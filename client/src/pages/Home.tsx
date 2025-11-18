@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3 } from "lucide-react";
+import { APP_LOGO } from "@/const";
 import { repertorio, type MomentoMissa } from "@/data/repertorio";
 
 export default function Home() {
@@ -35,8 +36,12 @@ export default function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
         <div className="container relative py-12 md:py-16">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-6">
-            <div className="p-4 rounded-2xl bg-primary/20 backdrop-blur-sm border border-primary/30 shadow-lg shadow-primary/20">
-              <Church className="w-10 h-10 md:w-12 md:h-12 text-primary" />
+            <div className="p-3 rounded-2xl bg-white/90 backdrop-blur-sm border border-primary/20 shadow-lg">
+              <img 
+                src={APP_LOGO} 
+                alt="LouvaMais Logo" 
+                className="w-14 h-14 md:w-16 md:h-16 object-contain"
+              />
             </div>
             <div className="flex-1">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-2 tracking-tight">
@@ -54,12 +59,20 @@ export default function Home() {
             <p className="text-base text-muted-foreground max-w-2xl">
               Músicas litúrgicas cuidadosamente selecionadas e organizadas por momentos da Santa Missa
             </p>
-            <Link href="/stats">
-              <Button variant="outline" size="sm" className="gap-2">
-                <BarChart3 className="w-4 h-4" />
-                Ver Estatísticas
-              </Button>
-            </Link>
+            <div className="flex gap-2 flex-wrap">
+              <Link href="/sobre">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Church className="w-4 h-4" />
+                  Sobre
+                </Button>
+              </Link>
+              <Link href="/stats">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <BarChart3 className="w-4 h-4" />
+                  Estatísticas
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </header>
@@ -204,9 +217,11 @@ export default function Home() {
         <div className="container py-10 md:py-12">
           <div className="text-center space-y-6">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="p-2 rounded-lg bg-primary/20">
-                <Church className="w-6 h-6 text-primary" />
-              </div>
+              <img 
+                src={APP_LOGO} 
+                alt="LouvaMais Logo" 
+                className="w-12 h-12 object-contain"
+              />
               <span className="text-lg font-semibold text-foreground">Repertório Católico</span>
             </div>
             <div className="space-y-2 text-sm text-muted-foreground">

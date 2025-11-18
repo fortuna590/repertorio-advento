@@ -44,3 +44,11 @@
 
 - [x] Atualizar footer com créditos LouvaMais - Church Solutions
 - [x] Atualizar informações da página
+
+
+## Novas Funcionalidades
+
+- [x] Adicionar logo do LouvaMais no header
+- [x] Criar página "Sobre" com missão da empresa
+- [x] Implementar formulário de contato
+- [x] Integrar envio de email para louvamais590@gmail.com (console log - requer configuração de serviço de email)

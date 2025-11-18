@@ -4,8 +4,10 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { registerClick, getClickStats } from "./db";
 import { z } from "zod";
+import { contactRouter } from "./routers/contact";
 
 export const appRouter = router({
+  contact: contactRouter,
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   auth: router({
