@@ -62,3 +62,10 @@
 - [x] Adicionar botões de doação no site
 - [ ] Criar página de produtos com links para Hotmart
 - [x] Testar doações em modo teste
+
+
+## Integração de Redes Sociais
+
+- [x] Adicionar link do Instagram no footer
+- [x] Adicionar botão do Instagram no header
+- [x] Criar seção de redes sociais
