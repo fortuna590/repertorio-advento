@@ -18,3 +18,12 @@
 - [ ] Favoritos salvos localmente
 - [ ] Modo escuro/claro
 - [ ] Compartilhamento de músicas específicas
+
+
+## Redesign Moderno
+
+- [x] Tema escuro com tons modernos
+- [x] Melhor responsividade mobile
+- [x] Cards com hover effects modernos
+- [x] Gradientes e sombras suaves
+- [x] Tipografia aprimorada
