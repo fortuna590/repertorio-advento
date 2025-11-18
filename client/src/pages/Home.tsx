@@ -4,7 +4,7 @@ import { trpc } from "@/lib/trpc";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3 } from "lucide-react";
+import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3, Heart } from "lucide-react";
 import { APP_LOGO } from "@/const";
 import { repertorio, type MomentoMissa } from "@/data/repertorio";
 
@@ -60,6 +60,12 @@ export default function Home() {
               Músicas litúrgicas cuidadosamente selecionadas e organizadas por momentos da Santa Missa
             </p>
             <div className="flex gap-2 flex-wrap">
+              <Link href="/doacao">
+                <Button variant="default" size="sm" className="gap-2 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70">
+                  <Heart className="w-4 h-4" />
+                  Apoie o Projeto
+                </Button>
+              </Link>
               <Link href="/sobre">
                 <Button variant="outline" size="sm" className="gap-2">
                   <Church className="w-4 h-4" />

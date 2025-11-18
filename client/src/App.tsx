@@ -8,6 +8,8 @@ import Home from "./pages/Home";
 import Stats from "./pages/Stats";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Donate from "./pages/Donate";
+import DonationSuccess from "./pages/DonationSuccess";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -17,6 +19,8 @@ function Router() {
       <Route path={"/stats"} component={Stats} />
       <Route path={"/sobre"} component={About} />
       <Route path={"/contato"} component={Contact} />
+      <Route path={"/doacao"} component={Donate} />
+      <Route path={"/doacao/sucesso"} component={DonationSuccess} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

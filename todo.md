@@ -52,3 +52,13 @@
 - [x] Criar página "Sobre" com missão da empresa
 - [x] Implementar formulário de contato
 - [x] Integrar envio de email para louvamais590@gmail.com (console log - requer configuração de serviço de email)
+
+
+## Sistema de Doações e Produtos
+
+- [x] Adicionar feature Stripe ao projeto
+- [x] Implementar backend de doações com Stripe
+- [x] Criar página "Apoie o Projeto" com doações
+- [x] Adicionar botões de doação no site
+- [ ] Criar página de produtos com links para Hotmart
+- [x] Testar doações em modo teste
