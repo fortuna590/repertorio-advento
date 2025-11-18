@@ -27,3 +27,14 @@
 - [x] Cards com hover effects modernos
 - [x] Gradientes e sombras suaves
 - [x] Tipografia aprimorada
+
+
+## Sistema de Rastreamento de Cliques
+
+- [x] Upgrade para web-db-user (backend + banco de dados)
+- [x] Schema do banco para rastrear cliques
+- [x] API para registrar cliques em links
+- [x] Painel administrativo de estatísticas
+- [x] Gráficos de músicas mais acessadas
+- [x] Estatísticas por momento da missa
+- [x] Contador de cliques YouTube vs Cifra Club

@@ -1,12 +1,26 @@
 import { useState } from "react";
+import { Link } from "wouter";
+import { trpc } from "@/lib/trpc";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Music, Youtube, Guitar, Sparkles, Church, Filter } from "lucide-react";
+import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3 } from "lucide-react";
 import { repertorio, type MomentoMissa } from "@/data/repertorio";
 
 export default function Home() {
   const [momentoSelecionado, setMomentoSelecionado] = useState<string | null>(null);
+  const registerClickMutation = trpc.clicks.register.useMutation();
+
+  const handleLinkClick = (musica: any, momento: any, linkType: "youtube" | "cifra") => {
+    registerClickMutation.mutate({
+      musicaId: `${momento.id}-${musica.numero}`,
+      musicaTitulo: musica.titulo,
+      musicaArtista: musica.artista,
+      momentoId: momento.id,
+      momentoTitulo: momento.titulo,
+      linkType,
+    });
+  };
 
   const momentoFiltrado = momentoSelecionado
     ? repertorio.find((m) => m.id === momentoSelecionado)
@@ -36,9 +50,17 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <p className="text-base text-muted-foreground max-w-2xl">
-            Músicas litúrgicas cuidadosamente selecionadas e organizadas por momentos da Santa Missa
-          </p>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
+            <p className="text-base text-muted-foreground max-w-2xl">
+              Músicas litúrgicas cuidadosamente selecionadas e organizadas por momentos da Santa Missa
+            </p>
+            <Link href="/stats">
+              <Button variant="outline" size="sm" className="gap-2">
+                <BarChart3 className="w-4 h-4" />
+                Ver Estatísticas
+              </Button>
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -143,6 +165,7 @@ export default function Home() {
                             href={musica.youtube}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={() => handleLinkClick(musica, momento, "youtube")}
                           >
                             <Youtube className="w-4 h-4" />
                             <span className="truncate">Escutar no YouTube</span>
@@ -160,6 +183,7 @@ export default function Home() {
                             href={musica.cifra}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={() => handleLinkClick(musica, momento, "cifra")}
                           >
                             <Guitar className="w-4 h-4" />
                             <span className="truncate">Ver Cifra</span>
