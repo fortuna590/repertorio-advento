@@ -38,3 +38,9 @@
 - [x] Gráficos de músicas mais acessadas
 - [x] Estatísticas por momento da missa
 - [x] Contador de cliques YouTube vs Cifra Club
+
+
+## Branding
+
+- [x] Atualizar footer com créditos LouvaMais - Church Solutions
+- [x] Atualizar informações da página

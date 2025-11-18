@@ -202,7 +202,7 @@ export default function Home() {
       {/* Footer Moderno */}
       <footer className="border-t border-border/50 bg-card/50 backdrop-blur-xl mt-20">
         <div className="container py-10 md:py-12">
-          <div className="text-center space-y-4">
+          <div className="text-center space-y-6">
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="p-2 rounded-lg bg-primary/20">
                 <Church className="w-6 h-6 text-primary" />
@@ -210,12 +210,21 @@ export default function Home() {
               <span className="text-lg font-semibold text-foreground">Repertório Católico</span>
             </div>
             <div className="space-y-2 text-sm text-muted-foreground">
-              <p>Repertório criado em 13 de novembro de 2025</p>
-              <p>Última atualização: 16 de novembro de 2025</p>
+              <p>Repertório do Tempo do Advento</p>
+              <p>29 músicas litúrgicas organizadas por momentos da Santa Missa</p>
             </div>
-            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground/80 pt-4 border-t border-border/30 mt-6">
+            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground/80 pt-4 border-t border-border/30">
               <Sparkles className="w-4 h-4 text-secondary" />
               <span>Para a maior glória de Deus</span>
+            </div>
+            <div className="pt-4 border-t border-border/30">
+              <p className="text-sm text-muted-foreground">
+                Uma produção de{" "}
+                <span className="font-semibold text-primary">LouvaMais - Church Solutions</span>
+              </p>
+              <p className="text-xs text-muted-foreground/60 mt-1">
+                © 2025 LouvaMais. Todos os direitos reservados.
+              </p>
             </div>
           </div>
         </div>

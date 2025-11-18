@@ -191,6 +191,23 @@ export default function Stats() {
           </CardContent>
         </Card>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t border-border/50 bg-card/50 backdrop-blur-xl mt-20">
+        <div className="container py-10 md:py-12">
+          <div className="text-center space-y-4">
+            <div className="pt-4 border-t border-border/30">
+              <p className="text-sm text-muted-foreground">
+                Uma produção de{" "}
+                <span className="font-semibold text-primary">LouvaMais - Church Solutions</span>
+              </p>
+              <p className="text-xs text-muted-foreground/60 mt-1">
+                © 2025 LouvaMais. Todos os direitos reservados.
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
