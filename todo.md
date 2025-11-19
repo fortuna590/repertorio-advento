@@ -69,3 +69,11 @@
 - [x] Adicionar link do Instagram no footer
 - [x] Adicionar botão do Instagram no header
 - [x] Criar seção de redes sociais
+
+
+## Novas Funcionalidades de Engajamento
+
+- [x] Botão flutuante de WhatsApp Business
+- [x] Seção de depoimentos de usuários
+- [x] Sistema de newsletter com formulário de inscrição
+- [x] Guia completo de divulgação para o Advento

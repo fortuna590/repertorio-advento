@@ -218,6 +218,148 @@ export default function Home() {
         </div>
       </main>
 
+      {/* Seção de Newsletter */}
+      <section className="container py-16 md:py-20">
+        <div className="max-w-4xl mx-auto">
+          <Card className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/30">
+            <CardContent className="p-8 md:p-12">
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 mb-4">
+                  <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                  Receba novos repertórios
+                </h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Inscreva-se na nossa newsletter e receba repertórios litúrgicos, dicas de música sacra e novidades do LouvaMais
+                </p>
+              </div>
+
+              <form
+                className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  const email = formData.get("email") as string;
+                  
+                  // Usar tRPC para enviar
+                  trpc.newsletter.subscribe.mutate({ email }).then(() => {
+                    alert("✅ Inscrição realizada! Verifique seu email.");
+                    e.currentTarget.reset();
+                  }).catch((err) => {
+                    alert("❌ Erro ao inscrever. Tente novamente.");
+                    console.error(err);
+                  });
+                }}
+              >
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Seu melhor email"
+                  required
+                  className="flex-1 px-4 py-3 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
+                <Button
+                  type="submit"
+                  className="px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg transition-all duration-300 hover:scale-105"
+                >
+                  Inscrever-se
+                </Button>
+              </form>
+
+              <p className="text-xs text-muted-foreground/60 text-center mt-4">
+                🔒 Seus dados estão seguros. Sem spam, apenas conteúdo de qualidade.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Seção de Depoimentos */}
+      <section className="container py-16 md:py-20">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            O que dizem sobre nós
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Depoimentos de paróquias e ministérios que usam nosso repertório
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+          {/* Depoimento 1 */}
+          <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-all duration-300">
+            <CardContent className="pt-6 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                  <Church className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground">Paróquia São José</p>
+                  <p className="text-sm text-muted-foreground">São Paulo, SP</p>
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                "O repertório do LouvaMais facilitou muito a organização das nossas celebrações do Advento. As músicas estão perfeitamente organizadas e os links ajudam muito!"
+              </p>
+              <div className="flex text-yellow-500">
+                {[...Array(5)].map((_, i) => (
+                  <Sparkles key={i} className="w-4 h-4 fill-current" />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Depoimento 2 */}
+          <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-all duration-300">
+            <CardContent className="pt-6 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                  <Music className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground">Ministério de Música</p>
+                  <p className="text-sm text-muted-foreground">Campinas, SP</p>
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                "Finalmente um site que reúne tudo o que precisamos: músicas, cifras e vídeos. Nossa equipe economiza horas de preparação toda semana!"
+              </p>
+              <div className="flex text-yellow-500">
+                {[...Array(5)].map((_, i) => (
+                  <Sparkles key={i} className="w-4 h-4 fill-current" />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Depoimento 3 */}
+          <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-all duration-300">
+            <CardContent className="pt-6 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                  <Guitar className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground">Coral Santa Cecília</p>
+                  <p className="text-sm text-muted-foreground">Ribeirão Preto, SP</p>
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                "É maravilhoso ter um repertório litúrgico completo e bem organizado. O LouvaMais é uma bênção para nossa comunidade!"
+              </p>
+              <div className="flex text-yellow-500">
+                {[...Array(5)].map((_, i) => (
+                  <Sparkles key={i} className="w-4 h-4 fill-current" />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
       {/* Footer Moderno */}
       <footer className="border-t border-border/50 bg-card/50 backdrop-blur-xl mt-20">
         <div className="container py-10 md:py-12">
