@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, clicks, InsertClick } from "../drizzle/schema";
+import { InsertUser, users, clicks, InsertClick, notifications, InsertNotification, Notification } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -190,6 +190,109 @@ export async function getClickStats() {
     };
   } catch (error) {
     console.error("[Database] Failed to get click stats:", error);
+    throw error;
+  }
+}
+
+/**
+ * Criar uma nova notificação
+ */
+export async function createNotification(notification: InsertNotification): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot create notification: database not available");
+    return;
+  }
+
+  try {
+    await db.insert(notifications).values(notification);
+    console.log(`[Notification] Created: ${notification.title}`);
+  } catch (error) {
+    console.error("[Database] Failed to create notification:", error);
+    throw error;
+  }
+}
+
+/**
+ * Listar todas as notificações (não lidas primeiro)
+ */
+export async function getNotifications(): Promise<Notification[]> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get notifications: database not available");
+    return [];
+  }
+
+  try {
+    const allNotifications = await db.select().from(notifications);
+    // Ordenar: não lidas primeiro, depois por data (mais recente primeiro)
+    return allNotifications.sort((a, b) => {
+      if (a.isRead !== b.isRead) {
+        return a.isRead - b.isRead; // 0 (não lida) vem antes de 1 (lida)
+      }
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+  } catch (error) {
+    console.error("[Database] Failed to get notifications:", error);
+    throw error;
+  }
+}
+
+/**
+ * Contar notificações não lidas
+ */
+export async function getUnreadNotificationCount(): Promise<number> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot count unread notifications: database not available");
+    return 0;
+  }
+
+  try {
+    const allNotifications = await db.select().from(notifications);
+    return allNotifications.filter(n => n.isRead === 0).length;
+  } catch (error) {
+    console.error("[Database] Failed to count unread notifications:", error);
+    throw error;
+  }
+}
+
+/**
+ * Marcar notificação como lida
+ */
+export async function markNotificationAsRead(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot mark notification as read: database not available");
+    return;
+  }
+
+  try {
+    await db.update(notifications)
+      .set({ isRead: 1 })
+      .where(eq(notifications.id, id));
+  } catch (error) {
+    console.error("[Database] Failed to mark notification as read:", error);
+    throw error;
+  }
+}
+
+/**
+ * Marcar todas as notificações como lidas
+ */
+export async function markAllNotificationsAsRead(): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot mark all notifications as read: database not available");
+    return;
+  }
+
+  try {
+    await db.update(notifications)
+      .set({ isRead: 1 })
+      .where(eq(notifications.isRead, 0));
+  } catch (error) {
+    console.error("[Database] Failed to mark all notifications as read:", error);
     throw error;
   }
 }

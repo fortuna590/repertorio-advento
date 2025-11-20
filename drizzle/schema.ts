@@ -41,3 +41,19 @@ export const clicks = mysqlTable("clicks", {
 
 export type Click = typeof clicks.$inferSelect;
 export type InsertClick = typeof clicks.$inferInsert;
+
+/**
+ * Tabela para notificações do sistema
+ */
+export const notifications = mysqlTable("notifications", {
+  id: int("id").autoincrement().primaryKey(),
+  type: mysqlEnum("type", ["donation", "contact", "newsletter", "general"]).notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  message: text("message").notNull(),
+  data: text("data"), // JSON com dados adicionais (valor doação, email, etc)
+  isRead: int("isRead").default(0).notNull(), // 0 = não lida, 1 = lida
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Notification = typeof notifications.$inferSelect;
+export type InsertNotification = typeof notifications.$inferInsert;

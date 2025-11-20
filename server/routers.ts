@@ -7,11 +7,13 @@ import { z } from "zod";
 import { contactRouter } from "./routers/contact";
 import { donationsRouter } from "./routers/donations";
 import { newsletterRouter } from "./routers/newsletter";
+import { notificationsRouter } from "./routers/notifications";
 
 export const appRouter = router({
   contact: contactRouter,
   donations: donationsRouter,
   newsletter: newsletterRouter,
+  notifications: notificationsRouter,
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   auth: router({

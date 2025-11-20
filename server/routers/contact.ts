@@ -1,5 +1,6 @@
 import { publicProcedure, router } from "../_core/trpc";
 import { z } from "zod";
+import { createNotification } from "../db";
 
 export const contactRouter = router({
   sendEmail: publicProcedure
@@ -26,6 +27,20 @@ export const contactRouter = router({
       console.log("Paróquia:", input.paroquia || "Não informada");
       console.log("Mensagem:", input.mensagem);
       console.log("---");
+      
+      // Criar notificação de nova mensagem de contato
+      await createNotification({
+        type: "contact",
+        title: "Nova mensagem de contato",
+        message: `${input.nome} (${input.email}) enviou uma mensagem`,
+        data: JSON.stringify({
+          nome: input.nome,
+          email: input.email,
+          telefone: input.telefone,
+          paroquia: input.paroquia,
+          mensagem: input.mensagem,
+        }),
+      });
       
       // TODO: Implementar envio real de email
       // Exemplo com Resend (gratuito):

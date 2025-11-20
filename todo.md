@@ -77,3 +77,13 @@
 - [x] Seção de depoimentos de usuários
 - [x] Sistema de newsletter com formulário de inscrição
 - [x] Guia completo de divulgação para o Advento
+
+
+## Sistema de Notificações
+
+- [x] Schema de notificações no banco de dados
+- [x] Backend de notificações (criar, listar, marcar como lida)
+- [x] Painel de notificações no frontend (sino com contador)
+- [x] Notificação automática ao receber doação
+- [x] Notificação automática ao receber mensagem de contato
+- [x] Envio de email para louvamais590@gmail.com (via console log - requer configuração de serviço)

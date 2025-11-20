@@ -1,6 +1,7 @@
 import { publicProcedure, router } from "../_core/trpc";
 import { z } from "zod";
 import Stripe from "stripe";
+import { createNotification } from "../db";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-10-29.clover",
@@ -49,6 +50,20 @@ export const donationsRouter = router({
             message: input.message || "",
           },
           allow_promotion_codes: true,
+        });
+
+        // Criar notificação de doação iniciada
+        await createNotification({
+          type: "donation",
+          title: "Nova doação iniciada",
+          message: `${input.donorName || "Anônimo"} iniciou uma doação de R$ ${(input.amount / 100).toFixed(2)}`,
+          data: JSON.stringify({
+            amount: input.amount,
+            donorName: input.donorName,
+            donorEmail: input.donorEmail,
+            message: input.message,
+            sessionId: session.id,
+          }),
         });
 
         return {

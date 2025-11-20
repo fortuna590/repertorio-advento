@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3, Heart } from "lucide-react";
 import { APP_LOGO } from "@/const";
 import { repertorio, type MomentoMissa } from "@/data/repertorio";
+import { NotificationBell } from "@/components/NotificationBell";
 
 export default function Home() {
   const [momentoSelecionado, setMomentoSelecionado] = useState<string | null>(null);
@@ -78,6 +79,7 @@ export default function Home() {
                   Estatísticas
                 </Button>
               </Link>
+              <NotificationBell />
             </div>
           </div>
         </div>
