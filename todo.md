@@ -92,3 +92,5 @@
 ## Atualização de Links
 
 - [x] Atualizar link da cifra da música 1 de Aclamação ao Evangelho
+
+- [x] Atualizar link da cifra da música 2 do FINAL

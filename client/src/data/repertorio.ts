@@ -280,7 +280,7 @@ export const repertorio: MomentoMissa[] = [
         titulo: "Natal é tempo de rever",
         artista: "José Acácio Santana",
         youtube: "https://www.youtube.com/watch?v=OSq5_WCTpVI",
-        cifra: ""
+        cifra: "https://arquidioceselondrina.com.br/apresentacao-das-ofertas-natal-e-tempo-de-rever/"
       },
       {
         numero: 3,
