@@ -96,3 +96,17 @@
 - [x] Atualizar link da cifra da música 2 do FINAL
 
 - [x] Adicionar link do YouTube para música 3 do FINAL
+
+
+## Novas Funcionalidades UX
+
+- [x] Sistema de favoritos (salvar no LocalStorage)
+- [x] Campo de busca de músicas por título/artista
+- [x] Modo de impressão otimizado com QR codes
+- [x] Botão para exportar repertório em PDF
+
+
+## Links de Referência/Parceiros
+
+- [x] Adicionar link de convite Manus (https://manus.im/invitation/O52IGHLNHHAWWG)
+- [x] Adicionar link de referência Hostinger (https://hostinger.com.br?REFERRALCODE=YWILOUVAMMXS)

@@ -4,14 +4,21 @@ import { trpc } from "@/lib/trpc";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3, Heart } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3, Heart, HeartOff, Printer, FileDown } from "lucide-react";
 import { APP_LOGO } from "@/const";
 import { repertorio, type MomentoMissa } from "@/data/repertorio";
 import { NotificationBell } from "@/components/NotificationBell";
+import { useFavorites } from "@/hooks/useFavorites";
+import { PrintView } from "@/components/PrintView";
+import { exportRepertorioPDF } from "@/utils/exportPDF";
 
 export default function Home() {
   const [momentoSelecionado, setMomentoSelecionado] = useState<string | null>(null);
+  const [buscaTexto, setBuscaTexto] = useState("");
+  const [showPrintView, setShowPrintView] = useState(false);
   const registerClickMutation = trpc.clicks.register.useMutation();
+  const { isFavorite, toggleFavorite} = useFavorites();
 
   const handleLinkClick = (musica: any, momento: any, linkType: "youtube" | "cifra") => {
     registerClickMutation.mutate({
@@ -28,10 +35,33 @@ export default function Home() {
     ? repertorio.find((m) => m.id === momentoSelecionado)
     : null;
 
-  const momentosParaExibir = momentoFiltrado ? [momentoFiltrado] : repertorio;
+  // Filtrar por busca de texto
+  const filtrarPorBusca = (momento: any) => {
+    if (!buscaTexto) return momento;
+    
+    const musicasFiltradas = momento.musicas.filter((musica: any) => {
+      const busca = buscaTexto.toLowerCase();
+      return (
+        musica.titulo.toLowerCase().includes(busca) ||
+        musica.artista.toLowerCase().includes(busca)
+      );
+    });
+
+    if (musicasFiltradas.length === 0) return null;
+    
+    return { ...momento, musicas: musicasFiltradas };
+  };
+
+  const momentosComBusca = (momentoFiltrado ? [momentoFiltrado] : repertorio)
+    .map(filtrarPorBusca)
+    .filter(Boolean);
+
+  const momentosParaExibir = momentosComBusca;
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      {showPrintView && <PrintView />}
+    <div className="min-h-screen bg-background" style={{ display: showPrintView ? 'none' : 'block' }}>
       {/* Hero Header */}
       <header className="relative border-b border-border/50 bg-gradient-to-br from-card via-card/95 to-accent/20 backdrop-blur-xl">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
@@ -79,6 +109,27 @@ export default function Home() {
                   Estatísticas
                 </Button>
               </Link>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="gap-2"
+                onClick={() => {
+                  setShowPrintView(true);
+                  setTimeout(() => window.print(), 500);
+                }}
+              >
+                <Printer className="w-4 h-4" />
+                Imprimir
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="gap-2"
+                onClick={() => exportRepertorioPDF()}
+              >
+                <FileDown className="w-4 h-4" />
+                Exportar PDF
+              </Button>
               <NotificationBell />
             </div>
           </div>
@@ -86,6 +137,20 @@ export default function Home() {
       </header>
 
       <main className="container py-8 md:py-12">
+        {/* Campo de Busca */}
+        <div className="mb-8">
+          <div className="relative max-w-2xl">
+            <Input
+              type="text"
+              placeholder="Buscar por título ou artista..."
+              value={buscaTexto}
+              onChange={(e) => setBuscaTexto(e.target.value)}
+              className="pl-10 h-12 text-base bg-card/50 border-border/50 focus:border-primary"
+            />
+            <Music className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+          </div>
+        </div>
+
         {/* Filtros Modernos */}
         <div className="mb-10 md:mb-12">
           <div className="flex items-center gap-3 mb-6">
@@ -158,12 +223,26 @@ export default function Home() {
                             {musica.artista}
                           </CardDescription>
                         </div>
-                        <Badge 
-                          variant="outline" 
-                          className="shrink-0 bg-accent/50 border-accent text-accent-foreground"
-                        >
-                          #{musica.numero}
-                        </Badge>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 hover:bg-red-500/10"
+                            onClick={() => toggleFavorite(momento.id, musica.numero)}
+                          >
+                            {isFavorite(momento.id, musica.numero) ? (
+                              <Heart className="w-4 h-4 text-red-500 fill-red-500" />
+                            ) : (
+                              <Heart className="w-4 h-4 text-muted-foreground" />
+                            )}
+                          </Button>
+                          <Badge 
+                            variant="outline" 
+                            className="bg-accent/50 border-accent text-accent-foreground"
+                          >
+                            #{musica.numero}
+                          </Badge>
+                        </div>
                       </div>
                       {musica.observacao && (
                         <Badge 
@@ -404,10 +483,38 @@ export default function Home() {
               <p className="text-xs text-muted-foreground/60 mt-1">
                 © 2025 LouvaMais. Todos os direitos reservados.
               </p>
+              
+              {/* Ferramentas Utilizadas */}
+              <div className="mt-4 pt-4 border-t border-border/30">
+                <p className="text-xs text-muted-foreground/80 mb-2">Ferramentas que usamos:</p>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  <a
+                    href="https://manus.im/invitation/O52IGHLNHHAWWG"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md bg-card/50 hover:bg-card border border-border/50 hover:border-primary/50 text-xs text-muted-foreground hover:text-foreground transition-all duration-300"
+                  >
+                    <Sparkles className="w-3 h-3" />
+                    <span>Criado com Manus AI</span>
+                  </a>
+                  <a
+                    href="https://hostinger.com.br?REFERRALCODE=YWILOUVAMMXS"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md bg-card/50 hover:bg-card border border-border/50 hover:border-primary/50 text-xs text-muted-foreground hover:text-foreground transition-all duration-300"
+                  >
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+                    </svg>
+                    <span>Hospedagem Hostinger</span>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </footer>
     </div>
+    </>
   );
 }
