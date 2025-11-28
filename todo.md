@@ -87,3 +87,8 @@
 - [x] Notificação automática ao receber doação
 - [x] Notificação automática ao receber mensagem de contato
 - [x] Envio de email para louvamais590@gmail.com (via console log - requer configuração de serviço)
+
+
+## Atualização de Links
+
+- [x] Atualizar link da cifra da música 1 de Aclamação ao Evangelho

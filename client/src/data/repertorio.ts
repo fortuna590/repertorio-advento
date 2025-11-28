@@ -118,7 +118,7 @@ export const repertorio: MomentoMissa[] = [
         titulo: "Aclamação ao Evangelho (Advento)",
         artista: "CNBB",
         youtube: "https://www.youtube.com/watch?v=WMVLsOlDuak",
-        cifra: "https://www.cifraclub.com.br/cnbb/aclamacao-ao-evangelho-advento/"
+        cifra: "https://musicasparamissa.com.br/musica/aleluia-vem-mostrar-nos/"
       },
       {
         numero: 2,
