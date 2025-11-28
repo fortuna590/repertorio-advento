@@ -286,7 +286,7 @@ export const repertorio: MomentoMissa[] = [
         numero: 3,
         titulo: "Vamos Todos a Belém",
         artista: "Músicas Católicas",
-        youtube: "",
+        youtube: "https://www.youtube.com/watch?v=OcqLAy4UTQs",
         cifra: ""
       }
     ]

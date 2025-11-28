@@ -94,3 +94,5 @@
 - [x] Atualizar link da cifra da música 1 de Aclamação ao Evangelho
 
 - [x] Atualizar link da cifra da música 2 do FINAL
+
+- [x] Adicionar link do YouTube para música 3 do FINAL
