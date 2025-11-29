@@ -1,6 +1,7 @@
 import { publicProcedure, router } from "../_core/trpc";
 import { z } from "zod";
 import { createNotification } from "../db";
+import { sendEmail, templateEmailContato } from "../_core/email";
 
 export const contactRouter = router({
   sendEmail: publicProcedure
@@ -14,12 +15,6 @@ export const contactRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      // Por enquanto, apenas simular o envio
-      // Em produção, você pode usar um serviço de email gratuito como:
-      // - Resend (https://resend.com) - 3000 emails/mês grátis
-      // - SendGrid - 100 emails/dia grátis
-      // - Mailgun - 5000 emails/mês grátis
-      
       console.log("📧 Nova mensagem de contato recebida:");
       console.log("Nome:", input.nome);
       console.log("Email:", input.email);
@@ -42,24 +37,31 @@ export const contactRouter = router({
         }),
       });
       
-      // TODO: Implementar envio real de email
-      // Exemplo com Resend (gratuito):
-      // const resend = new Resend(process.env.RESEND_API_KEY);
-      // await resend.emails.send({
-      //   from: 'contato@louvamais.com',
-      //   to: 'louvamais590@gmail.com',
-      //   subject: `Novo contato de ${input.nome}`,
-      //   html: `
-      //     <h2>Nova mensagem de contato</h2>
-      //     <p><strong>Nome:</strong> ${input.nome}</p>
-      //     <p><strong>Email:</strong> ${input.email}</p>
-      //     <p><strong>Telefone:</strong> ${input.telefone || 'Não informado'}</p>
-      //     <p><strong>Paróquia:</strong> ${input.paroquia || 'Não informada'}</p>
-      //     <p><strong>Mensagem:</strong></p>
-      //     <p>${input.mensagem}</p>
-      //   `,
-      // });
+      // Enviar email real usando Resend
+      const mensagemCompleta = `
+Nome: ${input.nome}
+Email: ${input.email}
+Telefone: ${input.telefone || 'Não informado'}
+Paróquia: ${input.paroquia || 'Não informada'}
+
+Mensagem:
+${input.mensagem}
+      `;
       
-      return { success: true };
+      const emailResult = await sendEmail({
+        to: 'louvamais590@gmail.com',
+        subject: `Nova mensagem de contato - ${input.nome}`,
+        html: templateEmailContato(input.nome, input.email, mensagemCompleta),
+        replyTo: input.email
+      });
+      
+      if (!emailResult.success) {
+        console.error('❌ Erro ao enviar email de contato:', emailResult.error);
+      }
+      
+      return { 
+        success: true,
+        emailSent: emailResult.success 
+      };
     }),
 });

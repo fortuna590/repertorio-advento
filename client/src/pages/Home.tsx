@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3, Heart, HeartOff, Printer, FileDown } from "lucide-react";
+import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3, Heart, HeartOff, Printer, FileDown, ShoppingBag, ListMusic } from "lucide-react";
 import { APP_LOGO } from "@/const";
 import { repertorio, type MomentoMissa } from "@/data/repertorio";
 import { NotificationBell } from "@/components/NotificationBell";
@@ -91,10 +91,22 @@ export default function Home() {
               Músicas litúrgicas cuidadosamente selecionadas e organizadas por momentos da Santa Missa
             </p>
             <div className="flex gap-2 flex-wrap">
+              <Link href="/montar-repertorio">
+                <Button variant="default" size="sm" className="gap-2 bg-gradient-to-r from-secondary to-secondary/80 hover:from-secondary/90 hover:to-secondary/70">
+                  <ListMusic className="w-4 h-4" />
+                  Montar Repertório
+                </Button>
+              </Link>
               <Link href="/doacao">
                 <Button variant="default" size="sm" className="gap-2 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70">
                   <Heart className="w-4 h-4" />
                   Apoie o Projeto
+                </Button>
+              </Link>
+              <Link href="/produtos">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <ShoppingBag className="w-4 h-4" />
+                  Produtos
                 </Button>
               </Link>
               <Link href="/sobre">

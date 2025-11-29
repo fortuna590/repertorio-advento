@@ -57,3 +57,20 @@ export const notifications = mysqlTable("notifications", {
 
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = typeof notifications.$inferInsert;
+
+/**
+ * Tabela para repertórios personalizados salvos pelos usuários
+ */
+export const repertorios = mysqlTable("repertorios", {
+  id: int("id").autoincrement().primaryKey(),
+  nome: varchar("nome", { length: 255 }).notNull(),
+  descricao: text("descricao"),
+  musicas: text("musicas").notNull(), // JSON array com IDs das músicas selecionadas
+  emailUsuario: varchar("emailUsuario", { length: 320 }),
+  nomeUsuario: varchar("nomeUsuario", { length: 255 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Repertorio = typeof repertorios.$inferSelect;
+export type InsertRepertorio = typeof repertorios.$inferInsert;

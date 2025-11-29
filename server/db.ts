@@ -296,3 +296,109 @@ export async function markAllNotificationsAsRead(): Promise<void> {
     throw error;
   }
 }
+
+/**
+ * Criar um novo repertório personalizado
+ */
+export async function createRepertorio(repertorio: { nome: string; descricao?: string; musicas: string; emailUsuario?: string; nomeUsuario?: string }): Promise<number> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot create repertorio: database not available");
+    throw new Error("Database not available");
+  }
+
+  try {
+    const { repertorios } = await import("../drizzle/schema");
+    const result = await db.insert(repertorios).values(repertorio);
+    const insertId = Number(result[0].insertId);
+    console.log(`[Repertorio] Created: ${repertorio.nome} (ID: ${insertId})`);
+    return insertId;
+  } catch (error) {
+    console.error("[Database] Failed to create repertorio:", error);
+    throw error;
+  }
+}
+
+/**
+ * Obter um repertório por ID
+ */
+export async function getRepertorioById(id: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get repertorio: database not available");
+    return undefined;
+  }
+
+  try {
+    const { repertorios } = await import("../drizzle/schema");
+    const result = await db.select().from(repertorios).where(eq(repertorios.id, id)).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get repertorio:", error);
+    throw error;
+  }
+}
+
+/**
+ * Listar todos os repertórios (mais recentes primeiro)
+ */
+export async function getAllRepertorios() {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get repertorios: database not available");
+    return [];
+  }
+
+  try {
+    const { repertorios } = await import("../drizzle/schema");
+    const allRepertorios = await db.select().from(repertorios);
+    return allRepertorios.sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  } catch (error) {
+    console.error("[Database] Failed to get repertorios:", error);
+    throw error;
+  }
+}
+
+/**
+ * Atualizar um repertório
+ */
+export async function updateRepertorio(id: number, updates: { nome?: string; descricao?: string; musicas?: string }): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot update repertorio: database not available");
+    return;
+  }
+
+  try {
+    const { repertorios } = await import("../drizzle/schema");
+    await db.update(repertorios)
+      .set(updates)
+      .where(eq(repertorios.id, id));
+    console.log(`[Repertorio] Updated: ID ${id}`);
+  } catch (error) {
+    console.error("[Database] Failed to update repertorio:", error);
+    throw error;
+  }
+}
+
+/**
+ * Deletar um repertório
+ */
+export async function deleteRepertorio(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot delete repertorio: database not available");
+    return;
+  }
+
+  try {
+    const { repertorios } = await import("../drizzle/schema");
+    await db.delete(repertorios).where(eq(repertorios.id, id));
+    console.log(`[Repertorio] Deleted: ID ${id}`);
+  } catch (error) {
+    console.error("[Database] Failed to delete repertorio:", error);
+    throw error;
+  }
+}

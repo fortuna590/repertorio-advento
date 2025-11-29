@@ -22,6 +22,13 @@
       "when": 1763612168396,
       "tag": "0002_chubby_misty_knight",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1764389528737,
+      "tag": "0003_happy_madripoor",
+      "breakpoints": true
     }
   ]
 }

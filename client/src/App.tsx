@@ -10,6 +10,8 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Donate from "./pages/Donate";
 import DonationSuccess from "./pages/DonationSuccess";
+import Produtos from "./pages/Produtos";
+import MontarRepertorio from "./pages/MontarRepertorio";
 import WhatsAppButton from "./components/WhatsAppButton";
 
 function Router() {
@@ -22,6 +24,8 @@ function Router() {
       <Route path={"/contato"} component={Contact} />
       <Route path={"/doacao"} component={Donate} />
       <Route path={"/doacao/sucesso"} component={DonationSuccess} />
+      <Route path={"/produtos"} component={Produtos} />
+      <Route path={"/montar-repertorio"} component={MontarRepertorio} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

@@ -110,3 +110,33 @@
 
 - [x] Adicionar link de convite Manus (https://manus.im/invitation/O52IGHLNHHAWWG)
 - [x] Adicionar link de referência Hostinger (https://hostinger.com.br?REFERRALCODE=YWILOUVAMMXS)
+
+
+## Integração de Email Real
+
+- [x] Configurar Resend.com para envio de emails
+- [x] Adicionar variável de ambiente RESEND_API_KEY
+- [x] Implementar envio real de emails no formulário de contato
+- [x] Implementar envio real de emails na newsletter
+- [ ] Testar envio de emails
+
+
+## Página de Produtos/Ebooks
+
+- [x] Criar página "Produtos" no menu de navegação
+- [x] Design da página de produtos com cards
+- [x] Adicionar links para Hotmart
+- [x] Seção de ebooks litúrgicos
+- [x] Call-to-action para produtos
+
+
+## Sistema de Repertório Personalizado
+
+- [x] Criar schema no banco de dados para repertórios salvos
+- [x] Implementar seleção de músicas para repertório customizado
+- [x] Backend para salvar/carregar repertórios personalizados
+- [x] Interface de montagem de repertório (checkboxes com cards)
+- [x] Visualização prévia do repertório montado
+- [x] Funcionalidade de impressão do repertório personalizado
+- [x] Funcionalidade de envio por email do repertório
+- [x] Salvar repertórios com nome/data para reutilização

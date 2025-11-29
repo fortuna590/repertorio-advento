@@ -1,10 +1,12 @@
 export interface Musica {
+  id?: string;
   numero: number;
   titulo: string;
   artista: string;
   youtube: string;
   cifra: string;
   observacao?: string;
+  momento?: string;
 }
 
 export interface MomentoMissa {
