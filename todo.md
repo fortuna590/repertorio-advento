@@ -140,3 +140,12 @@
 - [x] Funcionalidade de impressão do repertório personalizado
 - [x] Funcionalidade de envio por email do repertório
 - [x] Salvar repertórios com nome/data para reutilização
+
+
+## Ajustes na Página de Produtos
+
+- [x] Remover links de exemplo do Hotmart
+- [x] Adicionar status "Em Breve" nos produtos
+- [x] Criar formulário de interesse para notificação de lançamento
+- [x] Melhorar UX para não gerar frustração ou suspeita
+- [x] Remover CNPJ do rodapé da página de produtos

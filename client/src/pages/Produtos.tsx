@@ -1,11 +1,20 @@
+import { useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Book, Download, Star, CheckCircle2, ArrowRight, Sparkles } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Book, Star, CheckCircle2, Sparkles, Clock, Bell } from "lucide-react";
 import { APP_LOGO } from "@/const";
+import { trpc } from "@/lib/trpc";
+import { toast } from "sonner";
 
 export default function Produtos() {
+  const [emailInteresse, setEmailInteresse] = useState("");
+  const [nomeInteresse, setNomeInteresse] = useState("");
+  
+  const newsletterMutation = trpc.newsletter.subscribe.useMutation();
+
   const produtos = [
     {
       id: 1,
@@ -20,7 +29,6 @@ export default function Produtos() {
         "Sugestões de momentos da missa",
         "Atualizações gratuitas"
       ],
-      link: "https://hotmart.com/pt-br/marketplace/produtos/guia-repertorio-liturgico", // Link de exemplo
     },
     {
       id: 2,
@@ -35,7 +43,6 @@ export default function Produtos() {
         "Materiais complementares em PDF",
         "Acesso vitalício"
       ],
-      link: "https://hotmart.com/pt-br/marketplace/produtos/curso-ministerio-musica", // Link de exemplo
     },
     {
       id: 3,
@@ -50,9 +57,30 @@ export default function Produtos() {
         "Áudios de referência",
         "Direitos de execução inclusos"
       ],
-      link: "https://hotmart.com/pt-br/marketplace/produtos/partituras-liturgicas", // Link de exemplo
     }
   ];
+
+  const handleManifestInteresse = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!emailInteresse.trim()) {
+      toast.error("Por favor, digite seu email");
+      return;
+    }
+
+    try {
+      await newsletterMutation.mutateAsync({
+        email: emailInteresse,
+        nome: nomeInteresse || undefined,
+      });
+
+      toast.success("Obrigado! Você será avisado quando os produtos estiverem disponíveis! 🎉");
+      setEmailInteresse("");
+      setNomeInteresse("");
+    } catch (error: any) {
+      toast.error(error.message || "Erro ao registrar interesse");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -89,15 +117,15 @@ export default function Produtos() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent" />
         <div className="container relative py-16 md:py-24">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 border border-primary/30 mb-6">
-              <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Materiais Exclusivos</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/20 border border-secondary/30 mb-6">
+              <Clock className="w-4 h-4 text-secondary" />
+              <span className="text-sm font-medium text-secondary">Em Breve</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 tracking-tight">
               Produtos e E-books
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8">
-              Materiais profissionais para elevar o ministério de música da sua paróquia
+              Estamos preparando materiais exclusivos para elevar o ministério de música da sua paróquia
             </p>
           </div>
         </div>
@@ -109,7 +137,7 @@ export default function Produtos() {
           {produtos.map((produto) => (
             <Card 
               key={produto.id}
-              className={`group hover:shadow-2xl transition-all duration-500 ${
+              className={`group transition-all duration-500 ${
                 produto.destaque 
                   ? 'border-primary/50 bg-gradient-to-br from-primary/5 to-accent/5' 
                   : 'border-border/50'
@@ -129,9 +157,13 @@ export default function Produtos() {
                       {produto.destaque && (
                         <Badge className="bg-primary text-primary-foreground">
                           <Star className="w-3 h-3 mr-1" />
-                          Mais Vendido
+                          Mais Aguardado
                         </Badge>
                       )}
+                      <Badge variant="secondary" className="bg-secondary/20 text-secondary border-secondary/30">
+                        <Clock className="w-3 h-3 mr-1" />
+                        Em Breve
+                      </Badge>
                     </div>
                     <CardTitle className="text-2xl md:text-3xl mb-2">
                       {produto.titulo}
@@ -144,6 +176,7 @@ export default function Produtos() {
                     <div className="text-3xl font-bold text-primary">
                       {produto.preco}
                     </div>
+                    <p className="text-xs text-muted-foreground mt-1">previsão</p>
                   </div>
                 </div>
               </CardHeader>
@@ -166,35 +199,81 @@ export default function Produtos() {
                     </ul>
                   </div>
 
-                  {/* CTA */}
+                  {/* Status Em Breve */}
                   <div className="pt-4 border-t border-border/50">
-                    <Button 
-                      size="lg" 
-                      className={`w-full gap-2 ${
-                        produto.destaque 
-                          ? 'bg-primary hover:bg-primary/90' 
-                          : ''
-                      }`}
-                      asChild
-                    >
-                      <a 
-                        href={produto.link} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                      >
-                        <Download className="w-5 h-5" />
-                        Adquirir Agora
-                        <ArrowRight className="w-5 h-5" />
-                      </a>
-                    </Button>
-                    <p className="text-xs text-muted-foreground text-center mt-3">
-                      Pagamento seguro via Hotmart • Acesso imediato após a compra
-                    </p>
+                    <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-4 text-center">
+                      <Clock className="w-8 h-8 text-secondary mx-auto mb-2" />
+                      <p className="text-sm font-medium text-foreground mb-1">
+                        Produto em desenvolvimento
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Deixe seu email abaixo para ser avisado do lançamento
+                      </p>
+                    </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Formulário de Interesse */}
+        <div className="max-w-3xl mx-auto mt-16">
+          <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-accent/5">
+            <CardHeader className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 mx-auto mb-4">
+                <Bell className="w-8 h-8 text-primary" />
+              </div>
+              <CardTitle className="text-2xl md:text-3xl">
+                Seja o Primeiro a Saber!
+              </CardTitle>
+              <CardDescription className="text-base">
+                Cadastre-se para receber notificação quando os produtos estiverem disponíveis
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleManifestInteresse} className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">
+                    Seu nome (opcional)
+                  </label>
+                  <Input
+                    type="text"
+                    placeholder="Digite seu nome"
+                    value={nomeInteresse}
+                    onChange={(e) => setNomeInteresse(e.target.value)}
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">
+                    Seu email *
+                  </label>
+                  <Input
+                    type="email"
+                    placeholder="seu@email.com"
+                    value={emailInteresse}
+                    onChange={(e) => setEmailInteresse(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  className="w-full gap-2"
+                  disabled={newsletterMutation.isPending}
+                >
+                  <Bell className="w-5 h-5" />
+                  {newsletterMutation.isPending ? "Cadastrando..." : "Quero ser Avisado!"}
+                </Button>
+                
+                <p className="text-xs text-muted-foreground text-center">
+                  Não se preocupe, não enviamos spam. Apenas notificaremos sobre o lançamento dos produtos.
+                </p>
+              </form>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Garantia */}
@@ -204,11 +283,11 @@ export default function Produtos() {
               <CheckCircle2 className="w-8 h-8 text-primary" />
             </div>
             <h3 className="text-2xl font-bold text-foreground mb-3">
-              Garantia de 7 Dias
+              Garantia de Qualidade
             </h3>
             <p className="text-muted-foreground">
-              Se você não ficar satisfeito com qualquer produto, devolvemos 100% do seu dinheiro. 
-              Sem perguntas, sem complicações.
+              Todos os nossos produtos terão garantia de 7 dias. Se você não ficar satisfeito, 
+              devolvemos 100% do seu dinheiro. Sem perguntas, sem complicações.
             </p>
           </div>
         </div>
@@ -224,7 +303,6 @@ export default function Produtos() {
             </div>
             <div className="space-y-2 text-sm text-muted-foreground">
               <p>© 2025 LouvaMais - Church Solutions. Todos os direitos reservados.</p>
-              <p>CNPJ: 00.000.000/0001-00 | contato@louvamais.com.br</p>
             </div>
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground/80 pt-4 border-t border-border/30 mt-6">
               <Sparkles className="w-4 h-4 text-secondary" />
