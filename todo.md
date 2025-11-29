@@ -149,3 +149,14 @@
 - [x] Criar formulário de interesse para notificação de lançamento
 - [x] Melhorar UX para não gerar frustração ou suspeita
 - [x] Remover CNPJ do rodapé da página de produtos
+
+
+## Blog/Artigos Educativos
+
+- [x] Criar estrutura de dados para artigos
+- [x] Implementar página de listagem do blog
+- [x] Criar página individual de artigo com layout responsivo
+- [x] Sistema para usuário criar e gerenciar artigos (começando com artigo do Advento)
+- [x] Sistema de categorias e tags
+- [x] Integrar blog no menu principal
+- [x] SEO otimizado (meta tags, títulos, descrições)

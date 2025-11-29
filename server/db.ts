@@ -402,3 +402,158 @@ export async function deleteRepertorio(id: number): Promise<void> {
     throw error;
   }
 }
+
+/**
+ * Criar um novo artigo
+ */
+export async function createArtigo(artigo: { titulo: string; slug: string; resumo: string; conteudo: string; imagemCapa?: string; categoria?: string; tags?: string; autorNome?: string; publicado?: number }): Promise<number> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot create artigo: database not available");
+    throw new Error("Database not available");
+  }
+
+  try {
+    const { artigos } = await import("../drizzle/schema");
+    const result = await db.insert(artigos).values(artigo);
+    const insertId = Number(result[0].insertId);
+    console.log(`[Artigo] Created: ${artigo.titulo} (ID: ${insertId})`);
+    return insertId;
+  } catch (error) {
+    console.error("[Database] Failed to create artigo:", error);
+    throw error;
+  }
+}
+
+/**
+ * Obter um artigo por slug
+ */
+export async function getArtigoBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get artigo: database not available");
+    return undefined;
+  }
+
+  try {
+    const { artigos } = await import("../drizzle/schema");
+    const result = await db.select().from(artigos).where(eq(artigos.slug, slug)).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get artigo:", error);
+    throw error;
+  }
+}
+
+/**
+ * Obter um artigo por ID
+ */
+export async function getArtigoById(id: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get artigo: database not available");
+    return undefined;
+  }
+
+  try {
+    const { artigos } = await import("../drizzle/schema");
+    const result = await db.select().from(artigos).where(eq(artigos.id, id)).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get artigo:", error);
+    throw error;
+  }
+}
+
+/**
+ * Listar todos os artigos publicados (mais recentes primeiro)
+ */
+export async function getAllArtigos(includeRascunhos = false) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get artigos: database not available");
+    return [];
+  }
+
+  try {
+    const { artigos } = await import("../drizzle/schema");
+    let allArtigos = await db.select().from(artigos);
+    
+    if (!includeRascunhos) {
+      allArtigos = allArtigos.filter(a => a.publicado === 1);
+    }
+    
+    return allArtigos.sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  } catch (error) {
+    console.error("[Database] Failed to get artigos:", error);
+    throw error;
+  }
+}
+
+/**
+ * Atualizar um artigo
+ */
+export async function updateArtigo(id: number, updates: { titulo?: string; slug?: string; resumo?: string; conteudo?: string; imagemCapa?: string; categoria?: string; tags?: string; autorNome?: string; publicado?: number }): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot update artigo: database not available");
+    return;
+  }
+
+  try {
+    const { artigos } = await import("../drizzle/schema");
+    await db.update(artigos)
+      .set(updates)
+      .where(eq(artigos.id, id));
+    console.log(`[Artigo] Updated: ID ${id}`);
+  } catch (error) {
+    console.error("[Database] Failed to update artigo:", error);
+    throw error;
+  }
+}
+
+/**
+ * Deletar um artigo
+ */
+export async function deleteArtigo(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot delete artigo: database not available");
+    return;
+  }
+
+  try {
+    const { artigos } = await import("../drizzle/schema");
+    await db.delete(artigos).where(eq(artigos.id, id));
+    console.log(`[Artigo] Deleted: ID ${id}`);
+  } catch (error) {
+    console.error("[Database] Failed to delete artigo:", error);
+    throw error;
+  }
+}
+
+/**
+ * Incrementar visualizações de um artigo
+ */
+export async function incrementArtigoViews(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot increment artigo views: database not available");
+    return;
+  }
+
+  try {
+    const { artigos } = await import("../drizzle/schema");
+    const artigo = await getArtigoById(id);
+    if (artigo) {
+      await db.update(artigos)
+        .set({ visualizacoes: artigo.visualizacoes + 1 })
+        .where(eq(artigos.id, id));
+    }
+  } catch (error) {
+    console.error("[Database] Failed to increment artigo views:", error);
+    throw error;
+  }
+}

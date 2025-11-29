@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3, Heart, HeartOff, Printer, FileDown, ShoppingBag, ListMusic } from "lucide-react";
+import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3, Heart, HeartOff, Printer, FileDown, ShoppingBag, ListMusic, BookOpen } from "lucide-react";
 import { APP_LOGO } from "@/const";
 import { repertorio, type MomentoMissa } from "@/data/repertorio";
 import { NotificationBell } from "@/components/NotificationBell";
@@ -107,6 +107,12 @@ export default function Home() {
                 <Button variant="outline" size="sm" className="gap-2">
                   <ShoppingBag className="w-4 h-4" />
                   Produtos
+                </Button>
+              </Link>
+              <Link href="/blog">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <BookOpen className="w-4 h-4" />
+                  Blog
                 </Button>
               </Link>
               <Link href="/sobre">

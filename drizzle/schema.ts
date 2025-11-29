@@ -74,3 +74,25 @@ export const repertorios = mysqlTable("repertorios", {
 
 export type Repertorio = typeof repertorios.$inferSelect;
 export type InsertRepertorio = typeof repertorios.$inferInsert;
+
+/**
+ * Tabela para artigos do blog
+ */
+export const artigos = mysqlTable("artigos", {
+  id: int("id").autoincrement().primaryKey(),
+  titulo: varchar("titulo", { length: 255 }).notNull(),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  resumo: text("resumo").notNull(),
+  conteudo: text("conteudo").notNull(),
+  imagemCapa: varchar("imagemCapa", { length: 500 }),
+  categoria: varchar("categoria", { length: 100 }),
+  tags: text("tags"), // JSON array de tags
+  autorNome: varchar("autorNome", { length: 255 }),
+  publicado: int("publicado").default(1).notNull(), // 0 = rascunho, 1 = publicado
+  visualizacoes: int("visualizacoes").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Artigo = typeof artigos.$inferSelect;
+export type InsertArtigo = typeof artigos.$inferInsert;

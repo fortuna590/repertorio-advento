@@ -12,6 +12,9 @@ import Donate from "./pages/Donate";
 import DonationSuccess from "./pages/DonationSuccess";
 import Produtos from "./pages/Produtos";
 import MontarRepertorio from "./pages/MontarRepertorio";
+import Blog from "./pages/Blog";
+import BlogArtigo from "./pages/BlogArtigo";
+import BlogAdmin from "./pages/BlogAdmin";
 import WhatsAppButton from "./components/WhatsAppButton";
 
 function Router() {
@@ -26,6 +29,9 @@ function Router() {
       <Route path={"/doacao/sucesso"} component={DonationSuccess} />
       <Route path={"/produtos"} component={Produtos} />
       <Route path={"/montar-repertorio"} component={MontarRepertorio} />
+      <Route path={"/blog"} component={Blog} />
+      <Route path={"/blog/:slug"} component={BlogArtigo} />
+      <Route path={"/blog-admin"} component={BlogAdmin} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
