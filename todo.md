@@ -175,3 +175,8 @@
 - [x] Adicionar link de afiliado do Missal Romano nas referências
 - [x] Adicionar Catecismo como produto na página de produtos
 - [x] Adicionar Missal Romano como produto na página de produtos
+
+
+## Ajustes na Página de Montar Repertório
+
+- [x] Adicionar aviso de "Em Breve" na página de montar repertório

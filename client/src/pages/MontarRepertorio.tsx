@@ -1,418 +1,203 @@
-import { useState } from "react";
-import { Link, useLocation } from "wouter";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Music, Check, X, Eye, Save, Mail, Printer, ArrowLeft, Sparkles } from "lucide-react";
+import { AlertCircle, Music, ArrowLeft, Bell, CheckCircle2 } from "lucide-react";
 import { APP_LOGO } from "@/const";
-import { repertorio, type Musica } from "@/data/repertorio";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 
 export default function MontarRepertorio() {
-  const [, setLocation] = useLocation();
-  const [musicasSelecionadas, setMusicasSelecionadas] = useState<Musica[]>([]);
-  const [nomeRepertorio, setNomeRepertorio] = useState("");
-  const [descricaoRepertorio, setDescricaoRepertorio] = useState("");
-  const [showPreview, setShowPreview] = useState(false);
-  const [showEmailDialog, setShowEmailDialog] = useState(false);
-  const [emailDestinatario, setEmailDestinatario] = useState("");
-  const [nomeDestinatario, setNomeDestinatario] = useState("");
+  const [emailNotificacao, setEmailNotificacao] = useState("");
+  const [nomeNotificacao, setNomeNotificacao] = useState("");
+  const newsletterMutation = trpc.newsletter.subscribe.useMutation();
 
-  const criarRepertorioMutation = trpc.repertorios.create.useMutation();
-  const enviarEmailMutation = trpc.repertorios.sendByEmail.useMutation();
-
-  const toggleMusica = (musica: Musica) => {
-    const jaAdicionada = musicasSelecionadas.some(m => m.id === musica.id);
+  const handleRegistrarInteresse = async (e: React.FormEvent) => {
+    e.preventDefault();
     
-    if (jaAdicionada) {
-      setMusicasSelecionadas(musicasSelecionadas.filter(m => m.id !== musica.id));
-    } else {
-      setMusicasSelecionadas([...musicasSelecionadas, musica]);
-    }
-  };
-
-  const isMusicaSelecionada = (musicaId: string | undefined) => {
-    if (!musicaId) return false;
-    return musicasSelecionadas.some(m => m.id === musicaId);
-  };
-
-  const handleSalvarRepertorio = async () => {
-    if (!nomeRepertorio.trim()) {
-      toast.error("Por favor, dê um nome ao repertório");
-      return;
-    }
-
-    if (musicasSelecionadas.length === 0) {
-      toast.error("Selecione pelo menos uma música");
+    if (!emailNotificacao.trim()) {
+      toast.error("Por favor, digite seu email");
       return;
     }
 
     try {
-      await criarRepertorioMutation.mutateAsync({
-        nome: nomeRepertorio,
-        descricao: descricaoRepertorio,
-        musicas: musicasSelecionadas,
+      await newsletterMutation.mutateAsync({
+        email: emailNotificacao,
+        nome: nomeNotificacao || undefined,
       });
 
-      toast.success("Repertório salvo com sucesso!");
-      
-      // Resetar formulário
-      setNomeRepertorio("");
-      setDescricaoRepertorio("");
-      setMusicasSelecionadas([]);
+      toast.success("Obrigado! Você será avisado quando a funcionalidade estiver disponível! 🎉");
+      setEmailNotificacao("");
+      setNomeNotificacao("");
     } catch (error: any) {
-      toast.error(error.message || "Erro ao salvar repertório");
+      toast.error(error.message || "Erro ao registrar interesse");
     }
-  };
-
-  const handleEnviarEmail = async () => {
-    if (!emailDestinatario.trim()) {
-      toast.error("Digite um email válido");
-      return;
-    }
-
-    if (musicasSelecionadas.length === 0) {
-      toast.error("Selecione pelo menos uma música");
-      return;
-    }
-
-    try {
-      // Primeiro salvar o repertório
-      const repertorioResult = await criarRepertorioMutation.mutateAsync({
-        nome: nomeRepertorio || "Repertório Personalizado",
-        descricao: descricaoRepertorio,
-        musicas: musicasSelecionadas,
-        emailUsuario: emailDestinatario,
-        nomeUsuario: nomeDestinatario,
-      });
-
-      // Depois enviar por email
-      await enviarEmailMutation.mutateAsync({
-        repertorioId: repertorioResult.repertorioId,
-        destinatarioEmail: emailDestinatario,
-        destinatarioNome: nomeDestinatario,
-      });
-
-      toast.success("Repertório enviado por email!");
-      setShowEmailDialog(false);
-      setEmailDestinatario("");
-      setNomeDestinatario("");
-    } catch (error: any) {
-      toast.error(error.message || "Erro ao enviar email");
-    }
-  };
-
-  const handleImprimir = () => {
-    setShowPreview(true);
-    setTimeout(() => window.print(), 500);
   };
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border/50 bg-gradient-to-br from-card via-card/95 to-accent/20 backdrop-blur-xl print:hidden">
+      <header className="border-b border-border/50 bg-gradient-to-br from-card via-card/95 to-accent/20 backdrop-blur-xl">
         <div className="container py-6">
           <div className="flex items-center justify-between">
             <Link href="/">
               <button className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                 <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10" />
                 <div className="text-left">
-                  <div className="font-bold text-lg text-foreground">Montar Repertório</div>
-                  <div className="text-xs text-muted-foreground">Crie seu repertório personalizado</div>
+                  <div className="font-bold text-lg text-foreground">Repertório Católico</div>
+                  <div className="text-xs text-muted-foreground">LouvaMais Solutions</div>
                 </div>
               </button>
             </Link>
-            <Button variant="ghost" size="sm" onClick={() => setLocation("/")}>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Voltar
-            </Button>
+            <Link href="/">
+              <button className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+                <ArrowLeft className="w-4 h-4" />
+                Voltar
+              </button>
+            </Link>
           </div>
         </div>
       </header>
 
-      <div className="container py-8 md:py-12">
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Painel de Seleção de Músicas */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-foreground">
-                Selecione as Músicas
-              </h2>
-              <Badge variant="secondary" className="text-base px-4 py-2">
-                {musicasSelecionadas.length} selecionada(s)
-              </Badge>
-            </div>
-
-            {repertorio.map((momento) => (
-              <div key={momento.id} className="space-y-3">
-                <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                  <span className="text-primary">{momento.numero}</span>
-                  {momento.titulo}
-                </h3>
-                
-                <div className="grid gap-3">
-                  {momento.musicas.map((musica) => {
-                    const selecionada = isMusicaSelecionada(musica.id);
-                    
-                    return (
-                      <Card
-                        key={musica.id}
-                        className={`cursor-pointer transition-all duration-300 ${
-                          selecionada 
-                            ? 'border-primary bg-primary/5 shadow-lg' 
-                            : 'hover:border-primary/50'
-                        }`}
-                        onClick={() => toggleMusica({ ...musica, momento: momento.titulo })}
-                      >
-                        <CardHeader className="pb-3">
-                          <div className="flex items-start justify-between gap-3">
-                            <div className="flex-1 min-w-0">
-                              <CardTitle className="text-base flex items-center gap-2">
-                                <Music className="w-4 h-4 text-primary shrink-0" />
-                                <span className="truncate">{musica.titulo}</span>
-                              </CardTitle>
-                              <CardDescription className="text-sm truncate">
-                                {musica.artista}
-                              </CardDescription>
-                            </div>
-                            <div className={`p-2 rounded-full ${
-                              selecionada ? 'bg-primary' : 'bg-muted'
-                            }`}>
-                              {selecionada ? (
-                                <Check className="w-5 h-5 text-primary-foreground" />
-                              ) : (
-                                <X className="w-5 h-5 text-muted-foreground" />
-                              )}
-                            </div>
-                          </div>
-                        </CardHeader>
-                      </Card>
-                    );
-                  })}
+      {/* Main Content */}
+      <section className="container py-12 md:py-16">
+        <div className="max-w-3xl mx-auto">
+          {/* Alert Box */}
+          <Card className="border-amber-500/30 bg-gradient-to-br from-amber-50/10 to-orange-50/10 mb-8">
+            <CardHeader>
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-lg bg-amber-500/20">
+                  <AlertCircle className="w-6 h-6 text-amber-600" />
+                </div>
+                <div className="flex-1">
+                  <CardTitle className="text-amber-900 mb-2">
+                    🚀 Funcionalidade em Desenvolvimento
+                  </CardTitle>
+                  <CardDescription className="text-amber-800/80">
+                    O sistema de montagem de repertório personalizado será disponibilizado em breve! 
+                    Esta ferramenta permitirá que você selecione suas músicas favoritas, organize-as 
+                    por momento da missa, visualize uma prévia, imprima e envie por email.
+                  </CardDescription>
                 </div>
               </div>
-            ))}
-          </div>
+            </CardHeader>
+          </Card>
 
-          {/* Painel Lateral - Resumo e Ações */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-6 space-y-6">
-              {/* Resumo */}
-              <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-accent/5">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-primary" />
-                    Seu Repertório
-                  </CardTitle>
-                  <CardDescription>
-                    {musicasSelecionadas.length} música(s) selecionada(s)
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
+          {/* Features Coming Soon */}
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Music className="w-5 h-5 text-primary" />
+                O que você poderá fazer:
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                   <div>
-                    <label className="text-sm font-medium text-foreground mb-2 block">
-                      Nome do Repertório
-                    </label>
-                    <Input
-                      placeholder="Ex: Missa de Natal 2025"
-                      value={nomeRepertorio}
-                      onChange={(e) => setNomeRepertorio(e.target.value)}
-                    />
+                    <p className="font-medium text-foreground">Selecionar Músicas</p>
+                    <p className="text-sm text-muted-foreground">Escolha as músicas do nosso repertório que deseja incluir</p>
                   </div>
-                  
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                   <div>
-                    <label className="text-sm font-medium text-foreground mb-2 block">
-                      Descrição (opcional)
-                    </label>
-                    <Textarea
-                      placeholder="Ex: Repertório para a Missa do Galo"
-                      value={descricaoRepertorio}
-                      onChange={(e) => setDescricaoRepertorio(e.target.value)}
-                      rows={3}
-                    />
+                    <p className="font-medium text-foreground">Organizar por Momentos</p>
+                    <p className="text-sm text-muted-foreground">Organize as músicas por momento da missa (Entrada, Comunhão, etc)</p>
                   </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                  <div>
+                    <p className="font-medium text-foreground">Visualizar Prévia</p>
+                    <p className="text-sm text-muted-foreground">Veja como ficará seu repertório antes de finalizar</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                  <div>
+                    <p className="font-medium text-foreground">Imprimir</p>
+                    <p className="text-sm text-muted-foreground">Imprima seu repertório personalizado com design profissional</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                  <div>
+                    <p className="font-medium text-foreground">Enviar por Email</p>
+                    <p className="text-sm text-muted-foreground">Compartilhe seu repertório com a equipe por email</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                  <div>
+                    <p className="font-medium text-foreground">Salvar Repertórios</p>
+                    <p className="text-sm text-muted-foreground">Guarde seus repertórios favoritos para reutilizar depois</p>
+                  </div>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
 
-                  {musicasSelecionadas.length > 0 && (
-                    <div className="pt-4 border-t border-border/50">
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Músicas selecionadas:
-                      </p>
-                      <div className="space-y-2 max-h-40 overflow-y-auto">
-                        {musicasSelecionadas.map((musica, index) => (
-                          <div key={musica.id} className="text-sm flex items-start gap-2">
-                            <span className="text-primary font-medium">{index + 1}.</span>
-                            <span className="flex-1">{musica.titulo}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Ações */}
-              <div className="space-y-3">
-                <Button
-                  className="w-full gap-2"
-                  size="lg"
-                  onClick={() => setShowPreview(true)}
-                  disabled={musicasSelecionadas.length === 0}
+          {/* Notification Form */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Bell className="w-5 h-5 text-primary" />
+                Receba uma Notificação
+              </CardTitle>
+              <CardDescription>
+                Deixe seu email e será avisado assim que a funcionalidade estiver disponível
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleRegistrarInteresse} className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">
+                    Seu Nome (opcional)
+                  </label>
+                  <Input
+                    placeholder="João Silva"
+                    value={nomeNotificacao}
+                    onChange={(e) => setNomeNotificacao(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">
+                    Seu Email *
+                  </label>
+                  <Input
+                    type="email"
+                    placeholder="seu@email.com"
+                    value={emailNotificacao}
+                    onChange={(e) => setEmailNotificacao(e.target.value)}
+                    required
+                  />
+                </div>
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  className="w-full"
+                  disabled={newsletterMutation.isPending}
                 >
-                  <Eye className="w-5 h-5" />
-                  Visualizar Prévia
+                  {newsletterMutation.isPending ? "Registrando..." : "Notifique-me"}
                 </Button>
+              </form>
+            </CardContent>
+          </Card>
 
-                <Button
-                  className="w-full gap-2"
-                  variant="outline"
-                  size="lg"
-                  onClick={handleSalvarRepertorio}
-                  disabled={musicasSelecionadas.length === 0 || criarRepertorioMutation.isPending}
-                >
-                  <Save className="w-5 h-5" />
-                  {criarRepertorioMutation.isPending ? "Salvando..." : "Salvar Repertório"}
-                </Button>
-
-                <Button
-                  className="w-full gap-2"
-                  variant="outline"
-                  size="lg"
-                  onClick={handleImprimir}
-                  disabled={musicasSelecionadas.length === 0}
-                >
-                  <Printer className="w-5 h-5" />
-                  Imprimir
-                </Button>
-
-                <Button
-                  className="w-full gap-2"
-                  variant="outline"
-                  size="lg"
-                  onClick={() => setShowEmailDialog(true)}
-                  disabled={musicasSelecionadas.length === 0}
-                >
-                  <Mail className="w-5 h-5" />
-                  Enviar por Email
-                </Button>
-              </div>
-            </div>
+          {/* Info Box */}
+          <div className="mt-8 p-6 rounded-lg bg-primary/5 border border-primary/20">
+            <p className="text-sm text-muted-foreground text-center">
+              ℹ️ Enquanto isso, você pode explorar nosso <Link href="/"><span className="text-primary hover:underline">repertório de Advento</span></Link> com 29 músicas organizadas, 
+              criar <Link href="/"><span className="text-primary hover:underline">seus próprios repertórios personalizados</span></Link> através do sistema de montagem, 
+              ou ler nossos <Link href="/blog"><span className="text-primary hover:underline">artigos sobre música litúrgica</span></Link>.
+            </p>
           </div>
         </div>
-      </div>
-
-      {/* Dialog de Prévia */}
-      <Dialog open={showPreview} onOpenChange={setShowPreview}>
-        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl">
-              {nomeRepertorio || "Repertório Personalizado"}
-            </DialogTitle>
-            {descricaoRepertorio && (
-              <DialogDescription className="text-base">
-                {descricaoRepertorio}
-              </DialogDescription>
-            )}
-          </DialogHeader>
-          
-          <div className="space-y-4 mt-4">
-            {musicasSelecionadas.map((musica, index) => (
-              <Card key={musica.id}>
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <span className="text-primary">{index + 1}.</span>
-                    {musica.titulo}
-                  </CardTitle>
-                  <CardDescription>{musica.artista}</CardDescription>
-                  <Badge variant="outline" className="w-fit mt-2">
-                    {musica.momento}
-                  </Badge>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  {musica.youtube && (
-                    <a
-                      href={musica.youtube}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-primary hover:underline block"
-                    >
-                      🎵 YouTube: {musica.youtube}
-                    </a>
-                  )}
-                  {musica.cifra && (
-                    <a
-                      href={musica.cifra}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-primary hover:underline block"
-                    >
-                      🎸 Cifra: {musica.cifra}
-                    </a>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Dialog de Envio por Email */}
-      <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Enviar Repertório por Email</DialogTitle>
-            <DialogDescription>
-              Digite o email do destinatário para enviar o repertório
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="space-y-4 mt-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">
-                Nome do destinatário (opcional)
-              </label>
-              <Input
-                placeholder="Ex: Padre João"
-                value={nomeDestinatario}
-                onChange={(e) => setNomeDestinatario(e.target.value)}
-              />
-            </div>
-            
-            <div>
-              <label className="text-sm font-medium mb-2 block">
-                Email do destinatário *
-              </label>
-              <Input
-                type="email"
-                placeholder="exemplo@email.com"
-                value={emailDestinatario}
-                onChange={(e) => setEmailDestinatario(e.target.value)}
-              />
-            </div>
-
-            <div className="flex gap-3 pt-4">
-              <Button
-                variant="outline"
-                className="flex-1"
-                onClick={() => setShowEmailDialog(false)}
-              >
-                Cancelar
-              </Button>
-              <Button
-                className="flex-1 gap-2"
-                onClick={handleEnviarEmail}
-                disabled={enviarEmailMutation.isPending}
-              >
-                <Mail className="w-4 h-4" />
-                {enviarEmailMutation.isPending ? "Enviando..." : "Enviar"}
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      </section>
     </div>
   );
 }
