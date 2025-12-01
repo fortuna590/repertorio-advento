@@ -18,6 +18,38 @@ export default function Produtos() {
   const produtos = [
     {
       id: 1,
+      titulo: "Catecismo da Igreja Católica",
+      descricao: "Obra fundamental que apresenta de forma completa e sistemática o ensinamento da Igreja Católica. Referência essencial para aprofundar a fé e compreender a doutrina católica.",
+      preco: "Consultar no Mercado Livre",
+      destaque: true,
+      disponivel: true,
+      linkExterno: "https://mercadolivre.com/sec/1L32bE3",
+      beneficios: [
+        "Ensinamento completo da Igreja Católica",
+        "Organizado em 4 partes principais",
+        "Referência para catequese e formação",
+        "Citações da Sagrada Escritura",
+        "Aprovado pelo Magistério da Igreja"
+      ],
+    },
+    {
+      id: 2,
+      titulo: "Missal Romano",
+      descricao: "Livro litúrgico oficial da Igreja Católica que contém as orações, leituras e ritos para a celebração da Santa Missa. Essencial para sacerdotes, ministros e fiéis que desejam acompanhar a liturgia.",
+      preco: "Consultar no Mercado Livre",
+      destaque: true,
+      disponivel: true,
+      linkExterno: "https://mercadolivre.com/sec/2uS2z1T",
+      beneficios: [
+        "Livro litúrgico oficial da Igreja",
+        "Orações e ritos da Santa Missa",
+        "Leituras para todo o ano litúrgico",
+        "Referência para celebrações",
+        "Aprovado pela CNBB"
+      ],
+    },
+    {
+      id: 3,
       titulo: "Guia Completo de Repertório Litúrgico",
       descricao: "E-book completo com repertórios para todo o ano litúrgico: Advento, Natal, Quaresma, Páscoa e Tempo Comum. Mais de 200 músicas organizadas com links e cifras.",
       preco: "R$ 47,00",
@@ -31,7 +63,7 @@ export default function Produtos() {
       ],
     },
     {
-      id: 2,
+      id: 4,
       titulo: "Curso de Ministério de Música",
       descricao: "Aprenda a liderar o ministério de música da sua paróquia com técnicas práticas, teoria musical básica e organização de equipes.",
       preco: "R$ 97,00",
@@ -45,7 +77,7 @@ export default function Produtos() {
       ],
     },
     {
-      id: 3,
+      id: 5,
       titulo: "Pack de Partituras Litúrgicas",
       descricao: "Coleção de partituras profissionais para coral e instrumentos. Ideal para grupos musicais que desejam elevar a qualidade das celebrações.",
       preco: "R$ 67,00",
@@ -154,16 +186,23 @@ export default function Produtos() {
                           produto.destaque ? 'text-primary' : 'text-accent-foreground'
                         }`} />
                       </div>
-                      {produto.destaque && (
+                      {produto.destaque && !produto.disponivel && (
                         <Badge className="bg-primary text-primary-foreground">
                           <Star className="w-3 h-3 mr-1" />
                           Mais Aguardado
                         </Badge>
                       )}
-                      <Badge variant="secondary" className="bg-secondary/20 text-secondary border-secondary/30">
-                        <Clock className="w-3 h-3 mr-1" />
-                        Em Breve
-                      </Badge>
+                      {produto.disponivel ? (
+                        <Badge className="bg-green-500/20 text-green-700 border-green-500/30">
+                          <CheckCircle2 className="w-3 h-3 mr-1" />
+                          Disponível
+                        </Badge>
+                      ) : (
+                        <Badge variant="secondary" className="bg-secondary/20 text-secondary border-secondary/30">
+                          <Clock className="w-3 h-3 mr-1" />
+                          Em Breve
+                        </Badge>
+                      )}
                     </div>
                     <CardTitle className="text-2xl md:text-3xl mb-2">
                       {produto.titulo}
@@ -199,17 +238,30 @@ export default function Produtos() {
                     </ul>
                   </div>
 
-                  {/* Status Em Breve */}
+                  {/* Status / Ação */}
                   <div className="pt-4 border-t border-border/50">
-                    <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-4 text-center">
-                      <Clock className="w-8 h-8 text-secondary mx-auto mb-2" />
-                      <p className="text-sm font-medium text-foreground mb-1">
-                        Produto em desenvolvimento
-                      </p>
+                    {produto.disponivel && produto.linkExterno ? (
+                      <a 
+                        href={produto.linkExterno} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <Button className="w-full gap-2" size="lg">
+                          🛍️ Comprar no Mercado Livre
+                        </Button>
+                      </a>
+                    ) : (
+                      <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-4 text-center">
+                        <Clock className="w-8 h-8 text-secondary mx-auto mb-2" />
+                        <p className="text-sm font-medium text-foreground mb-1">
+                          Produto em desenvolvimento
+                        </p>
                       <p className="text-xs text-muted-foreground">
                         Deixe seu email abaixo para ser avisado do lançamento
                       </p>
                     </div>
+                    )}
                   </div>
                 </div>
               </CardContent>

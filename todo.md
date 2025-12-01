@@ -160,3 +160,18 @@
 - [x] Sistema de categorias e tags
 - [x] Integrar blog no menu principal
 - [x] SEO otimizado (meta tags, títulos, descrições)
+
+
+## Primeiro Artigo do Blog
+
+- [x] Criar artigo completo sobre o Advento
+- [x] Incluir significado das 4 velas
+- [x] Abordar a importância da espera do Senhor
+- [x] Adicionar tópico sobre preparação espiritual
+- [x] Adicionar referências bibliográficas
+- [x] Upload da imagem das velas do Advento
+- [x] Publicar artigo no blog com imagem
+- [x] Adicionar link de afiliado do Catecismo nas referências
+- [x] Adicionar link de afiliado do Missal Romano nas referências
+- [x] Adicionar Catecismo como produto na página de produtos
+- [x] Adicionar Missal Romano como produto na página de produtos
