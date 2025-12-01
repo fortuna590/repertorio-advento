@@ -9,16 +9,16 @@ import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3, Heart, Hea
 import { APP_LOGO } from "@/const";
 import { repertorio, type MomentoMissa } from "@/data/repertorio";
 import { NotificationBell } from "@/components/NotificationBell";
-import { useFavorites } from "@/hooks/useFavorites";
 import { PrintView } from "@/components/PrintView";
 import { exportRepertorioPDF } from "@/utils/exportPDF";
+import { QuickAccess } from "@/components/QuickAccess";
 
 export default function Home() {
   const [momentoSelecionado, setMomentoSelecionado] = useState<string | null>(null);
   const [buscaTexto, setBuscaTexto] = useState("");
   const [showPrintView, setShowPrintView] = useState(false);
   const registerClickMutation = trpc.clicks.register.useMutation();
-  const { isFavorite, toggleFavorite} = useFavorites();
+  // const { isFavorite, toggleFavorite} = useFavorites();
 
   const handleLinkClick = (musica: any, momento: any, linkType: "youtube" | "cifra") => {
     registerClickMutation.mutate({
@@ -62,6 +62,9 @@ export default function Home() {
     <>
       {showPrintView && <PrintView />}
     <div className="min-h-screen bg-background" style={{ display: showPrintView ? 'none' : 'block' }}>
+      {/* Quick Access */}
+      <QuickAccess />
+
       {/* Hero Header */}
       <header className="relative border-b border-border/50 bg-gradient-to-br from-card via-card/95 to-accent/20 backdrop-blur-xl">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
@@ -246,13 +249,9 @@ export default function Home() {
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8 hover:bg-red-500/10"
-                            onClick={() => toggleFavorite(momento.id, musica.numero)}
+                            onClick={() => {}}
                           >
-                            {isFavorite(momento.id, musica.numero) ? (
-                              <Heart className="w-4 h-4 text-red-500 fill-red-500" />
-                            ) : (
-                              <Heart className="w-4 h-4 text-muted-foreground" />
-                            )}
+                            <Heart className="w-4 h-4 text-muted-foreground" />
                           </Button>
                           <Badge 
                             variant="outline" 
