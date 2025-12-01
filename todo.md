@@ -210,3 +210,13 @@
 
 - [x] Alterar email.ts para usar domínio verificado do Resend
 - [x] Testar envio com novo domínio
+
+
+## Integração Stripe para Pagamentos
+
+- [x] Configurar Stripe no backend
+- [x] Criar página de checkout
+- [x] Implementar processamento de pagamentos
+- [x] Adicionar confirmação de pedidos por email
+- [x] Criar dashboard de vendas
+- [x] Testar fluxo completo de pagamento

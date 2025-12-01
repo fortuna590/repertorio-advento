@@ -217,3 +217,64 @@ export function templateEmailRepertorio(nomeDestinatario: string, musicasSelecio
     </html>
   `;
 }
+
+
+/**
+ * Template de email para confirmação de pedido
+ */
+export function templateEmailPedido(nome: string, produtoNome: string, valor: number, pedidoId: string): string {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+        .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+        .field { margin-bottom: 20px; }
+        .label { font-weight: bold; color: #7c3aed; margin-bottom: 5px; }
+        .value { background: white; padding: 15px; border-radius: 5px; border-left: 4px solid #7c3aed; }
+        .footer { text-align: center; margin-top: 30px; color: #666; font-size: 12px; }
+        .price { font-size: 24px; font-weight: bold; color: #7c3aed; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>💳 Pagamento Confirmado!</h1>
+          <p>Repertório Católico - LouvaMais</p>
+        </div>
+        <div class="content">
+          <p>Olá ${nome},</p>
+          <p>Seu pagamento foi processado com sucesso! Obrigado pela compra.</p>
+          
+          <div class="field">
+            <div class="label">📦 Produto:</div>
+            <div class="value">${produtoNome}</div>
+          </div>
+          
+          <div class="field">
+            <div class="label">💰 Valor:</div>
+            <div class="value price">R$ ${valor.toFixed(2)}</div>
+          </div>
+          
+          <div class="field">
+            <div class="label">🔖 ID do Pedido:</div>
+            <div class="value">${pedidoId}</div>
+          </div>
+          
+          <p style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e5e7eb;">
+            <strong>📧 Próximos passos:</strong> Você receberá em breve um email com as instruções de acesso ao produto.
+          </p>
+        </div>
+        <div class="footer">
+          <p>LouvaMais - Church Solutions | Repertório Católico</p>
+          <p>Para a maior glória de Deus ✨</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+}

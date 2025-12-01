@@ -15,6 +15,10 @@ import MontarRepertorio from "./pages/MontarRepertorio";
 import Blog from "./pages/Blog";
 import BlogArtigo from "./pages/BlogArtigo";
 import BlogAdmin from "./pages/BlogAdmin";
+import Checkout from "./pages/Checkout";
+import PagamentoSucesso from "./pages/PagamentoSucesso";
+import PagamentoCancelado from "./pages/PagamentoCancelado";
+import Dashboard from "./pages/Dashboard";
 import WhatsAppButton from "./components/WhatsAppButton";
 
 function Router() {
@@ -32,6 +36,10 @@ function Router() {
       <Route path={"/blog"} component={Blog} />
       <Route path={"/blog/:slug"} component={BlogArtigo} />
       <Route path={"/blog-admin"} component={BlogAdmin} />
+      <Route path={"/checkout"} component={Checkout} />
+      <Route path={"/pagamento-sucesso"} component={PagamentoSucesso} />
+      <Route path={"/pagamento-cancelado"} component={PagamentoCancelado} />
+      <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
