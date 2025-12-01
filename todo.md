@@ -204,3 +204,9 @@
 - [x] Solicitar API Key do Resend ao usuário
 - [x] Ativar envio real de emails com Resend
 - [ ] Testar envio de emails
+
+
+## Correção de Domínio do Resend
+
+- [x] Alterar email.ts para usar domínio verificado do Resend
+- [x] Testar envio com novo domínio
