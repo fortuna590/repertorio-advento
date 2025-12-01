@@ -196,3 +196,11 @@
 - [x] Remover Navigation global (sticky header)
 - [x] Manter QuickAccess na Home
 - [x] Manter menu desdobrável existente
+
+
+## Configuração de Emails
+
+- [x] Atualizar email de contato para louvamais590@gmail.com
+- [x] Solicitar API Key do Resend ao usuário
+- [x] Ativar envio real de emails com Resend
+- [ ] Testar envio de emails

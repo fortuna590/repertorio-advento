@@ -25,7 +25,7 @@ export async function sendEmail({
   subject,
   html,
   from = 'LouvaMais <noreply@louvamais.com.br>',
-  replyTo = 'louvamais590@gmail.com'
+  replyTo = 'louvamais590@gmail.com' // Email de contato para respostas
 }: SendEmailParams): Promise<{ success: boolean; messageId?: string; error?: string }> {
   
   // Se não tiver API key configurada, apenas loga
