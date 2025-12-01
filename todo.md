@@ -189,3 +189,10 @@
 - [x] Criar seção de acesso rápido às principais funcionalidades
 - [x] Adicionar ícones e badges visuais nos links
 - [x] Implementar transições e animações suaves
+
+
+## Ajustes de Navegação
+
+- [x] Remover Navigation global (sticky header)
+- [x] Manter QuickAccess na Home
+- [x] Manter menu desdobrável existente
