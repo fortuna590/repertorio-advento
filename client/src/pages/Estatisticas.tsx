@@ -29,6 +29,8 @@ export default function Estatisticas() {
 
   const clickStatsByMomento = clickStats?.clicksByMomento || [];
   const clickStatsByType = clickStats?.clicksByType || [];
+  const clickStatsByMusica = clickStats?.clicksByMusica || [];
+  const totalClicks = clickStats?.totalClicks || 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800">
@@ -118,6 +120,19 @@ export default function Estatisticas() {
           </Card>
         </div>
 
+        {/* Total de Cliques */}
+        <div className="mb-12">
+          <Card className="p-8 bg-gradient-to-br from-indigo-600/20 to-indigo-600/10 border-indigo-500/30">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-indigo-200 mb-2">Total Geral de Cliques</p>
+                <p className="text-5xl font-bold text-white">{totalClicks.toLocaleString()}</p>
+              </div>
+              <div className="text-6xl opacity-20">📊</div>
+            </div>
+          </Card>
+        </div>
+
         {/* Gráficos e Análises */}
         <div className="grid md:grid-cols-2 gap-6 mb-12">
           <Card className="p-8 bg-slate-800 border-purple-500/20">
@@ -175,6 +190,35 @@ export default function Estatisticas() {
                 <p className="text-purple-200 text-sm">Nenhum dado disponível ainda</p>
               )}
             </div>
+          </Card>
+        </div>
+
+        {/* Músicas Mais Acessadas */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-white mb-6">Músicas Mais Acessadas</h2>
+          <Card className="p-8 bg-slate-800 border-purple-500/20">
+            {clickStatsByMusica.length > 0 ? (
+              <div className="space-y-4">
+                {clickStatsByMusica.slice(0, 10).map((musica, index) => (
+                  <div key={`${musica.musicaId}-${musica.linkType}`} className="flex items-center gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                      <span className="text-white font-bold text-sm">{index + 1}</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white font-semibold truncate">{musica.musicaTitulo}</p>
+                      <p className="text-purple-300 text-sm truncate">{musica.musicaArtista}</p>
+                      <p className="text-purple-400 text-xs">{musica.momentoTitulo} • {musica.linkType === 'youtube' ? 'YouTube' : 'Cifra Club'}</p>
+                    </div>
+                    <div className="flex-shrink-0 text-right">
+                      <p className="text-white font-bold">{musica.count}</p>
+                      <p className="text-purple-300 text-xs">cliques</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-purple-200 text-center py-8">Nenhum dado de músicas disponível ainda</p>
+            )}
           </Card>
         </div>
 
