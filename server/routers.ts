@@ -2,7 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
-import { registerClick, getClickStats } from "./db";
+import { registerClick, getClickStats, getSiteStats } from "./db";
 import { z } from "zod";
 import { contactRouter } from "./routers/contact";
 import { donationsRouter } from "./routers/donations";
@@ -55,6 +55,11 @@ export const appRouter = router({
     // Obter estatísticas (público para visualização)
     getStats: publicProcedure.query(async () => {
       return await getClickStats();
+    }),
+
+    // Obter estatísticas gerais do site
+    getSiteStats: publicProcedure.query(async () => {
+      return await getSiteStats();
     }),
   }),
 });

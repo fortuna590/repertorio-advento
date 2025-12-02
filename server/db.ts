@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, count } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, clicks, InsertClick, notifications, InsertNotification, Notification } from "../drizzle/schema";
+import { InsertUser, users, clicks, InsertClick, notifications, InsertNotification, Notification, artigos, repertorios } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -195,6 +195,75 @@ export async function getClickStats() {
 }
 
 /**
+ * Obter estatísticas gerais do site
+ */
+export async function getSiteStats() {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get site stats: database not available");
+    return {
+      totalMusicas: 29,
+      totalVisualizacoes: 0,
+      totalDownloads: 0,
+      totalMinisterios: 0,
+      totalArtigos: 0,
+      crescimentoMensal: 0
+    };
+  }
+
+  try {
+    // Total de cliques (visualizações)
+    const allClicks = await db.select().from(clicks);
+    const totalVisualizacoes = allClicks.length;
+
+    // Total de downloads (repertórios criados)
+    const allRepertorios = await db.select().from(repertorios);
+    const totalDownloads = allRepertorios.length;
+
+    // Total de ministérios (usuários únicos que criaram repertórios)
+    const uniqueMinisterios = new Set(allRepertorios.map(r => r.emailUsuario).filter(Boolean)).size;
+
+    // Total de artigos publicados
+    const allArtigos = await db.select().from(artigos);
+    const totalArtigos = allArtigos.filter(a => a.publicado === 1).length;
+
+    // Calcular crescimento mensal (cliques este mês vs mês anterior)
+    const now = new Date();
+    const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const previousMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    
+    const clicksThisMonth = allClicks.filter(c => new Date(c.clickedAt) >= currentMonth).length;
+    const clicksPreviousMonth = allClicks.filter(c => {
+      const date = new Date(c.clickedAt);
+      return date >= previousMonth && date < currentMonth;
+    }).length;
+
+    const crescimentoMensal = clicksPreviousMonth > 0 
+      ? Math.round(((clicksThisMonth - clicksPreviousMonth) / clicksPreviousMonth) * 100)
+      : 0;
+
+    return {
+      totalMusicas: 29, // Fixo: 29 músicas do Advento
+      totalVisualizacoes: totalVisualizacoes,
+      totalDownloads: totalDownloads,
+      totalMinisterios: uniqueMinisterios,
+      totalArtigos: totalArtigos,
+      crescimentoMensal: crescimentoMensal
+    };
+  } catch (error) {
+    console.error("[Database] Failed to get site stats:", error);
+    return {
+      totalMusicas: 29,
+      totalVisualizacoes: 0,
+      totalDownloads: 0,
+      totalMinisterios: 0,
+      totalArtigos: 0,
+      crescimentoMensal: 0
+    };
+  }
+}
+
+/**
  * Criar uma nova notificação
  */
 export async function createNotification(notification: InsertNotification): Promise<void> {
@@ -234,7 +303,7 @@ export async function getNotifications(): Promise<Notification[]> {
     });
   } catch (error) {
     console.error("[Database] Failed to get notifications:", error);
-    throw error;
+    return [];
   }
 }
 
@@ -253,7 +322,7 @@ export async function getUnreadNotificationCount(): Promise<number> {
     return allNotifications.filter(n => n.isRead === 0).length;
   } catch (error) {
     console.error("[Database] Failed to count unread notifications:", error);
-    throw error;
+    return 0;
   }
 }
 
@@ -308,7 +377,6 @@ export async function createRepertorio(repertorio: { nome: string; descricao?: s
   }
 
   try {
-    const { repertorios } = await import("../drizzle/schema");
     const result = await db.insert(repertorios).values(repertorio);
     const insertId = Number(result[0].insertId);
     console.log(`[Repertorio] Created: ${repertorio.nome} (ID: ${insertId})`);
@@ -330,12 +398,11 @@ export async function getRepertorioById(id: number) {
   }
 
   try {
-    const { repertorios } = await import("../drizzle/schema");
     const result = await db.select().from(repertorios).where(eq(repertorios.id, id)).limit(1);
     return result.length > 0 ? result[0] : undefined;
   } catch (error) {
     console.error("[Database] Failed to get repertorio:", error);
-    throw error;
+    return undefined;
   }
 }
 
@@ -350,14 +417,13 @@ export async function getAllRepertorios() {
   }
 
   try {
-    const { repertorios } = await import("../drizzle/schema");
     const allRepertorios = await db.select().from(repertorios);
     return allRepertorios.sort((a, b) => 
       new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
   } catch (error) {
     console.error("[Database] Failed to get repertorios:", error);
-    throw error;
+    return [];
   }
 }
 
@@ -372,7 +438,6 @@ export async function updateRepertorio(id: number, updates: { nome?: string; des
   }
 
   try {
-    const { repertorios } = await import("../drizzle/schema");
     await db.update(repertorios)
       .set(updates)
       .where(eq(repertorios.id, id));
@@ -394,7 +459,6 @@ export async function deleteRepertorio(id: number): Promise<void> {
   }
 
   try {
-    const { repertorios } = await import("../drizzle/schema");
     await db.delete(repertorios).where(eq(repertorios.id, id));
     console.log(`[Repertorio] Deleted: ID ${id}`);
   } catch (error) {
@@ -414,7 +478,6 @@ export async function createArtigo(artigo: { titulo: string; slug: string; resum
   }
 
   try {
-    const { artigos } = await import("../drizzle/schema");
     const result = await db.insert(artigos).values(artigo);
     const insertId = Number(result[0].insertId);
     console.log(`[Artigo] Created: ${artigo.titulo} (ID: ${insertId})`);
@@ -436,12 +499,11 @@ export async function getArtigoBySlug(slug: string) {
   }
 
   try {
-    const { artigos } = await import("../drizzle/schema");
     const result = await db.select().from(artigos).where(eq(artigos.slug, slug)).limit(1);
     return result.length > 0 ? result[0] : undefined;
   } catch (error) {
     console.error("[Database] Failed to get artigo:", error);
-    throw error;
+    return undefined;
   }
 }
 
@@ -456,12 +518,11 @@ export async function getArtigoById(id: number) {
   }
 
   try {
-    const { artigos } = await import("../drizzle/schema");
     const result = await db.select().from(artigos).where(eq(artigos.id, id)).limit(1);
     return result.length > 0 ? result[0] : undefined;
   } catch (error) {
     console.error("[Database] Failed to get artigo:", error);
-    throw error;
+    return undefined;
   }
 }
 
@@ -476,7 +537,6 @@ export async function getAllArtigos(includeRascunhos = false) {
   }
 
   try {
-    const { artigos } = await import("../drizzle/schema");
     let allArtigos = await db.select().from(artigos);
     
     if (!includeRascunhos) {
@@ -488,7 +548,7 @@ export async function getAllArtigos(includeRascunhos = false) {
     );
   } catch (error) {
     console.error("[Database] Failed to get artigos:", error);
-    throw error;
+    return [];
   }
 }
 
@@ -503,7 +563,6 @@ export async function updateArtigo(id: number, updates: { titulo?: string; slug?
   }
 
   try {
-    const { artigos } = await import("../drizzle/schema");
     await db.update(artigos)
       .set(updates)
       .where(eq(artigos.id, id));
@@ -525,7 +584,6 @@ export async function deleteArtigo(id: number): Promise<void> {
   }
 
   try {
-    const { artigos } = await import("../drizzle/schema");
     await db.delete(artigos).where(eq(artigos.id, id));
     console.log(`[Artigo] Deleted: ID ${id}`);
   } catch (error) {
@@ -545,7 +603,6 @@ export async function incrementArtigoViews(id: number): Promise<void> {
   }
 
   try {
-    const { artigos } = await import("../drizzle/schema");
     const artigo = await getArtigoById(id);
     if (artigo) {
       await db.update(artigos)

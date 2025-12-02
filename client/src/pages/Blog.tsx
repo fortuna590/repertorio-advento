@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { BookOpen, Calendar, Eye, ArrowRight, Sparkles } from "lucide-react";
 import { APP_LOGO } from "@/const";
 import { trpc } from "@/lib/trpc";
+import ModernHeader from "@/components/ModernHeader";
+import SocialLinks from "@/components/SocialLinks";
 
 export default function Blog() {
   const { data: artigos, isLoading } = trpc.artigos.getAll.useQuery();
@@ -18,144 +20,132 @@ export default function Blog() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border/50 bg-gradient-to-br from-card via-card/95 to-accent/20 backdrop-blur-xl">
-        <div className="container py-6">
-          <div className="flex items-center justify-between">
-            <Link href="/">
-              <button className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10" />
-                <div className="text-left">
-                  <div className="font-bold text-lg text-foreground">Repertório Católico</div>
-                  <div className="text-xs text-muted-foreground">LouvaMais Solutions</div>
-                </div>
-              </button>
-            </Link>
-            <div className="flex items-center gap-3">
-              <Link href="/">
-                <Button variant="ghost" size="sm">Início</Button>
-              </Link>
-              <Link href="/sobre">
-                <Button variant="ghost" size="sm">Sobre</Button>
-              </Link>
-              <Link href="/contato">
-                <Button variant="ghost" size="sm">Contato</Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800">
+      <ModernHeader />
 
-      {/* Hero Section */}
-      <section className="relative border-b border-border/50 bg-gradient-to-br from-primary/10 via-background to-accent/10">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent" />
-        <div className="container relative py-16 md:py-24">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 border border-primary/30 mb-6">
-              <BookOpen className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Blog</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 tracking-tight">
-              Artigos sobre Música Litúrgica
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground">
-              Conteúdo educativo para enriquecer o ministério de música da sua paróquia
-            </p>
-          </div>
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        {/* Header */}
+        <div className="mb-16">
+          <h1 className="text-5xl font-bold text-white mb-4">Blog</h1>
+          <p className="text-xl text-purple-200">
+            Conteúdo educativo sobre música litúrgica e espiritualidade
+          </p>
         </div>
-      </section>
 
-      {/* Artigos Grid */}
-      <section className="container py-12 md:py-16">
-        {isLoading ? (
-          <div className="text-center py-12">
-            <div className="inline-flex items-center gap-2 text-muted-foreground">
-              <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-              <span>Carregando artigos...</span>
+        {/* Artigos Grid */}
+        <section className="mb-12">
+          {isLoading ? (
+            <div className="text-center py-12">
+              <div className="inline-flex items-center gap-2 text-purple-200">
+                <div className="w-5 h-5 border-2 border-purple-400 border-t-transparent rounded-full animate-spin" />
+                <span>Carregando artigos...</span>
+              </div>
             </div>
-          </div>
-        ) : artigos && artigos.length > 0 ? (
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
-            {artigos.map((artigo) => (
-              <Link key={artigo.id} href={`/blog/${artigo.slug}`}>
-                <Card className="group h-full cursor-pointer transition-all duration-300 hover:border-primary/50 hover:shadow-lg">
-                  {artigo.imagemCapa && (
-                    <div className="aspect-video w-full overflow-hidden rounded-t-lg">
-                      <img
-                        src={artigo.imagemCapa}
-                        alt={artigo.titulo}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    </div>
-                  )}
-                  <CardHeader>
-                    <div className="flex items-center gap-2 mb-3">
-                      {artigo.categoria && (
-                        <Badge variant="secondary" className="text-xs">
-                          {artigo.categoria}
-                        </Badge>
-                      )}
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <Eye className="w-3 h-3" />
-                        <span>{artigo.visualizacoes}</span>
+          ) : artigos && artigos.length > 0 ? (
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {artigos.map((artigo) => (
+                <Link key={artigo.id} href={`/blog/${artigo.slug}`}>
+                  <Card className="group h-full cursor-pointer transition-all duration-300 hover:border-purple-400/50 hover:shadow-lg bg-slate-800 border-purple-500/20">
+                    {artigo.imagemCapa && (
+                      <div className="aspect-video w-full overflow-hidden rounded-t-lg">
+                        <img
+                          src={artigo.imagemCapa}
+                          alt={artigo.titulo}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
                       </div>
-                    </div>
-                    <CardTitle className="text-xl group-hover:text-primary transition-colors line-clamp-2">
-                      {artigo.titulo}
-                    </CardTitle>
-                    <CardDescription className="line-clamp-3">
-                      {artigo.resumo}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <Calendar className="w-4 h-4" />
-                        <span>{formatDate(artigo.createdAt)}</span>
+                    )}
+                    <CardHeader>
+                      <div className="flex items-center gap-2 mb-3">
+                        {artigo.categoria && (
+                          <Badge variant="secondary" className="text-xs bg-purple-500/30 text-purple-200">
+                            {artigo.categoria}
+                          </Badge>
+                        )}
+                        <div className="flex items-center gap-1 text-xs text-purple-300">
+                          <Eye className="w-3 h-3" />
+                          <span>{artigo.visualizacoes}</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1 text-primary font-medium group-hover:gap-2 transition-all">
-                        <span>Ler mais</span>
-                        <ArrowRight className="w-4 h-4" />
+                      <CardTitle className="text-xl group-hover:text-purple-300 transition-colors line-clamp-2 text-white">
+                        {artigo.titulo}
+                      </CardTitle>
+                      <CardDescription className="line-clamp-3 text-purple-200">
+                        {artigo.resumo}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-2 text-purple-300">
+                          <Calendar className="w-4 h-4" />
+                          <span>{formatDate(artigo.createdAt)}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-purple-400 font-medium group-hover:gap-2 transition-all">
+                          <span>Ler mais</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <div className="max-w-2xl mx-auto text-center py-12">
-            <Card className="border-dashed">
-              <CardHeader>
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 mx-auto mb-4">
-                  <BookOpen className="w-8 h-8 text-primary" />
-                </div>
-                <CardTitle className="text-2xl">Nenhum artigo publicado ainda</CardTitle>
-                <CardDescription className="text-base">
-                  Em breve teremos conteúdo educativo sobre música litúrgica para você!
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </div>
-        )}
-      </section>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="max-w-2xl mx-auto text-center py-12">
+              <Card className="border-dashed bg-slate-800 border-purple-500/20">
+                <CardHeader>
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-purple-500/20 mx-auto mb-4">
+                    <BookOpen className="w-8 h-8 text-purple-400" />
+                  </div>
+                  <CardTitle className="text-2xl text-white">Nenhum artigo publicado ainda</CardTitle>
+                  <CardDescription className="text-base text-purple-200">
+                    Em breve teremos conteúdo educativo sobre música litúrgica para você!
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </div>
+          )}
+        </section>
+      </div>
 
       {/* Footer */}
-      <footer className="border-t border-border/50 bg-card/50 backdrop-blur-xl mt-20">
-        <div className="container py-10 md:py-12">
-          <div className="text-center space-y-4">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <img src={APP_LOGO} alt="LouvaMais" className="w-8 h-8" />
-              <span className="text-lg font-semibold text-foreground">LouvaMais - Church Solutions</span>
+      <footer className="border-t border-purple-500/20 bg-slate-900/50 backdrop-blur-sm mt-20">
+        <div className="max-w-6xl mx-auto px-4 py-12">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10 object-contain" />
+                <span className="font-bold text-white">Repertório Católico</span>
+              </div>
+              <p className="text-purple-200 text-sm">
+                Músicas litúrgicas para enriquecer suas celebrações
+              </p>
             </div>
-            <div className="space-y-2 text-sm text-muted-foreground">
-              <p>© 2025 LouvaMais - Church Solutions. Todos os direitos reservados.</p>
+
+            <div>
+              <h4 className="font-semibold text-white mb-4">Links Rápidos</h4>
+              <nav className="space-y-2">
+                <Link href="/repertorio" className="text-purple-200 hover:text-white transition text-sm block">
+                  Repertório
+                </Link>
+                <Link href="/sobre" className="text-purple-200 hover:text-white transition text-sm block">
+                  Sobre
+                </Link>
+                <Link href="/contato" className="text-purple-200 hover:text-white transition text-sm block">
+                  Contato
+                </Link>
+              </nav>
             </div>
-            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground/80 pt-4 border-t border-border/30 mt-6">
-              <Sparkles className="w-4 h-4 text-secondary" />
-              <span>Para a maior glória de Deus</span>
+
+            <div>
+              <h4 className="font-semibold text-white mb-4">Redes Sociais</h4>
+              <SocialLinks layout="horizontal" size="small" />
             </div>
+          </div>
+
+          <div className="border-t border-purple-500/20 pt-8 text-center text-purple-200 text-sm">
+            <p>© 2025 LouvaMais - Repertório Católico. Todos os direitos reservados.</p>
+            <p className="mt-2">Para a maior glória de Deus ✨</p>
           </div>
         </div>
       </footer>

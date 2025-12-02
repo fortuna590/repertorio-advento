@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Mail, Send, CheckCircle2, AlertCircle } from "lucide-react";
+import { Mail, Send, CheckCircle2, AlertCircle } from "lucide-react";
 import { Link } from "wouter";
 import { APP_LOGO } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
+import ModernHeader from "@/components/ModernHeader";
+import SocialLinks from "@/components/SocialLinks";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -60,53 +62,35 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border/50 bg-card/50 backdrop-blur-xl">
-        <div className="container py-8">
-          <Link href="/">
-            <Button variant="ghost" size="sm" className="mb-4">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Voltar ao Repertório
-            </Button>
-          </Link>
-          <div className="flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-white/90 backdrop-blur-sm border border-primary/20 shadow-lg">
-              <img 
-                src={APP_LOGO} 
-                alt="LouvaMais Logo" 
-                className="w-12 h-12 object-contain"
-              />
-            </div>
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-                Entre em Contato
-              </h1>
-              <p className="text-muted-foreground mt-1">
-                Estamos prontos para ajudar sua comunidade
-              </p>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800">
+      <ModernHeader />
 
-      <main className="container py-12">
-        <div className="max-w-3xl mx-auto">
-          <Card>
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        {/* Header */}
+        <div className="mb-16">
+          <h1 className="text-5xl font-bold text-white mb-4">Entre em Contato</h1>
+          <p className="text-xl text-purple-200">
+            Estamos prontos para ajudar sua comunidade
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8 mb-12">
+          {/* Formulário */}
+          <Card className="bg-slate-800 border-purple-500/20">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Mail className="w-5 h-5 text-primary" />
+              <CardTitle className="flex items-center gap-2 text-white">
+                <Mail className="w-5 h-5 text-purple-400" />
                 Formulário de Contato
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-purple-200">
                 Preencha o formulário abaixo e entraremos em contato em breve
               </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="nome">
-                    Nome Completo <span className="text-destructive">*</span>
+                  <Label htmlFor="nome" className="text-white">
+                    Nome Completo <span className="text-pink-400">*</span>
                   </Label>
                   <Input
                     id="nome"
@@ -115,12 +99,13 @@ export default function Contact() {
                     onChange={handleChange}
                     placeholder="Seu nome completo"
                     required
+                    className="bg-slate-700 border-purple-500/30 text-white placeholder:text-purple-300"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email">
-                    Email <span className="text-destructive">*</span>
+                  <Label htmlFor="email" className="text-white">
+                    Email <span className="text-pink-400">*</span>
                   </Label>
                   <Input
                     id="email"
@@ -130,11 +115,12 @@ export default function Contact() {
                     onChange={handleChange}
                     placeholder="seu@email.com"
                     required
+                    className="bg-slate-700 border-purple-500/30 text-white placeholder:text-purple-300"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="telefone">Telefone</Label>
+                  <Label htmlFor="telefone" className="text-white">Telefone</Label>
                   <Input
                     id="telefone"
                     name="telefone"
@@ -142,23 +128,25 @@ export default function Contact() {
                     value={formData.telefone}
                     onChange={handleChange}
                     placeholder="(00) 00000-0000"
+                    className="bg-slate-700 border-purple-500/30 text-white placeholder:text-purple-300"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="paroquia">Paróquia / Comunidade</Label>
+                  <Label htmlFor="paroquia" className="text-white">Paróquia / Comunidade</Label>
                   <Input
                     id="paroquia"
                     name="paroquia"
                     value={formData.paroquia}
                     onChange={handleChange}
                     placeholder="Nome da sua paróquia ou comunidade"
+                    className="bg-slate-700 border-purple-500/30 text-white placeholder:text-purple-300"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="mensagem">
-                    Mensagem <span className="text-destructive">*</span>
+                  <Label htmlFor="mensagem" className="text-white">
+                    Mensagem <span className="text-pink-400">*</span>
                   </Label>
                   <Textarea
                     id="mensagem"
@@ -168,6 +156,7 @@ export default function Contact() {
                     placeholder="Conte-nos como podemos ajudar..."
                     rows={6}
                     required
+                    className="bg-slate-700 border-purple-500/30 text-white placeholder:text-purple-300"
                   />
                 </div>
 
@@ -176,7 +165,7 @@ export default function Contact() {
                     type="submit"
                     size="lg"
                     disabled={sendEmailMutation.isPending}
-                    className="gap-2"
+                    className="gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
                   >
                     {sendEmailMutation.isPending ? (
                       <>
@@ -192,14 +181,14 @@ export default function Contact() {
                   </Button>
                   
                   {sendEmailMutation.isSuccess && (
-                    <div className="flex items-center gap-2 text-sm text-green-600">
+                    <div className="flex items-center gap-2 text-sm text-green-400">
                       <CheckCircle2 className="w-4 h-4" />
                       <span>Enviado com sucesso!</span>
                     </div>
                   )}
                   
                   {sendEmailMutation.isError && (
-                    <div className="flex items-center gap-2 text-sm text-destructive">
+                    <div className="flex items-center gap-2 text-sm text-pink-400">
                       <AlertCircle className="w-4 h-4" />
                       <span>Erro ao enviar</span>
                     </div>
@@ -210,45 +199,86 @@ export default function Contact() {
           </Card>
 
           {/* Informações de Contato */}
-          <Card className="mt-8 bg-gradient-to-br from-primary/5 to-transparent border-primary/30">
-            <CardContent className="py-8">
-              <div className="text-center space-y-4">
-                <div className="flex justify-center">
-                  <div className="p-3 rounded-xl bg-primary/20">
-                    <Mail className="w-6 h-6 text-primary" />
+          <div className="space-y-8">
+            <Card className="bg-gradient-to-br from-purple-600/20 to-pink-600/20 border-purple-500/30">
+              <CardContent className="py-8">
+                <div className="text-center space-y-4">
+                  <div className="flex justify-center">
+                    <div className="p-3 rounded-xl bg-purple-500/20">
+                      <Mail className="w-6 h-6 text-purple-400" />
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg text-white mb-2">Email Direto</h3>
+                    <a
+                      href="mailto:louvamais590@gmail.com"
+                      className="text-purple-300 hover:text-purple-200 transition"
+                    >
+                      louvamais590@gmail.com
+                    </a>
+                  </div>
+                  <p className="text-sm text-purple-200">
+                    Você também pode nos enviar um email diretamente
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Horário de Atendimento */}
+            <Card className="bg-slate-800 border-purple-500/20">
+              <CardContent className="py-8">
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-lg text-white">Horário de Atendimento</h3>
+                  <div className="space-y-2 text-purple-200">
+                    <p>Segunda a Sexta: 09:00 - 18:00</p>
+                    <p>Sábado: 09:00 - 12:00</p>
+                    <p>Domingo: Fechado</p>
                   </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-lg mb-2">Email Direto</h3>
-                  <a
-                    href="mailto:louvamais590@gmail.com"
-                    className="text-primary hover:underline"
-                  >
-                    louvamais590@gmail.com
-                  </a>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Você também pode nos enviar um email diretamente
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </main>
+      </div>
 
       {/* Footer */}
-      <footer className="border-t border-border/50 bg-card/50 backdrop-blur-xl mt-20">
-        <div className="container py-10 md:py-12">
-          <div className="text-center space-y-4">
-            <div className="pt-4 border-t border-border/30">
-              <p className="text-sm text-muted-foreground">
-                Uma produção de{" "}
-                <span className="font-semibold text-primary">LouvaMais - Church Solutions</span>
-              </p>
-              <p className="text-xs text-muted-foreground/60 mt-1">
-                © 2025 LouvaMais. Todos os direitos reservados.
+      <footer className="border-t border-purple-500/20 bg-slate-900/50 backdrop-blur-sm mt-20">
+        <div className="max-w-6xl mx-auto px-4 py-12">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10 object-contain" />
+                <span className="font-bold text-white">Repertório Católico</span>
+              </div>
+              <p className="text-purple-200 text-sm">
+                Músicas litúrgicas para enriquecer suas celebrações
               </p>
             </div>
+
+            <div>
+              <h4 className="font-semibold text-white mb-4">Links Rápidos</h4>
+              <nav className="space-y-2">
+                <Link href="/repertorio" className="text-purple-200 hover:text-white transition text-sm block">
+                  Repertório
+                </Link>
+                <Link href="/blog" className="text-purple-200 hover:text-white transition text-sm block">
+                  Blog
+                </Link>
+                <Link href="/sobre" className="text-purple-200 hover:text-white transition text-sm block">
+                  Sobre
+                </Link>
+              </nav>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-white mb-4">Redes Sociais</h4>
+              <SocialLinks layout="horizontal" size="small" />
+            </div>
+          </div>
+
+          <div className="border-t border-purple-500/20 pt-8 text-center text-purple-200 text-sm">
+            <p>© 2025 LouvaMais - Repertório Católico. Todos os direitos reservados.</p>
+            <p className="mt-2">Para a maior glória de Deus ✨</p>
           </div>
         </div>
       </footer>

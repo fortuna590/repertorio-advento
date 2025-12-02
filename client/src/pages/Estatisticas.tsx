@@ -1,8 +1,35 @@
 import { Card } from "@/components/ui/card";
 import { BarChart3, Music, Users, TrendingUp, Eye, Download } from "lucide-react";
 import ModernHeader from "@/components/ModernHeader";
+import SocialLinks from "@/components/SocialLinks";
+import { APP_LOGO } from "@/const";
+import { trpc } from "@/lib/trpc";
+import { Loader2 } from "lucide-react";
 
 export default function Estatisticas() {
+  const { data: stats, isLoading } = trpc.clicks.getSiteStats.useQuery();
+  const { data: clickStats } = trpc.clicks.getStats.useQuery();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-purple-400" />
+      </div>
+    );
+  }
+
+  const siteStats = stats || {
+    totalMusicas: 29,
+    totalVisualizacoes: 0,
+    totalDownloads: 0,
+    totalMinisterios: 0,
+    totalArtigos: 0,
+    crescimentoMensal: 0
+  };
+
+  const clickStatsByMomento = clickStats?.clicksByMomento || [];
+  const clickStatsByType = clickStats?.clicksByType || [];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800">
       <ModernHeader />
@@ -25,7 +52,7 @@ export default function Estatisticas() {
                 Total
               </span>
             </div>
-            <p className="text-4xl font-bold text-white mb-2">29+</p>
+            <p className="text-4xl font-bold text-white mb-2">{siteStats.totalMusicas}</p>
             <p className="text-purple-200">Músicas Litúrgicas</p>
             <p className="text-xs text-purple-400 mt-2">Repertório do Advento</p>
           </Card>
@@ -34,12 +61,12 @@ export default function Estatisticas() {
             <div className="flex items-center justify-between mb-4">
               <Eye className="w-8 h-8 text-pink-400" />
               <span className="text-xs bg-pink-500/30 text-pink-200 px-3 py-1 rounded-full">
-                Este mês
+                Total
               </span>
             </div>
-            <p className="text-4xl font-bold text-white mb-2">1.2K+</p>
+            <p className="text-4xl font-bold text-white mb-2">{siteStats.totalVisualizacoes.toLocaleString()}</p>
             <p className="text-pink-200">Visualizações</p>
-            <p className="text-xs text-pink-400 mt-2">Crescimento constante</p>
+            <p className="text-xs text-pink-400 mt-2">Cliques em links</p>
           </Card>
 
           <Card className="p-8 bg-gradient-to-br from-blue-600/20 to-blue-600/10 border-blue-500/30">
@@ -49,9 +76,9 @@ export default function Estatisticas() {
                 Total
               </span>
             </div>
-            <p className="text-4xl font-bold text-white mb-2">450+</p>
+            <p className="text-4xl font-bold text-white mb-2">{siteStats.totalDownloads}</p>
             <p className="text-blue-200">Downloads</p>
-            <p className="text-xs text-blue-400 mt-2">Repertórios exportados</p>
+            <p className="text-xs text-blue-400 mt-2">Repertórios criados</p>
           </Card>
 
           <Card className="p-8 bg-gradient-to-br from-green-600/20 to-green-600/10 border-green-500/30">
@@ -61,9 +88,9 @@ export default function Estatisticas() {
                 Comunidade
               </span>
             </div>
-            <p className="text-4xl font-bold text-white mb-2">150+</p>
+            <p className="text-4xl font-bold text-white mb-2">{siteStats.totalMinisterios}</p>
             <p className="text-green-200">Ministérios Conectados</p>
-            <p className="text-xs text-green-400 mt-2">Em todo o Brasil</p>
+            <p className="text-xs text-green-400 mt-2">Usuários únicos</p>
           </Card>
 
           <Card className="p-8 bg-gradient-to-br from-yellow-600/20 to-yellow-600/10 border-yellow-500/30">
@@ -73,7 +100,7 @@ export default function Estatisticas() {
                 Crescimento
               </span>
             </div>
-            <p className="text-4xl font-bold text-white mb-2">+35%</p>
+            <p className="text-4xl font-bold text-white mb-2">{siteStats.crescimentoMensal > 0 ? '+' : ''}{siteStats.crescimentoMensal}%</p>
             <p className="text-yellow-200">Crescimento Mensal</p>
             <p className="text-xs text-yellow-400 mt-2">Comparado ao mês anterior</p>
           </Card>
@@ -85,9 +112,9 @@ export default function Estatisticas() {
                 Artigos
               </span>
             </div>
-            <p className="text-4xl font-bold text-white mb-2">1</p>
+            <p className="text-4xl font-bold text-white mb-2">{siteStats.totalArtigos}</p>
             <p className="text-red-200">Artigos Publicados</p>
-            <p className="text-xs text-red-400 mt-2">Sobre o Advento</p>
+            <p className="text-xs text-red-400 mt-2">Conteúdo educativo</p>
           </Card>
         </div>
 
@@ -96,52 +123,57 @@ export default function Estatisticas() {
           <Card className="p-8 bg-slate-800 border-purple-500/20">
             <h3 className="text-xl font-bold text-white mb-6">Momentos da Missa Mais Acessados</h3>
             <div className="space-y-4">
-              {[
-                { label: "Entrada", value: 95, percentage: 100 },
-                { label: "Aclamação ao Evangelho", value: 88, percentage: 93 },
-                { label: "Ofertório", value: 82, percentage: 86 },
-                { label: "Comunhão", value: 78, percentage: 82 },
-                { label: "Saída", value: 72, percentage: 76 },
-              ].map((item) => (
-                <div key={item.label}>
-                  <div className="flex justify-between mb-2">
-                    <span className="text-purple-200">{item.label}</span>
-                    <span className="text-white font-semibold">{item.percentage}%</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div
-                      className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full"
-                      style={{ width: `${item.percentage}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
+              {clickStatsByMomento.length > 0 ? (
+                clickStatsByMomento.slice(0, 5).map((item) => {
+                  const maxCount = Math.max(...clickStatsByMomento.map(i => i.count), 1);
+                  const percentage = Math.round((item.count / maxCount) * 100);
+                  return (
+                    <div key={item.momentoId}>
+                      <div className="flex justify-between mb-2">
+                        <span className="text-purple-200">{item.momentoTitulo}</span>
+                        <span className="text-white font-semibold">{percentage}%</span>
+                      </div>
+                      <div className="w-full bg-slate-700 rounded-full h-2">
+                        <div
+                          className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full"
+                          style={{ width: `${percentage}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <p className="text-purple-200 text-sm">Nenhum dado disponível ainda</p>
+              )}
             </div>
           </Card>
 
           <Card className="p-8 bg-slate-800 border-purple-500/20">
             <h3 className="text-xl font-bold text-white mb-6">Recursos Mais Utilizados</h3>
             <div className="space-y-4">
-              {[
-                { label: "Visualizar Repertório", value: 98 },
-                { label: "Buscar Músicas", value: 87 },
-                { label: "Filtrar por Momento", value: 76 },
-                { label: "Exportar PDF", value: 65 },
-                { label: "Compartilhar", value: 54 },
-              ].map((item) => (
-                <div key={item.label} className="flex items-center justify-between">
-                  <span className="text-purple-200">{item.label}</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-24 bg-slate-700 rounded-full h-2">
-                      <div
-                        className="bg-gradient-to-r from-pink-500 to-purple-500 h-2 rounded-full"
-                        style={{ width: `${item.value}%` }}
-                      />
+              {clickStatsByType.length > 0 ? (
+                clickStatsByType.map((item) => {
+                  const totalClicks = clickStatsByType.reduce((sum, i) => sum + i.count, 0);
+                  const percentage = Math.round((item.count / totalClicks) * 100);
+                  const label = item.type === 'youtube' ? 'YouTube' : 'Cifra Club';
+                  return (
+                    <div key={item.type} className="flex items-center justify-between">
+                      <span className="text-purple-200">{label}</span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-24 bg-slate-700 rounded-full h-2">
+                          <div
+                            className="bg-gradient-to-r from-pink-500 to-purple-500 h-2 rounded-full"
+                            style={{ width: `${percentage}%` }}
+                          />
+                        </div>
+                        <span className="text-white font-semibold w-8 text-right">{percentage}%</span>
+                      </div>
                     </div>
-                    <span className="text-white font-semibold w-8 text-right">{item.value}%</span>
-                  </div>
-                </div>
-              ))}
+                  );
+                })
+              ) : (
+                <p className="text-purple-200 text-sm">Nenhum dado disponível ainda</p>
+              )}
             </div>
           </Card>
         </div>
@@ -155,25 +187,31 @@ export default function Estatisticas() {
               <div>
                 <h3 className="font-semibold text-white mb-2">Engajamento em Alta</h3>
                 <p className="text-purple-200 text-sm">
-                  Os usuários estão cada vez mais engajados com o repertório, especialmente com as funcionalidades de filtro e busca.
+                  {siteStats.totalVisualizacoes > 0 
+                    ? `${siteStats.totalVisualizacoes} cliques registrados mostram engajamento crescente com o repertório.`
+                    : 'Os usuários estão começando a explorar o repertório.'}
                 </p>
               </div>
             </div>
             <div className="flex gap-4">
               <div className="w-1 bg-gradient-to-b from-pink-500 to-purple-500 rounded-full" />
               <div>
-                <h3 className="font-semibold text-white mb-2">Crescimento Sustentável</h3>
+                <h3 className="font-semibold text-white mb-2">Comunidade em Crescimento</h3>
                 <p className="text-purple-200 text-sm">
-                  Crescimento consistente de 35% ao mês indica que o projeto está resolvendo um problema real para ministérios.
+                  {siteStats.totalMinisterios > 0
+                    ? `${siteStats.totalMinisterios} ministérios já criaram seus repertórios personalizados.`
+                    : 'A comunidade está começando a utilizar a plataforma.'}
                 </p>
               </div>
             </div>
             <div className="flex gap-4">
               <div className="w-1 bg-gradient-to-b from-purple-500 to-pink-500 rounded-full" />
               <div>
-                <h3 className="font-semibold text-white mb-2">Comunidade Forte</h3>
+                <h3 className="font-semibold text-white mb-2">Conteúdo Educativo</h3>
                 <p className="text-purple-200 text-sm">
-                  150+ ministérios conectados mostram que a plataforma está criando uma comunidade real de usuários.
+                  {siteStats.totalArtigos > 0
+                    ? `${siteStats.totalArtigos} artigos publicados para enriquecer a experiência dos usuários.`
+                    : 'Conteúdo educativo em desenvolvimento para apoiar os ministérios.'}
                 </p>
               </div>
             </div>
@@ -182,13 +220,55 @@ export default function Estatisticas() {
               <div>
                 <h3 className="font-semibold text-white mb-2">Potencial de Expansão</h3>
                 <p className="text-purple-200 text-sm">
-                  Com 1 artigo publicado e crescimento consistente, há grande potencial para expandir conteúdo educativo.
+                  Com {siteStats.totalMusicas} músicas do Advento e crescimento consistente, há grande potencial para expandir para outras liturgias.
                 </p>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="border-t border-purple-500/20 bg-slate-900/50 backdrop-blur-sm mt-20">
+        <div className="max-w-6xl mx-auto px-4 py-12">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10 object-contain" />
+                <span className="font-bold text-white">Repertório Católico</span>
+              </div>
+              <p className="text-purple-200 text-sm">
+                Músicas litúrgicas para enriquecer suas celebrações
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-white mb-4">Links Rápidos</h4>
+              <nav className="space-y-2">
+                <a href="/repertorio" className="text-purple-200 hover:text-white transition text-sm block">
+                  Repertório
+                </a>
+                <a href="/blog" className="text-purple-200 hover:text-white transition text-sm block">
+                  Blog
+                </a>
+                <a href="/sobre" className="text-purple-200 hover:text-white transition text-sm block">
+                  Sobre
+                </a>
+              </nav>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-white mb-4">Redes Sociais</h4>
+              <SocialLinks layout="horizontal" size="small" />
+            </div>
+          </div>
+
+          <div className="border-t border-purple-500/20 pt-8 text-center text-purple-200 text-sm">
+            <p>© 2025 LouvaMais - Repertório Católico. Todos os direitos reservados.</p>
+            <p className="mt-2">Para a maior glória de Deus ✨</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
