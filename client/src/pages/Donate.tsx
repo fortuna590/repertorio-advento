@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Heart, Sparkles, Check } from "lucide-react";
+import { Heart, Check } from "lucide-react";
 import { Link } from "wouter";
 import { APP_LOGO } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
+import ModernHeader from "@/components/ModernHeader";
+import SocialLinks from "@/components/SocialLinks";
 
 const SUGGESTED_AMOUNTS = [10, 25, 50, 100, 200];
 
@@ -61,54 +63,35 @@ export default function Donate() {
   const finalAmount = selectedAmount || (customAmount ? parseFloat(customAmount) : 0);
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border/50 bg-card/50 backdrop-blur-xl">
-        <div className="container py-8">
-          <Link href="/">
-            <Button variant="ghost" size="sm" className="mb-4">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Voltar ao Repertório
-            </Button>
-          </Link>
-          <div className="flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-white/90 backdrop-blur-sm border border-primary/20 shadow-lg">
-              <img 
-                src={APP_LOGO} 
-                alt="LouvaMais Logo" 
-                className="w-12 h-12 object-contain"
-              />
-            </div>
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-                Apoie o Projeto
-              </h1>
-              <p className="text-muted-foreground mt-1">
-                Sua doação ajuda a manter o LouvaMais funcionando
-              </p>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800">
+      <ModernHeader />
 
-      <main className="container py-12">
-        <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        {/* Header */}
+        <div className="mb-16">
+          <h1 className="text-5xl font-bold text-white mb-4">Apoie o Projeto</h1>
+          <p className="text-xl text-purple-200">
+            Sua doação ajuda a manter o LouvaMais funcionando e crescendo
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8 mb-12">
           {/* Formulário de Doação */}
           <div className="space-y-6">
-            <Card>
+            <Card className="bg-slate-800 border-purple-500/20">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Heart className="w-5 h-5 text-primary" />
+                <CardTitle className="flex items-center gap-2 text-white">
+                  <Heart className="w-5 h-5 text-pink-400" />
                   Fazer uma Doação
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-purple-200">
                   Escolha um valor ou insira o quanto deseja doar
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Valores Sugeridos */}
                 <div className="space-y-2">
-                  <Label>Valores Sugeridos</Label>
+                  <Label className="text-white">Valores Sugeridos</Label>
                   <div className="grid grid-cols-3 gap-2">
                     {SUGGESTED_AMOUNTS.map((amount) => (
                       <Button
@@ -118,7 +101,11 @@ export default function Donate() {
                           setSelectedAmount(amount);
                           setCustomAmount("");
                         }}
-                        className="relative"
+                        className={`relative ${
+                          selectedAmount === amount
+                            ? "bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+                            : "border-purple-500/30 text-purple-200 hover:text-white hover:bg-purple-500/10"
+                        }`}
                       >
                         {selectedAmount === amount && (
                           <Check className="w-4 h-4 absolute top-1 right-1" />
@@ -131,9 +118,9 @@ export default function Donate() {
 
                 {/* Valor Personalizado */}
                 <div className="space-y-2">
-                  <Label htmlFor="customAmount">Ou insira outro valor</Label>
+                  <Label htmlFor="customAmount" className="text-white">Ou insira outro valor</Label>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-300">
                       R$
                     </span>
                     <Input
@@ -148,45 +135,48 @@ export default function Donate() {
                         setSelectedAmount(null);
                       }}
                       placeholder="0,00"
-                      className="pl-10"
+                      className="pl-10 bg-slate-700 border-purple-500/30 text-white placeholder:text-purple-400"
                     />
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-purple-300">
                     Valor mínimo: R$ 5,00 | Valor máximo: R$ 10.000,00
                   </p>
                 </div>
 
                 {/* Informações do Doador */}
-                <div className="space-y-4 pt-4 border-t">
+                <div className="space-y-4 pt-4 border-t border-purple-500/20">
                   <div className="space-y-2">
-                    <Label htmlFor="donorName">Seu Nome (opcional)</Label>
+                    <Label htmlFor="donorName" className="text-white">Seu Nome (opcional)</Label>
                     <Input
                       id="donorName"
                       value={donorName}
                       onChange={(e) => setDonorName(e.target.value)}
                       placeholder="Como gostaria de ser chamado"
+                      className="bg-slate-700 border-purple-500/30 text-white placeholder:text-purple-400"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="donorEmail">Seu Email (opcional)</Label>
+                    <Label htmlFor="donorEmail" className="text-white">Seu Email (opcional)</Label>
                     <Input
                       id="donorEmail"
                       type="email"
                       value={donorEmail}
                       onChange={(e) => setDonorEmail(e.target.value)}
                       placeholder="seu@email.com"
+                      className="bg-slate-700 border-purple-500/30 text-white placeholder:text-purple-400"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="message">Mensagem (opcional)</Label>
+                    <Label htmlFor="message" className="text-white">Mensagem (opcional)</Label>
                     <Textarea
                       id="message"
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder="Deixe uma mensagem de apoio..."
                       rows={3}
+                      className="bg-slate-700 border-purple-500/30 text-white placeholder:text-purple-400"
                     />
                   </div>
                 </div>
@@ -194,7 +184,7 @@ export default function Donate() {
                 {/* Botão de Doação */}
                 <Button
                   size="lg"
-                  className="w-full gap-2"
+                  className="w-full gap-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white"
                   disabled={!finalAmount || finalAmount < 5 || createCheckoutMutation.isPending}
                   onClick={handleDonate}
                 >
@@ -211,7 +201,7 @@ export default function Donate() {
                   )}
                 </Button>
 
-                <p className="text-xs text-center text-muted-foreground">
+                <p className="text-xs text-center text-purple-300">
                   Pagamento seguro processado pelo Stripe
                 </p>
               </CardContent>
@@ -220,16 +210,13 @@ export default function Donate() {
 
           {/* Informações sobre o Projeto */}
           <div className="space-y-6">
-            <Card className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/30">
+            <Card className="bg-gradient-to-br from-purple-600/20 to-pink-600/20 border-purple-500/30">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-primary" />
-                  Por que Doar?
-                </CardTitle>
+                <CardTitle className="text-white">Por que Doar?</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 text-sm text-muted-foreground">
+              <CardContent className="space-y-4 text-sm text-purple-100">
                 <p>
-                  O <span className="font-semibold text-foreground">LouvaMais</span> é um projeto gratuito 
+                  O <span className="font-semibold text-white">LouvaMais</span> é um projeto gratuito 
                   que oferece soluções tecnológicas para igrejas, paróquias e comunidades católicas.
                 </p>
                 <p>
@@ -237,50 +224,50 @@ export default function Donate() {
                 </p>
                 <ul className="space-y-2 ml-4">
                   <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                    <Check className="w-4 h-4 text-pink-400 mt-0.5 flex-shrink-0" />
                     <span>Manter o site e servidores funcionando</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                    <Check className="w-4 h-4 text-pink-400 mt-0.5 flex-shrink-0" />
                     <span>Desenvolver novas funcionalidades</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                    <Check className="w-4 h-4 text-pink-400 mt-0.5 flex-shrink-0" />
                     <span>Criar mais repertórios litúrgicos</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                    <Check className="w-4 h-4 text-pink-400 mt-0.5 flex-shrink-0" />
                     <span>Oferecer suporte às comunidades</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                    <Check className="w-4 h-4 text-pink-400 mt-0.5 flex-shrink-0" />
                     <span>Expandir para mais paróquias</span>
                   </li>
                 </ul>
-                <p className="pt-4 border-t">
-                  <span className="font-semibold text-foreground">Toda doação</span>, por menor que seja, 
+                <p className="pt-4 border-t border-purple-500/30">
+                  <span className="font-semibold text-white">Toda doação</span>, por menor que seja, 
                   faz diferença e nos ajuda a continuar servindo a Igreja! 🙏
                 </p>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-slate-800 border-purple-500/20">
               <CardContent className="py-6">
                 <div className="text-center space-y-2">
-                  <p className="text-sm font-semibold text-foreground">
+                  <p className="text-sm font-semibold text-white">
                     Pagamento 100% Seguro
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-purple-200">
                     Processado pelo Stripe, líder mundial em pagamentos online
                   </p>
                   <div className="flex items-center justify-center gap-2 pt-2">
-                    <div className="px-3 py-1 bg-muted rounded text-xs font-medium">
+                    <div className="px-3 py-1 bg-purple-500/30 rounded text-xs font-medium text-purple-200">
                       🔒 SSL
                     </div>
-                    <div className="px-3 py-1 bg-muted rounded text-xs font-medium">
+                    <div className="px-3 py-1 bg-purple-500/30 rounded text-xs font-medium text-purple-200">
                       💳 Cartão
                     </div>
-                    <div className="px-3 py-1 bg-muted rounded text-xs font-medium">
+                    <div className="px-3 py-1 bg-purple-500/30 rounded text-xs font-medium text-purple-200">
                       🏦 Seguro
                     </div>
                   </div>
@@ -289,21 +276,46 @@ export default function Donate() {
             </Card>
           </div>
         </div>
-      </main>
+      </div>
 
       {/* Footer */}
-      <footer className="border-t border-border/50 bg-card/50 backdrop-blur-xl mt-20">
-        <div className="container py-10 md:py-12">
-          <div className="text-center space-y-4">
-            <div className="pt-4 border-t border-border/30">
-              <p className="text-sm text-muted-foreground">
-                Uma produção de{" "}
-                <span className="font-semibold text-primary">LouvaMais - Church Solutions</span>
-              </p>
-              <p className="text-xs text-muted-foreground/60 mt-1">
-                © 2025 LouvaMais. Todos os direitos reservados.
+      <footer className="border-t border-purple-500/20 bg-slate-900/50 backdrop-blur-sm mt-20">
+        <div className="max-w-6xl mx-auto px-4 py-12">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10 object-contain" />
+                <span className="font-bold text-white">Repertório Católico</span>
+              </div>
+              <p className="text-purple-200 text-sm">
+                Músicas litúrgicas para enriquecer suas celebrações
               </p>
             </div>
+
+            <div>
+              <h4 className="font-semibold text-white mb-4">Links Rápidos</h4>
+              <nav className="space-y-2">
+                <Link href="/repertorio" className="text-purple-200 hover:text-white transition text-sm block">
+                  Repertório
+                </Link>
+                <Link href="/blog" className="text-purple-200 hover:text-white transition text-sm block">
+                  Blog
+                </Link>
+                <Link href="/sobre" className="text-purple-200 hover:text-white transition text-sm block">
+                  Sobre
+                </Link>
+              </nav>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-white mb-4">Redes Sociais</h4>
+              <SocialLinks layout="horizontal" size="small" />
+            </div>
+          </div>
+
+          <div className="border-t border-purple-500/20 pt-8 text-center text-purple-200 text-sm">
+            <p>© 2025 LouvaMais - Repertório Católico. Todos os direitos reservados.</p>
+            <p className="mt-2">Para a maior glória de Deus ✨</p>
           </div>
         </div>
       </footer>

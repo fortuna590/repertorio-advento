@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc";
 import { Loader2, AlertCircle, CheckCircle } from "lucide-react";
+import { APP_LOGO } from "@/const";
+import ModernHeader from "@/components/ModernHeader";
+import SocialLinks from "@/components/SocialLinks";
 
 export default function Checkout() {
   const [, setLocation] = useLocation();
@@ -51,18 +54,20 @@ export default function Checkout() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800 py-12 px-4">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-12">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800">
+      <ModernHeader />
+      <div className="py-12 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-white mb-4">Checkout</h1>
           <p className="text-purple-200">Finalize sua compra com segurança</p>
-        </div>
+          </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {/* Formulário */}
-          <div className="md:col-span-2">
-            <Card className="p-8 bg-slate-800 border-purple-500/20">
-              <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Formulário */}
+            <div className="md:col-span-2">
+              <Card className="p-8 bg-slate-800 border-purple-500/20">
+                <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-purple-200 mb-2">
                     Nome Completo
@@ -150,16 +155,16 @@ export default function Checkout() {
                 >
                   Cancelar
                 </Button>
-              </form>
-            </Card>
-          </div>
+                </form>
+              </Card>
+            </div>
 
-          {/* Resumo do Pedido */}
-          <div>
-            <Card className="p-6 bg-slate-800 border-purple-500/20 sticky top-4">
-              <h3 className="text-lg font-semibold text-white mb-4">Resumo do Pedido</h3>
+            {/* Resumo do Pedido */}
+            <div>
+              <Card className="p-6 bg-slate-800 border-purple-500/20 sticky top-4">
+                <h3 className="text-lg font-semibold text-white mb-4">Resumo do Pedido</h3>
 
-              <div className="space-y-4 mb-6">
+                <div className="space-y-4 mb-6">
                 <div>
                   <p className="text-purple-200 text-sm">Produto</p>
                   <p className="text-white font-medium">{formData.productName}</p>
@@ -191,10 +196,53 @@ export default function Checkout() {
                 <p className="font-semibold mb-2">🔒 Pagamento Seguro</p>
                 <p>Seu pagamento é processado com segurança pelo Stripe.</p>
               </div>
-            </Card>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="border-t border-purple-500/20 bg-slate-900/50 backdrop-blur-sm mt-20">
+        <div className="max-w-6xl mx-auto px-4 py-12">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10 object-contain" />
+                <span className="font-bold text-white">Repertório Católico</span>
+              </div>
+              <p className="text-purple-200 text-sm">
+                Músicas litúrgicas para enriquecer suas celebrações
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-white mb-4">Links Rápidos</h4>
+              <nav className="space-y-2">
+                <Link href="/repertorio" className="text-purple-200 hover:text-white transition text-sm block">
+                  Repertório
+                </Link>
+                <Link href="/blog" className="text-purple-200 hover:text-white transition text-sm block">
+                  Blog
+                </Link>
+                <Link href="/sobre" className="text-purple-200 hover:text-white transition text-sm block">
+                  Sobre
+                </Link>
+              </nav>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-white mb-4">Redes Sociais</h4>
+              <SocialLinks layout="horizontal" size="small" />
+            </div>
+          </div>
+
+          <div className="border-t border-purple-500/20 pt-8 text-center text-purple-200 text-sm">
+            <p>© 2025 LouvaMais - Repertório Católico. Todos os direitos reservados.</p>
+            <p className="mt-2">Para a maior glória de Deus ✨</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

@@ -2,9 +2,11 @@ import { Link, useParams } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Eye, ArrowLeft, User, Tag, Sparkles } from "lucide-react";
+import { Calendar, Eye, ArrowLeft, User, Tag } from "lucide-react";
 import { APP_LOGO } from "@/const";
 import { trpc } from "@/lib/trpc";
+import ModernHeader from "@/components/ModernHeader";
+import SocialLinks from "@/components/SocialLinks";
 
 export default function BlogArtigo() {
   const { slug } = useParams();
@@ -20,9 +22,9 @@ export default function BlogArtigo() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="inline-flex items-center gap-2 text-muted-foreground">
-          <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800 flex items-center justify-center">
+        <div className="inline-flex items-center gap-2 text-purple-200">
+          <div className="w-5 h-5 border-2 border-purple-400 border-t-transparent rounded-full animate-spin" />
           <span>Carregando artigo...</span>
         </div>
       </div>
@@ -31,14 +33,14 @@ export default function BlogArtigo() {
 
   if (error || !artigo) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Card className="p-8 max-w-md text-center">
-          <h2 className="text-2xl font-bold text-foreground mb-4">Artigo não encontrado</h2>
-          <p className="text-muted-foreground mb-6">
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800 flex items-center justify-center">
+        <Card className="p-8 max-w-md text-center bg-slate-800 border-purple-500/20">
+          <h2 className="text-2xl font-bold text-white mb-4">Artigo não encontrado</h2>
+          <p className="text-purple-200 mb-6">
             O artigo que você está procurando não existe ou foi removido.
           </p>
           <Link href="/blog">
-            <Button>
+            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Voltar para o Blog
             </Button>
@@ -49,137 +51,134 @@ export default function BlogArtigo() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border/50 bg-gradient-to-br from-card via-card/95 to-accent/20 backdrop-blur-xl">
-        <div className="container py-6">
-          <div className="flex items-center justify-between">
-            <Link href="/">
-              <button className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10" />
-                <div className="text-left">
-                  <div className="font-bold text-lg text-foreground">Repertório Católico</div>
-                  <div className="text-xs text-muted-foreground">LouvaMais Solutions</div>
-                </div>
-              </button>
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800">
+      <ModernHeader />
+
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        {/* Cabeçalho do Artigo */}
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-6">
+            <Link href="/blog">
+              <Button variant="ghost" size="sm" className="text-purple-200 hover:text-white">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Blog
+              </Button>
             </Link>
-            <div className="flex items-center gap-3">
-              <Link href="/blog">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Voltar ao Blog
-                </Button>
-              </Link>
-            </div>
+            {artigo.categoria && (
+              <Badge className="bg-purple-500/30 text-purple-200 border-purple-500/50">{artigo.categoria}</Badge>
+            )}
           </div>
-        </div>
-      </header>
 
-      {/* Artigo */}
-      <article className="container py-12 md:py-16">
-        <div className="max-w-4xl mx-auto">
-          {/* Cabeçalho do Artigo */}
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-6">
-              <Link href="/blog">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Blog
-                </Button>
-              </Link>
-              {artigo.categoria && (
-                <Badge variant="secondary">{artigo.categoria}</Badge>
-              )}
-            </div>
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tight">
+            {artigo.titulo}
+          </h1>
 
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 tracking-tight">
-              {artigo.titulo}
-            </h1>
-
-            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6">
-              {artigo.autorNome && (
-                <div className="flex items-center gap-2">
-                  <User className="w-4 h-4" />
-                  <span>{artigo.autorNome}</span>
-                </div>
-              )}
+          <div className="flex flex-wrap items-center gap-4 text-sm text-purple-200 mb-6">
+            {artigo.autorNome && (
               <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                <span>{formatDate(artigo.createdAt)}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Eye className="w-4 h-4" />
-                <span>{artigo.visualizacoes} visualizações</span>
-              </div>
-            </div>
-
-            {artigo.tags && artigo.tags.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2 mb-6">
-                <Tag className="w-4 h-4 text-muted-foreground" />
-                {artigo.tags.map((tag: string, index: number) => (
-                  <Badge key={index} variant="outline" className="text-xs">
-                    {tag}
-                  </Badge>
-                ))}
+                <User className="w-4 h-4" />
+                <span>{artigo.autorNome}</span>
               </div>
             )}
-
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              {artigo.resumo}
-            </p>
+            <div className="flex items-center gap-2">
+              <Calendar className="w-4 h-4" />
+              <span>{formatDate(artigo.createdAt)}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Eye className="w-4 h-4" />
+              <span>{artigo.visualizacoes} visualizações</span>
+            </div>
           </div>
 
-          {/* Imagem de Capa */}
-          {artigo.imagemCapa && (
-            <div className="mb-12 rounded-2xl overflow-hidden border border-border/50">
-              <img
-                src={artigo.imagemCapa}
-                alt={artigo.titulo}
-                className="w-full h-auto"
-              />
+          {artigo.tags && artigo.tags.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2 mb-6">
+              <Tag className="w-4 h-4 text-purple-400" />
+              {artigo.tags.map((tag: string, index: number) => (
+                <Badge key={index} variant="outline" className="text-xs border-purple-500/30 text-purple-200 bg-purple-500/10">
+                  {tag}
+                </Badge>
+              ))}
             </div>
           )}
 
-          {/* Conteúdo do Artigo */}
-          <div className="prose prose-lg max-w-none">
-            <div
-              className="text-foreground leading-relaxed space-y-6"
-              dangerouslySetInnerHTML={{ __html: artigo.conteudo.replace(/\n/g, '<br />') }}
+          <p className="text-lg text-purple-200 leading-relaxed">
+            {artigo.resumo}
+          </p>
+        </div>
+
+        {/* Imagem de Capa */}
+        {artigo.imagemCapa && (
+          <div className="mb-12 rounded-2xl overflow-hidden border border-purple-500/30">
+            <img
+              src={artigo.imagemCapa}
+              alt={artigo.titulo}
+              className="w-full h-auto"
             />
           </div>
+        )}
 
-          {/* Footer do Artigo */}
-          <div className="mt-12 pt-8 border-t border-border/50">
-            <div className="flex items-center justify-between">
-              <Link href="/blog">
-                <Button variant="outline">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Voltar ao Blog
-                </Button>
-              </Link>
-              <div className="text-sm text-muted-foreground">
-                Atualizado em {formatDate(artigo.updatedAt)}
-              </div>
+        {/* Conteúdo do Artigo */}
+        <div className="prose prose-lg max-w-none mb-12">
+          <div
+            className="text-purple-100 leading-relaxed space-y-6"
+            dangerouslySetInnerHTML={{ __html: artigo.conteudo.replace(/\n/g, '<br />') }}
+          />
+        </div>
+
+        {/* Footer do Artigo */}
+        <div className="mt-12 pt-8 border-t border-purple-500/20">
+          <div className="flex items-center justify-between">
+            <Link href="/blog">
+              <Button variant="outline" className="border-purple-500/30 text-purple-200 hover:text-white hover:bg-purple-500/10">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Voltar ao Blog
+              </Button>
+            </Link>
+            <div className="text-sm text-purple-300">
+              Atualizado em {formatDate(artigo.updatedAt)}
             </div>
           </div>
         </div>
-      </article>
+      </div>
 
       {/* Footer */}
-      <footer className="border-t border-border/50 bg-card/50 backdrop-blur-xl mt-20">
-        <div className="container py-10 md:py-12">
-          <div className="text-center space-y-4">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <img src={APP_LOGO} alt="LouvaMais" className="w-8 h-8" />
-              <span className="text-lg font-semibold text-foreground">LouvaMais - Church Solutions</span>
+      <footer className="border-t border-purple-500/20 bg-slate-900/50 backdrop-blur-sm mt-20">
+        <div className="max-w-6xl mx-auto px-4 py-12">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10 object-contain" />
+                <span className="font-bold text-white">Repertório Católico</span>
+              </div>
+              <p className="text-purple-200 text-sm">
+                Músicas litúrgicas para enriquecer suas celebrações
+              </p>
             </div>
-            <div className="space-y-2 text-sm text-muted-foreground">
-              <p>© 2025 LouvaMais - Church Solutions. Todos os direitos reservados.</p>
+
+            <div>
+              <h4 className="font-semibold text-white mb-4">Links Rápidos</h4>
+              <nav className="space-y-2">
+                <Link href="/repertorio" className="text-purple-200 hover:text-white transition text-sm block">
+                  Repertório
+                </Link>
+                <Link href="/blog" className="text-purple-200 hover:text-white transition text-sm block">
+                  Blog
+                </Link>
+                <Link href="/sobre" className="text-purple-200 hover:text-white transition text-sm block">
+                  Sobre
+                </Link>
+              </nav>
             </div>
-            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground/80 pt-4 border-t border-border/30 mt-6">
-              <Sparkles className="w-4 h-4 text-secondary" />
-              <span>Para a maior glória de Deus</span>
+
+            <div>
+              <h4 className="font-semibold text-white mb-4">Redes Sociais</h4>
+              <SocialLinks layout="horizontal" size="small" />
             </div>
+          </div>
+
+          <div className="border-t border-purple-500/20 pt-8 text-center text-purple-200 text-sm">
+            <p>© 2025 LouvaMais - Repertório Católico. Todos os direitos reservados.</p>
+            <p className="mt-2">Para a maior glória de Deus ✨</p>
           </div>
         </div>
       </footer>

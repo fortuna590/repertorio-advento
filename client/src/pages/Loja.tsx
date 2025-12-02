@@ -1,7 +1,10 @@
+import { Link } from "wouter";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Star, BookOpen, Zap, Users, Award } from "lucide-react";
+import { APP_LOGO } from "@/const";
 import ModernHeader from "@/components/ModernHeader";
+import SocialLinks from "@/components/SocialLinks";
 
 interface Produto {
   id: string;
@@ -202,6 +205,48 @@ export default function Loja() {
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="border-t border-purple-500/20 bg-slate-900/50 backdrop-blur-sm mt-20">
+        <div className="max-w-6xl mx-auto px-4 py-12">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10 object-contain" />
+                <span className="font-bold text-white">Repertório Católico</span>
+              </div>
+              <p className="text-purple-200 text-sm">
+                Músicas litúrgicas para enriquecer suas celebrações
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-white mb-4">Links Rápidos</h4>
+              <nav className="space-y-2">
+                <Link href="/repertorio" className="text-purple-200 hover:text-white transition text-sm block">
+                  Repertório
+                </Link>
+                <Link href="/blog" className="text-purple-200 hover:text-white transition text-sm block">
+                  Blog
+                </Link>
+                <Link href="/sobre" className="text-purple-200 hover:text-white transition text-sm block">
+                  Sobre
+                </Link>
+              </nav>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-white mb-4">Redes Sociais</h4>
+              <SocialLinks layout="horizontal" size="small" />
+            </div>
+          </div>
+
+          <div className="border-t border-purple-500/20 pt-8 text-center text-purple-200 text-sm">
+            <p>© 2025 LouvaMais - Repertório Católico. Todos os direitos reservados.</p>
+            <p className="mt-2">Para a maior glória de Deus ✨</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
