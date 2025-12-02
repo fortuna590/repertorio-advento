@@ -253,3 +253,16 @@
 - [x] Adicionar efeitos hover nos botões
 - [x] Melhorar tipografia e espaçamento
 - [x] Adicionar gradientes e efeitos visuais
+
+
+## Nova Landing Page
+
+- [x] Renomear Home.tsx para Repertorio.tsx
+- [x] Criar nova Landing Page (Home.tsx)
+- [x] Seção Hero com apresentação
+- [x] Destaques do Repertório do Advento
+- [x] Seção de últimos artigos do Blog
+- [x] Estatísticas do site
+- [x] CTAs para Repertório e Blog
+- [x] Atualizar rotas no App.tsx
+- [x] Testar navegação
