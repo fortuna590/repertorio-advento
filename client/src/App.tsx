@@ -6,12 +6,12 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Repertorio from "./pages/Repertorio";
-import Stats from "./pages/Stats";
-import About from "./pages/About";
+// import Stats from "./pages/Stats"; // Replaced with Estatisticas.tsx
+// import About from "./pages/About"; // Replaced with Sobre.tsx
 import Contact from "./pages/Contact";
 import Donate from "./pages/Donate";
 import DonationSuccess from "./pages/DonationSuccess";
-import Produtos from "./pages/Produtos";
+// import Produtos from "./pages/Produtos"; // Replaced with Loja.tsx
 import MontarRepertorio from "./pages/MontarRepertorio";
 import Blog from "./pages/Blog";
 import BlogArtigo from "./pages/BlogArtigo";
@@ -21,6 +21,9 @@ import PagamentoSucesso from "./pages/PagamentoSucesso";
 import PagamentoCancelado from "./pages/PagamentoCancelado";
 import Dashboard from "./pages/Dashboard";
 import Depoimentos from "./pages/Depoimentos";
+import Sobre from "./pages/Sobre";
+import Estatisticas from "./pages/Estatisticas";
+import Loja from "./pages/Loja";
 import WhatsAppButton from "./components/WhatsAppButton";
 
 function Router() {
@@ -29,12 +32,10 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/repertorio"} component={Repertorio} />
-      <Route path={"/stats"} component={Stats} />
-      <Route path={"/sobre"} component={About} />
+      <Route path={"/estatisticas"} component={Estatisticas} />
       <Route path={"/contato"} component={Contact} />
       <Route path={"/doacao"} component={Donate} />
       <Route path={"/doacao/sucesso"} component={DonationSuccess} />
-      <Route path={"/produtos"} component={Produtos} />
       <Route path={"/montar-repertorio"} component={MontarRepertorio} />
       <Route path={"/blog"} component={Blog} />
       <Route path={"/blog/:slug"} component={BlogArtigo} />
@@ -44,6 +45,9 @@ function Router() {
       <Route path={"/pagamento-cancelado"} component={PagamentoCancelado} />
       <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/depoimentos"} component={Depoimentos} />
+      <Route path={"/sobre"} component={Sobre} />
+      <Route path={"/estatisticas"} component={Estatisticas} />
+      <Route path={"/loja"} component={Loja} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

@@ -1,33 +1,16 @@
 import { Link } from "wouter";
+// Removed - using ModernHeader instead
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Music, BookOpen, Heart, Sparkles, ArrowRight, Users } from "lucide-react";
 import { APP_LOGO } from "@/const";
 import SocialLinks from "@/components/SocialLinks";
+import ModernHeader from "@/components/ModernHeader";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800">
-      {/* Header */}
-      <header className="border-b border-purple-500/20 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10 rounded-lg" />
-            <span className="font-bold text-white">LouvaMais</span>
-          </Link>
-          <nav className="flex gap-6 items-center">
-            <Link href="/repertorio" className="text-purple-200 hover:text-white transition">
-              Repertório
-            </Link>
-            <Link href="/blog" className="text-purple-200 hover:text-white transition">
-              Blog
-            </Link>
-            <Link href="/depoimentos" className="text-purple-200 hover:text-white transition">
-              Depoimentos
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <ModernHeader />
 
       {/* Hero Section */}
       <section className="max-w-6xl mx-auto px-4 py-20 text-center">

@@ -274,3 +274,15 @@
 - [x] Deixar página com estado vazio
 - [x] Adicionar incentivo visual para visitantes deixarem depoimentos
 - [x] Criar CTA atrativo para compartilhar depoimento
+
+
+## Reestruturação de Navegação
+
+- [x] Criar menu tecnológico reutilizável para todas as páginas
+- [x] Criar página Sobre com seção Apoie o Projeto
+- [x] Criar página Estatísticas
+- [x] Criar página Loja/Produtos
+- [ ] Reformular página de Repertório (apenas funcionalidades: Montar, Exportar, Filtrar)
+- [x] Atualizar Landing Page com nova estrutura
+- [x] Atualizar rotas no App.tsx
+- [x] Testar navegação completa
