@@ -31,7 +31,7 @@ export function QuickAccess() {
       badge: "Em Breve",
     },
     {
-      href: "/repertorio",
+      href: "/",
       title: "Repertório Advento",
       description: "29 músicas litúrgicas para o Advento",
       icon: <Music className="w-6 h-6" />,
