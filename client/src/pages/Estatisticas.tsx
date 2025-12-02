@@ -83,18 +83,6 @@ export default function Estatisticas() {
             <p className="text-xs text-blue-400 mt-2">Repertórios criados</p>
           </Card>
 
-          <Card className="p-8 bg-gradient-to-br from-green-600/20 to-green-600/10 border-green-500/30">
-            <div className="flex items-center justify-between mb-4">
-              <Users className="w-8 h-8 text-green-400" />
-              <span className="text-xs bg-green-500/30 text-green-200 px-3 py-1 rounded-full">
-                Comunidade
-              </span>
-            </div>
-            <p className="text-4xl font-bold text-white mb-2">{siteStats.totalMinisterios}</p>
-            <p className="text-green-200">Ministérios Conectados</p>
-            <p className="text-xs text-green-400 mt-2">Usuários únicos</p>
-          </Card>
-
           <Card className="p-8 bg-gradient-to-br from-yellow-600/20 to-yellow-600/10 border-yellow-500/30">
             <div className="flex items-center justify-between mb-4">
               <TrendingUp className="w-8 h-8 text-yellow-400" />
@@ -105,18 +93,6 @@ export default function Estatisticas() {
             <p className="text-4xl font-bold text-white mb-2">{siteStats.crescimentoMensal > 0 ? '+' : ''}{siteStats.crescimentoMensal}%</p>
             <p className="text-yellow-200">Crescimento Mensal</p>
             <p className="text-xs text-yellow-400 mt-2">Comparado ao mês anterior</p>
-          </Card>
-
-          <Card className="p-8 bg-gradient-to-br from-red-600/20 to-red-600/10 border-red-500/30">
-            <div className="flex items-center justify-between mb-4">
-              <BarChart3 className="w-8 h-8 text-red-400" />
-              <span className="text-xs bg-red-500/30 text-red-200 px-3 py-1 rounded-full">
-                Artigos
-              </span>
-            </div>
-            <p className="text-4xl font-bold text-white mb-2">{siteStats.totalArtigos}</p>
-            <p className="text-red-200">Artigos Publicados</p>
-            <p className="text-xs text-red-400 mt-2">Conteúdo educativo</p>
           </Card>
         </div>
 

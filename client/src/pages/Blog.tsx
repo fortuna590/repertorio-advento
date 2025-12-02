@@ -97,10 +97,15 @@ export default function Blog() {
                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-purple-500/20 mx-auto mb-4">
                     <BookOpen className="w-8 h-8 text-purple-400" />
                   </div>
-                  <CardTitle className="text-2xl text-white">Nenhum artigo publicado ainda</CardTitle>
-                  <CardDescription className="text-base text-purple-200">
-                    Em breve teremos conteúdo educativo sobre música litúrgica para você!
+                  <CardTitle className="text-3xl text-white mb-4">Conteúdo em Breve</CardTitle>
+                  <CardDescription className="text-base text-purple-200 mb-8">
+                    Estamos preparando artigos educativos sobre música litúrgica, espiritualidade e dicas práticas para seu ministério. Em breve você terá acesso a conteúdo exclusivo!
                   </CardDescription>
+                  <Link href="/contato">
+                    <Button className="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white px-8 py-3 text-lg font-semibold">
+                      Entre em Contato
+                    </Button>
+                  </Link>
                 </CardHeader>
               </Card>
             </div>
