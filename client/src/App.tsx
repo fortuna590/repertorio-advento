@@ -19,6 +19,7 @@ import Checkout from "./pages/Checkout";
 import PagamentoSucesso from "./pages/PagamentoSucesso";
 import PagamentoCancelado from "./pages/PagamentoCancelado";
 import Dashboard from "./pages/Dashboard";
+import Depoimentos from "./pages/Depoimentos";
 import WhatsAppButton from "./components/WhatsAppButton";
 
 function Router() {
@@ -40,6 +41,7 @@ function Router() {
       <Route path={"/pagamento-sucesso"} component={PagamentoSucesso} />
       <Route path={"/pagamento-cancelado"} component={PagamentoCancelado} />
       <Route path={"/dashboard"} component={Dashboard} />
+      <Route path={"/depoimentos"} component={Depoimentos} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

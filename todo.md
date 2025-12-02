@@ -220,3 +220,36 @@
 - [x] Adicionar confirmação de pedidos por email
 - [x] Criar dashboard de vendas
 - [x] Testar fluxo completo de pagamento
+
+
+## Ativação Stripe em Produção
+
+- [ ] Claim do sandbox Stripe via link
+- [ ] Obter Publishable Key do Stripe
+- [ ] Obter Secret Key do Stripe
+- [ ] Adicionar chaves no painel de gerenciamento
+- [ ] Testar pagamentos com Stripe real
+
+
+## Página de Depoimentos
+
+- [x] Criar página de depoimentos com avaliações
+- [x] Adicionar seção de depoimentos na Home
+- [ ] Sistema de gerenciamento de depoimentos (admin)
+- [x] Exibir rating/estrelas dos depoimentos
+
+## Integração com Redes Sociais
+
+- [x] Adicionar links para Instagram
+- [x] Adicionar links para YouTube
+- [x] Adicionar links para Facebook
+- [x] Adicionar links para WhatsApp
+- [x] Integrar ícones nas páginas
+
+## Melhorias no Design
+
+- [x] Adicionar animações de scroll
+- [x] Melhorar responsividade mobile
+- [x] Adicionar efeitos hover nos botões
+- [x] Melhorar tipografia e espaçamento
+- [x] Adicionar gradientes e efeitos visuais
