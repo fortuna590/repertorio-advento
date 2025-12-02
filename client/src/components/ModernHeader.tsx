@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X, Home, Music, BookOpen, ShoppingBag, BarChart3, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { APP_LOGO } from "@/const";
 
 interface NavItem {
   label: string;
@@ -31,9 +32,7 @@ export default function ModernHeader() {
           {/* Logo */}
           <Link href="/">
             <a className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">✦</span>
-              </div>
+              <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10 object-contain" />
               <span className="text-white font-bold hidden sm:inline">LouvaMais</span>
             </a>
           </Link>
