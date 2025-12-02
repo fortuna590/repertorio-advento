@@ -266,3 +266,11 @@
 - [x] CTAs para Repertório e Blog
 - [x] Atualizar rotas no App.tsx
 - [x] Testar navegação
+
+
+## Ajustes na Página de Depoimentos
+
+- [x] Remover depoimentos de exemplo
+- [x] Deixar página com estado vazio
+- [x] Adicionar incentivo visual para visitantes deixarem depoimentos
+- [x] Criar CTA atrativo para compartilhar depoimento

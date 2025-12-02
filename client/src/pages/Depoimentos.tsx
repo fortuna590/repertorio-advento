@@ -1,87 +1,10 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Star, MessageCircle } from "lucide-react";
-
-interface Depoimento {
-  id: string;
-  nome: string;
-  cargo: string;
-  ministerio: string;
-  texto: string;
-  rating: number;
-  imagem?: string;
-}
-
-const depoimentosIniciais: Depoimento[] = [
-  {
-    id: "1",
-    nome: "Padre João Silva",
-    cargo: "Pároco",
-    ministerio: "Paróquia São José",
-    texto: "O Repertório Católico transformou nosso ministério de música. As músicas são bem selecionadas e organizadas por momentos da missa. Nosso coro melhorou muito!",
-    rating: 5,
-  },
-  {
-    id: "2",
-    nome: "Maria Santos",
-    cargo: "Coordenadora de Música",
-    ministerio: "Comunidade Católica Vida Nova",
-    texto: "Excelente ferramenta! Facilita muito a preparação das celebrações. As músicas do Advento são especialmente lindas e envolventes.",
-    rating: 5,
-  },
-  {
-    id: "3",
-    nome: "Pe. Carlos Mendes",
-    cargo: "Pároco",
-    ministerio: "Catedral Metropolitana",
-    texto: "Recomendo para todos os ministérios de música. A qualidade das seleções é notável e a organização por liturgia é muito prática.",
-    rating: 5,
-  },
-  {
-    id: "4",
-    nome: "Ana Paula Costa",
-    cargo: "Ministra de Música",
-    ministerio: "Igreja Matriz do Bairro",
-    texto: "Desde que comecei a usar o Repertório Católico, as celebrações ficaram muito mais bonitas. As músicas tocam o coração dos fiéis!",
-    rating: 5,
-  },
-  {
-    id: "5",
-    nome: "Frei Benedito",
-    cargo: "Responsável Litúrgico",
-    ministerio: "Convento Franciscano",
-    texto: "Perfeito para nossas necessidades. A integração com a liturgia é impecável e as músicas são todas bem conhecidas e apreciadas.",
-    rating: 5,
-  },
-  {
-    id: "6",
-    nome: "Isabela Ferreira",
-    cargo: "Diretora de Coro",
-    ministerio: "Paróquia Santa Maria",
-    texto: "Que recurso maravilhoso! Meu coro adora trabalhar com essas músicas. A qualidade é excelente e o preço é justo.",
-    rating: 5,
-  },
-];
+import { MessageCircle, Heart, Sparkles } from "lucide-react";
 
 export default function Depoimentos() {
-  const [depoimentos] = useState<Depoimento[]>(depoimentosIniciais);
-  const [filtroRating, setFiltroRating] = useState<number | null>(null);
-
-  const depoimentosFiltrados = filtroRating
-    ? depoimentos.filter((d) => d.rating >= filtroRating)
-    : depoimentos;
-
-  const renderStars = (rating: number) => {
-    return Array.from({ length: 5 }).map((_, i) => (
-      <Star
-        key={i}
-        className={`w-4 h-4 ${
-          i < rating ? "fill-yellow-400 text-yellow-400" : "text-gray-400"
-        }`}
-      />
-    ));
-  };
+  const [depoimentos] = useState([]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800 py-12 px-4">
@@ -92,92 +15,103 @@ export default function Depoimentos() {
           <p className="text-xl text-purple-200 mb-8">
             Veja o que ministérios de música de todo o Brasil dizem sobre o Repertório Católico
           </p>
+        </div>
 
-          {/* Filtro por Rating */}
-          <div className="flex justify-center gap-2 flex-wrap">
-            <Button
-              onClick={() => setFiltroRating(null)}
-              variant={filtroRating === null ? "default" : "outline"}
-              className={filtroRating === null ? "bg-purple-600" : ""}
-            >
-              Todos
+        {/* Estado Vazio - Incentivo */}
+        <div className="grid md:grid-cols-2 gap-8 mb-12">
+          {/* Seção de Incentivo */}
+          <div className="bg-gradient-to-br from-purple-600/30 to-pink-600/30 border border-purple-500/50 rounded-lg p-8 flex flex-col justify-center">
+            <div className="mb-6">
+              <Sparkles className="w-16 h-16 text-purple-400 mx-auto mb-4" />
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-4 text-center">
+              Seja o Primeiro!
+            </h2>
+            <p className="text-purple-100 mb-6 text-center leading-relaxed">
+              Sua comunidade e ministério de música são importantes para nós. Compartilhe sua experiência com o Repertório Católico e inspire outros ministérios!
+            </p>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <Heart className="w-5 h-5 text-pink-400 flex-shrink-0 mt-1" />
+                <p className="text-purple-100">Conte como o repertório ajudou seu ministério</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <Heart className="w-5 h-5 text-pink-400 flex-shrink-0 mt-1" />
+                <p className="text-purple-100">Compartilhe dicas e experiências com outras paróquias</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <Heart className="w-5 h-5 text-pink-400 flex-shrink-0 mt-1" />
+                <p className="text-purple-100">Ajude a crescer nossa comunidade de música litúrgica</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Seção de CTA */}
+          <div className="bg-gradient-to-br from-pink-600/30 to-purple-600/30 border border-pink-500/50 rounded-lg p-8 flex flex-col justify-center items-center text-center">
+            <MessageCircle className="w-16 h-16 text-pink-400 mb-6" />
+            <h3 className="text-2xl font-bold text-white mb-4">
+              Compartilhe seu Depoimento
+            </h3>
+            <p className="text-purple-100 mb-8">
+              Envie-nos um depoimento sobre sua experiência com o Repertório Católico. Queremos ouvir sua história!
+            </p>
+            <Button className="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white px-8 py-3 text-lg font-semibold">
+              Enviar Depoimento
             </Button>
-            {[5, 4, 3].map((rating) => (
-              <Button
-                key={rating}
-                onClick={() => setFiltroRating(rating)}
-                variant={filtroRating === rating ? "default" : "outline"}
-                className={filtroRating === rating ? "bg-purple-600" : ""}
-              >
-                {rating}+ ⭐
-              </Button>
-            ))}
+            <p className="text-xs text-purple-300 mt-6">
+              📧 Envie para: louvamais590@gmail.com
+            </p>
           </div>
         </div>
 
-        {/* Grid de Depoimentos */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {depoimentosFiltrados.map((depoimento) => (
-            <Card
-              key={depoimento.id}
-              className="p-6 bg-slate-800 border-purple-500/20 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20"
-            >
-              {/* Rating */}
-              <div className="flex gap-1 mb-4">
-                {renderStars(depoimento.rating)}
-              </div>
-
-              {/* Texto */}
-              <p className="text-purple-100 mb-6 italic leading-relaxed">
-                "{depoimento.texto}"
-              </p>
-
-              {/* Autor */}
-              <div className="border-t border-purple-500/20 pt-4">
-                <p className="font-semibold text-white">{depoimento.nome}</p>
-                <p className="text-sm text-purple-300">{depoimento.cargo}</p>
-                <p className="text-xs text-purple-400">{depoimento.ministerio}</p>
-              </div>
-            </Card>
-          ))}
-        </div>
-
-        {/* CTA */}
-        <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30 rounded-lg p-12 text-center mb-12">
-          <MessageCircle className="w-12 h-12 text-purple-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-white mb-4">
-            Compartilhe seu depoimento!
+        {/* Seção de Benefícios */}
+        <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30 rounded-lg p-12 mb-12">
+          <h2 className="text-2xl font-bold text-white mb-8 text-center">
+            Por que compartilhar seu depoimento?
           </h2>
-          <p className="text-purple-200 mb-6 max-w-2xl mx-auto">
-            Sua experiência com o Repertório Católico é importante para nós. Entre em contato e nos conte como o site tem ajudado seu ministério de música.
-          </p>
-          <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3">
-            Enviar Depoimento
-          </Button>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-purple-500/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">🎵</span>
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Inspire Outros</h3>
+              <p className="text-purple-200">Sua história pode motivar outros ministérios a melhorar suas celebrações</p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-purple-500/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">🤝</span>
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Fortaleça a Comunidade</h3>
+              <p className="text-purple-200">Conecte-se com outras paróquias e ministérios que compartilham sua paixão</p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-purple-500/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">⭐</span>
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Melhore o Projeto</h3>
+              <p className="text-purple-200">Seus comentários nos ajudam a aprimorar o Repertório Católico</p>
+            </div>
+          </div>
         </div>
 
-        {/* Estatísticas */}
+        {/* Estatísticas Vazias */}
         <div className="grid md:grid-cols-3 gap-6">
           <Card className="p-6 bg-slate-800 border-purple-500/20 text-center">
-            <p className="text-4xl font-bold text-purple-400 mb-2">
-              {depoimentos.length}+
-            </p>
-            <p className="text-purple-200">Depoimentos</p>
+            <p className="text-4xl font-bold text-purple-400 mb-2">0</p>
+            <p className="text-purple-200">Depoimentos Recebidos</p>
+            <p className="text-xs text-purple-400 mt-2">Seja o primeiro!</p>
           </Card>
 
           <Card className="p-6 bg-slate-800 border-purple-500/20 text-center">
-            <p className="text-4xl font-bold text-yellow-400 mb-2">
-              {(
-                depoimentos.reduce((acc, d) => acc + d.rating, 0) /
-                depoimentos.length
-              ).toFixed(1)}
-            </p>
-            <p className="text-purple-200">Avaliação Média</p>
+            <p className="text-4xl font-bold text-yellow-400 mb-2">⭐⭐⭐⭐⭐</p>
+            <p className="text-purple-200">Esperando sua Avaliação</p>
+            <p className="text-xs text-purple-400 mt-2">Compartilhe sua experiência</p>
           </Card>
 
           <Card className="p-6 bg-slate-800 border-purple-500/20 text-center">
-            <p className="text-4xl font-bold text-green-400 mb-2">100%</p>
-            <p className="text-purple-200">Recomendado</p>
+            <p className="text-4xl font-bold text-green-400 mb-2">∞</p>
+            <p className="text-purple-200">Impacto Potencial</p>
+            <p className="text-xs text-purple-400 mt-2">Sua história importa</p>
           </Card>
         </div>
       </div>
