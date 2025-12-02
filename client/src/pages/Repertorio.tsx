@@ -5,22 +5,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3, Heart, HeartOff, Printer, FileDown, ShoppingBag, ListMusic, BookOpen } from "lucide-react";
+import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3, Heart, Printer, FileDown, ShoppingBag, ListMusic, BookOpen } from "lucide-react";
 import { APP_LOGO } from "@/const";
 import { repertorio, type MomentoMissa } from "@/data/repertorio";
 import { NotificationBell } from "@/components/NotificationBell";
 import { PrintView } from "@/components/PrintView";
 import { exportRepertorioPDF } from "@/utils/exportPDF";
-import { QuickAccess } from "@/components/QuickAccess";
 import SocialLinks from "@/components/SocialLinks";
+import ModernHeader from "@/components/ModernHeader";
 
-export default function Home() {
+export default function Repertorio() {
   const [momentoSelecionado, setMomentoSelecionado] = useState<string | null>(null);
   const [buscaTexto, setBuscaTexto] = useState("");
   const [showPrintView, setShowPrintView] = useState(false);
   const registerClickMutation = trpc.clicks.register.useMutation();
   const registerNewsletterMutation = trpc.newsletter.subscribe.useMutation();
-  // const { isFavorite, toggleFavorite} = useFavorites();
 
   const handleLinkClick = (musica: any, momento: any, linkType: "youtube" | "cifra") => {
     registerClickMutation.mutate({
@@ -37,7 +36,6 @@ export default function Home() {
     ? repertorio.find((m) => m.id === momentoSelecionado)
     : null;
 
-  // Filtrar por busca de texto
   const filtrarPorBusca = (momento: any) => {
     if (!buscaTexto) return momento;
     
@@ -63,474 +61,305 @@ export default function Home() {
   return (
     <>
       {showPrintView && <PrintView />}
-    <div className="min-h-screen bg-background" style={{ display: showPrintView ? 'none' : 'block' }}>
-      {/* Quick Access */}
-      <QuickAccess />
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800" style={{ display: showPrintView ? 'none' : 'block' }}>
+        <ModernHeader />
 
-      {/* Hero Header */}
-      <header className="relative border-b border-border/50 bg-gradient-to-br from-card via-card/95 to-accent/20 backdrop-blur-xl">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
-        <div className="container relative py-12 md:py-16">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-6">
-            <div className="p-3 rounded-2xl bg-white/90 backdrop-blur-sm border border-primary/20 shadow-lg">
-              <img 
-                src={APP_LOGO} 
-                alt="LouvaMais Logo" 
-                className="w-14 h-14 md:w-16 md:h-16 object-contain"
+        <main className="max-w-6xl mx-auto px-4 py-12">
+          {/* Seção de Ações Rápidas */}
+          <div className="mb-12">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between mb-8">
+              <div>
+                <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Tempo do Advento</h1>
+                <p className="text-purple-200">29 músicas litúrgicas cuidadosamente selecionadas</p>
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                <Link href="/montar-repertorio">
+                  <Button className="gap-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white">
+                    <ListMusic className="w-4 h-4" />
+                    Montar Repertório
+                  </Button>
+                </Link>
+                <Button 
+                  variant="outline" 
+                  className="gap-2 border-purple-500/30 text-purple-200 hover:bg-purple-500/10"
+                  onClick={() => {
+                    setShowPrintView(true);
+                    setTimeout(() => window.print(), 500);
+                  }}
+                >
+                  <Printer className="w-4 h-4" />
+                  Imprimir
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="gap-2 border-purple-500/30 text-purple-200 hover:bg-purple-500/10"
+                  onClick={() => exportRepertorioPDF()}
+                >
+                  <FileDown className="w-4 h-4" />
+                  Exportar PDF
+                </Button>
+                <NotificationBell />
+              </div>
+            </div>
+
+            {/* Campo de Busca */}
+            <div className="relative max-w-2xl mb-8">
+              <Input
+                type="text"
+                placeholder="Buscar por título ou artista..."
+                value={buscaTexto}
+                onChange={(e) => setBuscaTexto(e.target.value)}
+                className="pl-10 h-12 text-base bg-slate-800 border-purple-500/30 text-white placeholder:text-purple-400"
               />
-            </div>
-            <div className="flex-1">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-2 tracking-tight">
-                Repertório Católico
-              </h1>
-              <p className="text-lg md:text-xl text-muted-foreground flex items-center gap-2 flex-wrap">
-                <Sparkles className="w-5 h-5 text-secondary" />
-                <span>Tempo do Advento</span>
-                <span className="text-muted-foreground/50">•</span>
-                <span className="text-sm text-muted-foreground/80">29 músicas litúrgicas</span>
-              </p>
+              <Music className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400" />
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
-            <p className="text-base text-muted-foreground max-w-2xl">
-              Músicas litúrgicas cuidadosamente selecionadas e organizadas por momentos da Santa Missa
-            </p>
-            <div className="flex gap-2 flex-wrap">
-              <Link href="/montar-repertorio">
-                <Button variant="default" size="sm" className="gap-2 bg-gradient-to-r from-secondary to-secondary/80 hover:from-secondary/90 hover:to-secondary/70">
-                  <ListMusic className="w-4 h-4" />
-                  Montar Repertório
-                </Button>
-              </Link>
-              <Link href="/doacao">
-                <Button variant="default" size="sm" className="gap-2 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70">
-                  <Heart className="w-4 h-4" />
-                  Apoie o Projeto
-                </Button>
-              </Link>
-              <Link href="/produtos">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <ShoppingBag className="w-4 h-4" />
-                  Produtos
-                </Button>
-              </Link>
-              <Link href="/blog">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <BookOpen className="w-4 h-4" />
-                  Blog
-                </Button>
-              </Link>
-              <Link href="/sobre">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Church className="w-4 h-4" />
-                  Sobre
-                </Button>
-              </Link>
-              <Link href="/stats">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <BarChart3 className="w-4 h-4" />
-                  Estatísticas
-                </Button>
-              </Link>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="gap-2"
-                onClick={() => {
-                  setShowPrintView(true);
-                  setTimeout(() => window.print(), 500);
-                }}
-              >
-                <Printer className="w-4 h-4" />
-                Imprimir
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="gap-2"
-                onClick={() => exportRepertorioPDF()}
-              >
-                <FileDown className="w-4 h-4" />
-                Exportar PDF
-              </Button>
-              <NotificationBell />
-            </div>
-          </div>
-        </div>
-      </header>
 
-      <main className="container py-8 md:py-12">
-        {/* Campo de Busca */}
-        <div className="mb-8">
-          <div className="relative max-w-2xl">
-            <Input
-              type="text"
-              placeholder="Buscar por título ou artista..."
-              value={buscaTexto}
-              onChange={(e) => setBuscaTexto(e.target.value)}
-              className="pl-10 h-12 text-base bg-card/50 border-border/50 focus:border-primary"
-            />
-            <Music className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-          </div>
-        </div>
-
-        {/* Filtros Modernos */}
-        <div className="mb-10 md:mb-12">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-accent">
-              <Filter className="w-5 h-5 text-accent-foreground" />
+          {/* Filtros de Momentos */}
+          <div className="mb-12">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 rounded-lg bg-purple-500/20">
+                <Filter className="w-5 h-5 text-purple-300" />
+              </div>
+              <h2 className="text-2xl font-bold text-white">
+                Momentos da Missa
+              </h2>
             </div>
-            <h2 className="text-xl md:text-2xl font-bold text-foreground">
-              Momentos da Missa
-            </h2>
-          </div>
-          
-          <div className="flex flex-wrap gap-2 md:gap-3">
-            <Button
-              variant={momentoSelecionado === null ? "default" : "outline"}
-              onClick={() => setMomentoSelecionado(null)}
-              size="sm"
-              className="rounded-full transition-all duration-300 hover:scale-105"
-            >
-              Todos os momentos
-            </Button>
-            {repertorio.map((momento) => (
+            
+            <div className="flex flex-wrap gap-2 md:gap-3">
               <Button
-                key={momento.id}
-                variant={momentoSelecionado === momento.id ? "default" : "outline"}
-                onClick={() => setMomentoSelecionado(momento.id)}
+                variant={momentoSelecionado === null ? "default" : "outline"}
+                onClick={() => setMomentoSelecionado(null)}
                 size="sm"
-                className="rounded-full transition-all duration-300 hover:scale-105"
+                className={`rounded-full transition-all duration-300 hover:scale-105 ${
+                  momentoSelecionado === null 
+                    ? 'bg-gradient-to-r from-pink-600 to-purple-600 text-white' 
+                    : 'border-purple-500/30 text-purple-200 hover:bg-purple-500/10'
+                }`}
               >
-                <span className="hidden sm:inline">{momento.numero}</span>
-                <span className="truncate max-w-[150px] sm:max-w-none">{momento.titulo}</span>
+                Todos os momentos
               </Button>
+              {repertorio.map((momento) => (
+                <Button
+                  key={momento.id}
+                  variant={momentoSelecionado === momento.id ? "default" : "outline"}
+                  onClick={() => setMomentoSelecionado(momento.id)}
+                  size="sm"
+                  className={`rounded-full transition-all duration-300 hover:scale-105 ${
+                    momentoSelecionado === momento.id
+                      ? 'bg-gradient-to-r from-pink-600 to-purple-600 text-white'
+                      : 'border-purple-500/30 text-purple-200 hover:bg-purple-500/10'
+                  }`}
+                >
+                  <span className="hidden sm:inline">{momento.numero}</span>
+                  <span className="truncate max-w-[150px] sm:max-w-none">{momento.titulo}</span>
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          {/* Lista de Momentos e Músicas */}
+          <div className="space-y-12 md:space-y-16 mb-16">
+            {momentosParaExibir.map((momento) => (
+              <section key={momento.id} className="space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                  <h2 className="text-3xl md:text-4xl font-bold text-white">
+                    <span className="text-pink-400">{momento.numero}</span> {momento.titulo}
+                  </h2>
+                  {momento.observacao && (
+                    <Badge 
+                      className="text-xs w-fit bg-purple-500/30 text-purple-200 border-purple-500/50"
+                    >
+                      {momento.observacao}
+                    </Badge>
+                  )}
+                </div>
+
+                <div className="grid gap-4 sm:gap-5 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                  {momento.musicas.map((musica: { numero: number; titulo: string; artista: string; youtube?: string; cifra?: string; id?: string; observacao?: string }) => (
+                    <Card
+                      key={`${momento.id}-${musica.numero}`}
+                      className="group hover:shadow-2xl hover:shadow-pink-500/20 transition-all duration-500 border-purple-500/20 bg-slate-800 hover:border-pink-500/50 hover:-translate-y-1"
+                    >
+                      <CardHeader className="pb-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex-1 min-w-0">
+                            <CardTitle className="text-base md:text-lg flex items-center gap-2 mb-1 text-white">
+                              <div className="text-pink-400">
+                                <Music className="w-4 h-4" />
+                              </div>
+                              <span className="truncate">{musica.titulo}</span>
+                            </CardTitle>
+                            <CardDescription className="text-sm truncate text-purple-300">
+                              {musica.artista}
+                            </CardDescription>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 hover:bg-pink-500/10"
+                              onClick={() => {}}
+                            >
+                              <Heart className="w-4 h-4 text-purple-400" />
+                            </Button>
+                            <Badge 
+                              className="bg-purple-500/30 border-purple-500/50 text-purple-200"
+                            >
+                              #{musica.numero}
+                            </Badge>
+                          </div>
+                        </div>
+                        {musica.observacao && (
+                          <Badge 
+                            className="text-xs mt-3 w-fit bg-purple-500/20 text-purple-200 border-purple-500/30"
+                          >
+                            {musica.observacao}
+                          </Badge>
+                        )}
+                      </CardHeader>
+                      <CardContent className="space-y-2 pt-0">
+                        {musica.youtube && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full justify-start gap-2 border-purple-500/30 text-purple-200 hover:bg-red-500/10 hover:border-red-500/50 hover:text-red-400 transition-all duration-300"
+                            asChild
+                          >
+                            <a
+                              href={musica.youtube}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => handleLinkClick(musica, momento, "youtube")}
+                            >
+                              <Youtube className="w-4 h-4" />
+                              <span className="truncate">Escutar no YouTube</span>
+                            </a>
+                          </Button>
+                        )}
+                        {musica.cifra && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full justify-start gap-2 border-purple-500/30 text-purple-200 hover:bg-pink-500/10 hover:border-pink-500/50 hover:text-pink-400 transition-all duration-300"
+                            asChild
+                          >
+                            <a
+                              href={musica.cifra}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => handleLinkClick(musica, momento, "cifra")}
+                            >
+                              <Guitar className="w-4 h-4" />
+                              <span className="truncate">Ver Cifra</span>
+                            </a>
+                          </Button>
+                        )}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </section>
             ))}
           </div>
-        </div>
 
-        {/* Lista de Momentos e Músicas */}
-        <div className="space-y-12 md:space-y-16">
-          {momentosParaExibir.map((momento) => (
-            <section key={momento.id} className="space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-                <h2 className="text-2xl md:text-3xl font-bold text-foreground">
-                  <span className="text-primary">{momento.numero}</span> {momento.titulo}
-                </h2>
-                {momento.observacao && (
-                  <Badge 
-                    variant="secondary" 
-                    className="text-xs w-fit bg-secondary/20 text-secondary border-secondary/30"
-                  >
-                    {momento.observacao}
-                  </Badge>
-                )}
-              </div>
-
-              <div className="grid gap-4 sm:gap-5 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                {momento.musicas.map((musica: { numero: number; titulo: string; artista: string; youtube?: string; cifra?: string; id?: string; observacao?: string }) => (
-                  <Card
-                    key={`${momento.id}-${musica.numero}`}
-                    className="group hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 border-border/50 bg-card/80 backdrop-blur-sm hover:border-primary/50 hover:-translate-y-1"
-                  >
-                    <CardHeader className="pb-3">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex-1 min-w-0">
-                          <CardTitle className="text-base md:text-lg flex items-center gap-2 mb-1">
-                            <div className="p-1.5 rounded-lg bg-primary/20 group-hover:bg-primary/30 transition-colors">
-                              <Music className="w-4 h-4 text-primary" />
-                            </div>
-                            <span className="truncate">{musica.titulo}</span>
-                          </CardTitle>
-                          <CardDescription className="text-sm truncate">
-                            {musica.artista}
-                          </CardDescription>
-                        </div>
-                        <div className="flex items-center gap-2 shrink-0">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 hover:bg-red-500/10"
-                            onClick={() => {}}
-                          >
-                            <Heart className="w-4 h-4 text-muted-foreground" />
-                          </Button>
-                          <Badge 
-                            variant="outline" 
-                            className="bg-accent/50 border-accent text-accent-foreground"
-                          >
-                            #{musica.numero}
-                          </Badge>
-                        </div>
-                      </div>
-                      {musica.observacao && (
-                        <Badge 
-                          variant="secondary" 
-                          className="text-xs mt-3 w-fit bg-secondary/20 text-secondary border-secondary/30"
-                        >
-                          {musica.observacao}
-                        </Badge>
-                      )}
-                    </CardHeader>
-                    <CardContent className="space-y-2 pt-0">
-                      {musica.youtube && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="w-full justify-start gap-2 hover:bg-red-500/10 hover:border-red-500/50 hover:text-red-400 transition-all duration-300"
-                          asChild
-                        >
-                          <a
-                            href={musica.youtube}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => handleLinkClick(musica, momento, "youtube")}
-                          >
-                            <Youtube className="w-4 h-4" />
-                            <span className="truncate">Escutar no YouTube</span>
-                          </a>
-                        </Button>
-                      )}
-                      {musica.cifra && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="w-full justify-start gap-2 hover:bg-primary/10 hover:border-primary/50 hover:text-primary transition-all duration-300"
-                          asChild
-                        >
-                          <a
-                            href={musica.cifra}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => handleLinkClick(musica, momento, "cifra")}
-                          >
-                            <Guitar className="w-4 h-4" />
-                            <span className="truncate">Ver Cifra</span>
-                          </a>
-                        </Button>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
-      </main>
-
-      {/* Seção de Newsletter */}
-      <section className="container py-16 md:py-20">
-        <div className="max-w-4xl mx-auto">
-          <Card className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/30">
-            <CardContent className="p-8 md:p-12">
-              <div className="text-center mb-8">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 mb-4">
-                  <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
+          {/* Seção de Newsletter */}
+          <section className="mb-16">
+            <Card className="bg-gradient-to-br from-pink-600/20 to-purple-600/20 border-purple-500/30">
+              <CardContent className="p-8 md:p-12">
+                <div className="text-center mb-8">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-pink-500/20 mb-4">
+                    <svg className="w-8 h-8 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                    Receba novos repertórios
+                  </h2>
+                  <p className="text-purple-200 max-w-2xl mx-auto">
+                    Inscreva-se na nossa newsletter e receba repertórios litúrgicos, dicas de música sacra e novidades do LouvaMais
+                  </p>
                 </div>
-                <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                  Receba novos repertórios
-                </h2>
-                <p className="text-muted-foreground max-w-2xl mx-auto">
-                  Inscreva-se na nossa newsletter e receba repertórios litúrgicos, dicas de música sacra e novidades do LouvaMais
+
+                <form
+                  className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.currentTarget);
+                    const email = formData.get("email") as string;
+                    
+                    registerNewsletterMutation.mutate(
+                      { email },
+                      {
+                        onSuccess: () => {
+                          (e.target as HTMLFormElement).reset();
+                        },
+                      }
+                    );
+                  }}
+                >
+                  <Input
+                    type="email"
+                    name="email"
+                    placeholder="seu@email.com"
+                    required
+                    className="flex-1 bg-slate-800 border-purple-500/30 text-white placeholder:text-purple-400"
+                  />
+                  <Button 
+                    type="submit"
+                    className="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white"
+                    disabled={registerNewsletterMutation.isPending}
+                  >
+                    {registerNewsletterMutation.isPending ? "Inscrevendo..." : "Inscrever"}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </section>
+        </main>
+
+        {/* Footer */}
+        <footer className="border-t border-purple-500/20 bg-slate-900/50 backdrop-blur-sm">
+          <div className="max-w-6xl mx-auto px-4 py-12">
+            <div className="grid md:grid-cols-3 gap-8 mb-8">
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10 object-contain" />
+                  <span className="font-bold text-white">Repertório Católico</span>
+                </div>
+                <p className="text-purple-200 text-sm">
+                  Músicas litúrgicas para enriquecer suas celebrações
                 </p>
               </div>
 
-              <form
-                className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const formData = new FormData(e.currentTarget);
-                  const email = formData.get("email") as string;
-                  
-                  // Usar tRPC para enviar
-                  registerNewsletterMutation.mutate(
-                    { email },
-                    {
-                      onSuccess: () => {
-                        alert("✅ Inscrição realizada! Verifique seu email.");
-                        e.currentTarget.reset();
-                      },
-                      onError: (err: any) => {
-                        alert("❌ Erro ao inscrever. Tente novamente.");
-                        console.error(err);
-                      },
-                    }
-                  );
-                  
-                }}
-              >
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Seu melhor email"
-                  required
-                  className="flex-1 px-4 py-3 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                />
-                <Button
-                  type="submit"
-                  className="px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg transition-all duration-300 hover:scale-105"
-                >
-                  Inscrever-se
-                </Button>
-              </form>
-
-              <p className="text-xs text-muted-foreground/60 text-center mt-4">
-                🔒 Seus dados estão seguros. Sem spam, apenas conteúdo de qualidade.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      {/* Seção de Depoimentos */}
-      <section className="container py-16 md:py-20">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            O que dizem sobre nós
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Depoimentos de paróquias e ministérios que usam nosso repertório
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-          {/* Depoimento 1 */}
-          <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-all duration-300">
-            <CardContent className="pt-6 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                  <Church className="w-6 h-6 text-primary" />
-                </div>
-                <div>
-                  <p className="font-semibold text-foreground">Paróquia São José</p>
-                  <p className="text-sm text-muted-foreground">São Paulo, SP</p>
-                </div>
+              <div>
+                <h4 className="font-semibold text-white mb-4">Links Rápidos</h4>
+                <nav className="space-y-2">
+                  <Link href="/blog" className="text-purple-200 hover:text-white transition text-sm block">
+                    Blog
+                  </Link>
+                  <Link href="/sobre" className="text-purple-200 hover:text-white transition text-sm block">
+                    Sobre
+                  </Link>
+                  <Link href="/stats" className="text-purple-200 hover:text-white transition text-sm block">
+                    Estatísticas
+                  </Link>
+                </nav>
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                "O repertório do LouvaMais facilitou muito a organização das nossas celebrações do Advento. As músicas estão perfeitamente organizadas e os links ajudam muito!"
-              </p>
-              <div className="flex text-yellow-500">
-                {[...Array(5)].map((_, i) => (
-                  <Sparkles key={i} className="w-4 h-4 fill-current" />
-                ))}
-              </div>
-            </CardContent>
-          </Card>
 
-          {/* Depoimento 2 */}
-          <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-all duration-300">
-            <CardContent className="pt-6 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                  <Music className="w-6 h-6 text-primary" />
-                </div>
-                <div>
-                  <p className="font-semibold text-foreground">Ministério de Música</p>
-                  <p className="text-sm text-muted-foreground">Campinas, SP</p>
-                </div>
+              <div>
+                <h4 className="font-semibold text-white mb-4">Redes Sociais</h4>
+                <SocialLinks layout="horizontal" size="small" />
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                "Finalmente um site que reúne tudo o que precisamos: músicas, cifras e vídeos. Nossa equipe economiza horas de preparação toda semana!"
-              </p>
-              <div className="flex text-yellow-500">
-                {[...Array(5)].map((_, i) => (
-                  <Sparkles key={i} className="w-4 h-4 fill-current" />
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Depoimento 3 */}
-          <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-all duration-300">
-            <CardContent className="pt-6 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                  <Guitar className="w-6 h-6 text-primary" />
-                </div>
-                <div>
-                  <p className="font-semibold text-foreground">Coral Santa Cecília</p>
-                  <p className="text-sm text-muted-foreground">Ribeirão Preto, SP</p>
-                </div>
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                "É maravilhoso ter um repertório litúrgico completo e bem organizado. O LouvaMais é uma bênção para nossa comunidade!"
-              </p>
-              <div className="flex text-yellow-500">
-                {[...Array(5)].map((_, i) => (
-                  <Sparkles key={i} className="w-4 h-4 fill-current" />
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      {/* Footer Moderno */}
-      <footer className="border-t border-border/50 bg-card/50 backdrop-blur-xl mt-20">
-        <div className="container py-10 md:py-12">
-          <div className="text-center space-y-6">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <img 
-                src={APP_LOGO} 
-                alt="LouvaMais Logo" 
-                className="w-12 h-12 object-contain"
-              />
-              <span className="text-lg font-semibold text-foreground">Repertório Católico</span>
             </div>
-            <div className="space-y-2 text-sm text-muted-foreground">
-              <p>Repertório do Tempo do Advento</p>
-              <p>29 músicas litúrgicas organizadas por momentos da Santa Missa</p>
-            </div>
-            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground/80 pt-4 border-t border-border/30">
-              <Sparkles className="w-4 h-4 text-secondary" />
-              <span>Para a maior glória de Deus</span>
-            </div>
-            {/* Redes Sociais */}
-            <div className="pt-4 border-t border-border/30">
-              <div className="flex items-center justify-center mb-4">
-                <SocialLinks layout="horizontal" size="medium" />
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Uma produção de{" "}
-                <span className="font-semibold text-primary">LouvaMais - Church Solutions</span>
-              </p>
-              <p className="text-xs text-muted-foreground/60 mt-1">
-                © 2025 LouvaMais. Todos os direitos reservados.
-              </p>
-              
-              {/* Ferramentas Utilizadas */}
-              <div className="mt-4 pt-4 border-t border-border/30">
-                <p className="text-xs text-muted-foreground/80 mb-2">Ferramentas que usamos:</p>
-                <div className="flex flex-wrap gap-2 justify-center">
-                  <a
-                    href="https://manus.im/invitation/O52IGHLNHHAWWG"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md bg-card/50 hover:bg-card border border-border/50 hover:border-primary/50 text-xs text-muted-foreground hover:text-foreground transition-all duration-300"
-                  >
-                    <Sparkles className="w-3 h-3" />
-                    <span>Criado com Manus AI</span>
-                  </a>
-                  <a
-                    href="https://hostinger.com.br?REFERRALCODE=YWILOUVAMMXS"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md bg-card/50 hover:bg-card border border-border/50 hover:border-primary/50 text-xs text-muted-foreground hover:text-foreground transition-all duration-300"
-                  >
-                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
-                    </svg>
-                    <span>Hospedagem Hostinger</span>
-                  </a>
-                </div>
-              </div>
+
+            <div className="border-t border-purple-500/20 pt-8 text-center text-purple-200 text-sm">
+              <p>© 2025 LouvaMais - Repertório Católico. Todos os direitos reservados.</p>
+              <p className="mt-2">Para a maior glória de Deus ✨</p>
             </div>
           </div>
-        </div>
-      </footer>
-    </div>
+        </footer>
+      </div>
     </>
   );
 }
