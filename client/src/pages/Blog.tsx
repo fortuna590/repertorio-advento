@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { BookOpen, Calendar, Eye, ArrowRight, Sparkles } from "lucide-react";
 import { APP_LOGO } from "@/const";
 import { trpc } from "@/lib/trpc";
+import PageHeader from "@/components/PageHeader";
 
 export default function Blog() {
   const { data: artigos, isLoading } = trpc.artigos.getAll.useQuery();
@@ -19,33 +20,8 @@ export default function Blog() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border/50 bg-gradient-to-br from-card via-card/95 to-accent/20 backdrop-blur-xl">
-        <div className="container py-6">
-          <div className="flex items-center justify-between">
-            <Link href="/">
-              <button className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10" />
-                <div className="text-left">
-                  <div className="font-bold text-lg text-foreground">Repertório Católico</div>
-                  <div className="text-xs text-muted-foreground">LouvaMais Solutions</div>
-                </div>
-              </button>
-            </Link>
-            <div className="flex items-center gap-3">
-              <Link href="/">
-                <Button variant="ghost" size="sm">Início</Button>
-              </Link>
-              <Link href="/sobre">
-                <Button variant="ghost" size="sm">Sobre</Button>
-              </Link>
-              <Link href="/contato">
-                <Button variant="ghost" size="sm">Contato</Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      <PageHeader title="Blog" description="Artigos e conteúdo educativo sobre música litúrgica" showBackButton={true} />
+
 
       {/* Hero Section */}
       <section className="relative border-b border-border/50 bg-gradient-to-br from-primary/10 via-background to-accent/10">

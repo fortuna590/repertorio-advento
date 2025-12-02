@@ -13,8 +13,9 @@ import { PrintView } from "@/components/PrintView";
 import { exportRepertorioPDF } from "@/utils/exportPDF";
 import { QuickAccess } from "@/components/QuickAccess";
 import SocialLinks from "@/components/SocialLinks";
+import PageHeader from "@/components/PageHeader";
 
-export default function Home() {
+export default function Repertorio() {
   const [momentoSelecionado, setMomentoSelecionado] = useState<string | null>(null);
   const [buscaTexto, setBuscaTexto] = useState("");
   const [showPrintView, setShowPrintView] = useState(false);
@@ -64,6 +65,7 @@ export default function Home() {
     <>
       {showPrintView && <PrintView />}
     <div className="min-h-screen bg-background" style={{ display: showPrintView ? 'none' : 'block' }}>
+      <PageHeader title="Repertório Católico" description="Tempo do Advento - 29 músicas litúrgicas" showBackButton={true} />
       {/* Quick Access */}
       <QuickAccess />
 
@@ -96,64 +98,7 @@ export default function Home() {
               Músicas litúrgicas cuidadosamente selecionadas e organizadas por momentos da Santa Missa
             </p>
             <div className="flex gap-2 flex-wrap">
-              <Link href="/montar-repertorio">
-                <Button variant="default" size="sm" className="gap-2 bg-gradient-to-r from-secondary to-secondary/80 hover:from-secondary/90 hover:to-secondary/70">
-                  <ListMusic className="w-4 h-4" />
-                  Montar Repertório
-                </Button>
-              </Link>
-              <Link href="/doacao">
-                <Button variant="default" size="sm" className="gap-2 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70">
-                  <Heart className="w-4 h-4" />
-                  Apoie o Projeto
-                </Button>
-              </Link>
-              <Link href="/produtos">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <ShoppingBag className="w-4 h-4" />
-                  Produtos
-                </Button>
-              </Link>
-              <Link href="/blog">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <BookOpen className="w-4 h-4" />
-                  Blog
-                </Button>
-              </Link>
-              <Link href="/sobre">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Church className="w-4 h-4" />
-                  Sobre
-                </Button>
-              </Link>
-              <Link href="/stats">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <BarChart3 className="w-4 h-4" />
-                  Estatísticas
-                </Button>
-              </Link>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="gap-2"
-                onClick={() => {
-                  setShowPrintView(true);
-                  setTimeout(() => window.print(), 500);
-                }}
-              >
-                <Printer className="w-4 h-4" />
-                Imprimir
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="gap-2"
-                onClick={() => exportRepertorioPDF()}
-              >
-                <FileDown className="w-4 h-4" />
-                Exportar PDF
-              </Button>
-              <NotificationBell />
+              {/* Botões removidos - agora acessíveis via navegação principal */}
             </div>
           </div>
         </div>
