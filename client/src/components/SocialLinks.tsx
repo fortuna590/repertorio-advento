@@ -1,4 +1,4 @@
-import { Instagram, Youtube, Facebook, MessageCircle, Mail } from "lucide-react";
+import { Instagram, MessageCircle, Mail } from "lucide-react";
 
 interface SocialLink {
   name: string;
@@ -11,31 +11,19 @@ const socialLinks: SocialLink[] = [
   {
     name: "Instagram",
     icon: <Instagram className="w-6 h-6" />,
-    url: "https://instagram.com/louvamais",
+    url: "https://www.instagram.com/louvamais.solutions?igsh=enh5eTIzYThic3R3",
     color: "hover:text-pink-400",
-  },
-  {
-    name: "YouTube",
-    icon: <Youtube className="w-6 h-6" />,
-    url: "https://youtube.com/@louvamais",
-    color: "hover:text-red-400",
-  },
-  {
-    name: "Facebook",
-    icon: <Facebook className="w-6 h-6" />,
-    url: "https://facebook.com/louvamais",
-    color: "hover:text-blue-400",
   },
   {
     name: "WhatsApp",
     icon: <MessageCircle className="w-6 h-6" />,
-    url: "https://wa.me/5511999999999",
+    url: "https://wa.me/5518996890414",
     color: "hover:text-green-400",
   },
   {
     name: "Email",
     icon: <Mail className="w-6 h-6" />,
-    url: "mailto:louvamais590@gmail.com",
+    url: "mailto:contato@louvamais.com",
     color: "hover:text-purple-400",
   },
 ];

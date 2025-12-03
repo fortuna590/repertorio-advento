@@ -27,19 +27,19 @@ export default function Home() {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-scaleIn">
-          <Link href="/repertorio">
+          <a href="/repertorio">
             <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-6 text-lg">
               <Music className="w-5 h-5 mr-2" />
               Explorar Repertório
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
-          </Link>
-          <Link href="/blog">
+          </a>
+          <a href="/blog">
             <Button variant="outline" className="border-purple-500 text-purple-200 hover:bg-purple-500/10 px-8 py-6 text-lg">
               <BookOpen className="w-5 h-5 mr-2" />
               Ler Artigos
             </Button>
-          </Link>
+          </a>
         </div>
 
         {/* Stats */}
@@ -78,12 +78,12 @@ export default function Home() {
           <p className="text-purple-200 mb-6 max-w-2xl mx-auto">
             Explore nossa coleção completa de 29 músicas litúrgicas organizadas por momentos da Santa Missa. Perfeito para preparar suas celebrações do Advento com qualidade e devoção.
           </p>
-          <Link href="/repertorio">
+          <a href="/repertorio">
             <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
               Ver Repertório Completo
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
-          </Link>
+          </a>
         </div>
       </section>
 
@@ -126,12 +126,12 @@ export default function Home() {
         </div>
 
         <div className="text-center">
-          <Link href="/blog">
+          <a href="/blog">
             <Button variant="outline" className="border-purple-500 text-purple-200 hover:bg-purple-500/10">
               Ver Todos os Artigos
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
-          </Link>
+          </a>
         </div>
       </section>
 
@@ -142,12 +142,12 @@ export default function Home() {
           <p className="text-purple-100 mb-8 max-w-2xl mx-auto">
             Explore nosso repertório do Advento e enriqueça suas celebrações com músicas litúrgicas de qualidade.
           </p>
-          <Link href="/repertorio">
+          <a href="/repertorio">
             <Button className="bg-white text-purple-600 hover:bg-purple-50 px-8 py-3">
               Acessar Repertório
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
-          </Link>
+          </a>
         </div>
       </section>
 
