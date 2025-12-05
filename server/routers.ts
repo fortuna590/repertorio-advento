@@ -11,6 +11,7 @@ import { notificationsRouter } from "./routers/notifications";
 import { repertoriosRouter } from "./routers/repertorios";
 import { artigosRouter } from "./routers/artigos";
 import { paymentsRouter } from "./routers/payments";
+import { productsRouter } from "./routers/products";
 
 export const appRouter = router({
   contact: contactRouter,
@@ -20,6 +21,7 @@ export const appRouter = router({
   repertorios: repertoriosRouter,
   artigos: artigosRouter,
   payments: paymentsRouter,
+  products: productsRouter,
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   auth: router({

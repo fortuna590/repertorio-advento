@@ -1,6 +1,6 @@
 import { eq, count } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, clicks, InsertClick, notifications, InsertNotification, Notification, artigos, repertorios } from "../drizzle/schema";
+import { InsertUser, users, clicks, InsertClick, notifications, InsertNotification, Notification, artigos, repertorios, products, Product, InsertProduct } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -611,6 +611,173 @@ export async function incrementArtigoViews(id: number): Promise<void> {
     }
   } catch (error) {
     console.error("[Database] Failed to increment artigo views:", error);
+    throw error;
+  }
+}
+
+
+// ============ PRODUTOS ============
+
+export async function getAllProducts(): Promise<Product[]> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get products: database not available");
+    return [];
+  }
+
+  try {
+    return await db.select().from(products).where(eq(products.disponivel, 1));
+  } catch (error) {
+    console.error("[Database] Failed to get products:", error);
+    return [];
+  }
+}
+
+export async function getProductById(id: number): Promise<Product | undefined> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get product: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.select().from(products).where(eq(products.id, id));
+    return result[0];
+  } catch (error) {
+    console.error("[Database] Failed to get product:", error);
+    return undefined;
+  }
+}
+
+export async function clearAndSeedProducts(): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot seed products: database not available");
+    return;
+  }
+
+  try {
+    // Limpar produtos existentes
+    await db.delete(products);
+
+    // Adicionar novos produtos
+    const newProducts: InsertProduct[] = [
+      {
+        nome: 'Catecismo da Igreja Católica',
+        descricao: 'Compêndio oficial da doutrina católica',
+        preco: 29990, // em centavos
+        moeda: 'BRL',
+        plataforma: 'mercado_livre',
+        produtoId: '5NTWJH-B1NV',
+        linkAfiliado: 'https://mercadolivre.com/sec/1L32bE3',
+        disponivel: 1,
+      },
+      {
+        nome: 'Missal Romano - Tradução Da 3ª Edição Típica',
+        descricao: 'Missal Solene para celebração da Santa Missa',
+        preco: 57989, // em centavos
+        moeda: 'BRL',
+        plataforma: 'mercado_livre',
+        produtoId: '5NTWJH-XHZD',
+        linkAfiliado: 'https://mercadolivre.com/sec/2uS2z1T',
+        disponivel: 1,
+      },
+      {
+        nome: 'Constituição Sacrosanctum Concilium',
+        descricao: 'Documento do Concílio Vaticano II sobre a Sagrada Liturgia',
+        preco: 2000, // em centavos
+        moeda: 'BRL',
+        plataforma: 'mercado_livre',
+        produtoId: '1ibn8j6',
+        linkAfiliado: 'https://mercadolivre.com/sec/1ibn8j6',
+        disponivel: 1,
+      },
+      {
+        nome: 'O Segredo dos Ritos',
+        descricao: 'Ritualidade e sacramentalidade da liturgia cristã - 216 páginas',
+        preco: 3040, // em centavos
+        moeda: 'BRL',
+        plataforma: 'amazon',
+        produtoId: '8535628673',
+        linkAfiliado: 'https://amzn.to/3Y5inXF',
+        disponivel: 1,
+      },
+      {
+        nome: 'Cristo, Festa Da Igreja - O Ano Litúrgico',
+        descricao: 'Estudo do ano litúrgico e celebração de Cristo - 506 páginas',
+        preco: 5077, // em centavos
+        moeda: 'BRL',
+        plataforma: 'amazon',
+        produtoId: '8573110392',
+        linkAfiliado: 'https://amzn.to/4pOmXFQ',
+        disponivel: 1,
+      },
+      {
+        nome: 'No Espírito E Na Verdade - Volume 2',
+        descricao: 'Introdução Antropológica à Liturgia - 448 páginas',
+        preco: 0,
+        moeda: 'BRL',
+        plataforma: 'amazon',
+        produtoId: '8532616852',
+        linkAfiliado: 'https://amzn.to/48QMOaf',
+        disponivel: 0,
+      },
+    ];
+
+    for (const product of newProducts) {
+      await db.insert(products).values(product);
+    }
+
+    console.log('[Database] ✅ Produtos adicionados com sucesso!');
+  } catch (error) {
+    console.error('[Database] ❌ Erro ao adicionar produtos:', error);
+    throw error;
+  }
+}
+
+export async function createProduct(product: InsertProduct): Promise<Product | null> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot create product: database not available");
+    return null;
+  }
+
+  try {
+    const result = await db.insert(products).values(product);
+    const id = result[0].insertId;
+    return await getProductById(Number(id)) || null;
+  } catch (error) {
+    console.error("[Database] Failed to create product:", error);
+    throw error;
+  }
+}
+
+export async function updateProduct(id: number, updates: Partial<InsertProduct>): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot update product: database not available");
+    return;
+  }
+
+  try {
+    await db.update(products).set(updates).where(eq(products.id, id));
+  } catch (error) {
+    console.error("[Database] Failed to update product:", error);
+    throw error;
+  }
+}
+
+export async function deleteProduct(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot delete product: database not available");
+    return;
+  }
+
+  try {
+    await db.delete(products).where(eq(products.id, id));
+  } catch (error) {
+    console.error("[Database] Failed to delete product:", error);
     throw error;
   }
 }

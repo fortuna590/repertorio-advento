@@ -96,3 +96,24 @@ export const artigos = mysqlTable("artigos", {
 
 export type Artigo = typeof artigos.$inferSelect;
 export type InsertArtigo = typeof artigos.$inferInsert;
+
+/**
+ * Tabela para produtos da loja (Mercado Livre e Amazon)
+ */
+export const products = mysqlTable("products", {
+  id: int("id").autoincrement().primaryKey(),
+  nome: varchar("nome", { length: 255 }).notNull(),
+  descricao: text("descricao").notNull(),
+  preco: int("preco").notNull(), // Preço em centavos (ex: 8990 = R$ 89,90)
+  moeda: varchar("moeda", { length: 10 }).default("BRL").notNull(),
+  plataforma: mysqlEnum("plataforma", ["mercado_livre", "amazon"]).notNull(),
+  produtoId: varchar("produtoId", { length: 100 }).notNull(), // ID do Mercado Livre ou ASIN do Amazon
+  linkAfiliado: varchar("linkAfiliado", { length: 500 }).notNull(),
+  imagem: varchar("imagem", { length: 500 }),
+  disponivel: int("disponivel").default(1).notNull(), // 0 = indisponível, 1 = disponível
+  ultimaAtualizacao: timestamp("ultimaAtualizacao").defaultNow().onUpdateNow().notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Product = typeof products.$inferSelect;
+export type InsertProduct = typeof products.$inferInsert;
