@@ -111,6 +111,15 @@ export const products = mysqlTable("products", {
   linkAfiliado: varchar("linkAfiliado", { length: 500 }).notNull(),
   imagem: varchar("imagem", { length: 500 }),
   disponivel: int("disponivel").default(1).notNull(), // 0 = indisponível, 1 = disponível
+  parcelaMaxima: int("parcelaMaxima").default(1).notNull(),
+  valorParcela: int("valorParcela").default(0).notNull(),
+  temJuros: int("temJuros").default(0).notNull(),
+  freteGratis: int("freteGratis").default(0).notNull(),
+  valorFrete: int("valorFrete").default(0).notNull(),
+  desconto: int("desconto").default(0).notNull(),
+  precoOriginal: int("precoOriginal").default(0).notNull(),
+  cupom: varchar("cupom", { length: 100 }),
+  valorCupom: int("valorCupom").default(0).notNull(),
   ultimaAtualizacao: timestamp("ultimaAtualizacao").defaultNow().onUpdateNow().notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });

@@ -14,9 +14,17 @@ interface Produto {
   nome: string;
   descricao: string;
   preco: number;
+  precoOriginal?: number;
+  desconto?: number;
   plataforma: string;
   linkAfiliado: string;
   disponivel: boolean;
+  parcelaMaxima?: number;
+  valorParcela?: number;
+  temJuros?: boolean;
+  freteGratis?: boolean;
+  cupom?: string;
+  valorCupom?: number;
 }
 
 export default function Loja() {
@@ -34,10 +42,18 @@ export default function Loja() {
         id: p.id,
         nome: p.nome,
         descricao: p.descricao,
-        preco: p.preco / 100, // Converter de centavos para reais
+        preco: p.preco / 100,
+        precoOriginal: p.precoOriginal ? p.precoOriginal / 100 : undefined,
+        desconto: p.desconto || undefined,
         plataforma: p.plataforma,
         linkAfiliado: p.linkAfiliado,
         disponivel: p.disponivel === 1,
+        parcelaMaxima: p.parcelaMaxima,
+        valorParcela: p.valorParcela ? p.valorParcela / 100 : undefined,
+        temJuros: p.temJuros === 1,
+        freteGratis: p.freteGratis === 1,
+        cupom: p.cupom,
+        valorCupom: p.valorCupom ? p.valorCupom / 100 : undefined,
       }));
       setProdutos(produtosFormatados);
       setLoading(false);
@@ -89,7 +105,26 @@ export default function Loja() {
                   <h3 className="text-xl font-bold text-white mb-2">{produto.nome}</h3>
                   <p className="text-purple-200 text-sm mb-4">{produto.descricao}</p>
                   <div className="mb-6">
-                    <p className="text-3xl font-bold text-purple-400">{formatarPreco(produto.preco)}</p>
+                    <div className="flex items-baseline gap-2 mb-2">
+                      <p className="text-3xl font-bold text-purple-400">{formatarPreco(produto.preco)}</p>
+                      {produto.precoOriginal && produto.desconto && (
+                        <>
+                          <p className="text-lg text-purple-300 line-through">{formatarPreco(produto.precoOriginal)}</p>
+                          <span className="bg-red-600 text-white px-2 py-1 rounded text-sm font-semibold">{produto.desconto}% OFF</span>
+                        </>
+                      )}
+                    </div>
+                    {produto.parcelaMaxima && produto.parcelaMaxima > 1 && (
+                      <p className="text-sm text-purple-200">
+                        ou {produto.parcelaMaxima}x de {formatarPreco(produto.valorParcela || 0)} {produto.temJuros ? 'com juros' : 'sem juros'}
+                      </p>
+                    )}
+                    {produto.freteGratis && (
+                      <p className="text-sm text-green-400 font-semibold">Frete Gratis</p>
+                    )}
+                    {produto.cupom && (
+                      <p className="text-sm text-yellow-400">Cupom: {produto.cupom}</p>
+                    )}
                   </div>
                   <a
                     href={produto.linkAfiliado}

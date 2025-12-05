@@ -43,6 +43,13 @@
       "when": 1764904338951,
       "tag": "0005_soft_rhodey",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1764905538173,
+      "tag": "0006_silent_domino",
+      "breakpoints": true
     }
   ]
 }
