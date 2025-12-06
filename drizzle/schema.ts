@@ -126,3 +126,21 @@ export const products = mysqlTable("products", {
 
 export type Product = typeof products.$inferSelect;
 export type InsertProduct = typeof products.$inferInsert;
+
+/**
+ * Tabela para depoimentos de usuários
+ */
+export const depoimentos = mysqlTable("depoimentos", {
+  id: int("id").autoincrement().primaryKey(),
+  nomeAutor: varchar("nomeAutor", { length: 255 }).notNull(),
+  emailAutor: varchar("emailAutor", { length: 320 }).notNull(),
+  organizacao: varchar("organizacao", { length: 255 }), // Paróquia, ministério, etc
+  mensagem: text("mensagem").notNull(),
+  rating: int("rating").notNull(), // 1-5 estrelas
+  aprovado: int("aprovado").default(0).notNull(), // 0 = pendente, 1 = aprovado
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Depoimento = typeof depoimentos.$inferSelect;
+export type InsertDepoimento = typeof depoimentos.$inferInsert;

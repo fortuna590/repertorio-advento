@@ -1,6 +1,6 @@
-import { eq, count } from "drizzle-orm";
+import { eq, desc, and, gte } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, clicks, InsertClick, notifications, InsertNotification, Notification, artigos, repertorios, products, Product, InsertProduct } from "../drizzle/schema";
+import { InsertUser, users, clicks, InsertClick, notifications, InsertNotification, Notification, artigos, repertorios, products, Product, InsertProduct, depoimentos, Depoimento, InsertDepoimento } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -813,5 +813,124 @@ export async function deleteProduct(id: number): Promise<void> {
   } catch (error) {
     console.error("[Database] Failed to delete product:", error);
     throw error;
+  }
+}
+
+
+// ============ DEPOIMENTOS ============
+
+export async function getAllDepoimentos(): Promise<Depoimento[]> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get depoimentos: database not available");
+    return [];
+  }
+
+  try {
+    // Retorna apenas depoimentos aprovados, ordenados por mais recentes
+    return await db.select()
+      .from(depoimentos)
+      .where(eq(depoimentos.aprovado, 1))
+      .orderBy(desc(depoimentos.createdAt));
+  } catch (error) {
+    console.error("[Database] Failed to get depoimentos:", error);
+    return [];
+  }
+}
+
+export async function getDepoimentoById(id: number): Promise<Depoimento | undefined> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get depoimento: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.select().from(depoimentos).where(eq(depoimentos.id, id));
+    return result[0];
+  } catch (error) {
+    console.error("[Database] Failed to get depoimento:", error);
+    return undefined;
+  }
+}
+
+export async function createDepoimento(depoimento: InsertDepoimento): Promise<Depoimento | null> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot create depoimento: database not available");
+    return null;
+  }
+
+  try {
+    const result = await db.insert(depoimentos).values(depoimento);
+    const id = result[0].insertId;
+    return await getDepoimentoById(Number(id)) || null;
+  } catch (error) {
+    console.error("[Database] Failed to create depoimento:", error);
+    throw error;
+  }
+}
+
+export async function updateDepoimento(id: number, updates: Partial<InsertDepoimento>): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot update depoimento: database not available");
+    return;
+  }
+
+  try {
+    await db.update(depoimentos).set(updates).where(eq(depoimentos.id, id));
+  } catch (error) {
+    console.error("[Database] Failed to update depoimento:", error);
+    throw error;
+  }
+}
+
+export async function deleteDepoimento(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot delete depoimento: database not available");
+    return;
+  }
+
+  try {
+    await db.delete(depoimentos).where(eq(depoimentos.id, id));
+  } catch (error) {
+    console.error("[Database] Failed to delete depoimento:", error);
+    throw error;
+  }
+}
+
+export async function approveDepoimento(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot approve depoimento: database not available");
+    return;
+  }
+
+  try {
+    await db.update(depoimentos).set({ aprovado: 1 }).where(eq(depoimentos.id, id));
+  } catch (error) {
+    console.error("[Database] Failed to approve depoimento:", error);
+    throw error;
+  }
+}
+
+export async function getPendingDepoimentos(): Promise<Depoimento[]> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get pending depoimentos: database not available");
+    return [];
+  }
+
+  try {
+    // Retorna depoimentos pendentes de aprovação
+    return await db.select()
+      .from(depoimentos)
+      .where(eq(depoimentos.aprovado, 0))
+      .orderBy(desc(depoimentos.createdAt));
+  } catch (error) {
+    console.error("[Database] Failed to get pending depoimentos:", error);
+    return [];
   }
 }

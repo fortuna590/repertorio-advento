@@ -286,3 +286,16 @@
 - [x] Atualizar Landing Page com nova estrutura
 - [x] Atualizar rotas no App.tsx
 - [x] Testar navegação completa
+
+
+## Sistema de Depoimentos Dinâmicos
+
+- [x] Criar schema no banco de dados para depoimentos
+- [x] Implementar API tRPC para criar/listar/deletar depoimentos
+- [x] Criar componente formulário de depoimento reutilizável
+- [x] Adicionar formulário na página Sobre
+- [x] Adicionar formulário ao final de todas as páginas principais
+- [x] Criar galeria de depoimentos visível no site
+- [x] Implementar validação de depoimentos (nome, email, mensagem, rating)
+- [x] Adicionar moderação de depoimentos (opcional)
+- [x] Testar sistema completo de depoimentos

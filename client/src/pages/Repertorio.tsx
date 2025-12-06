@@ -13,6 +13,7 @@ import { PrintView } from "@/components/PrintView";
 import { exportRepertorioPDF } from "@/utils/exportPDF";
 import SocialLinks from "@/components/SocialLinks";
 import ModernHeader from "@/components/ModernHeader";
+import { TestimonialForm } from "@/components/TestimonialForm";
 
 export default function Repertorio() {
   const [momentoSelecionado, setMomentoSelecionado] = useState<string | null>(null);
@@ -262,6 +263,11 @@ export default function Repertorio() {
               </section>
             ))}
           </div>
+
+          {/* Formulário de Depoimento */}
+          <section className="mb-16">
+            <TestimonialForm compact={true} />
+          </section>
 
           {/* Seção de Newsletter */}
           <section className="mb-16">

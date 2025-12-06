@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Heart, Target, Users, Zap } from "lucide-react";
 import ModernHeader from "@/components/ModernHeader";
 import SocialLinks from "@/components/SocialLinks";
+import { TestimonialForm } from "@/components/TestimonialForm";
+import { TestimonialGallery } from "@/components/TestimonialGallery";
 import { APP_LOGO } from "@/const";
 import { Link } from "wouter";
 
@@ -127,6 +129,16 @@ export default function Sobre() {
               "Que a música seja sempre um instrumento de louvor e comunhão."
             </p>
           </Card>
+        </div>
+
+        {/* Depoimentos */}
+        <div className="mb-16">
+          <TestimonialGallery title="Depoimentos da Comunidade" />
+        </div>
+
+        {/* Formulário de Depoimento */}
+        <div className="mb-16">
+          <TestimonialForm />
         </div>
 
         {/* Contato */}
