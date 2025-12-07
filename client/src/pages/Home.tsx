@@ -6,8 +6,6 @@ import { Music, BookOpen, Heart, Sparkles, ArrowRight, Users } from "lucide-reac
 import { APP_LOGO } from "@/const";
 import SocialLinks from "@/components/SocialLinks";
 import ModernHeader from "@/components/ModernHeader";
-import { TestimonialForm } from "@/components/TestimonialForm";
-import { TestimonialGallery } from "@/components/TestimonialGallery";
 
 export default function Home() {
   return (
@@ -135,16 +133,6 @@ export default function Home() {
             </Button>
           </a>
         </div>
-      </section>
-
-      {/* Depoimentos */}
-      <section className="max-w-6xl mx-auto px-4 py-20">
-        <TestimonialGallery title="O que dizem sobre o LouvaMais" limit={3} showViewAll={true} />
-      </section>
-
-      {/* Formulário de Depoimento */}
-      <section className="max-w-4xl mx-auto px-4 py-20">
-        <TestimonialForm compact={true} />
       </section>
 
       {/* CTA Final */}

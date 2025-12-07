@@ -2,7 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
-import { registerClick, getClickStats, getSiteStats } from "./db";
+import { registerClick, getClickStats, getSiteStats, getClickStatsByPeriod } from "./db";
 import { z } from "zod";
 import { contactRouter } from "./routers/contact";
 import { donationsRouter } from "./routers/donations";
@@ -12,7 +12,6 @@ import { repertoriosRouter } from "./routers/repertorios";
 import { artigosRouter } from "./routers/artigos";
 import { paymentsRouter } from "./routers/payments";
 import { productsRouter } from "./routers/products";
-import { depoimentosRouter } from "./routers/depoimentos";
 
 export const appRouter = router({
   contact: contactRouter,
@@ -23,7 +22,6 @@ export const appRouter = router({
   artigos: artigosRouter,
   payments: paymentsRouter,
   products: productsRouter,
-  depoimentos: depoimentosRouter,
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   auth: router({
@@ -56,15 +54,22 @@ export const appRouter = router({
         return { success: true };
       }),
 
-    // Obter estatísticas (público para visualização)
+    // Obter estatu00edsticas (pu00e9blico para visualização)
     getStats: publicProcedure.query(async () => {
       return await getClickStats();
     }),
 
-    // Obter estatísticas gerais do site
+    // Obter estatu00edsticas gerais do site
     getSiteStats: publicProcedure.query(async () => {
       return await getSiteStats();
     }),
+
+    // Obter estatu00edsticas por peru00edodo
+    getStatsByPeriod: publicProcedure
+      .input(z.object({ days: z.number().default(7) }))
+      .query(async ({ input }) => {
+        return await getClickStatsByPeriod(input.days);
+      }),
   }),
 });
 

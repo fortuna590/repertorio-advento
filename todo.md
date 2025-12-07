@@ -290,12 +290,26 @@
 
 ## Sistema de Depoimentos Dinâmicos
 
-- [x] Criar schema no banco de dados para depoimentos
-- [x] Implementar API tRPC para criar/listar/deletar depoimentos
-- [x] Criar componente formulário de depoimento reutilizável
-- [x] Adicionar formulário na página Sobre
-- [x] Adicionar formulário ao final de todas as páginas principais
-- [x] Criar galeria de depoimentos visível no site
-- [x] Implementar validação de depoimentos (nome, email, mensagem, rating)
-- [x] Adicionar moderação de depoimentos (opcional)
-- [x] Testar sistema completo de depoimentos
+- [ ] Criar schema no banco de dados para depoimentos
+- [ ] Implementar API tRPC para criar/listar/deletar depoimentos
+- [ ] Criar componente formulário de depoimento reutilizável
+- [ ] Adicionar formulário na página Sobre
+- [ ] Adicionar formulário ao final de todas as páginas principais
+- [ ] Criar galeria de depoimentos visível no site
+- [ ] Implementar validação de depoimentos (nome, email, mensagem, rating)
+- [ ] Adicionar moderação de depoimentos (opcional)
+- [ ] Testar sistema completo de depoimentos
+
+
+## Melhorias na Página de Estatísticas
+
+- [x] Diagnosticar por que cliques nas músicas não estão atualizando
+- [x] Corrigir sistema de rastreamento de cliques em tempo real
+- [x] Implementar auto-refresh de dados a cada 5 segundos
+- [x] Adicionar filtros por período (1 dia, 7 dias, 30 dias)
+- [x] Criar filtros por tipo de clique (YouTube vs Cifra)
+- [x] Adicionar top 10 músicas mais clicadas
+- [x] Adicionar top 10 momentos da missa mais acessados
+- [x] Melhorar design com cards mais visuais e cores temáticas
+- [x] Adicionar percentuais de cliques por tipo
+- [x] Implementar botão de atualização manual
