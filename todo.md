@@ -313,3 +313,13 @@
 - [x] Melhorar design com cards mais visuais e cores temáticas
 - [x] Adicionar percentuais de cliques por tipo
 - [x] Implementar botão de atualização manual
+
+
+## Ajuste de Ícones de Redes Sociais no Rodapé
+
+- [x] Analisar componente Footer atual
+- [x] Melhorar estilo visual dos ícones (tamanho, cores, efeitos hover)
+- [x] Adicionar links funcionais para Instagram, WhatsApp, Email
+- [x] Criar componente reutilizável para ícones de redes sociais
+- [x] Testar em todas as páginas
+- [x] Validar responsividade
