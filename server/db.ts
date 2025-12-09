@@ -1,6 +1,6 @@
 import { eq, desc, gte, count } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, clicks, InsertClick, notifications, InsertNotification, Notification, artigos, repertorios, products, Product, InsertProduct, depoimentos, Depoimento, InsertDepoimento } from "../drizzle/schema";
+import { InsertUser, users, clicks, InsertClick, notifications, InsertNotification, Notification, artigos, repertorios, products, Product, InsertProduct, depoimentos, Depoimento, InsertDepoimento, liturgias, Liturgia, InsertLiturgia } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -905,6 +905,126 @@ export async function deleteProduct(id: number): Promise<void> {
     await db.delete(products).where(eq(products.id, id));
   } catch (error) {
     console.error("[Database] Failed to delete product:", error);
+    throw error;
+  }
+}
+
+
+// ============ LITURGIAS ============
+
+/**
+ * Buscar liturgia por data (formato DD/MM/YYYY)
+ */
+export async function getLiturgia(data: string): Promise<Liturgia | undefined> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get liturgia: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.select().from(liturgias).where(eq(liturgias.data, data)).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get liturgia:", error);
+    return undefined;
+  }
+}
+
+/**
+ * Buscar liturgia por data ISO (YYYY-MM-DD)
+ */
+export async function getLiturgiaByDateISO(dataISO: string): Promise<Liturgia | undefined> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get liturgia: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.select().from(liturgias).where(eq(liturgias.dataISO, dataISO as any)).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get liturgia by date ISO:", error);
+    return undefined;
+  }
+}
+
+/**
+ * Criar ou atualizar uma liturgia
+ */
+export async function upsertLiturgia(liturgia: InsertLiturgia): Promise<Liturgia | null> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot upsert liturgia: database not available");
+    return null;
+  }
+
+  try {
+    // Verificar se já existe
+    const existing = await getLiturgia(liturgia.data);
+    
+    if (existing) {
+      // Atualizar
+      await db.update(liturgias)
+        .set(liturgia)
+        .where(eq(liturgias.id, existing.id));
+      return await getLiturgia(liturgia.data) || null;
+    } else {
+      // Criar
+      const result = await db.insert(liturgias).values(liturgia);
+      const id = result[0].insertId;
+      
+      // Buscar e retornar
+      const newLiturgia = await db.select().from(liturgias).where(eq(liturgias.id, Number(id))).limit(1);
+      return newLiturgia.length > 0 ? newLiturgia[0] : null;
+    }
+  } catch (error) {
+    console.error("[Database] Failed to upsert liturgia:", error);
+    throw error;
+  }
+}
+
+/**
+ * Listar liturgias de um período (últimos N dias)
+ */
+export async function getLiturgiasRange(days: number = 7): Promise<Liturgia[]> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get liturgias: database not available");
+    return [];
+  }
+
+  try {
+    const dateFrom = new Date();
+    dateFrom.setDate(dateFrom.getDate() - days);
+    
+    const result = await db.select().from(liturgias).where(
+      gte(liturgias.dataISO, dateFrom.toISOString().split('T')[0] as any)
+    );
+    
+    return result.sort((a, b) => new Date(b.dataISO).getTime() - new Date(a.dataISO).getTime());
+  } catch (error) {
+    console.error("[Database] Failed to get liturgias range:", error);
+    return [];
+  }
+}
+
+/**
+ * Deletar uma liturgia
+ */
+export async function deleteLiturgia(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot delete liturgia: database not available");
+    return;
+  }
+
+  try {
+    await db.delete(liturgias).where(eq(liturgias.id, id));
+    console.log(`[Liturgia] Deleted: ID ${id}`);
+  } catch (error) {
+    console.error("[Database] Failed to delete liturgia:", error);
     throw error;
   }
 }

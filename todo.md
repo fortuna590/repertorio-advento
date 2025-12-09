@@ -323,3 +323,19 @@
 - [x] Criar componente reutilizável para ícones de redes sociais
 - [x] Testar em todas as páginas
 - [x] Validar responsividade
+
+
+## Página de Liturgia Diária (Em Progresso)
+
+- [x] Pesquisar e documentar API da CNBB
+- [x] Criar schema e tabelas no banco de dados (liturgias, liturgiaFavoritos)
+- [x] Migrar schema com sucesso
+- [x] Implementar funções de banco de dados para liturgias
+- [x] Criar router tRPC com endpoints (getByDate, getToday, getPeriod)
+- [x] Integrar router ao appRouter principal
+- [ ] Criar página de Liturgia Diária com seletor de datas
+- [ ] Implementar componentes de exibição (leituras, evangelhos, salmos)
+- [ ] Adicionar seletor de data com calendário
+- [ ] Adicionar favoritos de liturgias
+- [ ] Implementar atualização automática diária
+- [ ] Testar integração completa

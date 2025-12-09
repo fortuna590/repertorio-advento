@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { date, int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -144,3 +144,48 @@ export const depoimentos = mysqlTable("depoimentos", {
 
 export type Depoimento = typeof depoimentos.$inferSelect;
 export type InsertDepoimento = typeof depoimentos.$inferInsert;
+
+
+/**
+ * Tabela para cache de liturgias diárias da CNBB
+ */
+export const liturgias = mysqlTable("liturgias", {
+  id: int("id").autoincrement().primaryKey(),
+  data: varchar("data", { length: 10 }).notNull().unique(), // Formato DD/MM/YYYY
+  dataISO: date("dataISO").notNull().unique(), // Formato YYYY-MM-DD para queries
+  liturgia: varchar("liturgia", { length: 255 }).notNull(), // Nome da liturgia
+  cor: varchar("cor", { length: 50 }).notNull(), // Cor litúrgica
+  
+  // Orações
+  coleta: text("coleta"),
+  oferendas: text("oferendas"),
+  comunhao: text("comunhao"),
+  extras: text("extras"), // JSON array com orações extras
+  
+  // Leituras (armazenadas como JSON)
+  primeiraLeitura: text("primeiraLeitura"), // JSON array
+  segundaLeitura: text("segundaLeitura"), // JSON array
+  salmo: text("salmo"), // JSON array
+  evangelho: text("evangelho"), // JSON array
+  
+  // Metadata
+  apiResponse: text("apiResponse"), // Resposta completa da API (backup)
+  ultimaAtualizacao: timestamp("ultimaAtualizacao").defaultNow().onUpdateNow().notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Liturgia = typeof liturgias.$inferSelect;
+export type InsertLiturgia = typeof liturgias.$inferInsert;
+
+/**
+ * Tabela para favoritos de liturgias dos usuários
+ */
+export const liturgiaFavoritos = mysqlTable("liturgiaFavoritos", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  liturgiaId: int("liturgiaId").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type LiturgiaFavorito = typeof liturgiaFavoritos.$inferSelect;
+export type InsertLiturgiaFavorito = typeof liturgiaFavoritos.$inferInsert;
