@@ -9,7 +9,8 @@ import {
   Menu, 
   X,
   ListMusic,
-  Home as HomeIcon
+  Home as HomeIcon,
+  Calendar
 } from "lucide-react";
 import { APP_LOGO } from "@/const";
 import { useState } from "react";
@@ -20,6 +21,7 @@ export function Navigation() {
   const navItems = [
     { href: "/", label: "Home", icon: HomeIcon },
     { href: "/montar-repertorio", label: "Montar Repertório", icon: ListMusic, highlight: true },
+    { href: "/liturgia", label: "Liturgia Diária", icon: Calendar },
     { href: "/produtos", label: "Produtos", icon: ShoppingBag },
     { href: "/blog", label: "Blog", icon: BookOpen },
     { href: "/sobre", label: "Sobre", icon: Church },

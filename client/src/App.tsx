@@ -24,6 +24,7 @@ import Depoimentos from "./pages/Depoimentos";
 import Sobre from "./pages/Sobre";
 import Estatisticas from "./pages/Estatisticas";
 import Loja from "./pages/Loja";
+import Liturgia from "./pages/Liturgia";
 import WhatsAppButton from "./components/WhatsAppButton";
 
 function Router() {
@@ -48,6 +49,7 @@ function Router() {
       <Route path={"/sobre"} component={Sobre} />
       <Route path={"/estatisticas"} component={Estatisticas} />
       <Route path={"/loja"} component={Loja} />
+      <Route path={"/liturgia"} component={Liturgia} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

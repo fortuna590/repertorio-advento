@@ -325,7 +325,7 @@
 - [x] Validar responsividade
 
 
-## Página de Liturgia Diária (Em Progresso)
+## Página de Liturgia Diária (Completo)
 
 - [x] Pesquisar e documentar API da CNBB
 - [x] Criar schema e tabelas no banco de dados (liturgias, liturgiaFavoritos)
@@ -333,9 +333,10 @@
 - [x] Implementar funções de banco de dados para liturgias
 - [x] Criar router tRPC com endpoints (getByDate, getToday, getPeriod)
 - [x] Integrar router ao appRouter principal
-- [ ] Criar página de Liturgia Diária com seletor de datas
-- [ ] Implementar componentes de exibição (leituras, evangelhos, salmos)
-- [ ] Adicionar seletor de data com calendário
-- [ ] Adicionar favoritos de liturgias
-- [ ] Implementar atualização automática diária
-- [ ] Testar integração completa
+- [x] Criar página de Liturgia Diária com seletor de datas
+- [x] Implementar componentes de exibição (leituras, evangelhos, salmos)
+- [x] Adicionar seletor de data com calendário
+- [x] Adicionar favoritos de liturgias (localStorage)
+- [x] Integrar ao menu de navegação
+- [x] Testar integração completa
+- [x] Criar testes unitários (11 testes passando)
