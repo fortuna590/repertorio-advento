@@ -19,12 +19,16 @@ export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { href: "/", label: "Home", icon: HomeIcon },
+    { href: "/", label: "Home", icon: HomeIcon, highlight: false },
+    { href: "/repertorio", label: "Repertório", icon: Music, highlight: false },
+    { href: "/liturgia", label: "Liturgia", icon: Calendar, highlight: false },
+    { href: "/blog", label: "Blog", icon: BookOpen, highlight: false },
+    { href: "/sobre", label: "Sobre", icon: Church, highlight: false },
+  ];
+
+  const mobileItems = [
     { href: "/montar-repertorio", label: "Montar Repertório", icon: ListMusic, highlight: true },
-    { href: "/liturgia", label: "Liturgia Diária", icon: Calendar },
-    { href: "/produtos", label: "Produtos", icon: ShoppingBag },
-    { href: "/blog", label: "Blog", icon: BookOpen },
-    { href: "/sobre", label: "Sobre", icon: Church },
+    { href: "/produtos", label: "Produtos", icon: ShoppingBag, highlight: false },
   ];
 
   const actionItems = [
@@ -57,7 +61,7 @@ export function Navigation() {
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className={`gap-2 ${item.highlight ? 'text-secondary font-semibold' : ''}`}
+                    className={`gap-2 ${(item as any).highlight ? 'text-secondary font-semibold' : ''}`}
                   >
                     <Icon className="w-4 h-4" />
                     <span className="hidden lg:inline">{item.label}</span>
@@ -99,11 +103,11 @@ export function Navigation() {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+          {/* Mobile Navigation */}
         {isOpen && (
           <nav className="md:hidden border-t border-border/50 bg-card/50 backdrop-blur-sm">
             <div className="container py-4 space-y-2">
-              {navItems.map((item) => {
+              {[...navItems, ...mobileItems].map((item) => {
                 const Icon = item.icon;
                 return (
                   <Link key={item.href} href={item.href}>
