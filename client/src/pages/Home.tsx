@@ -2,7 +2,7 @@ import { Link } from "wouter";
 // Removed - using ModernHeader instead
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Music, BookOpen, Heart, Sparkles, ArrowRight, Users } from "lucide-react";
+import { Music, BookOpen, Heart, Sparkles, ArrowRight, Users, Calendar } from "lucide-react";
 import { APP_LOGO } from "@/const";
 import SocialLinks from "@/components/SocialLinks";
 import ModernHeader from "@/components/ModernHeader";
@@ -70,20 +70,38 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Destaque do Advento */}
+      {/* Destaque do Advento e Liturgia */}
       <section className="max-w-6xl mx-auto px-4 py-20">
-        <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30 rounded-lg p-12 text-center mb-12">
-          <Sparkles className="w-12 h-12 text-purple-400 mx-auto mb-4" />
-          <h2 className="text-3xl font-bold text-white mb-4">Tempo do Advento</h2>
-          <p className="text-purple-200 mb-6 max-w-2xl mx-auto">
-            Explore nossa coleção completa de 29 músicas litúrgicas organizadas por momentos da Santa Missa. Perfeito para preparar suas celebrações do Advento com qualidade e devoção.
-          </p>
-          <a href="/repertorio">
-            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
-              Ver Repertório Completo
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </a>
+        <div className="grid md:grid-cols-2 gap-8 mb-12">
+          {/* Card Advento */}
+          <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30 rounded-lg p-12 text-center">
+            <Sparkles className="w-12 h-12 text-purple-400 mx-auto mb-4" />
+            <h2 className="text-3xl font-bold text-white mb-4">Tempo do Advento</h2>
+            <p className="text-purple-200 mb-6">
+              Explore nossa colecao completa de 29 musicas liturgicas organizadas por momentos da Santa Missa.
+            </p>
+            <a href="/repertorio">
+              <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
+                Ver Repertorio Completo
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </a>
+          </div>
+
+          {/* Card Liturgia Diaria */}
+          <div className="bg-gradient-to-r from-blue-600/20 to-cyan-600/20 border border-blue-500/30 rounded-lg p-12 text-center">
+            <Calendar className="w-12 h-12 text-blue-400 mx-auto mb-4" />
+            <h2 className="text-3xl font-bold text-white mb-4">Liturgia Diaria</h2>
+            <p className="text-blue-200 mb-6">
+              Acompanhe as leituras, evangelhos e salmos de cada dia da CNBB com navegacao simples.
+            </p>
+            <a href="/liturgia">
+              <Button className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white">
+                Acessar Liturgia
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </a>
+          </div>
         </div>
       </section>
 

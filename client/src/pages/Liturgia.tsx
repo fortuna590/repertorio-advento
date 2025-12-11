@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronLeft, ChevronRight, Calendar, BookOpen, Music, Heart } from "lucide-react";
+import { LiturgiaShare } from "@/components/LiturgiaShare";
 
 interface LiturgiaData {
   data: string;
@@ -234,6 +235,15 @@ export default function Liturgia() {
                   </Button>
                 </div>
               </CardHeader>
+
+              {/* Compartilhamento */}
+              <div className="px-6 pt-4 pb-2 border-b border-purple-500/20">
+                <LiturgiaShare 
+                  data={liturgia.data} 
+                  liturgia={liturgia.liturgia}
+                  url={typeof window !== "undefined" ? window.location.href : ""}
+                />
+              </div>
 
               <CardContent className="pt-6 space-y-6">
                 {/* Orações */}

@@ -340,3 +340,11 @@
 - [x] Integrar ao menu de navegação
 - [x] Testar integração completa
 - [x] Criar testes unitários (11 testes passando)
+
+
+## Melhorias na Página de Liturgia Diária
+
+- [x] Adicionar atalho/card de Liturgia Diária na Home
+- [x] Implementar funcionalidade de compartilhamento (WhatsApp, Email, Redes Sociais)
+- [x] Adicionar botões de compartilhamento na página de Liturgia
+- [x] Testar compartilhamento em todos os canais
