@@ -348,3 +348,9 @@
 - [x] Implementar funcionalidade de compartilhamento (WhatsApp, Email, Redes Sociais)
 - [x] Adicionar botões de compartilhamento na página de Liturgia
 - [x] Testar compartilhamento em todos os canais
+
+
+## Melhorias na Navegação de Liturgia
+
+- [x] Adicionar botão de voltar na página de Liturgia Diária
+- [x] Adicionar link de Liturgia no menu de navegação

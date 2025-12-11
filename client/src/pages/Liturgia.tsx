@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ChevronLeft, ChevronRight, Calendar, BookOpen, Music, Heart } from "lucide-react";
+import { ChevronLeft, ChevronRight, Calendar, BookOpen, Music, Heart, ArrowLeft } from "lucide-react";
 import { LiturgiaShare } from "@/components/LiturgiaShare";
 
 interface LiturgiaData {
@@ -21,6 +22,7 @@ interface LiturgiaData {
 }
 
 export default function Liturgia() {
+  const [, navigate] = useRouter() as any;
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [isFavorite, setIsFavorite] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
@@ -122,6 +124,16 @@ export default function Liturgia() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-12 px-4">
       <div className="max-w-4xl mx-auto">
+        {/* Botão de Voltar */}
+        <Button
+          onClick={() => navigate("/")}
+          variant="ghost"
+          className="mb-6 text-gray-400 hover:text-white hover:bg-slate-700/50"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Voltar
+        </Button>
+
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
