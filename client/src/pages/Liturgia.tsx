@@ -248,14 +248,14 @@ export default function Liturgia() {
                 </div>
               </CardHeader>
 
-              {/* Compartilhamento */}
-              <div className="px-6 pt-4 pb-2 border-b border-purple-500/20">
+              {/* Compartilhamento - Desabilitado temporariamente para debug */}
+              {/* <div className="px-6 pt-4 pb-2 border-b border-purple-500/20">
                 <LiturgiaShare 
                   data={liturgia.data} 
                   liturgia={liturgia.liturgia}
                   url={typeof window !== "undefined" ? window.location.href : ""}
                 />
-              </div>
+              </div> */}
 
               <CardContent className="pt-6 space-y-6">
                 {/* Orações */}
