@@ -21,33 +21,6 @@ export function LiturgiaShare({ data, liturgia, url = "" }: LiturgiaShareProps) 
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const shareLinks = [
-    {
-      name: "WhatsApp",
-      icon: MessageCircle,
-      url: `https://wa.me/?text=${encodedText}`,
-      color: "hover:text-green-500",
-    },
-    {
-      name: "Email",
-      icon: Mail,
-      url: `mailto:?subject=Liturgia de ${data}&body=${encodedText}`,
-      color: "hover:text-blue-500",
-    },
-    {
-      name: "Facebook",
-      icon: Facebook,
-      url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
-      color: "hover:text-blue-600",
-    },
-    {
-      name: "Twitter",
-      icon: Twitter,
-      url: `https://twitter.com/intent/tweet?text=${encodedText}`,
-      color: "hover:text-blue-400",
-    },
-  ];
-
   return (
     <div className="flex items-center gap-2">
       <span className="text-sm text-gray-400 flex items-center gap-1">
@@ -56,22 +29,49 @@ export function LiturgiaShare({ data, liturgia, url = "" }: LiturgiaShareProps) 
       </span>
       
       <div className="flex gap-2">
-        {shareLinks.map((link) => {
-          const Icon = link.icon;
-          return (
-            <a
-              key={link.name}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              title={`Compartilhar no ${link.name}`}
-              className={`p-2 rounded-lg text-gray-400 transition-colors ${link.color} hover:bg-slate-700/50`}
-            >
-              <Icon className="w-4 h-4" />
-            </a>
-          );
-        })}
+        {/* WhatsApp */}
+        <a
+          href={`https://wa.me/?text=${encodedText}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Compartilhar no WhatsApp"
+          className="p-2 rounded-lg text-gray-400 transition-colors hover:text-green-500 hover:bg-slate-700/50"
+        >
+          <MessageCircle className="w-4 h-4" />
+        </a>
 
+        {/* Email */}
+        <a
+          href={`mailto:?subject=Liturgia de ${data}&body=${encodedText}`}
+          title="Compartilhar por Email"
+          className="p-2 rounded-lg text-gray-400 transition-colors hover:text-blue-500 hover:bg-slate-700/50"
+        >
+          <Mail className="w-4 h-4" />
+        </a>
+
+        {/* Facebook */}
+        <a
+          href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Compartilhar no Facebook"
+          className="p-2 rounded-lg text-gray-400 transition-colors hover:text-blue-600 hover:bg-slate-700/50"
+        >
+          <Facebook className="w-4 h-4" />
+        </a>
+
+        {/* Twitter */}
+        <a
+          href={`https://twitter.com/intent/tweet?text=${encodedText}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Compartilhar no Twitter"
+          className="p-2 rounded-lg text-gray-400 transition-colors hover:text-blue-400 hover:bg-slate-700/50"
+        >
+          <Twitter className="w-4 h-4" />
+        </a>
+
+        {/* Copy */}
         <Button
           onClick={handleCopy}
           variant="ghost"
