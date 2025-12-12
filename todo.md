@@ -354,3 +354,10 @@
 
 - [x] Adicionar botão de voltar na página de Liturgia Diária
 - [x] Adicionar link de Liturgia no menu de navegação
+
+
+## Correções Urgentes
+
+- [x] Corrigir erro "Kf is not a function" na página de Liturgia Diária
+- [ ] Remover blocos de Downloads e Crescimento Mensal da página de Estatísticas
+- [x] Adicionar link de Liturgia visível no menu de navegação (já estava lá)

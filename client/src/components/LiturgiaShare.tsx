@@ -8,7 +8,7 @@ interface LiturgiaShareProps {
   url?: string;
 }
 
-export function LiturgiaShare({ data, liturgia, url = typeof window !== "undefined" ? window.location.href : "" }: LiturgiaShareProps) {
+export function LiturgiaShare({ data, liturgia, url = "" }: LiturgiaShareProps) {
   const [copied, setCopied] = useState(false);
 
   const shareText = `Liturgia de ${data}\n${liturgia}\n\nAcesse: ${url}`;
