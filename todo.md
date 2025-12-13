@@ -369,4 +369,13 @@
 - [x] Reconstruir página de Liturgia do zero com código simples
 - [x] Remover dependências desnecessárias
 - [x] Testar localmente antes de publicar
-- [ ] Publicar e validar no site ao vivo
+- [x] Publicar e validar no site ao vivo
+
+
+## Desabilitar Página de Liturgia Diária
+
+- [x] Remover link de Liturgia do menu de navegação (ModernHeader) - Não estava presente
+- [x] Remover card de Liturgia Diária da Home
+- [x] Comentar rota /liturgia no App.tsx
+- [x] Testar site sem a funcionalidade
+- [ ] Criar checkpoint final
