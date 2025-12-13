@@ -361,3 +361,12 @@
 - [x] Corrigir erro "Kf is not a function" na página de Liturgia Diária
 - [ ] Remover blocos de Downloads e Crescimento Mensal da página de Estatísticas
 - [x] Adicionar link de Liturgia visível no menu de navegação (já estava lá)
+
+
+## Reconstrução da Página de Liturgia
+
+- [x] Testar API da CNBB diretamente para verificar se está funcional
+- [x] Reconstruir página de Liturgia do zero com código simples
+- [x] Remover dependências desnecessárias
+- [x] Testar localmente antes de publicar
+- [ ] Publicar e validar no site ao vivo

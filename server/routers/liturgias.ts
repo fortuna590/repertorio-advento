@@ -44,7 +44,9 @@ function convertISOToData(dataISO: string): string {
  */
 async function fetchLiturgiaFromAPI(dia: number, mes: number, ano: number): Promise<LiturgiaResponse | null> {
   try {
-    const url = `${LITURGIA_API_URL}/?dia=${dia}&mes=${mes}&ano=${ano}`;
+    // Formato: YYYY-MM-DD
+    const dataFormatada = `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+    const url = `${LITURGIA_API_URL}/${dataFormatada}`;
     const response = await fetch(url);
     
     if (!response.ok) {

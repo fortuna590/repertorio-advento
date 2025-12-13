@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronLeft, ChevronRight, Calendar, BookOpen, Music, Heart, ArrowLeft } from "lucide-react";
-import { LiturgiaShare } from "@/components/LiturgiaShare";
+// import { LiturgiaShare } from "@/components/LiturgiaShare"; // Desabilitado temporariamente
 
 interface LiturgiaData {
   data: string;
