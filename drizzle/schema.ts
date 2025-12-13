@@ -17,6 +17,9 @@ export const users = mysqlTable("users", {
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  paroquia: varchar("paroquia", { length: 255 }), // Paróquia ou ministério do usuário
+  foto: varchar("foto", { length: 500 }), // URL da foto de perfil
+  bio: text("bio"), // Biografia/descrição do usuário
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
@@ -189,3 +192,56 @@ export const liturgiaFavoritos = mysqlTable("liturgiaFavoritos", {
 
 export type LiturgiaFavorito = typeof liturgiaFavoritos.$inferSelect;
 export type InsertLiturgiaFavorito = typeof liturgiaFavoritos.$inferInsert;
+
+/**
+ * Tabela para músicas favoritas dos usuários
+ */
+export const musicasFavoritas = mysqlTable("musicasFavoritas", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  musicaId: varchar("musicaId", { length: 100 }).notNull(), // ID da música no JSON
+  musicaTitulo: varchar("musicaTitulo", { length: 255 }).notNull(),
+  musicaArtista: varchar("musicaArtista", { length: 255 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type MusicaFavorita = typeof musicasFavoritas.$inferSelect;
+export type InsertMusicaFavorita = typeof musicasFavoritas.$inferInsert;
+
+/**
+ * Tabela para preferências de usuário (newsletter, notificações)
+ */
+export const userPreferences = mysqlTable("userPreferences", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  
+  // Newsletter
+  newsletterEnabled: int("newsletterEnabled").default(1).notNull(), // 0 = desativado, 1 = ativado
+  newsletterFrequency: mysqlEnum("newsletterFrequency", ["weekly", "monthly", "never"]).default("monthly").notNull(),
+  
+  // Notificações
+  notifyNewSongs: int("notifyNewSongs").default(1).notNull(),
+  notifyNewArticles: int("notifyNewArticles").default(1).notNull(),
+  notifyLiturgicalEvents: int("notifyLiturgicalEvents").default(1).notNull(),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type UserPreference = typeof userPreferences.$inferSelect;
+export type InsertUserPreference = typeof userPreferences.$inferInsert;
+
+/**
+ * Tabela para histórico de acessos a músicas (para sugestões personalizadas)
+ */
+export const musicHistory = mysqlTable("musicHistory", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  musicaId: varchar("musicaId", { length: 100 }).notNull(),
+  musicaTitulo: varchar("musicaTitulo", { length: 255 }).notNull(),
+  momentoId: varchar("momentoId", { length: 100 }).notNull(),
+  accessedAt: timestamp("accessedAt").defaultNow().notNull(),
+});
+
+export type MusicHistory = typeof musicHistory.$inferSelect;
+export type InsertMusicHistory = typeof musicHistory.$inferInsert;

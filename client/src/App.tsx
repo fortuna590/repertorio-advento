@@ -26,6 +26,9 @@ import Sobre from "./pages/Sobre";
 import Estatisticas from "./pages/Estatisticas";
 import Loja from "./pages/Loja";
 // import Liturgia from "./pages/Liturgia"; // Temporarily disabled due to production errors
+import Login from "./pages/Login";
+import Cadastro from "./pages/Cadastro";
+import Perfil from "./pages/Perfil";
 import WhatsAppButton from "./components/WhatsAppButton";
 
 function Router() {
@@ -52,6 +55,9 @@ function Router() {
       <Route path={"/estatisticas"} component={Estatisticas} />
       <Route path={"/loja"} component={Loja} />
       {/* <Route path={"/liturgia"} component={Liturgia} /> */} {/* Temporarily disabled due to production errors */}
+      <Route path={"/login"} component={Login} />
+      <Route path={"/cadastro"} component={Cadastro} />
+      <Route path={"/perfil"} component={Perfil} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

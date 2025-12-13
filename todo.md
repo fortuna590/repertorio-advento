@@ -400,4 +400,76 @@
 - [x] Testar aprovação/rejeição
 - [x] Testar exibição na galeria
 - [x] Escrever testes unitários - 47 testes passando (15 novos de depoimentos)
+- [x] Criar checkpoint final
+
+
+## Sistema de Autenticação Opcional e Funcionalidades de Usuário
+
+### Arquitetura e Planejamento
+- [x] Planejar fluxo de autenticação (visitante vs usuário logado)
+- [x] Definir tabelas do banco de dados (favoritos, preferências)
+- [x] Mapear rotas protegidas vs públicas
+
+### Schema do Banco de Dados
+- [x] Criar tabela `musicasFavoritas` (userId, musicaId, musicaTitulo, musicaArtista, createdAt)
+- [x] Atualizar tabela `users` com campos adicionais (paroquia, foto, bio)
+- [x] Criar tabela `userPreferences` (newsletter, notificações, frequência)
+- [x] Criar tabela `musicHistory` para histórico de acessos
+- [x] Migrar schema com pnpm db:push
+
+### Header e Navegação
+- [x] Atualizar ModernHeader com botões "Entrar" e "Cadastrar" (quando não logado)
+- [x] Adicionar menu dropdown de usuário (quando logado)
+- [x] Criar componente UserMenu com opções (Perfil, Favoritas, Repertórios, Sair)
+- [x] Adicionar avatar do usuário no header
+
+### Páginas de Autenticação
+- [x] Criar página de Login (/login) com OAuth (Google, Facebook)
+- [x] Criar página de Cadastro (/cadastro) com benefícios e OAuth
+- [x] Criar página de Perfil (/perfil) para editar dados
+- [ ] Criar página de Recuperação de Senha (/recuperar-senha) - Fase 2
+- [x] Integrar com sistema OAuth do Manus (Google, Facebook)
+- [x] Adicionar rotas no App.tsx
+
+### Sistema de Favoritos
+- [ ] Criar router tRPC para favoritos (adicionar, remover, listar)
+- [ ] Adicionar botão de favoritar em cada música do repertório
+- [ ] Criar página "Minhas Favoritas" (/minhas-favoritas)
+- [ ] Implementar filtros e busca nas favoritas
+- [ ] Adicionar opção de exportar favoritas em PDF
+
+### Repertórios Personalizados Avançados
+- [ ] Melhorar página de criação de repertórios
+- [ ] Adicionar drag-and-drop para reordenar músicas
+- [ ] Implementar notas/observações por repertório
+- [ ] Criar sistema de compartilhamento (link público)
+- [ ] Adicionar opção de duplicar repertórios
+- [ ] Página "Meus Repertórios" (/meus-repertorios)
+
+### Newsletter e Notificações
+- [ ] Criar tabela de preferências de newsletter
+- [ ] Adicionar checkbox de newsletter no cadastro
+- [ ] Criar página de Configurações (/configuracoes)
+- [ ] Implementar preferências (frequência: semanal, mensal, nunca)
+- [ ] Sistema de notificações de novas músicas
+- [ ] Alertas de músicas para próximas celebrações
+
+### Histórico e Sugestões
+- [ ] Rastrear músicas mais acessadas por usuário
+- [ ] Criar dashboard de estatísticas pessoais
+- [ ] Implementar algoritmo de sugestões baseado em histórico
+- [ ] Exibir "Recomendadas para você" na Home (usuários logados)
+
+### Recursos Sociais (Fase 2 - Opcional)
+- [ ] Sistema de comentários em músicas
+- [ ] Rating/avaliação de músicas (1-5 estrelas)
+- [ ] Compartilhamento social (WhatsApp, Facebook, Twitter)
+- [ ] Seguir outros usuários/ministérios
+
+### Testes e Validação
+- [ ] Escrever testes para autenticação
+- [ ] Testar fluxo de favoritos
+- [ ] Testar criação e edição de repertórios
+- [ ] Validar preferências de newsletter
+- [ ] Testar proteção de rotas (público vs privado)
 - [ ] Criar checkpoint final
