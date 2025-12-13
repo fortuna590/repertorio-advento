@@ -378,4 +378,26 @@
 - [x] Remover card de Liturgia Diária da Home
 - [x] Comentar rota /liturgia no App.tsx
 - [x] Testar site sem a funcionalidade
+- [x] Criar checkpoint final
+
+
+## Sistema Completo de Depoimentos com Moderação
+
+- [x] Criar schema no banco de dados (tabela depoimentos) - Já existia
+- [x] Adicionar campos: nome, email, organização, mensagem, rating, status (pendente/aprovado/rejeitado), createdAt
+- [x] Migrar schema com pnpm db:push - Já migrado
+- [x] Criar router tRPC para depoimentos
+- [x] Endpoint: criar depoimento (público, status pendente por padrão)
+- [x] Endpoint: listar depoimentos aprovados (público)
+- [x] Endpoint: listar depoimentos pendentes (admin)
+- [x] Endpoint: aprovar depoimento (admin)
+- [x] Endpoint: rejeitar/deletar depoimento (admin)
+- [x] Criar componente TestimonialForm (formulário de envio)
+- [x] Criar componente TestimonialGallery (galeria de depoimentos aprovados)
+- [x] Atualizar página Depoimentos com galeria dinâmica
+- [x] Criar página de moderação (/depoimentos-admin)
+- [x] Testar criação de depoimentos
+- [x] Testar aprovação/rejeição
+- [x] Testar exibição na galeria
+- [x] Escrever testes unitários - 47 testes passando (15 novos de depoimentos)
 - [ ] Criar checkpoint final

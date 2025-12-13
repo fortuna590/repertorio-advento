@@ -21,6 +21,7 @@ import PagamentoSucesso from "./pages/PagamentoSucesso";
 import PagamentoCancelado from "./pages/PagamentoCancelado";
 import Dashboard from "./pages/Dashboard";
 import Depoimentos from "./pages/Depoimentos";
+import DepoimentosAdmin from "./pages/DepoimentosAdmin";
 import Sobre from "./pages/Sobre";
 import Estatisticas from "./pages/Estatisticas";
 import Loja from "./pages/Loja";
@@ -46,6 +47,7 @@ function Router() {
       <Route path={"/pagamento-cancelado"} component={PagamentoCancelado} />
       <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/depoimentos"} component={Depoimentos} />
+      <Route path={"/depoimentos-admin"} component={DepoimentosAdmin} />
       <Route path={"/sobre"} component={Sobre} />
       <Route path={"/estatisticas"} component={Estatisticas} />
       <Route path={"/loja"} component={Loja} />
