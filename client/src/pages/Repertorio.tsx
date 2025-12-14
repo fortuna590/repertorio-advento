@@ -13,6 +13,7 @@ import { PrintView } from "@/components/PrintView";
 import { exportRepertorioPDF } from "@/utils/exportPDF";
 import SocialLinks from "@/components/SocialLinks";
 import ModernHeader from "@/components/ModernHeader";
+import FavoriteButton from "@/components/FavoriteButton";
 
 export default function Repertorio() {
   const [momentoSelecionado, setMomentoSelecionado] = useState<string | null>(null);
@@ -195,14 +196,11 @@ export default function Repertorio() {
                             </CardDescription>
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-8 w-8 hover:bg-pink-500/10"
-                              onClick={() => {}}
-                            >
-                              <Heart className="w-4 h-4 text-purple-400" />
-                            </Button>
+                            <FavoriteButton
+                              musicaId={`${momento.id}-${musica.numero}`}
+                              musicaTitulo={musica.titulo}
+                              musicaArtista={musica.artista}
+                            />
                             <Badge 
                               className="bg-purple-500/30 border-purple-500/50 text-purple-200"
                             >

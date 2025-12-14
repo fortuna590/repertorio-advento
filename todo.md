@@ -432,11 +432,14 @@
 - [x] Adicionar rotas no App.tsx
 
 ### Sistema de Favoritos
-- [ ] Criar router tRPC para favoritos (adicionar, remover, listar)
-- [ ] Adicionar botão de favoritar em cada música do repertório
-- [ ] Criar página "Minhas Favoritas" (/minhas-favoritas)
-- [ ] Implementar filtros e busca nas favoritas
-- [ ] Adicionar opção de exportar favoritas em PDF
+- [x] Criar router tRPC para favoritos (adicionar, remover, listar, isFavorite)
+- [x] Criar componente FavoriteButton reutilizável
+- [x] Adicionar botão de favoritar em cada música do repertório
+- [x] Criar página "Minhas Favoritas" (/minhas-favoritas)
+- [x] Implementar filtros e busca nas favoritas
+- [x] Toast notifications para feedback do usuário
+- [x] Redirect para login se usuário não autenticado
+- [ ] Adicionar opção de exportar favoritas em PDF - Fase 2
 
 ### Repertórios Personalizados Avançados
 - [ ] Melhorar página de criação de repertórios
@@ -467,9 +470,10 @@
 - [ ] Seguir outros usuários/ministérios
 
 ### Testes e Validação
-- [ ] Escrever testes para autenticação
-- [ ] Testar fluxo de favoritos
-- [ ] Testar criação e edição de repertórios
-- [ ] Validar preferências de newsletter
-- [ ] Testar proteção de rotas (público vs privado)
+- [x] Escrever testes para sistema de favoritos (10 testes)
+- [x] Testar fluxo de favoritos (adicionar, remover, listar)
+- [x] Validar proteção de rotas (redirect para login)
+- [x] 57 testes passando no total
+- [ ] Testar criação e edição de repertórios - Fase 2
+- [ ] Validar preferências de newsletter - Fase 2
 - [ ] Criar checkpoint final
