@@ -476,4 +476,13 @@
 - [x] 57 testes passando no total
 - [ ] Testar criação e edição de repertórios - Fase 2
 - [ ] Validar preferências de newsletter - Fase 2
-- [ ] Criar checkpoint final
+- [x] Criar checkpoint final
+
+
+## Correção do Sistema de Autenticação OAuth
+- [x] Investigar fluxo OAuth correto do Manus
+- [x] Corrigir páginas de Login e Cadastro para usar getLoginUrl()
+- [x] Remover botões de OAuth individuais (Google/Facebook)
+- [x] Usar portal OAuth unificado do Manus
+- [x] Testar login completo - Site funcionando corretamente
+- [ ] Criar checkpoint com correção
