@@ -66,11 +66,17 @@ export type InsertNotification = typeof notifications.$inferInsert;
  */
 export const repertorios = mysqlTable("repertorios", {
   id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").references(() => users.id), // Referência ao usuário logado
   nome: varchar("nome", { length: 255 }).notNull(),
   descricao: text("descricao"),
+  notas: text("notas"), // Notas/observações do repertório
   musicas: text("musicas").notNull(), // JSON array com IDs das músicas selecionadas
+  ordemMusicas: text("ordemMusicas"), // JSON array com ordem personalizada das músicas
   emailUsuario: varchar("emailUsuario", { length: 320 }),
   nomeUsuario: varchar("nomeUsuario", { length: 255 }),
+  shareId: varchar("shareId", { length: 36 }), // UUID para compartilhamento público
+  isPublic: int("isPublic").default(0).notNull(), // 0 = privado, 1 = público
+  dataCelebracao: timestamp("dataCelebracao"), // Data da celebração/missa
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

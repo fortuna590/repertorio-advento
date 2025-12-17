@@ -57,6 +57,13 @@
       "when": 1765638934659,
       "tag": "0007_perpetual_inhumans",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1765856514381,
+      "tag": "0008_true_quentin_quire",
+      "breakpoints": true
     }
   ]
 }

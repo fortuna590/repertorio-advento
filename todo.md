@@ -485,4 +485,19 @@
 - [x] Remover botões de OAuth individuais (Google/Facebook)
 - [x] Usar portal OAuth unificado do Manus
 - [x] Testar login completo - Site funcionando corretamente
-- [ ] Criar checkpoint com correção
+- [x] Criar checkpoint com correção
+
+
+## Repertórios Personalizados Melhorados
+- [x] Analisar sistema atual de repertórios (MontarRepertorio.tsx)
+- [x] Atualizar schema: adicionar userId, shareId, isPublic, notas, ordemMusicas, dataCelebracao
+- [x] Migrar schema com pnpm db:push
+- [x] Criar router tRPC para repertórios (CRUD completo + listMeus, getByShareId, updateOrdem, toggleShare, duplicate, updateNotas)
+- [x] Criar página "Meus Repertórios" (/meus-repertorios) com listagem, dropdown de ações, edição de notas
+- [x] Implementar drag-and-drop para reordenar músicas (RepertorioDetalhe.tsx)
+- [x] Adicionar notas/observações por repertório (editável pelo dono)
+- [x] Sistema de compartilhamento por link público (toggleShare)
+- [x] Funcionalidade de duplicar repertórios (dropdown em MeusRepertorios)
+- [x] Página pública para visualizar repertório compartilhado (RepertorioDetalhe com shareId)
+- [x] Testar sistema completo - 70 testes passando (13 novos de repertórios)
+- [ ] Criar checkpoint final

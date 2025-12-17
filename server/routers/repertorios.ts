@@ -2,6 +2,10 @@ import { publicProcedure, router } from "../_core/trpc";
 import { z } from "zod";
 import { createRepertorio, getRepertorioById, getAllRepertorios, updateRepertorio, deleteRepertorio } from "../db";
 import { sendEmail, templateEmailRepertorio } from "../_core/email";
+import { getDb } from "../db";
+import { repertorios } from "../../drizzle/schema";
+import { eq, and, desc } from "drizzle-orm";
+import { randomUUID } from "crypto";
 
 export const repertoriosRouter = router({
   // Criar novo repertório
@@ -15,20 +19,33 @@ export const repertoriosRouter = router({
         nomeUsuario: z.string().optional(),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
       const musicasJson = JSON.stringify(input.musicas);
+      const userId = ctx.user?.id || null;
+      const emailUsuario = input.emailUsuario || ctx.user?.email || null;
+      const nomeUsuario = input.nomeUsuario || ctx.user?.name || null;
       
-      const repertorioId = await createRepertorio({
-        nome: input.nome,
-        descricao: input.descricao,
-        musicas: musicasJson,
-        emailUsuario: input.emailUsuario,
-        nomeUsuario: input.nomeUsuario,
-      });
+      const [result] = await db
+        .insert(repertorios)
+        .values({
+          userId,
+          nome: input.nome,
+          descricao: input.descricao || null,
+          musicas: musicasJson,
+          ordemMusicas: musicasJson,
+          emailUsuario,
+          nomeUsuario,
+          isPublic: 0,
+          shareId: null,
+        })
+        .$returningId();
 
       return {
         success: true,
-        repertorioId,
+        repertorioId: result.id,
         message: "Repertório criado com sucesso!",
       };
     }),
@@ -36,16 +53,29 @@ export const repertoriosRouter = router({
   // Obter repertório por ID
   getById: publicProcedure
     .input(z.object({ id: z.number() }))
-    .query(async ({ input }) => {
-      const repertorio = await getRepertorioById(input.id);
-      
+    .query(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const [repertorio] = await db
+        .select()
+        .from(repertorios)
+        .where(eq(repertorios.id, input.id))
+        .limit(1);
+
       if (!repertorio) {
         throw new Error("Repertório não encontrado");
       }
 
+      // Verificar permissão: público ou dono
+      if (!repertorio.isPublic && repertorio.userId && repertorio.userId !== ctx.user?.id) {
+        throw new Error("Você não tem permissão para acessar este repertório");
+      }
+
       return {
         ...repertorio,
-        musicas: JSON.parse(repertorio.musicas),
+        musicas: JSON.parse(repertorio.musicas || "[]"),
+        ordemMusicas: repertorio.ordemMusicas ? JSON.parse(repertorio.ordemMusicas) : null,
       };
     }),
 
@@ -87,13 +117,220 @@ export const repertoriosRouter = router({
   // Deletar repertório
   delete: publicProcedure
     .input(z.object({ id: z.number() }))
-    .mutation(async ({ input }) => {
-      await deleteRepertorio(input.id);
+    .mutation(async ({ input, ctx }) => {
+      if (!ctx.user) {
+        // Manter compatibilidade com sistema antigo
+        await deleteRepertorio(input.id);
+      } else {
+        const db = await getDb();
+        if (!db) throw new Error("Database not available");
+        
+        const [repertorio] = await db
+          .select()
+          .from(repertorios)
+          .where(eq(repertorios.id, input.id))
+          .limit(1);
+
+        if (repertorio && repertorio.userId !== ctx.user.id) {
+          throw new Error("Você não tem permissão para deletar este repertório");
+        }
+        await deleteRepertorio(input.id);
+      }
 
       return {
         success: true,
         message: "Repertório deletado com sucesso!",
       };
+    }),
+
+  // Listar repertórios do usuário logado
+  listMeus: publicProcedure.query(async ({ ctx }) => {
+    if (!ctx.user) {
+      return [];
+    }
+
+    const db = await getDb();
+    if (!db) throw new Error("Database not available");
+
+    const meusRepertorios = await db
+      .select()
+      .from(repertorios)
+      .where(eq(repertorios.userId, ctx.user.id))
+      .orderBy(desc(repertorios.createdAt));
+
+    return meusRepertorios.map((r) => ({
+      ...r,
+      musicas: JSON.parse(r.musicas || "[]"),
+      ordemMusicas: r.ordemMusicas ? JSON.parse(r.ordemMusicas) : null,
+    }));
+  }),
+
+  // Obter repertório público por shareId
+  getByShareId: publicProcedure
+    .input(z.object({ shareId: z.string() }))
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const [repertorio] = await db
+        .select()
+        .from(repertorios)
+        .where(and(eq(repertorios.shareId, input.shareId), eq(repertorios.isPublic, 1)))
+        .limit(1);
+
+      if (!repertorio) {
+        throw new Error("Repertório não encontrado ou não é público");
+      }
+
+      return {
+        ...repertorio,
+        musicas: JSON.parse(repertorio.musicas || "[]"),
+        ordemMusicas: repertorio.ordemMusicas ? JSON.parse(repertorio.ordemMusicas) : null,
+      };
+    }),
+
+  // Atualizar ordem das músicas (drag-and-drop)
+  updateOrdem: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        ordemMusicas: z.array(z.string()),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      if (!ctx.user) {
+        throw new Error("Usuário não autenticado");
+      }
+
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const [repertorio] = await db
+        .select()
+        .from(repertorios)
+        .where(eq(repertorios.id, input.id))
+        .limit(1);
+
+      if (!repertorio || repertorio.userId !== ctx.user.id) {
+        throw new Error("Você não tem permissão para editar este repertório");
+      }
+
+      await db
+        .update(repertorios)
+        .set({ ordemMusicas: JSON.stringify(input.ordemMusicas) })
+        .where(eq(repertorios.id, input.id));
+
+      return { success: true, message: "Ordem atualizada!" };
+    }),
+
+  // Ativar/desativar compartilhamento público
+  toggleShare: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      if (!ctx.user) {
+        throw new Error("Usuário não autenticado");
+      }
+
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const [repertorio] = await db
+        .select()
+        .from(repertorios)
+        .where(eq(repertorios.id, input.id))
+        .limit(1);
+
+      if (!repertorio || repertorio.userId !== ctx.user.id) {
+        throw new Error("Você não tem permissão para compartilhar este repertório");
+      }
+
+      const isPublic = repertorio.isPublic ? 0 : 1;
+      const shareId = isPublic ? (repertorio.shareId || randomUUID()) : repertorio.shareId;
+
+      await db.update(repertorios).set({ isPublic, shareId }).where(eq(repertorios.id, input.id));
+
+      return {
+        success: true,
+        isPublic: Boolean(isPublic),
+        shareId,
+        message: isPublic ? "Repertório agora é público!" : "Repertório agora é privado",
+      };
+    }),
+
+  // Duplicar repertório
+  duplicate: publicProcedure
+    .input(z.object({ id: z.number(), novoNome: z.string().optional() }))
+    .mutation(async ({ input, ctx }) => {
+      if (!ctx.user) {
+        throw new Error("Usuário não autenticado");
+      }
+
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const [original] = await db
+        .select()
+        .from(repertorios)
+        .where(eq(repertorios.id, input.id))
+        .limit(1);
+
+      if (!original) {
+        throw new Error("Repertório não encontrado");
+      }
+
+      if (!original.isPublic && original.userId !== ctx.user.id) {
+        throw new Error("Você não tem permissão para duplicar este repertório");
+      }
+
+      const [result] = await db
+        .insert(repertorios)
+        .values({
+          userId: ctx.user.id,
+          nome: input.novoNome || `${original.nome} (Cópia)`,
+          descricao: original.descricao,
+          notas: original.notas,
+          musicas: original.musicas,
+          ordemMusicas: original.ordemMusicas,
+          emailUsuario: ctx.user.email || null,
+          nomeUsuario: ctx.user.name || null,
+          dataCelebracao: null,
+          isPublic: 0,
+          shareId: null,
+        })
+        .$returningId();
+
+      return { success: true, id: result.id, message: "Repertório duplicado com sucesso!" };
+    }),
+
+  // Atualizar notas do repertório
+  updateNotas: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        notas: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      if (!ctx.user) {
+        throw new Error("Usuário não autenticado");
+      }
+
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const [repertorio] = await db
+        .select()
+        .from(repertorios)
+        .where(eq(repertorios.id, input.id))
+        .limit(1);
+
+      if (!repertorio || repertorio.userId !== ctx.user.id) {
+        throw new Error("Você não tem permissão para editar este repertório");
+      }
+
+      await db.update(repertorios).set({ notas: input.notas }).where(eq(repertorios.id, input.id));
+
+      return { success: true, message: "Notas atualizadas!" };
     }),
 
   // Enviar repertório por email
