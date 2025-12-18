@@ -500,4 +500,14 @@
 - [x] Funcionalidade de duplicar repertórios (dropdown em MeusRepertorios)
 - [x] Página pública para visualizar repertório compartilhado (RepertorioDetalhe com shareId)
 - [x] Testar sistema completo - 70 testes passando (13 novos de repertórios)
+- [x] Criar checkpoint final
+
+
+## Integração e Ativação do Sistema de Repertórios
+- [x] Investigar página MontarRepertorio.tsx atual
+- [x] Atualizar MontarRepertorio para salvar no banco de dados via tRPC
+- [x] Adicionar redirect para página de detalhes após criar repertório
+- [x] Interface completa com seleção de músicas por momento da missa
+- [x] Adicionar link "Meus Repertórios" no menu dropdown do usuário - Já existia
+- [x] Testar fluxo completo: criar → visualizar → editar → compartilhar - Site funcionando
 - [ ] Criar checkpoint final
