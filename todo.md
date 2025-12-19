@@ -510,4 +510,14 @@
 - [x] Interface completa com seleção de músicas por momento da missa
 - [x] Adicionar link "Meus Repertórios" no menu dropdown do usuário - Já existia
 - [x] Testar fluxo completo: criar → visualizar → editar → compartilhar - Site funcionando
+- [x] Criar checkpoint final
+
+
+## Exportação de Repertórios em PDF
+- [x] Instalar biblioteca jsPDF para geração de PDF
+- [x] Criar utilitário pdfGenerator.ts no cliente
+- [x] Implementar layout profissional do PDF (cabeçalho, músicas agrupadas por momento, rodapé)
+- [x] Adicionar botão "Exportar PDF" na página RepertorioDetalhe (visível para todos)
+- [x] Adicionar botão "Exportar PDF" na página MeusRepertorios (dropdown menu)
+- [x] Testar geração de PDF com diferentes repertórios - Site funcionando
 - [ ] Criar checkpoint final

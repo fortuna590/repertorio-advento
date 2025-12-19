@@ -34,8 +34,10 @@ import {
   Lock,
   Globe,
   ArrowLeft,
+  Download,
 } from "lucide-react";
 import { Link } from "wouter";
+import { generateRepertorioPDF } from "@/lib/pdfGenerator";
 
 export default function MeusRepertorios() {
   const { user, loading: authLoading } = useAuth();
@@ -109,7 +111,35 @@ export default function MeusRepertorios() {
   const handleCopyLink = (shareId: string) => {
     const shareUrl = `${window.location.origin}/repertorio/${shareId}`;
     navigator.clipboard.writeText(shareUrl);
-    toast.success("Link copiado para a área de transferência!");
+    toast.success("Link copiado!");
+  };
+
+  const handleExportPDF = (repertorio: any) => {
+    // Dados das músicas (simplificado - idealmente viria do backend)
+    const musicasData: Record<string, { titulo: string; artista: string; momento: string }> = {
+      "entrada-1": { titulo: "Vem, Senhor Jesus", artista: "Ministério Adoração e Vida", momento: "Entrada" },
+      "entrada-2": { titulo: "Maranata", artista: "Comunidade Católica Shalom", momento: "Entrada" },
+      // ... outras músicas
+    };
+
+    const musicasIds = repertorio.musicas || [];
+    const musicasComDetalhes = musicasIds.map((musicaId: string) => ({
+      id: musicaId,
+      titulo: musicasData[musicaId]?.titulo || musicaId,
+      artista: musicasData[musicaId]?.artista || "Desconhecido",
+      momento: musicasData[musicaId]?.momento || "Outras",
+    }));
+
+    generateRepertorioPDF({
+      nome: repertorio.nome,
+      descricao: repertorio.descricao || undefined,
+      notas: repertorio.notas || undefined,
+      dataCelebracao: repertorio.dataCelebracao ? String(repertorio.dataCelebracao) : undefined,
+      musicas: musicasComDetalhes,
+      createdAt: repertorio.createdAt ? String(repertorio.createdAt) : undefined,
+    });
+
+    toast.success("PDF gerado com sucesso!");
   };
 
   const handleDelete = (id: number, nome: string) => {
@@ -245,6 +275,13 @@ export default function MeusRepertorios() {
                             Copiar Link
                           </DropdownMenuItem>
                         )}
+                        <DropdownMenuItem
+                          className="text-white hover:bg-purple-600/20"
+                          onClick={() => handleExportPDF(rep)}
+                        >
+                          <Download className="w-4 h-4 mr-2" />
+                          Exportar PDF
+                        </DropdownMenuItem>
                         <DropdownMenuItem
                           className="text-white hover:bg-purple-600/20"
                           onClick={() => duplicateMutation.mutate({ id: rep.id })}

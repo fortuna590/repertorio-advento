@@ -20,8 +20,10 @@ import {
   ExternalLink,
   User,
   Save,
+  Download,
 } from "lucide-react";
 import { Link } from "wouter";
+import { generateRepertorioPDF } from "@/lib/pdfGenerator";
 
 // Dados das músicas do Advento (simplificado)
 const musicasData: Record<string, { titulo: string; artista: string; momento: string }> = {
@@ -167,6 +169,28 @@ export default function RepertorioDetalhe() {
     toast.success("Link copiado!");
   };
 
+  const handleExportPDF = () => {
+    if (!repertorio) return;
+
+    const musicasComDetalhes = ordemMusicas.map((musicaId) => ({
+      id: musicaId,
+      titulo: musicasData[musicaId]?.titulo || musicaId,
+      artista: musicasData[musicaId]?.artista || "Desconhecido",
+      momento: musicasData[musicaId]?.momento || "Outras",
+    }));
+
+    generateRepertorioPDF({
+      nome: repertorio.nome,
+      descricao: repertorio.descricao || undefined,
+      notas: repertorio.notas || undefined,
+      dataCelebracao: repertorio.dataCelebracao ? String(repertorio.dataCelebracao) : undefined,
+      musicas: musicasComDetalhes,
+      createdAt: repertorio.createdAt ? String(repertorio.createdAt) : undefined,
+    });
+
+    toast.success("PDF gerado com sucesso!");
+  };
+
   if (isLoading || authLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800 flex items-center justify-center">
@@ -237,48 +261,61 @@ export default function RepertorioDetalhe() {
             </div>
           </div>
 
-          {/* Ações do dono */}
-          {isOwner && (
-            <div className="flex gap-2">
-              {hasChanges && (
-                <Button
-                  onClick={handleSaveOrdem}
-                  className="bg-green-600 hover:bg-green-700"
-                  disabled={updateOrdemMutation.isPending}
-                >
-                  <Save className="w-4 h-4 mr-2" />
-                  Salvar Ordem
-                </Button>
-              )}
-              <Button
-                variant="outline"
-                onClick={() => toggleShareMutation.mutate({ id: repertorioId! })}
-                className="border-purple-500/30 text-purple-200"
-              >
-                {repertorio.isPublic ? (
-                  <>
-                    <Lock className="w-4 h-4 mr-2" />
-                    Tornar Privado
-                  </>
-                ) : (
-                  <>
-                    <Share2 className="w-4 h-4 mr-2" />
-                    Compartilhar
-                  </>
+          {/* Ações */}
+          <div className="flex gap-2">
+            {/* Botão Exportar PDF (sempre visível) */}
+            <Button
+              variant="outline"
+              onClick={handleExportPDF}
+              className="border-purple-500/30 text-purple-200 hover:bg-purple-600/30"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Exportar PDF
+            </Button>
+
+            {/* Ações do dono */}
+            {isOwner && (
+              <>
+                {hasChanges && (
+                  <Button
+                    onClick={handleSaveOrdem}
+                    className="bg-green-600 hover:bg-green-700"
+                    disabled={updateOrdemMutation.isPending}
+                  >
+                    <Save className="w-4 h-4 mr-2" />
+                    Salvar Ordem
+                  </Button>
                 )}
-              </Button>
-              {repertorio.isPublic && repertorio.shareId && (
                 <Button
                   variant="outline"
-                  onClick={handleCopyLink}
+                  onClick={() => toggleShareMutation.mutate({ id: repertorioId! })}
                   className="border-purple-500/30 text-purple-200"
                 >
-                  <LinkIcon className="w-4 h-4 mr-2" />
-                  Copiar Link
+                  {repertorio.isPublic ? (
+                    <>
+                      <Lock className="w-4 h-4 mr-2" />
+                      Tornar Privado
+                    </>
+                  ) : (
+                    <>
+                      <Share2 className="w-4 h-4 mr-2" />
+                      Compartilhar
+                    </>
+                  )}
                 </Button>
-              )}
-            </div>
-          )}
+                {repertorio.isPublic && repertorio.shareId && (
+                  <Button
+                    variant="outline"
+                    onClick={handleCopyLink}
+                    className="border-purple-500/30 text-purple-200"
+                  >
+                    <LinkIcon className="w-4 h-4 mr-2" />
+                    Copiar Link
+                  </Button>
+                )}
+              </>
+            )}
+          </div>
         </div>
 
         {/* Lista de Músicas com Drag-and-Drop */}
