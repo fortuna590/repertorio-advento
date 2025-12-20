@@ -520,4 +520,16 @@
 - [x] Adicionar botão "Exportar PDF" na página RepertorioDetalhe (visível para todos)
 - [x] Adicionar botão "Exportar PDF" na página MeusRepertorios (dropdown menu)
 - [x] Testar geração de PDF com diferentes repertórios - Site funcionando
+- [x] Criar checkpoint final
+
+
+## Correção das Músicas nos Repertórios
+- [x] Investigar músicas reais existentes no site (repertorio.ts)
+- [x] Atualizar MontarRepertorio.tsx com as músicas reais do site
+- [x] Manter apenas os momentos que já existem no repertório original (11 momentos, 29 músicas)
+- [x] Adicionar links para CifraClub em cada música
+- [x] Atualizar RepertorioDetalhe.tsx com links clicáveis (YouTube e CifraClub)
+- [x] Atualizar MeusRepertorios.tsx com dados corretos (usando repertorio.ts)
+- [x] Atualizar pdfGenerator.ts com músicas reais (já estava correto, recebe dados como parâmetro)
+- [x] Testar sistema completo - 70 testes passando
 - [ ] Criar checkpoint final

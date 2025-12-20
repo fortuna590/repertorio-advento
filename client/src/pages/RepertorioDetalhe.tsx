@@ -11,52 +11,37 @@ import {
   ArrowLeft,
   GripVertical,
   Share2,
-  Copy,
   Calendar,
   FileText,
   Link as LinkIcon,
   Lock,
   Globe,
-  ExternalLink,
   User,
   Save,
   Download,
+  Youtube,
+  Guitar,
 } from "lucide-react";
 import { Link } from "wouter";
 import { generateRepertorioPDF } from "@/lib/pdfGenerator";
+import { repertorio } from "@/data/repertorio";
 
-// Dados das músicas do Advento (simplificado)
-const musicasData: Record<string, { titulo: string; artista: string; momento: string }> = {
-  "entrada-1": { titulo: "Vem, Senhor Jesus", artista: "Ministério Adoração e Vida", momento: "Entrada" },
-  "entrada-2": { titulo: "Maranata", artista: "Comunidade Católica Shalom", momento: "Entrada" },
-  "entrada-3": { titulo: "Preparai o Caminho", artista: "Comunidade Católica Shalom", momento: "Entrada" },
-  "entrada-4": { titulo: "Vem, Vem, Senhor", artista: "Ministério Adoração e Vida", momento: "Entrada" },
-  "entrada-5": { titulo: "Desperta, Jerusalém", artista: "Comunidade Católica Shalom", momento: "Entrada" },
-  "ato-penitencial-1": { titulo: "Senhor, Piedade (Advento)", artista: "Pe. Zezinho", momento: "Ato Penitencial" },
-  "ato-penitencial-2": { titulo: "Kyrie Eleison", artista: "Taizé", momento: "Ato Penitencial" },
-  "salmo-1": { titulo: "Salmo 24 - A Vós, Senhor", artista: "Ir. Miria Kolling", momento: "Salmo" },
-  "salmo-2": { titulo: "Salmo 84 - Mostrai-nos", artista: "Pe. José Weber", momento: "Salmo" },
-  "aclamacao-1": { titulo: "Aleluia (Advento)", artista: "Comunidade Católica Shalom", momento: "Aclamação" },
-  "aclamacao-2": { titulo: "Vem, Senhor, Vem!", artista: "Ministério Adoração e Vida", momento: "Aclamação" },
-  "ofertorio-1": { titulo: "Aceita, Senhor", artista: "Pe. Zezinho", momento: "Ofertório" },
-  "ofertorio-2": { titulo: "Oferta de Amor", artista: "Comunidade Católica Shalom", momento: "Ofertório" },
-  "santo-1": { titulo: "Santo (Advento)", artista: "Pe. José Weber", momento: "Santo" },
-  "santo-2": { titulo: "Hosana nas Alturas", artista: "Ministério Adoração e Vida", momento: "Santo" },
-  "paz-1": { titulo: "Paz Sobre a Terra", artista: "Comunidade Católica Shalom", momento: "Paz" },
-  "paz-2": { titulo: "A Paz Esteja Convosco", artista: "Pe. Zezinho", momento: "Paz" },
-  "cordeiro-1": { titulo: "Cordeiro de Deus (Advento)", artista: "Pe. José Weber", momento: "Cordeiro" },
-  "cordeiro-2": { titulo: "Cordeiro Manso", artista: "Ministério Adoração e Vida", momento: "Cordeiro" },
-  "comunhao-1": { titulo: "Vinde, Fiéis", artista: "Tradicional", momento: "Comunhão" },
-  "comunhao-2": { titulo: "Ó Vinde, Adoremos", artista: "Tradicional", momento: "Comunhão" },
-  "comunhao-3": { titulo: "Pão da Vida", artista: "Comunidade Católica Shalom", momento: "Comunhão" },
-  "comunhao-4": { titulo: "Eu Vim Para Que Todos", artista: "Pe. Zezinho", momento: "Comunhão" },
-  "acao-gracas-1": { titulo: "Magnificat", artista: "Ir. Miria Kolling", momento: "Ação de Graças" },
-  "acao-gracas-2": { titulo: "Graças e Louvores", artista: "Ministério Adoração e Vida", momento: "Ação de Graças" },
-  "final-1": { titulo: "Ide Por Todo o Mundo", artista: "Pe. Zezinho", momento: "Final" },
-  "final-2": { titulo: "Maria de Nazaré", artista: "Pe. Zezinho", momento: "Final" },
-  "final-3": { titulo: "Virgem do Silêncio", artista: "Comunidade Católica Shalom", momento: "Final" },
-  "final-4": { titulo: "Ave Maria (Advento)", artista: "Tradicional", momento: "Final" },
-};
+// Criar mapa de músicas a partir do repertorio.ts para acesso rápido
+const musicasMap: Record<string, { titulo: string; artista: string; momento: string; youtube: string; cifra: string; observacao?: string }> = {};
+
+repertorio.forEach((momento) => {
+  momento.musicas.forEach((musica) => {
+    const musicaId = `${momento.id}-${musica.numero}`;
+    musicasMap[musicaId] = {
+      titulo: musica.titulo,
+      artista: musica.artista,
+      momento: momento.titulo,
+      youtube: musica.youtube,
+      cifra: musica.cifra,
+      observacao: musica.observacao,
+    };
+  });
+});
 
 export default function RepertorioDetalhe() {
   const params = useParams();
@@ -84,10 +69,13 @@ export default function RepertorioDetalhe() {
     { enabled: !!shareId }
   );
 
-  const repertorio = repertorioById || repertorioByShare;
+  const repertorioData = repertorioById || repertorioByShare;
   const isLoading = loadingById || loadingByShare;
-  const isOwner = user && repertorio?.userId === user.id;
 
+  // Verificar se o usuário é dono do repertório
+  const isOwner = user && repertorioData?.userId === user.id;
+
+  // Mutations
   const updateOrdemMutation = trpc.repertorios.updateOrdem.useMutation({
     onSuccess: () => {
       toast.success("Ordem salva com sucesso!");
@@ -109,11 +97,10 @@ export default function RepertorioDetalhe() {
 
   const toggleShareMutation = trpc.repertorios.toggleShare.useMutation({
     onSuccess: (data) => {
-      toast.success(data.message);
-      if (data.isPublic && data.shareId) {
-        const shareUrl = `${window.location.origin}/repertorio/${data.shareId}`;
-        navigator.clipboard.writeText(shareUrl);
-        toast.info("Link copiado!");
+      if (data.isPublic) {
+        toast.success("Repertório compartilhado!");
+      } else {
+        toast.success("Repertório agora é privado");
       }
     },
     onError: (error) => {
@@ -121,16 +108,15 @@ export default function RepertorioDetalhe() {
     },
   });
 
-  // Inicializar ordem das músicas
+  // Inicializar estados quando dados carregam
   useEffect(() => {
-    if (repertorio) {
-      const ordem = repertorio.ordemMusicas || repertorio.musicas;
-      setOrdemMusicas(ordem);
-      setNotas(repertorio.notas || "");
+    if (repertorioData) {
+      setNotas(repertorioData.notas || "");
+      setOrdemMusicas(repertorioData.ordemMusicas || repertorioData.musicas || []);
     }
-  }, [repertorio]);
+  }, [repertorioData]);
 
-  // Handlers de drag-and-drop
+  // Drag and drop handlers
   const handleDragStart = (index: number) => {
     setDraggedIndex(index);
   };
@@ -164,28 +150,28 @@ export default function RepertorioDetalhe() {
   };
 
   const handleCopyLink = () => {
-    const shareUrl = `${window.location.origin}/repertorio/${repertorio?.shareId}`;
+    const shareUrl = `${window.location.origin}/repertorio/${repertorioData?.shareId}`;
     navigator.clipboard.writeText(shareUrl);
     toast.success("Link copiado!");
   };
 
   const handleExportPDF = () => {
-    if (!repertorio) return;
+    if (!repertorioData) return;
 
     const musicasComDetalhes = ordemMusicas.map((musicaId) => ({
       id: musicaId,
-      titulo: musicasData[musicaId]?.titulo || musicaId,
-      artista: musicasData[musicaId]?.artista || "Desconhecido",
-      momento: musicasData[musicaId]?.momento || "Outras",
+      titulo: musicasMap[musicaId]?.titulo || musicaId,
+      artista: musicasMap[musicaId]?.artista || "Desconhecido",
+      momento: musicasMap[musicaId]?.momento || "Outras",
     }));
 
     generateRepertorioPDF({
-      nome: repertorio.nome,
-      descricao: repertorio.descricao || undefined,
-      notas: repertorio.notas || undefined,
-      dataCelebracao: repertorio.dataCelebracao ? String(repertorio.dataCelebracao) : undefined,
+      nome: repertorioData.nome,
+      descricao: repertorioData.descricao || undefined,
+      notas: repertorioData.notas || undefined,
+      dataCelebracao: repertorioData.dataCelebracao ? String(repertorioData.dataCelebracao) : undefined,
       musicas: musicasComDetalhes,
-      createdAt: repertorio.createdAt ? String(repertorio.createdAt) : undefined,
+      createdAt: repertorioData.createdAt ? String(repertorioData.createdAt) : undefined,
     });
 
     toast.success("PDF gerado com sucesso!");
@@ -199,7 +185,7 @@ export default function RepertorioDetalhe() {
     );
   }
 
-  if (!repertorio) {
+  if (!repertorioData) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800 flex items-center justify-center">
         <Card className="bg-slate-800/50 border-purple-500/20 max-w-md">
@@ -234,27 +220,27 @@ export default function RepertorioDetalhe() {
             </Link>
             <div>
               <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-                {repertorio.nome}
-                {repertorio.isPublic ? (
+                {repertorioData.nome}
+                {repertorioData.isPublic ? (
                   <Globe className="w-6 h-6 text-green-400" />
                 ) : (
                   <Lock className="w-6 h-6 text-purple-400" />
                 )}
               </h1>
-              {repertorio.descricao && (
-                <p className="text-purple-200 mt-1">{repertorio.descricao}</p>
+              {repertorioData.descricao && (
+                <p className="text-purple-200 mt-1">{repertorioData.descricao}</p>
               )}
               <div className="flex items-center gap-4 mt-2 text-purple-300 text-sm">
-                {repertorio.nomeUsuario && (
+                {repertorioData.nomeUsuario && (
                   <span className="flex items-center gap-1">
                     <User className="w-4 h-4" />
-                    {repertorio.nomeUsuario}
+                    {repertorioData.nomeUsuario}
                   </span>
                 )}
-                {repertorio.dataCelebracao && (
+                {repertorioData.dataCelebracao && (
                   <span className="flex items-center gap-1">
                     <Calendar className="w-4 h-4" />
-                    {new Date(repertorio.dataCelebracao).toLocaleDateString("pt-BR")}
+                    {new Date(repertorioData.dataCelebracao).toLocaleDateString("pt-BR")}
                   </span>
                 )}
               </div>
@@ -262,7 +248,7 @@ export default function RepertorioDetalhe() {
           </div>
 
           {/* Ações */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {/* Botão Exportar PDF (sempre visível) */}
             <Button
               variant="outline"
@@ -291,7 +277,7 @@ export default function RepertorioDetalhe() {
                   onClick={() => toggleShareMutation.mutate({ id: repertorioId! })}
                   className="border-purple-500/30 text-purple-200"
                 >
-                  {repertorio.isPublic ? (
+                  {repertorioData.isPublic ? (
                     <>
                       <Lock className="w-4 h-4 mr-2" />
                       Tornar Privado
@@ -303,7 +289,7 @@ export default function RepertorioDetalhe() {
                     </>
                   )}
                 </Button>
-                {repertorio.isPublic && repertorio.shareId && (
+                {repertorioData.isPublic && repertorioData.shareId && (
                   <Button
                     variant="outline"
                     onClick={handleCopyLink}
@@ -325,7 +311,7 @@ export default function RepertorioDetalhe() {
               <Music className="w-5 h-5 text-purple-400" />
               Músicas ({ordemMusicas.length})
               {isOwner && (
-                <span className="text-purple-400 text-sm font-normal ml-2">
+                <span className="text-sm font-normal text-purple-300 ml-2">
                   (arraste para reordenar)
                 </span>
               )}
@@ -334,35 +320,55 @@ export default function RepertorioDetalhe() {
           <CardContent>
             <div className="space-y-2">
               {ordemMusicas.map((musicaId, index) => {
-                const musica = musicasData[musicaId] || {
-                  titulo: musicaId,
-                  artista: "Desconhecido",
-                  momento: "Outro",
-                };
+                const musica = musicasMap[musicaId];
+                if (!musica) return null;
+
                 return (
                   <div
                     key={musicaId}
-                    draggable={isOwner ? true : false}
+                    draggable={isOwner || false}
                     onDragStart={() => handleDragStart(index)}
                     onDragOver={(e) => handleDragOver(e, index)}
                     onDragEnd={handleDragEnd}
-                    className={`flex items-center gap-3 p-3 rounded-lg bg-purple-900/30 border border-purple-500/20 ${
+                    className={`flex items-center gap-3 p-4 rounded-lg bg-slate-700/50 border border-purple-500/20 ${
                       isOwner ? "cursor-grab active:cursor-grabbing" : ""
                     } ${draggedIndex === index ? "opacity-50" : ""}`}
                   >
                     {isOwner && (
                       <GripVertical className="w-5 h-5 text-purple-400 flex-shrink-0" />
                     )}
-                    <span className="w-8 h-8 rounded-full bg-purple-600/30 flex items-center justify-center text-purple-200 text-sm font-medium flex-shrink-0">
-                      {index + 1}
-                    </span>
                     <div className="flex-1 min-w-0">
-                      <p className="text-white font-medium truncate">{musica.titulo}</p>
-                      <p className="text-purple-300 text-sm truncate">{musica.artista}</p>
+                      <p className="text-white font-medium">{musica.titulo}</p>
+                      <p className="text-purple-300 text-sm">{musica.artista}</p>
+                      <p className="text-purple-400 text-xs mt-1">{musica.momento}</p>
+                      {musica.observacao && (
+                        <p className="text-purple-500 text-xs mt-1">{musica.observacao}</p>
+                      )}
                     </div>
-                    <span className="px-2 py-1 rounded bg-purple-600/30 text-purple-200 text-xs flex-shrink-0">
-                      {musica.momento}
-                    </span>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      {musica.youtube && (
+                        <a
+                          href={musica.youtube}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 rounded-full bg-red-600/20 hover:bg-red-600/40 transition-colors"
+                          title="Ver no YouTube"
+                        >
+                          <Youtube className="w-4 h-4 text-red-400" />
+                        </a>
+                      )}
+                      {musica.cifra && (
+                        <a
+                          href={musica.cifra}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 rounded-full bg-orange-600/20 hover:bg-orange-600/40 transition-colors"
+                          title="Ver cifra"
+                        >
+                          <Guitar className="w-4 h-4 text-orange-400" />
+                        </a>
+                      )}
+                    </div>
                   </div>
                 );
               })}
@@ -370,35 +376,30 @@ export default function RepertorioDetalhe() {
           </CardContent>
         </Card>
 
-        {/* Notas */}
-        {(isOwner || repertorio.notas) && (
+        {/* Notas (apenas para dono) */}
+        {isOwner && (
           <Card className="bg-slate-800/50 border-purple-500/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
                 <FileText className="w-5 h-5 text-purple-400" />
-                Notas e Observações
+                Observações
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {isOwner ? (
-                <div className="space-y-3">
-                  <Textarea
-                    value={notas}
-                    onChange={(e) => setNotas(e.target.value)}
-                    placeholder="Adicione observações, lembretes ou instruções para este repertório..."
-                    className="bg-slate-700 border-purple-500/30 text-white min-h-[100px]"
-                  />
-                  <Button
-                    onClick={handleSaveNotas}
-                    className="bg-gradient-to-r from-purple-600 to-pink-600"
-                    disabled={updateNotasMutation.isPending}
-                  >
-                    {updateNotasMutation.isPending ? "Salvando..." : "Salvar Notas"}
-                  </Button>
-                </div>
-              ) : (
-                <p className="text-purple-200 whitespace-pre-wrap">{repertorio.notas}</p>
-              )}
+              <Textarea
+                value={notas}
+                onChange={(e) => setNotas(e.target.value)}
+                placeholder="Adicione observações sobre este repertório..."
+                className="bg-slate-700/50 border-purple-500/30 text-white min-h-[100px]"
+              />
+              <Button
+                onClick={handleSaveNotas}
+                disabled={updateNotasMutation.isPending}
+                className="mt-4 bg-purple-600 hover:bg-purple-700"
+              >
+                <Save className="w-4 h-4 mr-2" />
+                {updateNotasMutation.isPending ? "Salvando..." : "Salvar Notas"}
+              </Button>
             </CardContent>
           </Card>
         )}

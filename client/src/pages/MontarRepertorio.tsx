@@ -11,69 +11,16 @@ import { toast } from "sonner";
 import ModernHeader from "@/components/ModernHeader";
 import {
   Music,
-  Plus,
   ArrowLeft,
   Save,
   Calendar,
   FileText,
   CheckCircle2,
+  Youtube,
+  Guitar,
 } from "lucide-react";
 import { Link } from "wouter";
-
-// Dados das músicas do Advento organizadas por momento
-const musicasPorMomento = {
-  Entrada: [
-    { id: "entrada-1", titulo: "Vem, Senhor Jesus", artista: "Ministério Adoração e Vida" },
-    { id: "entrada-2", titulo: "Maranata", artista: "Comunidade Católica Shalom" },
-    { id: "entrada-3", titulo: "Preparai o Caminho", artista: "Comunidade Católica Shalom" },
-    { id: "entrada-4", titulo: "Vem, Vem, Senhor", artista: "Ministério Adoração e Vida" },
-    { id: "entrada-5", titulo: "Desperta, Jerusalém", artista: "Comunidade Católica Shalom" },
-  ],
-  "Ato Penitencial": [
-    { id: "ato-penitencial-1", titulo: "Senhor, Piedade (Advento)", artista: "Pe. Zezinho" },
-    { id: "ato-penitencial-2", titulo: "Kyrie Eleison", artista: "Taizé" },
-  ],
-  Salmo: [
-    { id: "salmo-1", titulo: "Salmo 24 - A Vós, Senhor", artista: "Ir. Miria Kolling" },
-    { id: "salmo-2", titulo: "Salmo 84 - Mostrai-nos", artista: "Pe. José Weber" },
-  ],
-  Aclamação: [
-    { id: "aclamacao-1", titulo: "Aleluia (Advento)", artista: "Comunidade Católica Shalom" },
-    { id: "aclamacao-2", titulo: "Vem, Senhor, Vem!", artista: "Ministério Adoração e Vida" },
-  ],
-  Ofertório: [
-    { id: "ofertorio-1", titulo: "Aceita, Senhor", artista: "Pe. Zezinho" },
-    { id: "ofertorio-2", titulo: "Oferta de Amor", artista: "Comunidade Católica Shalom" },
-  ],
-  Santo: [
-    { id: "santo-1", titulo: "Santo (Advento)", artista: "Pe. José Weber" },
-    { id: "santo-2", titulo: "Hosana nas Alturas", artista: "Ministério Adoração e Vida" },
-  ],
-  Paz: [
-    { id: "paz-1", titulo: "Paz Sobre a Terra", artista: "Comunidade Católica Shalom" },
-    { id: "paz-2", titulo: "A Paz Esteja Convosco", artista: "Pe. Zezinho" },
-  ],
-  Cordeiro: [
-    { id: "cordeiro-1", titulo: "Cordeiro de Deus (Advento)", artista: "Pe. José Weber" },
-    { id: "cordeiro-2", titulo: "Cordeiro Manso", artista: "Ministério Adoração e Vida" },
-  ],
-  Comunhão: [
-    { id: "comunhao-1", titulo: "Vinde, Fiéis", artista: "Tradicional" },
-    { id: "comunhao-2", titulo: "Ó Vinde, Adoremos", artista: "Tradicional" },
-    { id: "comunhao-3", titulo: "Pão da Vida", artista: "Comunidade Católica Shalom" },
-    { id: "comunhao-4", titulo: "Eu Vim Para Que Todos", artista: "Pe. Zezinho" },
-  ],
-  "Ação de Graças": [
-    { id: "acao-gracas-1", titulo: "Magnificat", artista: "Ir. Miria Kolling" },
-    { id: "acao-gracas-2", titulo: "Graças e Louvores", artista: "Ministério Adoração e Vida" },
-  ],
-  Final: [
-    { id: "final-1", titulo: "Ide Por Todo o Mundo", artista: "Pe. Zezinho" },
-    { id: "final-2", titulo: "Maria de Nazaré", artista: "Pe. Zezinho" },
-    { id: "final-3", titulo: "Virgem do Silêncio", artista: "Comunidade Católica Shalom" },
-    { id: "final-4", titulo: "Ave Maria (Advento)", artista: "Tradicional" },
-  ],
-};
+import { repertorio } from "@/data/repertorio";
 
 export default function MontarRepertorio() {
   const { user, loading: authLoading } = useAuth();
@@ -167,7 +114,7 @@ export default function MontarRepertorio() {
         <div className="grid gap-6 lg:grid-cols-3">
           {/* Formulário */}
           <div className="lg:col-span-1 space-y-4">
-            <Card className="bg-slate-800/50 border-purple-500/20">
+            <Card className="bg-slate-800/50 border-purple-500/20 sticky top-4">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <FileText className="w-5 h-5 text-purple-400" />
@@ -225,27 +172,33 @@ export default function MontarRepertorio() {
             </Card>
           </div>
 
-          {/* Seleção de Músicas */}
+          {/* Seleção de Músicas - Usando dados reais do repertorio.ts */}
           <div className="lg:col-span-2 space-y-6">
-            {Object.entries(musicasPorMomento).map(([momento, musicas]) => (
+            {repertorio.map((momento) => (
               <Card
-                key={momento}
+                key={momento.id}
                 className="bg-slate-800/50 border-purple-500/20"
               >
                 <CardHeader>
                   <CardTitle className="text-white flex items-center gap-2">
-                    <Music className="w-5 h-5 text-purple-400" />
-                    {momento}
+                    <span className="text-2xl">{momento.numero}</span>
+                    {momento.titulo}
                   </CardTitle>
+                  {momento.observacao && (
+                    <p className="text-purple-300 text-sm mt-1">
+                      {momento.observacao}
+                    </p>
+                  )}
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {musicas.map((musica) => {
-                      const isSelected = musicasSelecionadas.includes(musica.id);
+                    {momento.musicas.map((musica) => {
+                      const musicaId = `${momento.id}-${musica.numero}`;
+                      const isSelected = musicasSelecionadas.includes(musicaId);
                       return (
                         <div
-                          key={musica.id}
-                          onClick={() => handleToggleMusica(musica.id)}
+                          key={musicaId}
+                          onClick={() => handleToggleMusica(musicaId)}
                           className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
                             isSelected
                               ? "bg-purple-600/20 border-purple-500/50"
@@ -254,20 +207,51 @@ export default function MontarRepertorio() {
                         >
                           <Checkbox
                             checked={isSelected}
-                            onCheckedChange={() => handleToggleMusica(musica.id)}
+                            onCheckedChange={() => handleToggleMusica(musicaId)}
                             className="border-purple-400"
                           />
                           <div className="flex-1 min-w-0">
-                            <p className="text-white font-medium truncate">
+                            <p className="text-white font-medium">
                               {musica.titulo}
                             </p>
-                            <p className="text-purple-300 text-sm truncate">
+                            <p className="text-purple-300 text-sm">
                               {musica.artista}
                             </p>
+                            {musica.observacao && (
+                              <p className="text-purple-400 text-xs mt-1">
+                                {musica.observacao}
+                              </p>
+                            )}
                           </div>
-                          {isSelected && (
-                            <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
-                          )}
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            {musica.youtube && (
+                              <a
+                                href={musica.youtube}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="p-2 rounded-full bg-red-600/20 hover:bg-red-600/40 transition-colors"
+                                title="Ver no YouTube"
+                              >
+                                <Youtube className="w-4 h-4 text-red-400" />
+                              </a>
+                            )}
+                            {musica.cifra && (
+                              <a
+                                href={musica.cifra}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="p-2 rounded-full bg-orange-600/20 hover:bg-orange-600/40 transition-colors"
+                                title="Ver cifra"
+                              >
+                                <Guitar className="w-4 h-4 text-orange-400" />
+                              </a>
+                            )}
+                            {isSelected && (
+                              <CheckCircle2 className="w-5 h-5 text-green-400" />
+                            )}
+                          </div>
                         </div>
                       );
                     })}

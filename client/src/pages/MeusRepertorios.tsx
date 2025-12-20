@@ -38,6 +38,7 @@ import {
 } from "lucide-react";
 import { Link } from "wouter";
 import { generateRepertorioPDF } from "@/lib/pdfGenerator";
+import { repertorio } from "@/data/repertorio";
 
 export default function MeusRepertorios() {
   const { user, loading: authLoading } = useAuth();
@@ -114,29 +115,35 @@ export default function MeusRepertorios() {
     toast.success("Link copiado!");
   };
 
-  const handleExportPDF = (repertorio: any) => {
-    // Dados das músicas (simplificado - idealmente viria do backend)
-    const musicasData: Record<string, { titulo: string; artista: string; momento: string }> = {
-      "entrada-1": { titulo: "Vem, Senhor Jesus", artista: "Ministério Adoração e Vida", momento: "Entrada" },
-      "entrada-2": { titulo: "Maranata", artista: "Comunidade Católica Shalom", momento: "Entrada" },
-      // ... outras músicas
-    };
+  // Criar mapa de músicas a partir do repertorio.ts importado
+  const musicasMap: Record<string, { titulo: string; artista: string; momento: string }> = {};
+  repertorio.forEach((momento) => {
+    momento.musicas.forEach((musica) => {
+      const musicaId = `${momento.id}-${musica.numero}`;
+      musicasMap[musicaId] = {
+        titulo: musica.titulo,
+        artista: musica.artista,
+        momento: momento.titulo,
+      };
+    });
+  });
 
-    const musicasIds = repertorio.musicas || [];
+  const handleExportPDF = (rep: any) => {
+    const musicasIds = rep.musicas || [];
     const musicasComDetalhes = musicasIds.map((musicaId: string) => ({
       id: musicaId,
-      titulo: musicasData[musicaId]?.titulo || musicaId,
-      artista: musicasData[musicaId]?.artista || "Desconhecido",
-      momento: musicasData[musicaId]?.momento || "Outras",
+      titulo: musicasMap[musicaId]?.titulo || musicaId,
+      artista: musicasMap[musicaId]?.artista || "Desconhecido",
+      momento: musicasMap[musicaId]?.momento || "Outras",
     }));
 
     generateRepertorioPDF({
-      nome: repertorio.nome,
-      descricao: repertorio.descricao || undefined,
-      notas: repertorio.notas || undefined,
-      dataCelebracao: repertorio.dataCelebracao ? String(repertorio.dataCelebracao) : undefined,
+      nome: rep.nome,
+      descricao: rep.descricao || undefined,
+      notas: rep.notas || undefined,
+      dataCelebracao: rep.dataCelebracao ? String(rep.dataCelebracao) : undefined,
       musicas: musicasComDetalhes,
-      createdAt: repertorio.createdAt ? String(repertorio.createdAt) : undefined,
+      createdAt: rep.createdAt ? String(rep.createdAt) : undefined,
     });
 
     toast.success("PDF gerado com sucesso!");
