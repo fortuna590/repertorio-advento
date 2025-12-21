@@ -553,4 +553,5 @@
 
 ## Alteração do Email Superadmin
 - [x] Atualizar SUPERADMIN_EMAIL para louvmais590@gmail.com
+- [x] Corrigir para email real do usuário: fortuna590@gmail.com
 - [x] Criar checkpoint final

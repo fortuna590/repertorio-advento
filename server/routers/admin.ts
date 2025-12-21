@@ -5,7 +5,7 @@ import { users } from "../../drizzle/schema";
 import { eq, like, or, desc, sql, count } from "drizzle-orm";
 
 // Email do superadmin - único usuário com acesso ao painel de administração
-const SUPERADMIN_EMAIL = "louvmais590@gmail.com";
+const SUPERADMIN_EMAIL = "fortuna590@gmail.com";
 
 // Função para verificar se é superadmin
 const isSuperAdmin = (email: string | null | undefined): boolean => {
@@ -16,10 +16,15 @@ export const adminRouter = router({
   // Verificar se o usuário atual é superadmin
   checkSuperAdmin: publicProcedure.query(async ({ ctx }) => {
     if (!ctx.user) {
+      console.log("[Admin] Usuario nao autenticado");
       return { isSuperAdmin: false };
     }
+    const isAdmin = isSuperAdmin(ctx.user.email);
+    console.log("[Admin] Email do usuario:", ctx.user.email);
+    console.log("[Admin] E superadmin?", isAdmin);
+    console.log("[Admin] Email esperado:", SUPERADMIN_EMAIL);
     return {
-      isSuperAdmin: isSuperAdmin(ctx.user.email),
+      isSuperAdmin: isAdmin,
     };
   }),
 
