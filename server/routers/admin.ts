@@ -5,7 +5,7 @@ import { users } from "../../drizzle/schema";
 import { eq, like, or, desc, sql, count } from "drizzle-orm";
 
 // Email do superadmin - único usuário com acesso ao painel de administração
-const SUPERADMIN_EMAIL = "louvamais@gmail.com";
+const SUPERADMIN_EMAIL = "louvmais590@gmail.com";
 
 // Função para verificar se é superadmin
 const isSuperAdmin = (email: string | null | undefined): boolean => {

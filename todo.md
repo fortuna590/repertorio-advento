@@ -548,4 +548,9 @@
 - [x] Adicionar link de Admin no menu (visível apenas para superadmin)
 - [x] Proteger rota /admin para acesso apenas do superadmin (verificação no frontend e backend)
 - [x] Testar sistema completo - 83 testes passando (13 novos de admin)
-- [ ] Criar checkpoint final
+- [x] Criar checkpoint final
+
+
+## Alteração do Email Superadmin
+- [x] Atualizar SUPERADMIN_EMAIL para louvmais590@gmail.com
+- [x] Criar checkpoint final
