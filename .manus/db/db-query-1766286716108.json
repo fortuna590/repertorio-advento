@@ -1,0 +1,1246 @@
+{
+  "query": "SELECT id, name, email, createdAt FROM users ORDER BY createdAt DESC",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT id, name, email, createdAt FROM users ORDER BY createdAt DESC",
+  "rows": [
+    {
+      "id": "2340001",
+      "name": "Priscila Fortuna Santos",
+      "email": "pryscila.fortuna@gmail.com",
+      "createdAt": "2025-12-20 19:41:04"
+    },
+    {
+      "id": "2100025",
+      "name": "Test User 2",
+      "email": "test-user2-1766205093181@example.com",
+      "createdAt": "2025-12-20 04:31:33"
+    },
+    {
+      "id": "2100024",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205093148@example.com",
+      "createdAt": "2025-12-20 04:31:33"
+    },
+    {
+      "id": "2100023",
+      "name": "Test User 2",
+      "email": "test-user2-1766205093133@example.com",
+      "createdAt": "2025-12-20 04:31:33"
+    },
+    {
+      "id": "2100022",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205093112@example.com",
+      "createdAt": "2025-12-20 04:31:33"
+    },
+    {
+      "id": "2100021",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205093067@example.com",
+      "createdAt": "2025-12-20 04:31:33"
+    },
+    {
+      "id": "2100020",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205093022@example.com",
+      "createdAt": "2025-12-20 04:31:33"
+    },
+    {
+      "id": "2100019",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205092966@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100018",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205092902@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100017",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205092851@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100016",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205092817@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100015",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205092777@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100014",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205092753@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100013",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205092744@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100012",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205092729@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100011",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205092718@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100010",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205092705@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100009",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205092678@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100008",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205090873@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100007",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205092664@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100006",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205092635@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100005",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205092624@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100004",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205092576@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100003",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205092544@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100002",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205092516@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100001",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205090877@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "1680136",
+      "name": "Test User 2",
+      "email": "test-user2-1765978866093@example.com",
+      "createdAt": "2025-12-17 13:41:06"
+    },
+    {
+      "id": "1680135",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978866057@example.com",
+      "createdAt": "2025-12-17 13:41:06"
+    },
+    {
+      "id": "1680134",
+      "name": "Test User 2",
+      "email": "test-user2-1765978866036@example.com",
+      "createdAt": "2025-12-17 13:41:06"
+    },
+    {
+      "id": "1680133",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978866015@example.com",
+      "createdAt": "2025-12-17 13:41:06"
+    },
+    {
+      "id": "1680132",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978865978@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680131",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978865939@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680130",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978865901@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680129",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978865861@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680128",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978865852@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680127",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978865840@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680126",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978865814@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680125",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978865802@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680124",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978865789@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680123",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978865771@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680122",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978865761@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680121",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978865751@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680120",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978865733@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680119",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978865710@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680118",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978865709@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680117",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978865701@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680116",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978865679@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680115",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978865662@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680114",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978865650@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680113",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978865540@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680112",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978865540@example.com",
+      "createdAt": "2025-12-17 13:41:05"
+    },
+    {
+      "id": "1680111",
+      "name": "Test User 2",
+      "email": "test-user2-1765978830746@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680110",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978830702@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680109",
+      "name": "Test User 2",
+      "email": "test-user2-1765978830686@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680108",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978830654@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680107",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978830601@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680106",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978830558@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680105",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978830520@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680104",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978830468@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680103",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978830467@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680102",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978830459@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680101",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978830431@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680100",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978830424@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680099",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978830411@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680098",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978830402@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680097",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978830384@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680096",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978830375@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680095",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978830361@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680094",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978830339@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680093",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978830336@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680092",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978830329@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680091",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978830309@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680090",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978830292@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680089",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978830291@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680088",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978830173@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680087",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978830173@example.com",
+      "createdAt": "2025-12-17 13:40:30"
+    },
+    {
+      "id": "1680062",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978811319@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680086",
+      "name": "Test User 2",
+      "email": "test-user2-1765978811873@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680085",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978811843@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680084",
+      "name": "Test User 2",
+      "email": "test-user2-1765978811825@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680083",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978811802@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680082",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978811768@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680081",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978811736@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680080",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978811698@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680079",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978811637@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680078",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978811627@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680077",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978811618@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680076",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978811594@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680075",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978811578@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680074",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978811565@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680073",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978811560@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680072",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978811532@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680071",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978811524@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680070",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978811520@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680069",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978811488@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680068",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978811484@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680067",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978811480@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680066",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978811451@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680065",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978811435@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680064",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978811434@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680063",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978811319@example.com",
+      "createdAt": "2025-12-17 13:40:11"
+    },
+    {
+      "id": "1680057",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978779044@example.com",
+      "createdAt": "2025-12-17 13:39:39"
+    },
+    {
+      "id": "1680056",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978779015@example.com",
+      "createdAt": "2025-12-17 13:39:39"
+    },
+    {
+      "id": "1680058",
+      "name": "Test User 2",
+      "email": "test-user2-1765978779064@example.com",
+      "createdAt": "2025-12-17 13:39:39"
+    },
+    {
+      "id": "1680059",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978779084@example.com",
+      "createdAt": "2025-12-17 13:39:39"
+    },
+    {
+      "id": "1680037",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978778584@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680055",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978778985@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680054",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978778972@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680053",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978778958@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680052",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978778952@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680051",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978778921@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680050",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978778905@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680049",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978778891@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680048",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978778886@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680047",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978778859@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680046",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978778848@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680045",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978778834@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680044",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978778822@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680043",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978778790@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680042",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978778778@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680041",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978778777@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680040",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978778742@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680039",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978778719@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680038",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978778719@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680036",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978778584@example.com",
+      "createdAt": "2025-12-17 13:39:38"
+    },
+    {
+      "id": "1680026",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978713931@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680017",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978713847@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680027",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978713951@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680025",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978713928@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680024",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978713923@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680023",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978713911@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680022",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978713892@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680021",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978713886@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680020",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978713872@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680019",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978713869@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680018",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978713850@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680005",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978713596@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680016",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978713837@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680015",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978713832@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680014",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978713814@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680013",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978713797@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680012",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978713796@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680011",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978713775@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680010",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978713765@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680009",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978713759@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680008",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978713739@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680007",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765978713725@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1680006",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765978713599@example.com",
+      "createdAt": "2025-12-17 13:38:33"
+    },
+    {
+      "id": "1650022",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765972301157@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650027",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765972301213@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650026",
+      "name": "Test User 2",
+      "email": "test-user2-1765972301199@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650025",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765972301182@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650024",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765972301182@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650023",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765972301159@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650021",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765972301139@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650020",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765972301122@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650019",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765972301120@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650018",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765972301107@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650017",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765972301103@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650016",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765972301085@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650015",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765972301081@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650014",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765972301071@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650013",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765972301067@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650012",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765972301050@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650011",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765972301021@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650010",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765972301018@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650009",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765972301012@example.com",
+      "createdAt": "2025-12-17 11:51:41"
+    },
+    {
+      "id": "1650008",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765972300990@example.com",
+      "createdAt": "2025-12-17 11:51:40"
+    },
+    {
+      "id": "1650007",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765972300973@example.com",
+      "createdAt": "2025-12-17 11:51:40"
+    },
+    {
+      "id": "1650006",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765972300972@example.com",
+      "createdAt": "2025-12-17 11:51:40"
+    },
+    {
+      "id": "1650005",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765972300732@example.com",
+      "createdAt": "2025-12-17 11:51:40"
+    },
+    {
+      "id": "1650004",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1765972300732@example.com",
+      "createdAt": "2025-12-17 11:51:40"
+    },
+    {
+      "id": "1530012",
+      "name": "Gabriela Iassia",
+      "email": "gabi.finati@gmail.com",
+      "createdAt": "2025-12-17 00:28:14"
+    },
+    {
+      "id": "1140034",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765683017552@example.com",
+      "createdAt": "2025-12-14 03:30:17"
+    },
+    {
+      "id": "1140033",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765683017538@example.com",
+      "createdAt": "2025-12-14 03:30:17"
+    },
+    {
+      "id": "1140032",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765683017485@example.com",
+      "createdAt": "2025-12-14 03:30:17"
+    },
+    {
+      "id": "1140031",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765683017467@example.com",
+      "createdAt": "2025-12-14 03:30:17"
+    },
+    {
+      "id": "1140030",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765683017430@example.com",
+      "createdAt": "2025-12-14 03:30:17"
+    },
+    {
+      "id": "1140029",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765683017416@example.com",
+      "createdAt": "2025-12-14 03:30:17"
+    },
+    {
+      "id": "1140028",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765683017356@example.com",
+      "createdAt": "2025-12-14 03:30:17"
+    },
+    {
+      "id": "1140027",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765683017313@example.com",
+      "createdAt": "2025-12-14 03:30:17"
+    },
+    {
+      "id": "1140026",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765683017289@example.com",
+      "createdAt": "2025-12-14 03:30:17"
+    },
+    {
+      "id": "1140025",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765683017148@example.com",
+      "createdAt": "2025-12-14 03:30:17"
+    },
+    {
+      "id": "1140024",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682994340@example.com",
+      "createdAt": "2025-12-14 03:29:54"
+    },
+    {
+      "id": "1140023",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682994329@example.com",
+      "createdAt": "2025-12-14 03:29:54"
+    },
+    {
+      "id": "1140022",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682994245@example.com",
+      "createdAt": "2025-12-14 03:29:54"
+    },
+    {
+      "id": "1140021",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682994229@example.com",
+      "createdAt": "2025-12-14 03:29:54"
+    },
+    {
+      "id": "1140020",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682994197@example.com",
+      "createdAt": "2025-12-14 03:29:54"
+    },
+    {
+      "id": "1140019",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682994185@example.com",
+      "createdAt": "2025-12-14 03:29:54"
+    },
+    {
+      "id": "1140018",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682994131@example.com",
+      "createdAt": "2025-12-14 03:29:54"
+    },
+    {
+      "id": "1140017",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682994094@example.com",
+      "createdAt": "2025-12-14 03:29:54"
+    },
+    {
+      "id": "1140016",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682994073@example.com",
+      "createdAt": "2025-12-14 03:29:54"
+    },
+    {
+      "id": "1140015",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682993935@example.com",
+      "createdAt": "2025-12-14 03:29:54"
+    },
+    {
+      "id": "1140014",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682972123@example.com",
+      "createdAt": "2025-12-14 03:29:32"
+    },
+    {
+      "id": "1140013",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682972113@example.com",
+      "createdAt": "2025-12-14 03:29:32"
+    },
+    {
+      "id": "1140012",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682972074@example.com",
+      "createdAt": "2025-12-14 03:29:32"
+    },
+    {
+      "id": "1140011",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682972059@example.com",
+      "createdAt": "2025-12-14 03:29:32"
+    },
+    {
+      "id": "1140010",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682972026@example.com",
+      "createdAt": "2025-12-14 03:29:32"
+    },
+    {
+      "id": "1140009",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682972015@example.com",
+      "createdAt": "2025-12-14 03:29:32"
+    },
+    {
+      "id": "1140008",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682971968@example.com",
+      "createdAt": "2025-12-14 03:29:31"
+    },
+    {
+      "id": "1140007",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682971937@example.com",
+      "createdAt": "2025-12-14 03:29:31"
+    },
+    {
+      "id": "1140006",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682971916@example.com",
+      "createdAt": "2025-12-14 03:29:31"
+    },
+    {
+      "id": "1140005",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682971784@example.com",
+      "createdAt": "2025-12-14 03:29:31"
+    },
+    {
+      "id": "1140001",
+      "name": "Tiago Fortuna Fotografia",
+      "email": "tiagofortuna.fotografia@gmail.com",
+      "createdAt": "2025-12-14 03:04:24"
+    },
+    {
+      "id": "480009",
+      "name": "Tiago LouvaMais",
+      "email": "louvamais590@gmail.com",
+      "createdAt": "2025-11-29 19:07:17"
+    },
+    {
+      "id": "1",
+      "name": "Tiago Fortuna Santos",
+      "email": "fortuna590@gmail.com",
+      "createdAt": "2025-11-20 04:19:43"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\tcreatedAt\n2340001\tPriscila Fortuna Santos\tpryscila.fortuna@gmail.com\t2025-12-20 19:41:04\n2100025\tTest User 2\ttest-user2-1766205093181@example.com\t2025-12-20 04:31:33\n2100024\tTest User Repertorios\ttest-repertorios-1766205093148@example.com\t2025-12-20 04:31:33\n2100023\tTest User 2\ttest-user2-1766205093133@example.com\t2025-12-20 04:31:33\n2100022\tTest User Repertorios\ttest-repertorios-1766205093112@example.com\t2025-12-20 04:31:33\n2100021\tTest User Repertorios\ttest-repertorios-1766205093067@example.com\t2025-12-20 04:31:33\n2100020\tTest User Repertorios\ttest-repertorios-1766205093022@example.com\t2025-12-20 04:31:33\n2100019\tTest User Repertorios\ttest-repertorios-1766205092966@example.com\t2025-12-20 04:31:32\n2100018\tTest User Repertorios\ttest-repertorios-1766205092902@example.com\t2025-12-20 04:31:32\n2100017\tTest User Repertorios\ttest-repertorios-1766205092851@example.com\t2025-12-20 04:31:32\n2100016\tTest User Repertorios\ttest-repertorios-1766205092817@example.com\t2025-12-20 04:31:32\n2100015\tTest User Repertorios\ttest-repertorios-1766205092777@example.com\t2025-12-20 04:31:32\n2100014\tTest User Repertorios\ttest-repertorios-1766205092753@example.com\t2025-12-20 04:31:32\n2100013\tTest User Repertorios\ttest-repertorios-1766205092744@example.com\t2025-12-20 04:31:32\n2100012\tTest User Favoritos\ttest-favoritos-1766205092729@example.com\t2025-12-20 04:31:32\n2100011\tTest User Favoritos\ttest-favoritos-1766205092718@example.com\t2025-12-20 04:31:32\n2100010\tTest User Repertorios\ttest-repertorios-1766205092705@example.com\t2025-12-20 04:31:32\n2100009\tTest User Favoritos\ttest-favoritos-1766205092678@example.com\t2025-12-20 04:31:32\n2100008\tTest User Repertorios\ttest-repertorios-1766205090873@example.com\t2025-12-20 04:31:32\n2100007\tTest User Favoritos\ttest-favoritos-1766205092664@example.com\t2025-12-20 04:31:32\n2100006\tTest User Favoritos\ttest-favoritos-1766205092635@example.com\t2025-12-20 04:31:32\n2100005\tTest User Favoritos\ttest-favoritos-1766205092624@example.com\t2025-12-20 04:31:32\n2100004\tTest User Favoritos\ttest-favoritos-1766205092576@example.com\t2025-12-20 04:31:32\n2100003\tTest User Favoritos\ttest-favoritos-1766205092544@example.com\t2025-12-20 04:31:32\n2100002\tTest User Favoritos\ttest-favoritos-1766205092516@example.com\t2025-12-20 04:31:32\n2100001\tTest User Favoritos\ttest-favoritos-1766205090877@example.com\t2025-12-20 04:31:32\n1680136\tTest User 2\ttest-user2-1765978866093@example.com\t2025-12-17 13:41:06\n1680135\tTest User Repertorios\ttest-repertorios-1765978866057@example.com\t2025-12-17 13:41:06\n1680134\tTest User 2\ttest-user2-1765978866036@example.com\t2025-12-17 13:41:06\n1680133\tTest User Repertorios\ttest-repertorios-1765978866015@example.com\t2025-12-17 13:41:06\n1680132\tTest User Repertorios\ttest-repertorios-1765978865978@example.com\t2025-12-17 13:41:05\n1680131\tTest User Repertorios\ttest-repertorios-1765978865939@example.com\t2025-12-17 13:41:05\n1680130\tTest User Repertorios\ttest-repertorios-1765978865901@example.com\t2025-12-17 13:41:05\n1680129\tTest User Favoritos\ttest-favoritos-1765978865861@example.com\t2025-12-17 13:41:05\n1680128\tTest User Favoritos\ttest-favoritos-1765978865852@example.com\t2025-12-17 13:41:05\n1680127\tTest User Repertorios\ttest-repertorios-1765978865840@example.com\t2025-12-17 13:41:05\n1680126\tTest User Favoritos\ttest-favoritos-1765978865814@example.com\t2025-12-17 13:41:05\n1680125\tTest User Repertorios\ttest-repertorios-1765978865802@example.com\t2025-12-17 13:41:05\n1680124\tTest User Favoritos\ttest-favoritos-1765978865789@example.com\t2025-12-17 13:41:05\n1680123\tTest User Repertorios\ttest-repertorios-1765978865771@example.com\t2025-12-17 13:41:05\n1680122\tTest User Favoritos\ttest-favoritos-1765978865761@example.com\t2025-12-17 13:41:05\n1680121\tTest User Favoritos\ttest-favoritos-1765978865751@example.com\t2025-12-17 13:41:05\n1680120\tTest User Repertorios\ttest-repertorios-1765978865733@example.com\t2025-12-17 13:41:05\n1680119\tTest User Repertorios\ttest-repertorios-1765978865710@example.com\t2025-12-17 13:41:05\n1680118\tTest User Favoritos\ttest-favoritos-1765978865709@example.com\t2025-12-17 13:41:05\n1680117\tTest User Repertorios\ttest-repertorios-1765978865701@example.com\t2025-12-17 13:41:05\n1680116\tTest User Favoritos\ttest-favoritos-1765978865679@example.com\t2025-12-17 13:41:05\n1680115\tTest User Favoritos\ttest-favoritos-1765978865662@example.com\t2025-12-17 13:41:05\n1680114\tTest User Repertorios\ttest-repertorios-1765978865650@example.com\t2025-12-17 13:41:05\n1680113\tTest User Favoritos\ttest-favoritos-1765978865540@example.com\t2025-12-17 13:41:05\n1680112\tTest User Repertorios\ttest-repertorios-1765978865540@example.com\t2025-12-17 13:41:05\n1680111\tTest User 2\ttest-user2-1765978830746@example.com\t2025-12-17 13:40:30\n1680110\tTest User Repertorios\ttest-repertorios-1765978830702@example.com\t2025-12-17 13:40:30\n1680109\tTest User 2\ttest-user2-1765978830686@example.com\t2025-12-17 13:40:30\n1680108\tTest User Repertorios\ttest-repertorios-1765978830654@example.com\t2025-12-17 13:40:30\n1680107\tTest User Repertorios\ttest-repertorios-1765978830601@example.com\t2025-12-17 13:40:30\n1680106\tTest User Repertorios\ttest-repertorios-1765978830558@example.com\t2025-12-17 13:40:30\n1680105\tTest User Repertorios\ttest-repertorios-1765978830520@example.com\t2025-12-17 13:40:30\n1680104\tTest User Favoritos\ttest-favoritos-1765978830468@example.com\t2025-12-17 13:40:30\n1680103\tTest User Repertorios\ttest-repertorios-1765978830467@example.com\t2025-12-17 13:40:30\n1680102\tTest User Favoritos\ttest-favoritos-1765978830459@example.com\t2025-12-17 13:40:30\n1680101\tTest User Repertorios\ttest-repertorios-1765978830431@example.com\t2025-12-17 13:40:30\n1680100\tTest User Favoritos\ttest-favoritos-1765978830424@example.com\t2025-12-17 13:40:30\n1680099\tTest User Favoritos\ttest-favoritos-1765978830411@example.com\t2025-12-17 13:40:30\n1680098\tTest User Repertorios\ttest-repertorios-1765978830402@example.com\t2025-12-17 13:40:30\n1680097\tTest User Favoritos\ttest-favoritos-1765978830384@example.com\t2025-12-17 13:40:30\n1680096\tTest User Favoritos\ttest-favoritos-1765978830375@example.com\t2025-12-17 13:40:30\n1680095\tTest User Repertorios\ttest-repertorios-1765978830361@example.com\t2025-12-17 13:40:30\n1680094\tTest User Repertorios\ttest-repertorios-1765978830339@example.com\t2025-12-17 13:40:30\n1680093\tTest User Favoritos\ttest-favoritos-1765978830336@example.com\t2025-12-17 13:40:30\n1680092\tTest User Repertorios\ttest-repertorios-1765978830329@example.com\t2025-12-17 13:40:30\n1680091\tTest User Favoritos\ttest-favoritos-1765978830309@example.com\t2025-12-17 13:40:30\n1680090\tTest User Favoritos\ttest-favoritos-1765978830292@example.com\t2025-12-17 13:40:30\n1680089\tTest User Repertorios\ttest-repertorios-1765978830291@example.com\t2025-12-17 13:40:30\n1680088\tTest User Repertorios\ttest-repertorios-1765978830173@example.com\t2025-12-17 13:40:30\n1680087\tTest User Favoritos\ttest-favoritos-1765978830173@example.com\t2025-12-17 13:40:30\n1680062\tTest User Favoritos\ttest-favoritos-1765978811319@example.com\t2025-12-17 13:40:11\n1680086\tTest User 2\ttest-user2-1765978811873@example.com\t2025-12-17 13:40:11\n1680085\tTest User Repertorios\ttest-repertorios-1765978811843@example.com\t2025-12-17 13:40:11\n1680084\tTest User 2\ttest-user2-1765978811825@example.com\t2025-12-17 13:40:11\n1680083\tTest User Repertorios\ttest-repertorios-1765978811802@example.com\t2025-12-17 13:40:11\n1680082\tTest User Repertorios\ttest-repertorios-1765978811768@example.com\t2025-12-17 13:40:11\n1680081\tTest User Repertorios\ttest-repertorios-1765978811736@example.com\t2025-12-17 13:40:11\n1680080\tTest User Repertorios\ttest-repertorios-1765978811698@example.com\t2025-12-17 13:40:11\n1680079\tTest User Repertorios\ttest-repertorios-1765978811637@example.com\t2025-12-17 13:40:11\n1680078\tTest User Favoritos\ttest-favoritos-1765978811627@example.com\t2025-12-17 13:40:11\n1680077\tTest User Favoritos\ttest-favoritos-1765978811618@example.com\t2025-12-17 13:40:11\n1680076\tTest User Repertorios\ttest-repertorios-1765978811594@example.com\t2025-12-17 13:40:11\n1680075\tTest User Favoritos\ttest-favoritos-1765978811578@example.com\t2025-12-17 13:40:11\n1680074\tTest User Repertorios\ttest-repertorios-1765978811565@example.com\t2025-12-17 13:40:11\n1680073\tTest User Favoritos\ttest-favoritos-1765978811560@example.com\t2025-12-17 13:40:11\n1680072\tTest User Favoritos\ttest-favoritos-1765978811532@example.com\t2025-12-17 13:40:11\n1680071\tTest User Favoritos\ttest-favoritos-1765978811524@example.com\t2025-12-17 13:40:11\n1680070\tTest User Repertorios\ttest-repertorios-1765978811520@example.com\t2025-12-17 13:40:11\n1680069\tTest User Repertorios\ttest-repertorios-1765978811488@example.com\t2025-12-17 13:40:11\n1680068\tTest User Favoritos\ttest-favoritos-1765978811484@example.com\t2025-12-17 13:40:11\n1680067\tTest User Repertorios\ttest-repertorios-1765978811480@example.com\t2025-12-17 13:40:11\n1680066\tTest User Favoritos\ttest-favoritos-1765978811451@example.com\t2025-12-17 13:40:11\n1680065\tTest User Repertorios\ttest-repertorios-1765978811435@example.com\t2025-12-17 13:40:11\n1680064\tTest User Favoritos\ttest-favoritos-1765978811434@example.com\t2025-12-17 13:40:11\n1680063\tTest User Repertorios\ttest-repertorios-1765978811319@example.com\t2025-12-17 13:40:11\n1680057\tTest User Repertorios\ttest-repertorios-1765978779044@example.com\t2025-12-17 13:39:39\n1680056\tTest User Repertorios\ttest-repertorios-1765978779015@example.com\t2025-12-17 13:39:39\n1680058\tTest User 2\ttest-user2-1765978779064@example.com\t2025-12-17 13:39:39\n1680059\tTest User Repertorios\ttest-repertorios-1765978779084@example.com\t2025-12-17 13:39:39\n1680037\tTest User Repertorios\ttest-repertorios-1765978778584@example.com\t2025-12-17 13:39:38\n1680055\tTest User Repertorios\ttest-repertorios-1765978778985@example.com\t2025-12-17 13:39:38\n1680054\tTest User Favoritos\ttest-favoritos-1765978778972@example.com\t2025-12-17 13:39:38\n1680053\tTest User Favoritos\ttest-favoritos-1765978778958@example.com\t2025-12-17 13:39:38\n1680052\tTest User Repertorios\ttest-repertorios-1765978778952@example.com\t2025-12-17 13:39:38\n1680051\tTest User Repertorios\ttest-repertorios-1765978778921@example.com\t2025-12-17 13:39:38\n1680050\tTest User Favoritos\ttest-favoritos-1765978778905@example.com\t2025-12-17 13:39:38\n1680049\tTest User Repertorios\ttest-repertorios-1765978778891@example.com\t2025-12-17 13:39:38\n1680048\tTest User Favoritos\ttest-favoritos-1765978778886@example.com\t2025-12-17 13:39:38\n1680047\tTest User Repertorios\ttest-repertorios-1765978778859@example.com\t2025-12-17 13:39:38\n1680046\tTest User Favoritos\ttest-favoritos-1765978778848@example.com\t2025-12-17 13:39:38\n1680045\tTest User Favoritos\ttest-favoritos-1765978778834@example.com\t2025-12-17 13:39:38\n1680044\tTest User Repertorios\ttest-repertorios-1765978778822@example.com\t2025-12-17 13:39:38\n1680043\tTest User Repertorios\ttest-repertorios-1765978778790@example.com\t2025-12-17 13:39:38\n1680042\tTest User Favoritos\ttest-favoritos-1765978778778@example.com\t2025-12-17 13:39:38\n1680041\tTest User Repertorios\ttest-repertorios-1765978778777@example.com\t2025-12-17 13:39:38\n1680040\tTest User Favoritos\ttest-favoritos-1765978778742@example.com\t2025-12-17 13:39:38\n1680039\tTest User Favoritos\ttest-favoritos-1765978778719@example.com\t2025-12-17 13:39:38\n1680038\tTest User Repertorios\ttest-repertorios-1765978778719@example.com\t2025-12-17 13:39:38\n1680036\tTest User Favoritos\ttest-favoritos-1765978778584@example.com\t2025-12-17 13:39:38\n1680026\tTest User Favoritos\ttest-favoritos-1765978713931@example.com\t2025-12-17 13:38:33\n1680017\tTest User Favoritos\ttest-favoritos-1765978713847@example.com\t2025-12-17 13:38:33\n1680027\tTest User Repertorios\ttest-repertorios-1765978713951@example.com\t2025-12-17 13:38:33\n1680025\tTest User Repertorios\ttest-repertorios-1765978713928@example.com\t2025-12-17 13:38:33\n1680024\tTest User Favoritos\ttest-favoritos-1765978713923@example.com\t2025-12-17 13:38:33\n1680023\tTest User Repertorios\ttest-repertorios-1765978713911@example.com\t2025-12-17 13:38:33\n1680022\tTest User Repertorios\ttest-repertorios-1765978713892@example.com\t2025-12-17 13:38:33\n1680021\tTest User Favoritos\ttest-favoritos-1765978713886@example.com\t2025-12-17 13:38:33\n1680020\tTest User Favoritos\ttest-favoritos-1765978713872@example.com\t2025-12-17 13:38:33\n1680019\tTest User Repertorios\ttest-repertorios-1765978713869@example.com\t2025-12-17 13:38:33\n1680018\tTest User Repertorios\ttest-repertorios-1765978713850@example.com\t2025-12-17 13:38:33\n1680005\tTest User Repertorios\ttest-repertorios-1765978713596@example.com\t2025-12-17 13:38:33\n1680016\tTest User Favoritos\ttest-favoritos-1765978713837@example.com\t2025-12-17 13:38:33\n1680015\tTest User Repertorios\ttest-repertorios-1765978713832@example.com\t2025-12-17 13:38:33\n1680014\tTest User Repertorios\ttest-repertorios-1765978713814@example.com\t2025-12-17 13:38:33\n1680013\tTest User Repertorios\ttest-repertorios-1765978713797@example.com\t2025-12-17 13:38:33\n1680012\tTest User Favoritos\ttest-favoritos-1765978713796@example.com\t2025-12-17 13:38:33\n1680011\tTest User Repertorios\ttest-repertorios-1765978713775@example.com\t2025-12-17 13:38:33\n1680010\tTest User Repertorios\ttest-repertorios-1765978713765@example.com\t2025-12-17 13:38:33\n1680009\tTest User Favoritos\ttest-favoritos-1765978713759@example.com\t2025-12-17 13:38:33\n1680008\tTest User Favoritos\ttest-favoritos-1765978713739@example.com\t2025-12-17 13:38:33\n1680007\tTest User Repertorios\ttest-repertorios-1765978713725@example.com\t2025-12-17 13:38:33\n1680006\tTest User Favoritos\ttest-favoritos-1765978713599@example.com\t2025-12-17 13:38:33\n1650022\tTest User Repertorios\ttest-repertorios-1765972301157@example.com\t2025-12-17 11:51:41\n1650027\tTest User Repertorios\ttest-repertorios-1765972301213@example.com\t2025-12-17 11:51:41\n1650026\tTest User 2\ttest-user2-1765972301199@example.com\t2025-12-17 11:51:41\n1650025\tTest User Favoritos\ttest-favoritos-1765972301182@example.com\t2025-12-17 11:51:41\n1650024\tTest User Repertorios\ttest-repertorios-1765972301182@example.com\t2025-12-17 11:51:41\n1650023\tTest User Favoritos\ttest-favoritos-1765972301159@example.com\t2025-12-17 11:51:41\n1650021\tTest User Repertorios\ttest-repertorios-1765972301139@example.com\t2025-12-17 11:51:41\n1650020\tTest User Favoritos\ttest-favoritos-1765972301122@example.com\t2025-12-17 11:51:41\n1650019\tTest User Repertorios\ttest-repertorios-1765972301120@example.com\t2025-12-17 11:51:41\n1650018\tTest User Favoritos\ttest-favoritos-1765972301107@example.com\t2025-12-17 11:51:41\n1650017\tTest User Repertorios\ttest-repertorios-1765972301103@example.com\t2025-12-17 11:51:41\n1650016\tTest User Repertorios\ttest-repertorios-1765972301085@example.com\t2025-12-17 11:51:41\n1650015\tTest User Favoritos\ttest-favoritos-1765972301081@example.com\t2025-12-17 11:51:41\n1650014\tTest User Favoritos\ttest-favoritos-1765972301071@example.com\t2025-12-17 11:51:41\n1650013\tTest User Repertorios\ttest-repertorios-1765972301067@example.com\t2025-12-17 11:51:41\n1650012\tTest User Repertorios\ttest-repertorios-1765972301050@example.com\t2025-12-17 11:51:41\n1650011\tTest User Repertorios\ttest-repertorios-1765972301021@example.com\t2025-12-17 11:51:41\n1650010\tTest User Favoritos\ttest-favoritos-1765972301018@example.com\t2025-12-17 11:51:41\n1650009\tTest User Repertorios\ttest-repertorios-1765972301012@example.com\t2025-12-17 11:51:41\n1650008\tTest User Favoritos\ttest-favoritos-1765972300990@example.com\t2025-12-17 11:51:40\n1650007\tTest User Favoritos\ttest-favoritos-1765972300973@example.com\t2025-12-17 11:51:40\n1650006\tTest User Repertorios\ttest-repertorios-1765972300972@example.com\t2025-12-17 11:51:40\n1650005\tTest User Favoritos\ttest-favoritos-1765972300732@example.com\t2025-12-17 11:51:40\n1650004\tTest User Repertorios\ttest-repertorios-1765972300732@example.com\t2025-12-17 11:51:40\n1530012\tGabriela Iassia\tgabi.finati@gmail.com\t2025-12-17 00:28:14\n1140034\tTest User Favoritos\ttest-favoritos-1765683017552@example.com\t2025-12-14 03:30:17\n1140033\tTest User Favoritos\ttest-favoritos-1765683017538@example.com\t2025-12-14 03:30:17\n1140032\tTest User Favoritos\ttest-favoritos-1765683017485@example.com\t2025-12-14 03:30:17\n1140031\tTest User Favoritos\ttest-favoritos-1765683017467@example.com\t2025-12-14 03:30:17\n1140030\tTest User Favoritos\ttest-favoritos-1765683017430@example.com\t2025-12-14 03:30:17\n1140029\tTest User Favoritos\ttest-favoritos-1765683017416@example.com\t2025-12-14 03:30:17\n1140028\tTest User Favoritos\ttest-favoritos-1765683017356@example.com\t2025-12-14 03:30:17\n1140027\tTest User Favoritos\ttest-favoritos-1765683017313@example.com\t2025-12-14 03:30:17\n1140026\tTest User Favoritos\ttest-favoritos-1765683017289@example.com\t2025-12-14 03:30:17\n1140025\tTest User Favoritos\ttest-favoritos-1765683017148@example.com\t2025-12-14 03:30:17\n1140024\tTest User Favoritos\ttest-favoritos-1765682994340@example.com\t2025-12-14 03:29:54\n1140023\tTest User Favoritos\ttest-favoritos-1765682994329@example.com\t2025-12-14 03:29:54\n1140022\tTest User Favoritos\ttest-favoritos-1765682994245@example.com\t2025-12-14 03:29:54\n1140021\tTest User Favoritos\ttest-favoritos-1765682994229@example.com\t2025-12-14 03:29:54\n1140020\tTest User Favoritos\ttest-favoritos-1765682994197@example.com\t2025-12-14 03:29:54\n1140019\tTest User Favoritos\ttest-favoritos-1765682994185@example.com\t2025-12-14 03:29:54\n1140018\tTest User Favoritos\ttest-favoritos-1765682994131@example.com\t2025-12-14 03:29:54\n1140017\tTest User Favoritos\ttest-favoritos-1765682994094@example.com\t2025-12-14 03:29:54\n1140016\tTest User Favoritos\ttest-favoritos-1765682994073@example.com\t2025-12-14 03:29:54\n1140015\tTest User Favoritos\ttest-favoritos-1765682993935@example.com\t2025-12-14 03:29:54\n1140014\tTest User Favoritos\ttest-favoritos-1765682972123@example.com\t2025-12-14 03:29:32\n1140013\tTest User Favoritos\ttest-favoritos-1765682972113@example.com\t2025-12-14 03:29:32\n1140012\tTest User Favoritos\ttest-favoritos-1765682972074@example.com\t2025-12-14 03:29:32\n1140011\tTest User Favoritos\ttest-favoritos-1765682972059@example.com\t2025-12-14 03:29:32\n1140010\tTest User Favoritos\ttest-favoritos-1765682972026@example.com\t2025-12-14 03:29:32\n1140009\tTest User Favoritos\ttest-favoritos-1765682972015@example.com\t2025-12-14 03:29:32\n1140008\tTest User Favoritos\ttest-favoritos-1765682971968@example.com\t2025-12-14 03:29:31\n1140007\tTest User Favoritos\ttest-favoritos-1765682971937@example.com\t2025-12-14 03:29:31\n1140006\tTest User Favoritos\ttest-favoritos-1765682971916@example.com\t2025-12-14 03:29:31\n1140005\tTest User Favoritos\ttest-favoritos-1765682971784@example.com\t2025-12-14 03:29:31\n1140001\tTiago Fortuna Fotografia\ttiagofortuna.fotografia@gmail.com\t2025-12-14 03:04:24\n480009\tTiago LouvaMais\tlouvamais590@gmail.com\t2025-11-29 19:07:17\n1\tTiago Fortuna Santos\tfortuna590@gmail.com\t2025-11-20 04:19:43\n",
+  "stderr": "",
+  "execution_time_ms": 129
+}

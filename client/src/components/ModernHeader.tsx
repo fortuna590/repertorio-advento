@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Home, Music, BookOpen, ShoppingBag, BarChart3, Info, User, LogIn, UserPlus, Heart, ListMusic, Settings, LogOut } from "lucide-react";
+import { Menu, X, Home, Music, BookOpen, ShoppingBag, BarChart3, Info, User, LogIn, UserPlus, Heart, ListMusic, Settings, LogOut, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -33,6 +33,7 @@ export default function ModernHeader() {
   const [location, navigate] = useLocation();
   
   const { data: user } = trpc.auth.me.useQuery();
+  const { data: adminCheck } = trpc.admin.checkSuperAdmin.useQuery();
   const logoutMutation = trpc.auth.logout.useMutation({
     onSuccess: () => {
       window.location.reload();
@@ -123,6 +124,15 @@ export default function ModernHeader() {
                     <Settings className="w-4 h-4 mr-2" />
                     Configurações
                   </DropdownMenuItem>
+                  {adminCheck?.isSuperAdmin && (
+                    <>
+                      <DropdownMenuSeparator className="bg-purple-500/20" />
+                      <DropdownMenuItem onClick={() => navigate("/admin")} className="text-yellow-400 focus:bg-yellow-600/30 focus:text-yellow-300 cursor-pointer">
+                        <Shield className="w-4 h-4 mr-2" />
+                        Administração
+                      </DropdownMenuItem>
+                    </>
+                  )}
                   <DropdownMenuSeparator className="bg-purple-500/20" />
                   <DropdownMenuItem onClick={handleLogout} className="text-red-400 focus:bg-red-600/30 focus:text-red-300 cursor-pointer">
                     <LogOut className="w-4 h-4 mr-2" />

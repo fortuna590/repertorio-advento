@@ -1,0 +1,130 @@
+{
+  "query": "SELECT id, name, email, createdAt FROM users ORDER BY createdAt DESC LIMIT 20",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT id, name, email, createdAt FROM users ORDER BY createdAt DESC LIMIT 20",
+  "rows": [
+    {
+      "id": "2340001",
+      "name": "Priscila Fortuna Santos",
+      "email": "pryscila.fortuna@gmail.com",
+      "createdAt": "2025-12-20 19:41:04"
+    },
+    {
+      "id": "2100023",
+      "name": "Test User 2",
+      "email": "test-user2-1766205093133@example.com",
+      "createdAt": "2025-12-20 04:31:33"
+    },
+    {
+      "id": "2100025",
+      "name": "Test User 2",
+      "email": "test-user2-1766205093181@example.com",
+      "createdAt": "2025-12-20 04:31:33"
+    },
+    {
+      "id": "2100024",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205093148@example.com",
+      "createdAt": "2025-12-20 04:31:33"
+    },
+    {
+      "id": "2100022",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205093112@example.com",
+      "createdAt": "2025-12-20 04:31:33"
+    },
+    {
+      "id": "2100021",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205093067@example.com",
+      "createdAt": "2025-12-20 04:31:33"
+    },
+    {
+      "id": "2100020",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205093022@example.com",
+      "createdAt": "2025-12-20 04:31:33"
+    },
+    {
+      "id": "2100007",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205092664@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100010",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205092705@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100001",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205090877@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100006",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205092635@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100015",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205092777@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100013",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205092744@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100014",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205092753@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100012",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205092729@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100009",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205092678@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100004",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205092576@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100008",
+      "name": "Test User Repertorios",
+      "email": "test-repertorios-1766205090873@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100005",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205092624@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    },
+    {
+      "id": "2100011",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1766205092718@example.com",
+      "createdAt": "2025-12-20 04:31:32"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\tcreatedAt\n2340001\tPriscila Fortuna Santos\tpryscila.fortuna@gmail.com\t2025-12-20 19:41:04\n2100023\tTest User 2\ttest-user2-1766205093133@example.com\t2025-12-20 04:31:33\n2100025\tTest User 2\ttest-user2-1766205093181@example.com\t2025-12-20 04:31:33\n2100024\tTest User Repertorios\ttest-repertorios-1766205093148@example.com\t2025-12-20 04:31:33\n2100022\tTest User Repertorios\ttest-repertorios-1766205093112@example.com\t2025-12-20 04:31:33\n2100021\tTest User Repertorios\ttest-repertorios-1766205093067@example.com\t2025-12-20 04:31:33\n2100020\tTest User Repertorios\ttest-repertorios-1766205093022@example.com\t2025-12-20 04:31:33\n2100007\tTest User Favoritos\ttest-favoritos-1766205092664@example.com\t2025-12-20 04:31:32\n2100010\tTest User Repertorios\ttest-repertorios-1766205092705@example.com\t2025-12-20 04:31:32\n2100001\tTest User Favoritos\ttest-favoritos-1766205090877@example.com\t2025-12-20 04:31:32\n2100006\tTest User Favoritos\ttest-favoritos-1766205092635@example.com\t2025-12-20 04:31:32\n2100015\tTest User Repertorios\ttest-repertorios-1766205092777@example.com\t2025-12-20 04:31:32\n2100013\tTest User Repertorios\ttest-repertorios-1766205092744@example.com\t2025-12-20 04:31:32\n2100014\tTest User Repertorios\ttest-repertorios-1766205092753@example.com\t2025-12-20 04:31:32\n2100012\tTest User Favoritos\ttest-favoritos-1766205092729@example.com\t2025-12-20 04:31:32\n2100009\tTest User Favoritos\ttest-favoritos-1766205092678@example.com\t2025-12-20 04:31:32\n2100004\tTest User Favoritos\ttest-favoritos-1766205092576@example.com\t2025-12-20 04:31:32\n2100008\tTest User Repertorios\ttest-repertorios-1766205090873@example.com\t2025-12-20 04:31:32\n2100005\tTest User Favoritos\ttest-favoritos-1766205092624@example.com\t2025-12-20 04:31:32\n2100011\tTest User Favoritos\ttest-favoritos-1766205092718@example.com\t2025-12-20 04:31:32\n",
+  "stderr": "",
+  "execution_time_ms": 50
+}

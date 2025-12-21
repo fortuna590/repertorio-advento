@@ -32,6 +32,7 @@ import Perfil from "./pages/Perfil";
 import MinhasFavoritas from "./pages/MinhasFavoritas";
 import MeusRepertorios from "./pages/MeusRepertorios";
 import RepertorioDetalhe from "./pages/RepertorioDetalhe";
+import Admin from "./pages/Admin";
 import WhatsAppButton from "./components/WhatsAppButton";
 
 function Router() {
@@ -64,6 +65,7 @@ function Router() {
       <Route path={"/minhas-favoritas"} component={MinhasFavoritas} />
       <Route path={"/meus-repertorios"} component={MeusRepertorios} />
       <Route path={"/repertorio/:id"} component={RepertorioDetalhe} />
+      <Route path={"/admin"} component={Admin} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
