@@ -16,7 +16,7 @@ export default function Sobre() {
         <div className="mb-16">
           <h1 className="text-5xl font-bold text-white mb-6">Sobre o LouvaMais</h1>
           <p className="text-xl text-purple-200 mb-8 leading-relaxed">
-            O Repertório Católico é uma plataforma dedicada a facilitar a vida dos ministérios de música litúrgica. 
+            O LouvaMais é uma plataforma dedicada a facilitar a vida dos ministérios de música litúrgica. 
             Nosso objetivo é fornecer uma seleção cuidadosa de músicas organizadas por momentos da Santa Missa, 
             ajudando paróquias, comunidades e grupos de oração a celebrar com qualidade e devoção.
           </p>
@@ -158,7 +158,7 @@ export default function Sobre() {
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10 object-contain" />
-                <span className="font-bold text-white">Repertório Católico</span>
+                <span className="font-bold text-white">LouvaMais</span>
               </div>
               <p className="text-purple-200 text-sm">
                 Músicas litúrgicas para enriquecer suas celebrações
@@ -187,7 +187,7 @@ export default function Sobre() {
           </div>
 
           <div className="border-t border-purple-500/20 pt-8 text-center text-purple-200 text-sm">
-            <p>© 2025 LouvaMais - Repertório Católico. Todos os direitos reservados.</p>
+            <p>© 2025 LouvaMais. Todos os direitos reservados.</p>
             <p className="mt-2">Para a maior glória de Deus ✨</p>
           </div>
         </div>

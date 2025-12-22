@@ -2,7 +2,7 @@ import { MessageCircle } from "lucide-react";
 
 export default function WhatsAppButton() {
   const whatsappNumber = "5518996890414"; // Formato internacional sem espaços
-  const message = encodeURIComponent("Olá! Vim através do site Repertório Católico e gostaria de saber mais sobre o LouvaMais.");
+  const message = encodeURIComponent("Olá! Vim através do site LouvaMais e gostaria de saber mais sobre o LouvaMais.");
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
 
   return (

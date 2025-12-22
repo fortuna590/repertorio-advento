@@ -329,7 +329,7 @@ export default function Stats() {
             <div className="pt-4 border-t border-purple-500/20">
               <p className="text-sm text-purple-300">
                 Uma produção de{" "}
-                <span className="font-semibold text-purple-200">LouvaMais - Repertório Católico</span>
+                <span className="font-semibold text-purple-200">LouvaMais</span>
               </p>
               <p className="text-xs text-purple-400/60 mt-1">
                 © 2025 LouvaMais. Todos os direitos reservados.

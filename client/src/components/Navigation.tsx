@@ -47,7 +47,7 @@ export function Navigation() {
               </div>
               <div className="hidden sm:block text-left">
                 <div className="font-bold text-sm md:text-base text-foreground">LouvaMais</div>
-                <div className="text-xs text-muted-foreground">Repertório Católico</div>
+                <div className="text-xs text-muted-foreground">LouvaMais</div>
               </div>
             </button>
           </Link>

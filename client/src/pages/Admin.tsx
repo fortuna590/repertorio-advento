@@ -855,7 +855,7 @@ export default function Admin() {
                     variant="outline"
                     className="h-auto p-4 flex flex-col items-start border-purple-500/30 text-left hover:bg-purple-500/20"
                     onClick={() => {
-                      setEmailSubject("Novidades no Repertório Católico!");
+                      setEmailSubject("Novidades no LouvaMais!");
                       setEmailBody("Olá!\n\nTemos novidades incríveis para você!\n\nNovas músicas foram adicionadas ao nosso repertório do Advento. Acesse agora e confira as novidades.\n\nAbraços,\nEquipe LouvaMais");
                     }}
                   >

@@ -60,7 +60,7 @@ export function PrintView() {
       `}</style>
 
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold mb-2">Repertório Católico - Advento</h1>
+        <h1 className="text-3xl font-bold mb-2">LouvaMais - Advento</h1>
         <p className="text-gray-600">LouvaMais - Church Solutions</p>
         <p className="text-sm text-gray-500">29 músicas organizadas por momentos da missa</p>
       </div>

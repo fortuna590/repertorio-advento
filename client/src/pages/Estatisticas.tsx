@@ -41,7 +41,7 @@ export default function Estatisticas() {
         <div className="mb-16">
           <h1 className="text-5xl font-bold text-white mb-4">Estatísticas</h1>
           <p className="text-xl text-purple-200">
-            Acompanhe o crescimento e impacto do Repertório Católico
+            Acompanhe o crescimento e impacto do LouvaMais
           </p>
         </div>
 
@@ -255,7 +255,7 @@ export default function Estatisticas() {
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10 object-contain" />
-                <span className="font-bold text-white">Repertório Católico</span>
+                <span className="font-bold text-white">LouvaMais</span>
               </div>
               <p className="text-purple-200 text-sm">
                 Músicas litúrgicas para enriquecer suas celebrações
@@ -284,7 +284,7 @@ export default function Estatisticas() {
           </div>
 
           <div className="border-t border-purple-500/20 pt-8 text-center text-purple-200 text-sm">
-            <p>© 2025 LouvaMais - Repertório Católico. Todos os direitos reservados.</p>
+            <p>© 2025 LouvaMais. Todos os direitos reservados.</p>
             <p className="mt-2">Para a maior glória de Deus ✨</p>
           </div>
         </div>

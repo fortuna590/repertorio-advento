@@ -590,3 +590,13 @@
 - [ ] Publicar alterações no site ao vivo
 - [ ] Testar no site publicado
 - [ ] Criar checkpoint final
+
+
+## Renomear Site para LouvaMais
+- [x] Atualizar nome do site nas configurações - Usar Settings > General no Manus
+- [x] Atualizar título e descrição na página inicial (Home.tsx)
+- [x] Atualizar textos e slogans para refletir tema LouvaMais
+- [x] Verificar e atualizar outras páginas que mencionam nome antigo (15 arquivos atualizados)
+- [x] Atualizar rodapé e metadados
+- [x] Testar alterações - 111 testes passando
+- [ ] Criar checkpoint final

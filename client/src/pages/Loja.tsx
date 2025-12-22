@@ -225,7 +225,7 @@ export default function Loja() {
             <div>
               <img src={APP_LOGO} alt="LouvaMais" className="h-12 mb-4" />
               <p className="text-purple-200 text-sm">
-                Repertório Católico para Sua Comunidade
+                LouvaMais para Sua Comunidade
               </p>
             </div>
             <div>
