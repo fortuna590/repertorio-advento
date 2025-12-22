@@ -82,6 +82,18 @@ export const adminRouter = router({
       const orderBy = input.sortOrder === "asc" ? asc(sortColumn) : desc(sortColumn);
 
       // Buscar usuários
+      console.log("[Admin] Buscando usuários com filtros:", {
+        page: input.page,
+        limit: input.limit,
+        search: input.search,
+        sortField: input.sortField,
+        sortOrder: input.sortOrder,
+        dateFrom: input.dateFrom,
+        dateTo: input.dateTo,
+        offset,
+        whereClause: whereClause ? "com filtros" : "sem filtros"
+      });
+
       const usersList = await db
         .select({
           id: users.id,
@@ -95,6 +107,8 @@ export const adminRouter = router({
         .orderBy(orderBy)
         .limit(input.limit)
         .offset(offset);
+
+      console.log("[Admin] Usuários encontrados:", usersList.length);
 
       // Contar total
       const totalResult = await db

@@ -581,4 +581,12 @@
 - [x] Total de favoritos e depoimentos
 
 - [x] Testar todas as funcionalidades - 111 testes passando (28 novos)
+- [x] Criar checkpoint final
+
+
+## Correções no Painel de Administração
+- [x] Corrigir botão de Administração - Verificado funcionando no servidor local
+- [x] Adicionar logs de debug para verificar queries
+- [ ] Publicar alterações no site ao vivo
+- [ ] Testar no site publicado
 - [ ] Criar checkpoint final
