@@ -555,3 +555,30 @@
 - [x] Atualizar SUPERADMIN_EMAIL para louvmais590@gmail.com
 - [x] Corrigir para email real do usuário: fortuna590@gmail.com
 - [x] Criar checkpoint final
+
+
+## Melhorias do Painel Admin e Sistema de Notificações
+
+### Passo 1: Filtros Avançados no Painel Admin
+- [x] Adicionar filtro por data de cadastro (de/até)
+- [x] Implementar ordenação por nome, email e data
+- [x] Criar botão de exportação de usuários em CSV
+- [x] Adicionar seleção múltipla de usuários
+
+### Passo 2: Sistema de Notificações por Email
+- [x] Criar router tRPC para envio de emails em massa
+- [x] Criar página de composição de email no admin (aba Emails)
+- [x] Implementar seleção de destinatários (todos, filtrados, selecionados)
+- [x] Adicionar templates de email pré-definidos (4 templates)
+- [ ] Histórico de emails enviados - Fase 2
+- [ ] Integrar com Resend API para envio real - Requer configuração
+
+### Passo 3: Dashboard de Estatísticas Avançadas
+- [x] Gráfico de crescimento mensal de usuários (6 meses)
+- [x] Taxa de retenção de usuários (30 dias)
+- [x] Músicas mais populares (Top 10 favoritadas)
+- [x] Total de repertórios criados
+- [x] Total de favoritos e depoimentos
+
+- [x] Testar todas as funcionalidades - 111 testes passando (28 novos)
+- [ ] Criar checkpoint final
