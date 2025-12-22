@@ -1,0 +1,40 @@
+{
+  "query": "SELECT id, name, email, createdAt FROM users ORDER BY createdAt DESC;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT id, name, email, createdAt FROM users ORDER BY createdAt DESC;",
+  "rows": [
+    {
+      "id": "2340001",
+      "name": "Priscila Fortuna Santos",
+      "email": "pryscila.fortuna@gmail.com",
+      "createdAt": "2025-12-20 19:41:04"
+    },
+    {
+      "id": "1530012",
+      "name": "Gabriela Iassia",
+      "email": "gabi.finati@gmail.com",
+      "createdAt": "2025-12-17 00:28:14"
+    },
+    {
+      "id": "1140001",
+      "name": "Tiago Fortuna Fotografia",
+      "email": "tiagofortuna.fotografia@gmail.com",
+      "createdAt": "2025-12-14 03:04:24"
+    },
+    {
+      "id": "480009",
+      "name": "Tiago LouvaMais",
+      "email": "louvamais590@gmail.com",
+      "createdAt": "2025-11-29 19:07:17"
+    },
+    {
+      "id": "1",
+      "name": "Tiago Fortuna Santos",
+      "email": "fortuna590@gmail.com",
+      "createdAt": "2025-11-20 04:19:43"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\tcreatedAt\n2340001\tPriscila Fortuna Santos\tpryscila.fortuna@gmail.com\t2025-12-20 19:41:04\n1530012\tGabriela Iassia\tgabi.finati@gmail.com\t2025-12-17 00:28:14\n1140001\tTiago Fortuna Fotografia\ttiagofortuna.fotografia@gmail.com\t2025-12-14 03:04:24\n480009\tTiago LouvaMais\tlouvamais590@gmail.com\t2025-11-29 19:07:17\n1\tTiago Fortuna Santos\tfortuna590@gmail.com\t2025-11-20 04:19:43\n",
+  "stderr": "",
+  "execution_time_ms": 56
+}

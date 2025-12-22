@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO products (nome, descricao, preco, moeda, plataforma, produtoId, linkAfiliado, disponivel, parcelaMaxima, valorParcela, temJuros, freteGratis) VALUES ('Camiseta de São Carlo Acutis', 'Camiseta católica com estampa de São Carlo Acutis, o santo padroeiro da internet. Material confortável, ideal para evangelização e expressão da fé.', 5990, 'BRL', 'mercado_livre', '5NTWJH-9BYV', 'https://mercadolivre.com/sec/2ih4zj6', 1, 3, 1997, 0, 0);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute INSERT INTO products (nome, descricao, preco, moeda, plataforma, produtoId, linkAfiliado, disponivel, parcelaMaxima, valorParcela, temJuros, freteGratis) VALUES ('Camiseta de São Carlo Acutis', 'Camiseta católica com estampa de São Carlo Acutis, o santo padroeiro da internet. Material confortável, ideal para evangelização e expressão da fé.', 5990, 'BRL', 'mercado_livre', '5NTWJH-9BYV', 'https://mercadolivre.com/sec/2ih4zj6', 1, 3, 1997, 0, 0);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 66
+}

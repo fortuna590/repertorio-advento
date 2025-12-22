@@ -1,0 +1,60 @@
+{
+  "query": "SELECT id, name, email FROM users WHERE email LIKE 'test-%@example.com' LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT id, name, email FROM users WHERE email LIKE 'test-%@example.com' LIMIT 10;",
+  "rows": [
+    {
+      "id": "1140005",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682971784@example.com"
+    },
+    {
+      "id": "1140006",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682971916@example.com"
+    },
+    {
+      "id": "1140007",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682971937@example.com"
+    },
+    {
+      "id": "1140008",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682971968@example.com"
+    },
+    {
+      "id": "1140009",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682972015@example.com"
+    },
+    {
+      "id": "1140010",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682972026@example.com"
+    },
+    {
+      "id": "1140011",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682972059@example.com"
+    },
+    {
+      "id": "1140012",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682972074@example.com"
+    },
+    {
+      "id": "1140013",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682972113@example.com"
+    },
+    {
+      "id": "1140014",
+      "name": "Test User Favoritos",
+      "email": "test-favoritos-1765682972123@example.com"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\n1140005\tTest User Favoritos\ttest-favoritos-1765682971784@example.com\n1140006\tTest User Favoritos\ttest-favoritos-1765682971916@example.com\n1140007\tTest User Favoritos\ttest-favoritos-1765682971937@example.com\n1140008\tTest User Favoritos\ttest-favoritos-1765682971968@example.com\n1140009\tTest User Favoritos\ttest-favoritos-1765682972015@example.com\n1140010\tTest User Favoritos\ttest-favoritos-1765682972026@example.com\n1140011\tTest User Favoritos\ttest-favoritos-1765682972059@example.com\n1140012\tTest User Favoritos\ttest-favoritos-1765682972074@example.com\n1140013\tTest User Favoritos\ttest-favoritos-1765682972113@example.com\n1140014\tTest User Favoritos\ttest-favoritos-1765682972123@example.com\n",
+  "stderr": "",
+  "execution_time_ms": 55
+}

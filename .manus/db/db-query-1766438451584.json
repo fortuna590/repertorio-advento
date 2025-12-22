@@ -1,0 +1,73 @@
+{
+  "query": "SELECT id, nome, preco, plataforma, produtoId FROM products ORDER BY id DESC;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT id, nome, preco, plataforma, produtoId FROM products ORDER BY id DESC;",
+  "rows": [
+    {
+      "id": "30003",
+      "nome": "Livro de São Carlo Acutis",
+      "preco": "3990",
+      "plataforma": "mercado_livre",
+      "produtoId": "5NTWJH-AYUL"
+    },
+    {
+      "id": "30002",
+      "nome": "Camiseta de São Carlo Acutis",
+      "preco": "5990",
+      "plataforma": "mercado_livre",
+      "produtoId": "5NTWJH-9BYV"
+    },
+    {
+      "id": "30001",
+      "nome": "Imagem de São Carlo Acutis",
+      "preco": "4990",
+      "plataforma": "mercado_livre",
+      "produtoId": "5NTWJH-7FNQ"
+    },
+    {
+      "id": "12",
+      "nome": "No Espírito E Na Verdade - Volume 2",
+      "preco": "0",
+      "plataforma": "amazon",
+      "produtoId": "8532616852"
+    },
+    {
+      "id": "11",
+      "nome": "Cristo, Festa Da Igreja - O Ano Litúrgico",
+      "preco": "5077",
+      "plataforma": "amazon",
+      "produtoId": "8573110392"
+    },
+    {
+      "id": "10",
+      "nome": "O Segredo dos Ritos",
+      "preco": "3040",
+      "plataforma": "amazon",
+      "produtoId": "8535628673"
+    },
+    {
+      "id": "9",
+      "nome": "Constituição Sacrosanctum Concilium",
+      "preco": "2000",
+      "plataforma": "mercado_livre",
+      "produtoId": "1ibn8j6"
+    },
+    {
+      "id": "8",
+      "nome": "Missal Romano - Tradução Da 3ª Edição Típica",
+      "preco": "57989",
+      "plataforma": "mercado_livre",
+      "produtoId": "5NTWJH-XHZD"
+    },
+    {
+      "id": "7",
+      "nome": "Catecismo da Igreja Católica",
+      "preco": "5899",
+      "plataforma": "mercado_livre",
+      "produtoId": "5NTWJH-B1NV"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tnome\tpreco\tplataforma\tprodutoId\n30003\tLivro de São Carlo Acutis\t3990\tmercado_livre\t5NTWJH-AYUL\n30002\tCamiseta de São Carlo Acutis\t5990\tmercado_livre\t5NTWJH-9BYV\n30001\tImagem de São Carlo Acutis\t4990\tmercado_livre\t5NTWJH-7FNQ\n12\tNo Espírito E Na Verdade - Volume 2\t0\tamazon\t8532616852\n11\tCristo, Festa Da Igreja - O Ano Litúrgico\t5077\tamazon\t8573110392\n10\tO Segredo dos Ritos\t3040\tamazon\t8535628673\n9\tConstituição Sacrosanctum Concilium\t2000\tmercado_livre\t1ibn8j6\n8\tMissal Romano - Tradução Da 3ª Edição Típica\t57989\tmercado_livre\t5NTWJH-XHZD\n7\tCatecismo da Igreja Católica\t5899\tmercado_livre\t5NTWJH-B1NV\n",
+  "stderr": "",
+  "execution_time_ms": 48
+}

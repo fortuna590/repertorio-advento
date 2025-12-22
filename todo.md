@@ -600,3 +600,16 @@
 - [x] Atualizar rodapé e metadados
 - [x] Testar alterações - 111 testes passando
 - [ ] Criar checkpoint final
+
+
+## Limpeza de Usuários de Teste
+- [x] Deletar usuários de teste do banco de dados (emails com "test-")
+- [x] Verificar contagem final de usuários reais (5 usuários restantes)
+- [ ] Criar checkpoint final
+
+
+## Novos Produtos - São Carlo Acutis
+- [x] Adicionar Imagem de São Carlo Acutis (ID: 5NTWJH-7FNQ)
+- [x] Adicionar Camiseta de São Carlo Acutis (ID: 5NTWJH-9BYV)
+- [x] Adicionar Livro de São Carlo Acutis (ID: 5NTWJH-AYUL)
+- [ ] Criar checkpoint final
