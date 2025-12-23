@@ -1,0 +1,9 @@
+{
+  "query": "UPDATE products SET preco = 6489, valorParcela = 2163 WHERE nome LIKE '%Catecismo%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute UPDATE products SET preco = 6489, valorParcela = 2163 WHERE nome LIKE '%Catecismo%';",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 64
+}

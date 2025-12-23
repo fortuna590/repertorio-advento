@@ -613,3 +613,12 @@
 - [x] Adicionar Camiseta de São Carlo Acutis (ID: 5NTWJH-9BYV)
 - [x] Adicionar Livro de São Carlo Acutis (ID: 5NTWJH-AYUL)
 - [ ] Criar checkpoint final
+
+
+## Atualização de Preços dos Produtos
+- [x] Atualizar preço do Livro de São Carlo Acutis para R$ 29,03
+- [x] Atualizar preço da Camiseta de São Carlo Acutis para R$ 64,41
+- [x] Atualizar preço da Imagem de São Carlo Acutis para R$ 59,90
+- [x] Atualizar preço do Catecismo da Igreja Católica para R$ 64,89
+- [x] Atualizar preço do Missal Romano para R$ 579,89
+- [ ] Criar checkpoint final

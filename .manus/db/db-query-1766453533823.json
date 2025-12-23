@@ -1,0 +1,9 @@
+{
+  "query": "UPDATE products SET preco = 6441, valorParcela = 2147 WHERE produtoId = '5NTWJH-9BYV';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute UPDATE products SET preco = 6441, valorParcela = 2147 WHERE produtoId = '5NTWJH-9BYV';",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 186
+}

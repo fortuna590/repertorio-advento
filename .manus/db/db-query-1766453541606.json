@@ -1,0 +1,16 @@
+{
+  "query": "SELECT id, nome, produtoId, preco FROM products WHERE nome LIKE '%Catecismo%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT id, nome, produtoId, preco FROM products WHERE nome LIKE '%Catecismo%';",
+  "rows": [
+    {
+      "id": "7",
+      "nome": "Catecismo da Igreja Católica",
+      "produtoId": "5NTWJH-B1NV",
+      "preco": "5899"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tnome\tprodutoId\tpreco\n7\tCatecismo da Igreja Católica\t5NTWJH-B1NV\t5899\n",
+  "stderr": "",
+  "execution_time_ms": 55
+}

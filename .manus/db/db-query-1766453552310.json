@@ -1,0 +1,64 @@
+{
+  "query": "SELECT nome, preco, valorParcela, parcelaMaxima FROM products ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT nome, preco, valorParcela, parcelaMaxima FROM products ORDER BY id;",
+  "rows": [
+    {
+      "nome": "Catecismo da Igreja Católica",
+      "preco": "6489",
+      "valorParcela": "2163",
+      "parcelaMaxima": "12"
+    },
+    {
+      "nome": "Missal Romano - Tradução Da 3ª Edição Típica",
+      "preco": "57989",
+      "valorParcela": "19330",
+      "parcelaMaxima": "12"
+    },
+    {
+      "nome": "Constituição Sacrosanctum Concilium",
+      "preco": "2000",
+      "valorParcela": "2000",
+      "parcelaMaxima": "1"
+    },
+    {
+      "nome": "O Segredo dos Ritos",
+      "preco": "3040",
+      "valorParcela": "3040",
+      "parcelaMaxima": "1"
+    },
+    {
+      "nome": "Cristo, Festa Da Igreja - O Ano Litúrgico",
+      "preco": "5077",
+      "valorParcela": "5077",
+      "parcelaMaxima": "1"
+    },
+    {
+      "nome": "No Espírito E Na Verdade - Volume 2",
+      "preco": "0",
+      "valorParcela": "0",
+      "parcelaMaxima": "1"
+    },
+    {
+      "nome": "Imagem de São Carlo Acutis",
+      "preco": "5990",
+      "valorParcela": "1997",
+      "parcelaMaxima": "3"
+    },
+    {
+      "nome": "Camiseta de São Carlo Acutis",
+      "preco": "6441",
+      "valorParcela": "2147",
+      "parcelaMaxima": "3"
+    },
+    {
+      "nome": "Livro de São Carlo Acutis",
+      "preco": "2903",
+      "valorParcela": "968",
+      "parcelaMaxima": "3"
+    }
+  ],
+  "messages": [],
+  "stdout": "nome\tpreco\tvalorParcela\tparcelaMaxima\nCatecismo da Igreja Católica\t6489\t2163\t12\nMissal Romano - Tradução Da 3ª Edição Típica\t57989\t19330\t12\nConstituição Sacrosanctum Concilium\t2000\t2000\t1\nO Segredo dos Ritos\t3040\t3040\t1\nCristo, Festa Da Igreja - O Ano Litúrgico\t5077\t5077\t1\nNo Espírito E Na Verdade - Volume 2\t0\t0\t1\nImagem de São Carlo Acutis\t5990\t1997\t3\nCamiseta de São Carlo Acutis\t6441\t2147\t3\nLivro de São Carlo Acutis\t2903\t968\t3\n",
+  "stderr": "",
+  "execution_time_ms": 87
+}
