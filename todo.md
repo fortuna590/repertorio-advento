@@ -622,3 +622,15 @@
 - [x] Atualizar preço do Catecismo da Igreja Católica para R$ 64,89
 - [x] Atualizar preço do Missal Romano para R$ 579,89
 - [ ] Criar checkpoint final
+
+
+## Sistema de Múltiplos Repertórios com Subpáginas
+- [x] Criar arquivo de dados repertorioMissaDoGalo.ts com 10 músicas
+- [x] Criar página de seleção de repertórios (/repertorios)
+- [x] Criar página específica para Missa do Galo (/repertorio/missa-do-galo)
+- [x] Manter página de Advento existente (/repertorio)
+- [x] Atualizar navegação no ModernHeader
+- [x] Atualizar rotas no App.tsx
+- [x] Implementar botão "Ouvir" com fallback automático
+- [x] Testar todas as páginas
+- [ ] Criar checkpoint final

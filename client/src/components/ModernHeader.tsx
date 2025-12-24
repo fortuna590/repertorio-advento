@@ -21,7 +21,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: "Início", href: "/", icon: <Home className="w-4 h-4" /> },
-  { label: "Repertório", href: "/repertorio", icon: <Music className="w-4 h-4" /> },
+  { label: "Repertório", href: "/repertorios", icon: <Music className="w-4 h-4" /> },
   { label: "Blog", href: "/blog", icon: <BookOpen className="w-4 h-4" /> },
   { label: "Loja", href: "/loja", icon: <ShoppingBag className="w-4 h-4" /> },
   { label: "Estatísticas", href: "/estatisticas", icon: <BarChart3 className="w-4 h-4" /> },

@@ -26,7 +26,7 @@ export default function Home() {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-scaleIn">
-          <a href="/repertorio">
+          <a href="/repertorios">
             <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-6 text-lg">
               <Music className="w-5 h-5 mr-2" />
               Explorar Repertório
@@ -128,7 +128,7 @@ export default function Home() {
             <p className="text-purple-200 mb-6">
               29 músicas litúrgicas cuidadosamente selecionadas para o tempo do Advento. Organize sua celebração com facilidade e excelência.
             </p>
-            <a href="/repertorio">
+            <a href="/repertorios">
               <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
                 Ver Repertório Completo
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -200,7 +200,7 @@ export default function Home() {
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </a>
-            <a href="/repertorio">
+            <a href="/repertorios">
               <Button variant="outline" className="border-white text-white hover:bg-white/10 px-8 py-3">
                 Explorar Repertório
               </Button>
