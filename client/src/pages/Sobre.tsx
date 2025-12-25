@@ -12,9 +12,24 @@ export default function Sobre() {
       <ModernHeader />
 
       <div className="max-w-6xl mx-auto px-4 py-12">
+        {/* Hero Section com Logo */}
+        <div className="text-center mb-20">
+          <div className="flex justify-center mb-8 animate-fadeInDown">
+            <img 
+              src={APP_LOGO} 
+              alt="LouvaMais" 
+              className="w-48 h-48 md:w-64 md:h-64 object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+            />
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 animate-fadeInUp">LouvaMais</h1>
+          <p className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400 font-semibold mb-4">
+            Louve com Excelência
+          </p>
+        </div>
+
         {/* Seção Principal */}
         <div className="mb-16">
-          <h1 className="text-5xl font-bold text-white mb-6">Sobre o LouvaMais</h1>
+          <h2 className="text-4xl font-bold text-white mb-6">Sobre o LouvaMais</h2>
           <p className="text-xl text-purple-200 mb-8 leading-relaxed">
             O LouvaMais é uma plataforma dedicada a facilitar a vida dos ministérios de música litúrgica. 
             Nosso objetivo é fornecer uma seleção cuidadosa de músicas organizadas por momentos da Santa Missa, 

@@ -589,7 +589,7 @@
 - [x] Adicionar logs de debug para verificar queries
 - [ ] Publicar alterações no site ao vivo
 - [ ] Testar no site publicado
-- [ ] Criar checkpoint final
+- [x] Criar checkpoint final
 
 
 ## Renomear Site para LouvaMais
@@ -599,20 +599,20 @@
 - [x] Verificar e atualizar outras páginas que mencionam nome antigo (15 arquivos atualizados)
 - [x] Atualizar rodapé e metadados
 - [x] Testar alterações - 111 testes passando
-- [ ] Criar checkpoint final
+- [x] Criar checkpoint final
 
 
 ## Limpeza de Usuários de Teste
 - [x] Deletar usuários de teste do banco de dados (emails com "test-")
 - [x] Verificar contagem final de usuários reais (5 usuários restantes)
-- [ ] Criar checkpoint final
+- [x] Criar checkpoint final
 
 
 ## Novos Produtos - São Carlo Acutis
 - [x] Adicionar Imagem de São Carlo Acutis (ID: 5NTWJH-7FNQ)
 - [x] Adicionar Camiseta de São Carlo Acutis (ID: 5NTWJH-9BYV)
 - [x] Adicionar Livro de São Carlo Acutis (ID: 5NTWJH-AYUL)
-- [ ] Criar checkpoint final
+- [x] Criar checkpoint final
 
 
 ## Atualização de Preços dos Produtos
@@ -621,7 +621,7 @@
 - [x] Atualizar preço da Imagem de São Carlo Acutis para R$ 59,90
 - [x] Atualizar preço do Catecismo da Igreja Católica para R$ 64,89
 - [x] Atualizar preço do Missal Romano para R$ 579,89
-- [ ] Criar checkpoint final
+- [x] Criar checkpoint final
 
 
 ## Sistema de Múltiplos Repertórios com Subpáginas
@@ -633,4 +633,12 @@
 - [x] Atualizar rotas no App.tsx
 - [x] Implementar botão "Ouvir" com fallback automático
 - [x] Testar todas as páginas
+- [x] Criar checkpoint final
+
+
+## Atualização da Logo do Site
+- [x] Copiar nova logo (cruz moderna rosa/roxo) para client/public/
+- [x] Atualizar referência no const.ts
+- [x] Destacar logo na página Sobre com seção hero
+- [x] Testar em todas as páginas
 - [ ] Criar checkpoint final
