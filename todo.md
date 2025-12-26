@@ -641,4 +641,11 @@
 - [x] Atualizar referência no const.ts
 - [x] Destacar logo na página Sobre com seção hero
 - [x] Testar em todas as páginas
+- [x] Criar checkpoint final
+
+
+## Remover Fundo da Logo
+- [x] Processar imagem para remover fundo preto
+- [x] Substituir logo no projeto
+- [x] Testar em todas as páginas
 - [ ] Criar checkpoint final
