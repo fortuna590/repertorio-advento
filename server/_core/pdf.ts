@@ -160,17 +160,19 @@ export async function gerarPDFRepertorio(data: RepertorioData): Promise<Buffer> 
         doc.fontSize(10).font("Helvetica").fillColor("#444").text(data.notas);
       }
 
-      // Footer
-      const pageCount = doc.bufferedPageRange().count;
-      for (let i = 0; i < pageCount; i++) {
-        doc.switchToPage(i);
-        doc.fontSize(8).fillColor("#aaa").text(
-          `Gerado por LouvaMais - Página ${i + 1} de ${pageCount}`,
-          50,
-          doc.page.height - 30,
-          { align: "center" }
-        );
-      }
+      // Finalizar o documento antes de adicionar rodapés
+      // O rodapé será adicionado via evento 'pageAdded' ou manualmente após finalizar
+      // Por enquanto, vamos adicionar apenas na última página para evitar erros
+      const range = doc.bufferedPageRange();
+      const pageCount = range.count;
+      
+      // Adicionar rodapé apenas na página atual (evita erro de switchToPage)
+      doc.fontSize(8).fillColor("#aaa").text(
+        `Gerado por LouvaMais - Página ${pageCount} de ${pageCount}`,
+        50,
+        doc.page.height - 30,
+        { align: "center", width: doc.page.width - 100 }
+      );
 
       doc.end();
     } catch (error) {

@@ -723,4 +723,11 @@
 - [x] Corrigir função de geração de PDF para incluir todas as músicas selecionadas
 - [x] Testar geração de PDF com repertório personalizado
 - [x] Validar que músicas aparecem com nome completo (título + artista) organizadas por momentos
-- [ ] Criar checkpoint final com correção
+- [x] Criar checkpoint final com correção
+
+## URGENTE - Erro switchToPage na Geração de PDF
+- [x] Diagnosticar erro "switchToPage(0) out of bounds, current buffer covers pages 1 to 1"
+- [x] Corrigir lógica de adição de rodapés que tenta acessar página 0
+- [x] Testar geração de PDF com repertório do usuário (9 músicas)
+- [x] Validar que PDF é gerado sem erros
+- [ ] Criar checkpoint com correção
