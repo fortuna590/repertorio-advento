@@ -356,12 +356,38 @@ export const repertoriosRouter = router({
         throw new Error("Você não tem permissão para acessar este repertório");
       }
 
-      const musicas = JSON.parse(repertorio.musicas || "[]");
+      const musicasIds = JSON.parse(repertorio.musicas || "[]");
+      
+      // Importar repertório completo para buscar dados das músicas
+      const { repertorioCompleto } = await import("../../client/src/data/repertorioCompleto");
+      
+      // Criar mapa de músicas por ID
+      const musicasMap = new Map();
+      repertorioCompleto.forEach(momento => {
+        momento.musicas.forEach(musica => {
+          const musicaId = `${momento.id}-${musica.numero || musica.id}`;
+          musicasMap.set(musicaId, {
+            id: musicaId,
+            titulo: musica.titulo,
+            artista: musica.artista,
+            momento: momento.titulo,
+            tom: musica.observacao?.match(/Tom:\s*([A-G][#b]?[m]?)/)?.[1] || "",
+            cifraResumo: musica.cifra || "",
+            linkYouTube: musica.youtube || "",
+            linkCifra: musica.cifra || "",
+          });
+        });
+      });
+      
+      // Buscar dados completos das músicas
+      const musicasCompletas = musicasIds
+        .map((id: string) => musicasMap.get(id))
+        .filter((m: any) => m !== undefined);
       
       const pdfBuffer = await gerarPDFRepertorio({
         nome: repertorio.nome,
         descricao: repertorio.descricao || undefined,
-        musicas,
+        musicas: musicasCompletas,
         dataCelebracao: repertorio.dataCelebracao ? repertorio.dataCelebracao.toISOString() : undefined,
         notas: repertorio.notas || undefined,
       });

@@ -46,6 +46,7 @@ export default function MontarRepertorio() {
   const [termoBusca, setTermoBusca] = useState("");
   const [repertorioFiltro, setRepertorioFiltro] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [modoSelecao, setModoSelecao] = useState<'livre' | 'momentos'>('livre');
 
   // Filtrar m\u00fasicas com base no termo de busca e repert\u00f3rio
   const momentosFiltrados = useMemo(() => {
@@ -128,12 +129,26 @@ export default function MontarRepertorio() {
     );
   }
 
-  const handleToggleMusica = (musicaId: string) => {
-    setMusicasSelecionadas((prev) =>
-      prev.includes(musicaId)
-        ? prev.filter((id) => id !== musicaId)
-        : [...prev, musicaId]
-    );
+  const handleToggleMusica = (musicaId: string, momentoId: string) => {
+    setMusicasSelecionadas((prev) => {
+      if (modoSelecao === 'momentos') {
+        // No modo por momentos, remover outras músicas do mesmo momento
+        const semMomentoAtual = prev.filter((id) => !id.startsWith(momentoId));
+        
+        // Se a música já estava selecionada, apenas remove
+        if (prev.includes(musicaId)) {
+          return semMomentoAtual;
+        }
+        
+        // Caso contrário, adiciona a nova música
+        return [...semMomentoAtual, musicaId];
+      } else {
+        // Modo livre: comportamento normal
+        return prev.includes(musicaId)
+          ? prev.filter((id) => id !== musicaId)
+          : [...prev, musicaId];
+      }
+    });
   };
 
   const handleAplicarTemplate = (template: TemplateRepertorio) => {
@@ -325,6 +340,47 @@ export default function MontarRepertorio() {
 
           {/* Seleção de Músicas - Usando dados de todos os repertórios */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Toggle de Modo de Seleção */}
+            <Card className="bg-gradient-to-r from-indigo-900/50 to-purple-900/50 border-indigo-500/30">
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-white font-semibold flex items-center gap-2">
+                      <Music className="w-5 h-5 text-indigo-400" />
+                      Modo de Seleção
+                    </h3>
+                    <p className="text-indigo-200 text-sm mt-1">
+                      {modoSelecao === 'livre'
+                        ? 'Escolha livremente quantas músicas quiser'
+                        : 'Selecione uma música por momento litúrgico'}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setModoSelecao('livre')}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                        modoSelecao === 'livre'
+                          ? 'bg-indigo-600 text-white shadow-lg'
+                          : 'bg-slate-700 text-indigo-300 hover:bg-slate-600'
+                      }`}
+                    >
+                      Livre
+                    </button>
+                    <button
+                      onClick={() => setModoSelecao('momentos')}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                        modoSelecao === 'momentos'
+                          ? 'bg-indigo-600 text-white shadow-lg'
+                          : 'bg-slate-700 text-indigo-300 hover:bg-slate-600'
+                      }`}
+                    >
+                      Por Momentos
+                    </button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
             {/* Campo de Busca */}
             <Card className="bg-slate-800/50 border-purple-500/20">
               <CardContent className="pt-6">
@@ -369,7 +425,7 @@ export default function MontarRepertorio() {
                           : 'bg-slate-700 text-purple-300 hover:bg-slate-600'
                       }`}
                     >
-                      \ud83d\udd6f\ufe0f Advento
+                      🕯️ Advento
                     </button>
                     <button
                       onClick={() => setRepertorioFiltro('missa-galo')}
@@ -379,7 +435,7 @@ export default function MontarRepertorio() {
                           : 'bg-slate-700 text-orange-300 hover:bg-slate-600'
                       }`}
                     >
-                      \ud83c\udf84 Missa do Galo
+                      🎄 Missa do Galo
                     </button>
                     <button
                       onClick={() => setRepertorioFiltro('tempo-natal')}
@@ -389,7 +445,7 @@ export default function MontarRepertorio() {
                           : 'bg-slate-700 text-cyan-300 hover:bg-slate-600'
                       }`}
                     >
-                      \u2b50 Tempo do Natal
+                      ⭐ Tempo do Natal
                     </button>
                   </div>
                 </div>
@@ -401,9 +457,16 @@ export default function MontarRepertorio() {
                 className="bg-slate-800/50 border-purple-500/20"
               >
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
-                    <span className="text-2xl">{momento.numero}</span>
-                    {momento.titulo}
+                  <CardTitle className="text-white flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl">{momento.numero}</span>
+                      {momento.titulo}
+                    </div>
+                    {modoSelecao === 'momentos' && (
+                      <span className="text-xs bg-indigo-600 text-white px-2 py-1 rounded-full">
+                        Selecione 1 música
+                      </span>
+                    )}
                   </CardTitle>
                   {momento.observacao && (
                     <p className="text-purple-300 text-sm mt-1">
@@ -419,7 +482,7 @@ export default function MontarRepertorio() {
                       return (
                         <div
                           key={musicaId}
-                          onClick={() => handleToggleMusica(musicaId)}
+                          onClick={() => handleToggleMusica(musicaId, momento.id)}
                           className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
                             isSelected
                               ? "bg-purple-600/20 border-purple-500/50"
@@ -428,7 +491,7 @@ export default function MontarRepertorio() {
                         >
                           <Checkbox
                             checked={isSelected}
-                            onCheckedChange={() => handleToggleMusica(musicaId)}
+                            onCheckedChange={() => handleToggleMusica(musicaId, momento.id)}
                             className="border-purple-400"
                           />
                           <div className="flex-1 min-w-0">

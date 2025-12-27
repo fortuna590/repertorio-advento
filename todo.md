@@ -705,4 +705,14 @@
 - [x] Gerar QR codes para links de YouTube e cifras
 - [x] Adicionar botão "Exportar PDF" na página de detalhes do repertório
 - [x] Testar exportação e qualidade do PDF
+- [x] Criar checkpoint final
+
+
+## Correções Urgentes e Melhorias
+- [x] Corrigir PDF vazio - incluir todas as músicas com nome completo e artista
+- [ ] Melhorar layout do PDF com logo em destaque
+- [x] Corrigir caracteres estranhos nos filtros (emojis como \ud83d\udd6f)
+- [x] Criar layout de seleção por momentos litúrgicos
+- [x] Manter opção de seleção livre como padrão
+- [x] Testar todas as correções
 - [ ] Criar checkpoint final
