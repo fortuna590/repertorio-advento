@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -20,6 +20,7 @@ import {
   Guitar,
   Sparkles,
   Zap,
+  Search,
 } from "lucide-react";
 import { Link } from "wouter";
 import { repertorioCompleto } from "@/data/repertorioCompleto";
@@ -32,10 +33,37 @@ export default function MontarRepertorio() {
   const [descricao, setDescricao] = useState("");
   const [dataCelebracao, setDataCelebracao] = useState("");
   const [musicasSelecionadas, setMusicasSelecionadas] = useState<string[]>([]);
+  const [termoBusca, setTermoBusca] = useState("");
+
+  // Filtrar m\u00fasicas com base no termo de busca
+  const momentosFiltrados = useMemo(() => {
+    if (!termoBusca.trim()) return repertorioCompleto;
+
+    const termoLower = termoBusca.toLowerCase();
+    return repertorioCompleto
+      .map((momento) => ({
+        ...momento,
+        musicas: momento.musicas.filter(
+          (musica) =>
+            musica.titulo.toLowerCase().includes(termoLower) ||
+            musica.artista.toLowerCase().includes(termoLower) ||
+            momento.titulo.toLowerCase().includes(termoLower)
+        ),
+      }))
+      .filter((momento) => momento.musicas.length > 0);
+  }, [termoBusca]);
+
+  // Contar total de m\u00fasicas filtradas
+  const totalMusicasFiltradas = useMemo(() => {
+    return momentosFiltrados.reduce(
+      (total: number, momento) => total + momento.musicas.length,
+      0
+    );
+  }, [momentosFiltrados]);
 
   const createMutation = trpc.repertorios.create.useMutation({
     onSuccess: (data) => {
-      toast.success("Repertório criado com sucesso!");
+      toast.success("Repert\u00f3rio criado com sucesso!");
       navigate(`/repertorio/${data.repertorioId}`);
     },
     onError: (error) => {
@@ -43,7 +71,7 @@ export default function MontarRepertorio() {
     },
   });
 
-  // Redirect para login se não autenticado
+  // Redirect para login se n\u00e3o autenticado
   if (!authLoading && !user) {
     navigate("/login");
     return null;
@@ -228,7 +256,27 @@ export default function MontarRepertorio() {
 
           {/* Seleção de Músicas - Usando dados de todos os repertórios */}
           <div className="lg:col-span-2 space-y-6">
-            {repertorioCompleto.map((momento) => (
+            {/* Campo de Busca */}
+            <Card className="bg-slate-800/50 border-purple-500/20">
+              <CardContent className="pt-6">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400" />
+                  <Input
+                    type="text"
+                    placeholder="Buscar por título, artista ou momento litúrgico..."
+                    value={termoBusca}
+                    onChange={(e) => setTermoBusca(e.target.value)}
+                    className="pl-10 bg-slate-700 border-purple-500/30 text-white placeholder:text-purple-400"
+                  />
+                </div>
+                {termoBusca && (
+                  <p className="text-purple-300 text-sm mt-2">
+                    {totalMusicasFiltradas} {totalMusicasFiltradas === 1 ? 'música encontrada' : 'músicas encontradas'}
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+            {momentosFiltrados.map((momento) => (
               <Card
                 key={momento.id}
                 className="bg-slate-800/50 border-purple-500/20"

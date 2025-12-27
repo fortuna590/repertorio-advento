@@ -648,7 +648,7 @@
 - [x] Processar imagem para remover fundo preto
 - [x] Substituir logo no projeto
 - [x] Testar em todas as páginas
-- [ ] Criar checkpoint final
+- [x] Criar checkpoint final
 
 
 ## Repertório do Tempo do Natal
@@ -680,4 +680,12 @@
 - [x] Investigar estrutura de IDs no repertorioCompleto.ts
 - [x] Atualizar RepertorioDetalhe.tsx para usar repertorioCompleto
 - [x] Testar criação e visualização de repertório
+- [x] Criar checkpoint final
+
+
+## Campo de Busca no Montar Repertório
+- [x] Adicionar input de busca acima da lista de músicas
+- [x] Implementar lógica de filtragem por título, artista e momento
+- [x] Adicionar indicador de resultados encontrados
+- [x] Testar funcionalidade
 - [ ] Criar checkpoint final
