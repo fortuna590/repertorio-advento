@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Music, Calendar, Sparkles, Church } from "lucide-react";
+import { Music, Calendar, Sparkles, Church, Star } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import ModernHeader from "@/components/ModernHeader";
@@ -29,6 +29,18 @@ export default function Repertorios() {
       link: "/repertorio/missa-do-galo",
       icone: Church,
       gradiente: "from-yellow-500/20 to-orange-500/20"
+    },
+    {
+      id: "tempo-do-natal",
+      titulo: "Tempo do Natal",
+      descricao: "Repertório para a Festa da Sagrada Família e celebrações natalinas",
+      tempoLiturgico: "Natal",
+      cor: "branco",
+      totalMusicas: 10,
+      totalMomentos: 9,
+      link: "/repertorio/tempo-do-natal",
+      icone: Star,
+      gradiente: "from-blue-500/20 to-cyan-500/20"
     }
   ];
 

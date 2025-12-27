@@ -649,3 +649,12 @@
 - [x] Substituir logo no projeto
 - [x] Testar em todas as páginas
 - [ ] Criar checkpoint final
+
+
+## Repertório do Tempo do Natal
+- [x] Criar arquivo repertorioTempoDoNatal.ts com 10 músicas
+- [x] Adicionar card na página de seleção de repertórios
+- [x] Criar página RepertorioTempoDoNatal.tsx
+- [x] Atualizar rotas no App.tsx
+- [x] Testar todas as funcionalidades
+- [ ] Criar checkpoint final

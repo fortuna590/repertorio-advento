@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Repertorio from "./pages/Repertorio";
 import Repertorios from "./pages/Repertorios";
 import RepertorioMissaDoGalo from "./pages/RepertorioMissaDoGalo";
+import RepertorioTempoDoNatal from "./pages/RepertorioTempoDoNatal";
 // import Stats from "./pages/Stats"; // Replaced with Estatisticas.tsx
 // import About from "./pages/About"; // Replaced with Sobre.tsx
 import Contact from "./pages/Contact";
@@ -45,6 +46,7 @@ function Router() {
       <Route path={"/repertorios"} component={Repertorios} />
       <Route path={"/repertorio"} component={Repertorio} />
       <Route path={"/repertorio/missa-do-galo"} component={RepertorioMissaDoGalo} />
+      <Route path={"/repertorio/tempo-do-natal"} component={RepertorioTempoDoNatal} />
       <Route path={"/estatisticas"} component={Estatisticas} />
       <Route path={"/contato"} component={Contact} />
       <Route path={"/doacao"} component={Donate} />
