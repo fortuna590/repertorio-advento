@@ -7,6 +7,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { toast } from "sonner";
 import ModernHeader from "@/components/ModernHeader";
 import {
@@ -21,6 +28,9 @@ import {
   Sparkles,
   Zap,
   Search,
+  X,
+  Eye,
+  Filter,
 } from "lucide-react";
 import { Link } from "wouter";
 import { repertorioCompleto } from "@/data/repertorioCompleto";
@@ -34,24 +44,36 @@ export default function MontarRepertorio() {
   const [dataCelebracao, setDataCelebracao] = useState("");
   const [musicasSelecionadas, setMusicasSelecionadas] = useState<string[]>([]);
   const [termoBusca, setTermoBusca] = useState("");
+  const [repertorioFiltro, setRepertorioFiltro] = useState<string | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
 
-  // Filtrar m\u00fasicas com base no termo de busca
+  // Filtrar m\u00fasicas com base no termo de busca e repert\u00f3rio
   const momentosFiltrados = useMemo(() => {
-    if (!termoBusca.trim()) return repertorioCompleto;
+    let filtered = repertorioCompleto;
 
-    const termoLower = termoBusca.toLowerCase();
-    return repertorioCompleto
-      .map((momento) => ({
-        ...momento,
-        musicas: momento.musicas.filter(
-          (musica) =>
-            musica.titulo.toLowerCase().includes(termoLower) ||
-            musica.artista.toLowerCase().includes(termoLower) ||
-            momento.titulo.toLowerCase().includes(termoLower)
-        ),
-      }))
-      .filter((momento) => momento.musicas.length > 0);
-  }, [termoBusca]);
+    // Filtrar por repert\u00f3rio
+    if (repertorioFiltro) {
+      filtered = filtered.filter((momento) => momento.id.startsWith(repertorioFiltro));
+    }
+
+    // Filtrar por termo de busca
+    if (termoBusca.trim()) {
+      const termoLower = termoBusca.toLowerCase();
+      filtered = filtered
+        .map((momento) => ({
+          ...momento,
+          musicas: momento.musicas.filter(
+            (musica) =>
+              musica.titulo.toLowerCase().includes(termoLower) ||
+              musica.artista.toLowerCase().includes(termoLower) ||
+              momento.titulo.toLowerCase().includes(termoLower)
+          ),
+        }))
+        .filter((momento) => momento.musicas.length > 0);
+    }
+
+    return filtered;
+  }, [termoBusca, repertorioFiltro]);
 
   // Contar total de m\u00fasicas filtradas
   const totalMusicasFiltradas = useMemo(() => {
@@ -60,6 +82,27 @@ export default function MontarRepertorio() {
       0
     );
   }, [momentosFiltrados]);
+
+  // Agrupar m\u00fasicas selecionadas por momento para preview
+  const musicasAgrupadas = useMemo(() => {
+    const grupos: Record<string, { momento: typeof repertorioCompleto[0], musicas: typeof repertorioCompleto[0]['musicas'] }> = {};
+    
+    musicasSelecionadas.forEach((musicaId) => {
+      // Encontrar o momento que cont\u00e9m esta m\u00fasica
+      for (const momento of repertorioCompleto) {
+        const musica = momento.musicas.find((m) => `${momento.id}-${m.numero}` === musicaId);
+        if (musica) {
+          if (!grupos[momento.id]) {
+            grupos[momento.id] = { momento, musicas: [] };
+          }
+          grupos[momento.id].musicas.push(musica);
+          break;
+        }
+      }
+    });
+    
+    return Object.values(grupos);
+  }, [musicasSelecionadas]);
 
   const createMutation = trpc.repertorios.create.useMutation({
     onSuccess: (data) => {
@@ -98,6 +141,11 @@ export default function MontarRepertorio() {
     setDescricao(template.descricao);
     setMusicasSelecionadas(template.musicasSelecionadas);
     toast.success(`Template "${template.nome}" aplicado com sucesso!`);
+  };
+
+  const handleLimparSelecao = () => {
+    setMusicasSelecionadas([]);
+    toast.success("Sele\u00e7\u00e3o limpa!");
   };
 
   const handleSalvar = () => {
@@ -242,13 +290,34 @@ export default function MontarRepertorio() {
                 </div>
 
                 {/* Resumo */}
-                <div className="pt-4 border-t border-purple-500/20">
+                <div className="pt-4 border-t border-purple-500/20 space-y-3">
                   <div className="flex items-center justify-between text-purple-200">
-                    <span className="text-sm">Músicas selecionadas:</span>
+                    <span className="text-sm">M\u00fasicas selecionadas:</span>
                     <span className="font-bold text-lg text-white">
                       {musicasSelecionadas.length}
                     </span>
                   </div>
+                  
+                  {musicasSelecionadas.length > 0 && (
+                    <div className="flex flex-col gap-2">
+                      <Button
+                        onClick={() => setShowPreview(true)}
+                        variant="outline"
+                        className="w-full bg-purple-600/20 border-purple-500/50 hover:bg-purple-600/30 text-white"
+                      >
+                        <Eye className="w-4 h-4 mr-2" />
+                        Visualizar Preview
+                      </Button>
+                      <Button
+                        onClick={handleLimparSelecao}
+                        variant="outline"
+                        className="w-full bg-red-600/20 border-red-500/50 hover:bg-red-600/30 text-white"
+                      >
+                        <X className="w-4 h-4 mr-2" />
+                        Limpar Sele\u00e7\u00e3o
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -269,11 +338,61 @@ export default function MontarRepertorio() {
                     className="pl-10 bg-slate-700 border-purple-500/30 text-white placeholder:text-purple-400"
                   />
                 </div>
-                {termoBusca && (
+                {(termoBusca || repertorioFiltro) && (
                   <p className="text-purple-300 text-sm mt-2">
-                    {totalMusicasFiltradas} {totalMusicasFiltradas === 1 ? 'música encontrada' : 'músicas encontradas'}
+                    {totalMusicasFiltradas} {totalMusicasFiltradas === 1 ? 'm\u00fasica encontrada' : 'm\u00fasicas encontradas'}
                   </p>
                 )}
+                
+                {/* Filtros por Repert\u00f3rio */}
+                <div className="mt-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Filter className="w-4 h-4 text-purple-400" />
+                    <span className="text-sm text-purple-200">Filtrar por repert\u00f3rio:</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={() => setRepertorioFiltro(null)}
+                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                        repertorioFiltro === null
+                          ? 'bg-purple-600 text-white'
+                          : 'bg-slate-700 text-purple-300 hover:bg-slate-600'
+                      }`}
+                    >
+                      Todos
+                    </button>
+                    <button
+                      onClick={() => setRepertorioFiltro('advento')}
+                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                        repertorioFiltro === 'advento'
+                          ? 'bg-purple-600 text-white'
+                          : 'bg-slate-700 text-purple-300 hover:bg-slate-600'
+                      }`}
+                    >
+                      \ud83d\udd6f\ufe0f Advento
+                    </button>
+                    <button
+                      onClick={() => setRepertorioFiltro('missa-galo')}
+                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                        repertorioFiltro === 'missa-galo'
+                          ? 'bg-orange-600 text-white'
+                          : 'bg-slate-700 text-orange-300 hover:bg-slate-600'
+                      }`}
+                    >
+                      \ud83c\udf84 Missa do Galo
+                    </button>
+                    <button
+                      onClick={() => setRepertorioFiltro('tempo-natal')}
+                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                        repertorioFiltro === 'tempo-natal'
+                          ? 'bg-cyan-600 text-white'
+                          : 'bg-slate-700 text-cyan-300 hover:bg-slate-600'
+                      }`}
+                    >
+                      \u2b50 Tempo do Natal
+                    </button>
+                  </div>
+                </div>
               </CardContent>
             </Card>
             {momentosFiltrados.map((momento) => (
@@ -364,6 +483,109 @@ export default function MontarRepertorio() {
           </div>
         </div>
       </div>
+
+      {/* Modal de Preview */}
+      <Dialog open={showPreview} onOpenChange={setShowPreview}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-slate-900 border-purple-500/30">
+          <DialogHeader>
+            <DialogTitle className="text-2xl text-white flex items-center gap-2">
+              <Eye className="w-6 h-6 text-purple-400" />
+              Preview do Repert\u00f3rio
+            </DialogTitle>
+            <DialogDescription className="text-purple-300">
+              Revise as m\u00fasicas selecionadas antes de salvar
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-6 mt-4">
+            {/* Informa\u00e7\u00f5es do Repert\u00f3rio */}
+            <div className="bg-slate-800/50 rounded-lg p-4 border border-purple-500/20">
+              <h3 className="text-lg font-semibold text-white mb-2">{nome || "Sem nome"}</h3>
+              {descricao && <p className="text-purple-300 text-sm">{descricao}</p>}
+              <div className="flex items-center gap-4 mt-3 text-sm text-purple-200">
+                <span>Total: {musicasSelecionadas.length} m\u00fasicas</span>
+                {dataCelebracao && (
+                  <span className="flex items-center gap-1">
+                    <Calendar className="w-4 h-4" />
+                    {new Date(dataCelebracao + 'T00:00').toLocaleDateString('pt-BR')}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* M\u00fasicas Agrupadas por Momento */}
+            {musicasAgrupadas.length === 0 ? (
+              <p className="text-purple-300 text-center py-8">Nenhuma m\u00fasica selecionada</p>
+            ) : (
+              musicasAgrupadas.map((grupo, idx) => (
+                <div key={idx} className="bg-slate-800/30 rounded-lg p-4 border border-purple-500/10">
+                  <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
+                    <span className="text-xl">{grupo.momento.numero}</span>
+                    {grupo.momento.titulo}
+                  </h4>
+                  <div className="space-y-2">
+                    {grupo.musicas.map((musica, musicaIdx) => (
+                      <div
+                        key={musicaIdx}
+                        className="flex items-center justify-between bg-slate-700/30 rounded p-3"
+                      >
+                        <div>
+                          <p className="text-white font-medium">{musica.titulo}</p>
+                          <p className="text-purple-300 text-sm">{musica.artista}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {musica.youtube && (
+                            <a
+                              href={musica.youtube}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 rounded-full bg-red-600/20 hover:bg-red-600/40 transition-colors"
+                            >
+                              <Youtube className="w-4 h-4 text-red-400" />
+                            </a>
+                          )}
+                          {musica.cifra && (
+                            <a
+                              href={musica.cifra}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 rounded-full bg-orange-600/20 hover:bg-orange-600/40 transition-colors"
+                            >
+                              <Guitar className="w-4 h-4 text-orange-400" />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))
+            )}
+
+            {/* Bot\u00f5es de A\u00e7\u00e3o */}
+            <div className="flex gap-3 pt-4 border-t border-purple-500/20">
+              <Button
+                onClick={() => setShowPreview(false)}
+                variant="outline"
+                className="flex-1 bg-slate-700 border-purple-500/30 hover:bg-slate-600 text-white"
+              >
+                Voltar para Edi\u00e7\u00e3o
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowPreview(false);
+                  handleSalvar();
+                }}
+                disabled={createMutation.isPending || musicasSelecionadas.length === 0 || !nome.trim()}
+                className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              >
+                <Save className="w-4 h-4 mr-2" />
+                {createMutation.isPending ? "Salvando..." : "Confirmar e Salvar"}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

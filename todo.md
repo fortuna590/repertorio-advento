@@ -688,4 +688,12 @@
 - [x] Implementar lógica de filtragem por título, artista e momento
 - [x] Adicionar indicador de resultados encontrados
 - [x] Testar funcionalidade
+- [x] Criar checkpoint final
+
+
+## Melhorias no Montar Repertório
+- [x] Implementar botão "Limpar Seleção" para desmarcar todas as músicas
+- [x] Adicionar filtros por repertório (Advento, Missa do Galo, Tempo do Natal)
+- [x] Criar modal de preview antes de salvar
+- [x] Testar funcionalidade
 - [ ] Criar checkpoint final
