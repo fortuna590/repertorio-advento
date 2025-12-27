@@ -24,12 +24,12 @@ import {
 } from "lucide-react";
 import { Link } from "wouter";
 import { generateRepertorioPDF } from "@/lib/pdfGenerator";
-import { repertorio } from "@/data/repertorio";
+import { repertorioCompleto } from "@/data/repertorioCompleto";
 
-// Criar mapa de músicas a partir do repertorio.ts para acesso rápido
+// Criar mapa de músicas a partir do repertorioCompleto.ts para acesso rápido
 const musicasMap: Record<string, { titulo: string; artista: string; momento: string; youtube: string; cifra: string; observacao?: string }> = {};
 
-repertorio.forEach((momento) => {
+repertorioCompleto.forEach((momento) => {
   momento.musicas.forEach((musica) => {
     const musicaId = `${momento.id}-${musica.numero}`;
     musicasMap[musicaId] = {

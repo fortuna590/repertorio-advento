@@ -107,29 +107,29 @@ export const templatesRepertorio: TemplateRepertorio[] = [
       "tempo-natal-entrada-1", // Olhando a Sagrada Família
       
       // Ato Penitencial
-      "tempo-natal-ato-penitencial-1", // Senhor que Viestes Salvar
+      "tempo-natal-ato-penitencial-2", // Senhor que Viestes Salvar
       
       // Glória
-      "tempo-natal-gloria-1", // Glória a Deus nas Alturas
+      "tempo-natal-glória-3", // Glória a Deus nas Alturas
       
       // Aclamação ao Evangelho
-      "tempo-natal-aclamacao-ao-evangelho-1", // O Cristo Já Nasceu (Na Gruta de Belém)
+      "tempo-natal-aclamação-ao-evangelho-4", // O Cristo Já Nasceu (Na Gruta de Belém)
       
       // Ofertório
-      "tempo-natal-ofertorio-1", // A Mesa Santa
+      "tempo-natal-ofertório-5", // A Mesa Santa
       
       // Santo
-      "tempo-natal-santo-1", // Santo - Deus do Universo
+      "tempo-natal-santo-6", // Santo - Deus do Universo
       
       // Cordeiro
-      "tempo-natal-cordeiro-de-deus-1", // Cordeiro
+      "tempo-natal-cordeiro-de-deus-7", // Cordeiro
       
       // Comunhão
-      "tempo-natal-comunhao-1", // Venho Senhor
-      "tempo-natal-comunhao-2", // Entre Nós
+      "tempo-natal-comunhão-8", // Venho Senhor
+      "tempo-natal-comunhão-9", // Entre Nós
       
       // Final
-      "tempo-natal-final-1", // A Escolhida
+      "tempo-natal-final-10", // A Escolhida
     ]
   },
   {

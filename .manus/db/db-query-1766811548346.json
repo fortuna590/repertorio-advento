@@ -1,0 +1,13 @@
+{
+  "query": "SELECT musicas FROM repertorios WHERE nome = 'Tempo do Natal - Sagrada Família' LIMIT 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT musicas FROM repertorios WHERE nome = 'Tempo do Natal - Sagrada Família' LIMIT 1;",
+  "rows": [
+    {
+      "musicas": "[\"tempo-natal-entrada-1\",\"tempo-natal-ato-penitencial-1\",\"tempo-natal-gloria-1\",\"tempo-natal-aclamacao-ao-evangelho-1\",\"tempo-natal-ofertorio-1\",\"tempo-natal-santo-1\",\"tempo-natal-cordeiro-de-deus-1\",\"tempo-natal-comunhao-1\",\"tempo-natal-comunhao-2\",\"tempo-natal-final-1\"]"
+    }
+  ],
+  "messages": [],
+  "stdout": "musicas\n[\"tempo-natal-entrada-1\",\"tempo-natal-ato-penitencial-1\",\"tempo-natal-gloria-1\",\"tempo-natal-aclamacao-ao-evangelho-1\",\"tempo-natal-ofertorio-1\",\"tempo-natal-santo-1\",\"tempo-natal-cordeiro-de-deus-1\",\"tempo-natal-comunhao-1\",\"tempo-natal-comunhao-2\",\"tempo-natal-final-1\"]\n",
+  "stderr": "",
+  "execution_time_ms": 59
+}

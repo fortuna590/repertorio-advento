@@ -1,0 +1,26 @@
+{
+  "query": "SELECT * FROM repertorios WHERE nome LIKE '%Tempo do Natal%' LIMIT 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT * FROM repertorios WHERE nome LIKE '%Tempo do Natal%' LIMIT 1;",
+  "rows": [
+    {
+      "id": "330002",
+      "nome": "Tempo do Natal - Sagrada Família",
+      "descricao": "Repertório para celebrações do Tempo do Natal, especialmente para a Festa da Sagrada Família",
+      "musicas": "[\"tempo-natal-entrada-1\",\"tempo-natal-ato-penitencial-1\",\"tempo-natal-gloria-1\",\"tempo-natal-aclamacao-ao-evangelho-1\",\"tempo-natal-ofertorio-1\",\"tempo-natal-santo-1\",\"tempo-natal-cordeiro-de-deus-1\",\"tempo-natal-comunhao-1\",\"tempo-natal-comunhao-2\",\"tempo-natal-final-1\"]",
+      "emailUsuario": "fortuna590@gmail.com",
+      "nomeUsuario": "Tiago Fortuna Santos",
+      "createdAt": "2025-12-27 04:54:17",
+      "updatedAt": "2025-12-27 04:54:17",
+      "userId": "1",
+      "notas": "NULL",
+      "ordemMusicas": "[\"tempo-natal-entrada-1\",\"tempo-natal-ato-penitencial-1\",\"tempo-natal-gloria-1\",\"tempo-natal-aclamacao-ao-evangelho-1\",\"tempo-natal-ofertorio-1\",\"tempo-natal-santo-1\",\"tempo-natal-cordeiro-de-deus-1\",\"tempo-natal-comunhao-1\",\"tempo-natal-comunhao-2\",\"tempo-natal-final-1\"]",
+      "shareId": "NULL",
+      "isPublic": "0",
+      "dataCelebracao": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tnome\tdescricao\tmusicas\temailUsuario\tnomeUsuario\tcreatedAt\tupdatedAt\tuserId\tnotas\tordemMusicas\tshareId\tisPublic\tdataCelebracao\n330002\tTempo do Natal - Sagrada Família\tRepertório para celebrações do Tempo do Natal, especialmente para a Festa da Sagrada Família\t[\"tempo-natal-entrada-1\",\"tempo-natal-ato-penitencial-1\",\"tempo-natal-gloria-1\",\"tempo-natal-aclamacao-ao-evangelho-1\",\"tempo-natal-ofertorio-1\",\"tempo-natal-santo-1\",\"tempo-natal-cordeiro-de-deus-1\",\"tempo-natal-comunhao-1\",\"tempo-natal-comunhao-2\",\"tempo-natal-final-1\"]\tfortuna590@gmail.com\tTiago Fortuna Santos\t2025-12-27 04:54:17\t2025-12-27 04:54:17\t1\tNULL\t[\"tempo-natal-entrada-1\",\"tempo-natal-ato-penitencial-1\",\"tempo-natal-gloria-1\",\"tempo-natal-aclamacao-ao-evangelho-1\",\"tempo-natal-ofertorio-1\",\"tempo-natal-santo-1\",\"tempo-natal-cordeiro-de-deus-1\",\"tempo-natal-comunhao-1\",\"tempo-natal-comunhao-2\",\"tempo-natal-final-1\"]\tNULL\t0\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 96
+}

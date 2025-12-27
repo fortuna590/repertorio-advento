@@ -673,4 +673,11 @@
 - [x] Adicionar UI de seleção de templates
 - [x] Implementar lógica de aplicação de templates
 - [x] Testar funcionalidade
+- [x] Criar checkpoint final
+
+
+## Corrigir IDs das Músicas nos Templates
+- [x] Investigar estrutura de IDs no repertorioCompleto.ts
+- [x] Atualizar RepertorioDetalhe.tsx para usar repertorioCompleto
+- [x] Testar criação e visualização de repertório
 - [ ] Criar checkpoint final
