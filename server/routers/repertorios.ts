@@ -2,6 +2,7 @@ import { publicProcedure, router } from "../_core/trpc";
 import { z } from "zod";
 import { createRepertorio, getRepertorioById, getAllRepertorios, updateRepertorio, deleteRepertorio } from "../db";
 import { sendEmail, templateEmailRepertorio } from "../_core/email";
+import { gerarPDFRepertorio } from "../_core/pdf";
 import { getDb } from "../db";
 import { repertorios } from "../../drizzle/schema";
 import { eq, and, desc } from "drizzle-orm";
@@ -331,6 +332,46 @@ export const repertoriosRouter = router({
       await db.update(repertorios).set({ notas: input.notas }).where(eq(repertorios.id, input.id));
 
       return { success: true, message: "Notas atualizadas!" };
+    }),
+
+  // Exportar repertório em PDF
+  exportPDF: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const [repertorio] = await db
+        .select()
+        .from(repertorios)
+        .where(eq(repertorios.id, input.id))
+        .limit(1);
+
+      if (!repertorio) {
+        throw new Error("Repertório não encontrado");
+      }
+
+      // Verificar permissão: público ou dono
+      if (!repertorio.isPublic && repertorio.userId && repertorio.userId !== ctx.user?.id) {
+        throw new Error("Você não tem permissão para acessar este repertório");
+      }
+
+      const musicas = JSON.parse(repertorio.musicas || "[]");
+      
+      const pdfBuffer = await gerarPDFRepertorio({
+        nome: repertorio.nome,
+        descricao: repertorio.descricao || undefined,
+        musicas,
+        dataCelebracao: repertorio.dataCelebracao ? repertorio.dataCelebracao.toISOString() : undefined,
+        notas: repertorio.notas || undefined,
+      });
+
+      // Retornar PDF como base64
+      return {
+        success: true,
+        pdf: pdfBuffer.toString("base64"),
+        filename: `${repertorio.nome.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`,
+      };
     }),
 
   // Enviar repertório por email

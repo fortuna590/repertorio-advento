@@ -23,7 +23,6 @@ import {
   Guitar,
 } from "lucide-react";
 import { Link } from "wouter";
-import { generateRepertorioPDF } from "@/lib/pdfGenerator";
 import { repertorioCompleto } from "@/data/repertorioCompleto";
 
 // Criar mapa de músicas a partir do repertorioCompleto.ts para acesso rápido
@@ -155,26 +154,39 @@ export default function RepertorioDetalhe() {
     toast.success("Link copiado!");
   };
 
+  const exportPDFMutation = trpc.repertorios.exportPDF.useMutation({
+    onSuccess: (data) => {
+      // Converter base64 para blob e fazer download
+      const byteCharacters = atob(data.pdf);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: "application/pdf" });
+      
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = data.filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      toast.success("PDF gerado com sucesso!");
+    },
+    onError: (error) => {
+      toast.error(error.message || "Erro ao gerar PDF");
+    },
+  });
+
   const handleExportPDF = () => {
-    if (!repertorioData) return;
-
-    const musicasComDetalhes = ordemMusicas.map((musicaId) => ({
-      id: musicaId,
-      titulo: musicasMap[musicaId]?.titulo || musicaId,
-      artista: musicasMap[musicaId]?.artista || "Desconhecido",
-      momento: musicasMap[musicaId]?.momento || "Outras",
-    }));
-
-    generateRepertorioPDF({
-      nome: repertorioData.nome,
-      descricao: repertorioData.descricao || undefined,
-      notas: repertorioData.notas || undefined,
-      dataCelebracao: repertorioData.dataCelebracao ? String(repertorioData.dataCelebracao) : undefined,
-      musicas: musicasComDetalhes,
-      createdAt: repertorioData.createdAt ? String(repertorioData.createdAt) : undefined,
-    });
-
-    toast.success("PDF gerado com sucesso!");
+    if (!repertorioId) {
+      toast.error("ID do repertório não encontrado");
+      return;
+    }
+    exportPDFMutation.mutate({ id: repertorioId });
   };
 
   if (isLoading || authLoading) {
@@ -253,10 +265,11 @@ export default function RepertorioDetalhe() {
             <Button
               variant="outline"
               onClick={handleExportPDF}
+              disabled={exportPDFMutation.isPending}
               className="border-purple-500/30 text-purple-200 hover:bg-purple-600/30"
             >
               <Download className="w-4 h-4 mr-2" />
-              Exportar PDF
+              {exportPDFMutation.isPending ? "Gerando..." : "Exportar PDF"}
             </Button>
 
             {/* Ações do dono */}

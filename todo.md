@@ -696,4 +696,13 @@
 - [x] Adicionar filtros por repertório (Advento, Missa do Galo, Tempo do Natal)
 - [x] Criar modal de preview antes de salvar
 - [x] Testar funcionalidade
+- [x] Criar checkpoint final
+
+
+## Exportação PDF Melhorada de Repertórios
+- [x] Criar função de geração de PDF no backend com logo
+- [x] Adicionar cifras resumidas no PDF
+- [x] Gerar QR codes para links de YouTube e cifras
+- [x] Adicionar botão "Exportar PDF" na página de detalhes do repertório
+- [x] Testar exportação e qualidade do PDF
 - [ ] Criar checkpoint final
