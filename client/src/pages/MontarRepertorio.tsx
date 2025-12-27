@@ -18,9 +18,12 @@ import {
   CheckCircle2,
   Youtube,
   Guitar,
+  Sparkles,
+  Zap,
 } from "lucide-react";
 import { Link } from "wouter";
 import { repertorioCompleto } from "@/data/repertorioCompleto";
+import { templatesRepertorio, type TemplateRepertorio } from "@/data/templatesRepertorio";
 
 export default function MontarRepertorio() {
   const { user, loading: authLoading } = useAuth();
@@ -60,6 +63,13 @@ export default function MontarRepertorio() {
         ? prev.filter((id) => id !== musicaId)
         : [...prev, musicaId]
     );
+  };
+
+  const handleAplicarTemplate = (template: TemplateRepertorio) => {
+    setNome(template.nome);
+    setDescricao(template.descricao);
+    setMusicasSelecionadas(template.musicasSelecionadas);
+    toast.success(`Template "${template.nome}" aplicado com sucesso!`);
   };
 
   const handleSalvar = () => {
@@ -110,6 +120,50 @@ export default function MontarRepertorio() {
             {createMutation.isPending ? "Salvando..." : "Salvar Repertório"}
           </Button>
         </div>
+
+        {/* Templates Rápidos */}
+        <Card className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 border-purple-500/30 mb-6">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-yellow-400" />
+              Templates Rápidos
+            </CardTitle>
+            <p className="text-purple-200 text-sm mt-1">
+              Comece com um repertório pré-configurado e personalize conforme necessário
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+              {templatesRepertorio.map((template) => (
+                <button
+                  key={template.id}
+                  onClick={() => handleAplicarTemplate(template)}
+                  className="group relative bg-slate-800/70 hover:bg-slate-700/70 border border-purple-500/30 hover:border-purple-400/50 rounded-lg p-4 text-left transition-all hover:scale-105 hover:shadow-lg hover:shadow-purple-500/20"
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-3xl">{template.emoji}</span>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-white font-semibold text-sm mb-1 group-hover:text-purple-300 transition-colors">
+                        {template.nome}
+                      </h3>
+                      <p className="text-purple-300 text-xs line-clamp-2">
+                        {template.descricao}
+                      </p>
+                      <div className="flex items-center gap-2 mt-2">
+                        <span className="text-xs text-purple-400 bg-purple-500/20 px-2 py-0.5 rounded">
+                          {template.musicasSelecionadas.length} músicas
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Zap className="w-4 h-4 text-yellow-400" />
+                  </div>
+                </button>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
         <div className="grid gap-6 lg:grid-cols-3">
           {/* Formulário */}

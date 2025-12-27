@@ -665,4 +665,12 @@
 - [x] Adicionar músicas da Missa do Galo ao banco
 - [x] Adicionar músicas do Tempo do Natal ao banco
 - [x] Testar recurso de Montar Repertório
+- [x] Criar checkpoint final
+
+
+## Templates de Repertórios Litúrgicos
+- [x] Criar arquivo de templates pré-configurados
+- [x] Adicionar UI de seleção de templates
+- [x] Implementar lógica de aplicação de templates
+- [x] Testar funcionalidade
 - [ ] Criar checkpoint final
