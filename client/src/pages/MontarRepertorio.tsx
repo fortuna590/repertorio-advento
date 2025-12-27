@@ -20,7 +20,7 @@ import {
   Guitar,
 } from "lucide-react";
 import { Link } from "wouter";
-import { repertorio } from "@/data/repertorio";
+import { repertorioCompleto } from "@/data/repertorioCompleto";
 
 export default function MontarRepertorio() {
   const { user, loading: authLoading } = useAuth();
@@ -172,9 +172,9 @@ export default function MontarRepertorio() {
             </Card>
           </div>
 
-          {/* Seleção de Músicas - Usando dados reais do repertorio.ts */}
+          {/* Seleção de Músicas - Usando dados de todos os repertórios */}
           <div className="lg:col-span-2 space-y-6">
-            {repertorio.map((momento) => (
+            {repertorioCompleto.map((momento) => (
               <Card
                 key={momento.id}
                 className="bg-slate-800/50 border-purple-500/20"

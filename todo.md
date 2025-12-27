@@ -657,4 +657,12 @@
 - [x] Criar página RepertorioTempoDoNatal.tsx
 - [x] Atualizar rotas no App.tsx
 - [x] Testar todas as funcionalidades
+- [x] Criar checkpoint final
+
+
+## Integrar Novos Repertórios ao Montar Repertório
+- [x] Analisar estrutura do banco de dados de músicas
+- [x] Adicionar músicas da Missa do Galo ao banco
+- [x] Adicionar músicas do Tempo do Natal ao banco
+- [x] Testar recurso de Montar Repertório
 - [ ] Criar checkpoint final
