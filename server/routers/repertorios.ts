@@ -361,28 +361,77 @@ export const repertoriosRouter = router({
       // Importar repertório completo para buscar dados das músicas
       const { repertorioCompleto } = await import("../../client/src/data/repertorioCompleto");
       
-      // Criar mapa de músicas por ID
+      // Criar mapa de músicas por ID com TODOS os formatos possíveis
       const musicasMap = new Map();
+      
       repertorioCompleto.forEach(momento => {
         momento.musicas.forEach(musica => {
-          const musicaId = `${momento.id}-${musica.numero || musica.id}`;
-          musicasMap.set(musicaId, {
-            id: musicaId,
+          const musicaData = {
+            id: `${momento.id}-${musica.numero}`,
             titulo: musica.titulo,
             artista: musica.artista,
-            momento: momento.titulo,
+            momento: momento.titulo.replace(/ \(.*\)$/, ''), // Remove sufixos como (Missa do Galo)
             tom: musica.observacao?.match(/Tom:\s*([A-G][#b]?[m]?)/)?.[1] || "",
-            cifraResumo: musica.cifra || "",
+            cifraResumo: "",
             linkYouTube: musica.youtube || "",
             linkCifra: musica.cifra || "",
+          };
+          
+          // Gerar TODAS as variações possíveis de ID
+          const variacoesId = [
+            // Formato completo: momento.id-musica.numero
+            `${momento.id}-${musica.numero}`,
+            
+            // Formato simplificado do template: apenas momento.id base + numero
+            // Exemplo: "entrada-1" para momento.id="entrada"
+            `${momento.id.split('-')[0]}-${musica.numero}`,
+            
+            // Formato com momento base normalizado
+            // Exemplo: "ato-penitencial-1" para momento.id="penitencial"
+            momento.id.includes('penitencial') ? `ato-penitencial-${musica.numero}` : null,
+            momento.id.includes('aclamacao') || momento.id.includes('evangelho') ? `aclamacao-ao-evangelho-${musica.numero}` : null,
+            momento.id.includes('acendimento') ? `acendimento-da-vela-do-advento-${musica.numero}` : null,
+            momento.id.includes('ofertorio') ? `ofertorio-${musica.numero}` : null,
+            momento.id.includes('santo') ? `santo-${musica.numero}` : null,
+            momento.id.includes('cordeiro') ? `cordeiro-${musica.numero}` : null,
+            momento.id.includes('comunhao') ? `comunhao-${musica.numero}` : null,
+            momento.id.includes('final') ? `final-${musica.numero}` : null,
+            momento.id.includes('entrada') ? `entrada-${musica.numero}` : null,
+            momento.id.includes('gloria') ? `gloria-${musica.numero}` : null,
+            
+            // Formatos específicos de Missa do Galo
+            momento.id.startsWith('missa-galo') ? `missa-galo-${momento.id.split('-').slice(2).join('-')}-${musica.numero}` : null,
+            
+            // Formatos específicos de Tempo do Natal
+            momento.id.startsWith('tempo-natal') ? `tempo-natal-${momento.id.split('-').slice(2).join('-')}-${musica.numero}` : null,
+          ].filter(Boolean); // Remove nulls
+          
+          // Registrar música com todas as variações
+          variacoesId.forEach(id => {
+            if (id) {
+              musicasMap.set(id, musicaData);
+            }
           });
         });
       });
       
+      console.log("[PDF Export] Total de entradas no mapa:", musicasMap.size);
+      console.log("[PDF Export] IDs recebidos do banco:", musicasIds);
+      
       // Buscar dados completos das músicas
       const musicasCompletas = musicasIds
-        .map((id: string) => musicasMap.get(id))
+        .map((id: string) => {
+          const musica = musicasMap.get(id);
+          if (!musica) {
+            console.log(`[PDF Export] ❌ Música NÃO encontrada para ID: "${id}"`);
+          } else {
+            console.log(`[PDF Export] ✓ Música encontrada: "${musica.titulo}" (${id})`);
+          }
+          return musica;
+        })
         .filter((m: any) => m !== undefined);
+      
+      console.log("[PDF Export] Total de músicas encontradas:", musicasCompletas.length, "de", musicasIds.length);
       
       const pdfBuffer = await gerarPDFRepertorio({
         nome: repertorio.nome,

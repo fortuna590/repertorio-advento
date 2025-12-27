@@ -715,4 +715,12 @@
 - [x] Criar layout de seleção por momentos litúrgicos
 - [x] Manter opção de seleção livre como padrão
 - [x] Testar todas as correções
-- [ ] Criar checkpoint final
+- [x] Criar checkpoint final
+
+## URGENTE - Correção PDF Vazio em Novos Repertórios
+- [x] Diagnosticar por que o PDF está sendo gerado vazio (apenas com cabeçalho "OUTROS")
+- [x] Corrigir endpoint de exportação para buscar dados completos das músicas do repertorioCompleto.ts
+- [x] Corrigir função de geração de PDF para incluir todas as músicas selecionadas
+- [x] Testar geração de PDF com repertório personalizado
+- [x] Validar que músicas aparecem com nome completo (título + artista) organizadas por momentos
+- [ ] Criar checkpoint final com correção
