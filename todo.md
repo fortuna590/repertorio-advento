@@ -743,4 +743,11 @@
 - [x] Verificar compatibilidade de todas as dependências com Vercel
 - [x] Criar guia completo de deploy passo a passo
 - [x] Documentar configuração de domínio da Hostinger
-- [ ] Criar checkpoint final com projeto pronto para deploy
+- [x] Criar checkpoint final com projeto pronto para deploy
+
+## Automação de Deploy
+- [x] Criar script deploy-github.sh para enviar código ao GitHub
+- [x] Criar script deploy-github.bat para Windows
+- [x] Criar guia DEPLOY-RAPIDO.md com 3 passos simples
+- [x] Preparar arquivo ZIP com projeto completo (via Management UI)
+- [ ] Criar checkpoint final com pacote automatizado
