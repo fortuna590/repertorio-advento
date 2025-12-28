@@ -750,4 +750,14 @@
 - [x] Criar script deploy-github.bat para Windows
 - [x] Criar guia DEPLOY-RAPIDO.md com 3 passos simples
 - [x] Preparar arquivo ZIP com projeto completo (via Management UI)
-- [ ] Criar checkpoint final com pacote automatizado
+- [x] Criar checkpoint final com pacote automatizado
+
+## Melhorias de Estatísticas e Página Inicial
+- [x] Corrigir sistema de contagem de visualizações de músicas (já estava funcionando)
+- [x] Implementar contador de repertórios mais acessados na página de estatísticas
+- [x] Atualizar contador de músicas na página inicial (29+ → 75+)
+- [x] Contar total real de músicas no repertorioCompleto.ts (75 músicas)
+- [x] Redesenhar página inicial para ser mais compacta e objetiva
+- [x] Reduzir scroll necessário na home
+- [x] Testar contadores de estatísticas
+- [ ] Criar checkpoint com melhorias implementadas

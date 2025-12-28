@@ -73,6 +73,12 @@ export const repertoriosRouter = router({
         throw new Error("Você não tem permissão para acessar este repertório");
       }
 
+      // Incrementar contador de visualizações
+      await db
+        .update(repertorios)
+        .set({ visualizacoes: (repertorio.visualizacoes || 0) + 1 })
+        .where(eq(repertorios.id, input.id));
+
       return {
         ...repertorio,
         musicas: JSON.parse(repertorio.musicas || "[]"),
@@ -447,6 +453,33 @@ export const repertoriosRouter = router({
         pdf: pdfBuffer.toString("base64"),
         filename: `${repertorio.nome.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`,
       };
+    }),
+
+  // Obter repertórios mais acessados
+  getMaisAcessados: publicProcedure
+    .input(z.object({ limit: z.number().default(10) }).optional())
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const limit = input?.limit || 10;
+
+      const repertoriosMaisAcessados = await db
+        .select()
+        .from(repertorios)
+        .where(eq(repertorios.isPublic, 1))
+        .orderBy(desc(repertorios.visualizacoes))
+        .limit(limit);
+
+      return repertoriosMaisAcessados.map(r => ({
+        id: r.id,
+        nome: r.nome,
+        descricao: r.descricao,
+        nomeUsuario: r.nomeUsuario,
+        visualizacoes: r.visualizacoes || 0,
+        createdAt: r.createdAt,
+        totalMusicas: JSON.parse(r.musicas || "[]").length,
+      }));
     }),
 
   // Enviar repertório por email

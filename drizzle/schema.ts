@@ -77,6 +77,7 @@ export const repertorios = mysqlTable("repertorios", {
   shareId: varchar("shareId", { length: 36 }), // UUID para compartilhamento público
   isPublic: int("isPublic").default(0).notNull(), // 0 = privado, 1 = público
   dataCelebracao: timestamp("dataCelebracao"), // Data da celebração/missa
+  visualizacoes: int("visualizacoes").default(0).notNull(), // Contador de visualizações
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

@@ -6,6 +6,59 @@ import { APP_LOGO } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { Loader2 } from "lucide-react";
 
+function RepertoriosMaisAcessados() {
+  const { data: repertorios, isLoading } = trpc.repertorios.getMaisAcessados.useQuery({ limit: 10 });
+
+  if (isLoading) {
+    return (
+      <Card className="p-8 bg-slate-800 border-purple-500/20">
+        <div className="flex justify-center py-8">
+          <Loader2 className="w-6 h-6 animate-spin text-purple-400" />
+        </div>
+      </Card>
+    );
+  }
+
+  if (!repertorios || repertorios.length === 0) {
+    return (
+      <Card className="p-8 bg-slate-800 border-purple-500/20">
+        <p className="text-purple-200 text-center py-8">Nenhum repertório público disponível ainda</p>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="p-8 bg-slate-800 border-purple-500/20">
+      <div className="space-y-4">
+        {repertorios.map((repertorio, index) => (
+          <a
+            key={repertorio.id}
+            href={`/repertorio/${repertorio.id}`}
+            className="flex items-center gap-4 hover:bg-purple-500/5 p-3 rounded-lg transition-all duration-200"
+          >
+            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-teal-500 flex items-center justify-center">
+              <span className="text-white font-bold text-sm">{index + 1}</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-white font-semibold truncate">{repertorio.nome}</p>
+              {repertorio.descricao && (
+                <p className="text-purple-300 text-sm truncate">{repertorio.descricao}</p>
+              )}
+              <p className="text-purple-400 text-xs">
+                {repertorio.totalMusicas} músicas • {repertorio.nomeUsuario || "Anônimo"}
+              </p>
+            </div>
+            <div className="flex-shrink-0 text-right">
+              <p className="text-white font-bold">{repertorio.visualizacoes}</p>
+              <p className="text-purple-300 text-xs">visualizações</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </Card>
+  );
+}
+
 export default function Estatisticas() {
   const { data: stats, isLoading } = trpc.clicks.getSiteStats.useQuery();
   const { data: clickStats } = trpc.clicks.getStats.useQuery();
@@ -167,6 +220,12 @@ export default function Estatisticas() {
               )}
             </div>
           </Card>
+        </div>
+
+        {/* Repertórios Mais Acessados */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-white mb-6">Repertórios Mais Acessados</h2>
+          <RepertoriosMaisAcessados />
         </div>
 
         {/* Músicas Mais Acessadas */}
