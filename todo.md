@@ -730,4 +730,17 @@
 - [x] Corrigir lógica de adição de rodapés que tenta acessar página 0
 - [x] Testar geração de PDF com repertório do usuário (9 músicas)
 - [x] Validar que PDF é gerado sem erros
-- [ ] Criar checkpoint com correção
+- [x] Criar checkpoint com correção
+
+## Preparação para Deploy Vercel + Supabase
+- [x] Criar vercel.json com configurações de rotas e build
+- [x] Ajustar package.json com scripts de build otimizados
+- [x] Criar .env.example com todas as variáveis necessárias
+- [x] Exportar schema do banco de dados PostgreSQL
+- [x] Criar arquivo de migração SQL para Supabase
+- [x] Criar .gitignore adequado para o projeto
+- [x] Testar build de produção localmente
+- [x] Verificar compatibilidade de todas as dependências com Vercel
+- [x] Criar guia completo de deploy passo a passo
+- [x] Documentar configuração de domínio da Hostinger
+- [ ] Criar checkpoint final com projeto pronto para deploy

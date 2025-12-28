@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "buildCommand": "pnpm build",
+  "outputDirectory": "client/dist",
+  "installCommand": "pnpm install",
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/client/dist/$1"
+    }
+  ],
+  "functions": {
+    "api/index.js": {
+      "runtime": "nodejs22.x",
+      "includeFiles": "dist/**"
+    }
+  },
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
