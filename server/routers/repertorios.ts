@@ -458,18 +458,33 @@ export const repertoriosRouter = router({
   // Obter repertórios mais acessados
   getMaisAcessados: publicProcedure
     .input(z.object({ limit: z.number().default(10) }).optional())
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new Error("Database not available");
 
       const limit = input?.limit || 10;
 
-      const repertoriosMaisAcessados = await db
+      // Buscar todos os repertórios ordenados por visualizações
+      // Se usuário logado: mostrar seus repertórios primeiro, depois públicos
+      // Se não logado: mostrar apenas públicos
+      let repertoriosMaisAcessados = await db
         .select()
         .from(repertorios)
-        .where(eq(repertorios.isPublic, 1))
         .orderBy(desc(repertorios.visualizacoes))
-        .limit(limit);
+        .limit(100); // Buscar mais para filtrar depois
+      
+      // Filtrar baseado no usuário
+      if (ctx.user) {
+        // Mostrar repertórios do usuário + públicos
+        repertoriosMaisAcessados = repertoriosMaisAcessados
+          .filter(r => r.userId === ctx.user!.id || r.isPublic === 1)
+          .slice(0, limit);
+      } else {
+        // Apenas públicos
+        repertoriosMaisAcessados = repertoriosMaisAcessados
+          .filter(r => r.isPublic === 1)
+          .slice(0, limit);
+      }
 
       return repertoriosMaisAcessados.map(r => ({
         id: r.id,

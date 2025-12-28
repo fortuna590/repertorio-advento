@@ -54,8 +54,8 @@ export default function Home() {
           <Card className="bg-slate-800/50 border-purple-500/20">
             <CardContent className="pt-4 pb-4 text-center">
               <ListMusic className="w-6 h-6 text-pink-400 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-white">11</p>
-              <p className="text-xs text-purple-200">Momentos</p>
+              <p className="text-sm font-bold text-white leading-tight">Separadas por Momentos</p>
+              <p className="text-xs text-purple-200 mt-1">Organizado</p>
             </CardContent>
           </Card>
 
@@ -66,6 +66,29 @@ export default function Home() {
               <p className="text-xs text-purple-200">Comunidade</p>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Cards Blog e Loja */}
+        <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto mt-6">
+          <a href="/blog">
+            <Card className="bg-gradient-to-br from-purple-800/40 to-purple-900/40 border-purple-500/30 hover:border-purple-500/60 transition-all duration-300 cursor-pointer">
+              <CardContent className="pt-5 pb-5 text-center">
+                <BookOpen className="w-7 h-7 text-purple-300 mx-auto mb-2" />
+                <p className="text-lg font-bold text-white">Blog</p>
+                <p className="text-xs text-purple-200 mt-1">Artigos e dicas</p>
+              </CardContent>
+            </Card>
+          </a>
+
+          <a href="/loja">
+            <Card className="bg-gradient-to-br from-pink-800/40 to-pink-900/40 border-pink-500/30 hover:border-pink-500/60 transition-all duration-300 cursor-pointer">
+              <CardContent className="pt-5 pb-5 text-center">
+                <Heart className="w-7 h-7 text-pink-300 mx-auto mb-2" />
+                <p className="text-lg font-bold text-white">Loja</p>
+                <p className="text-xs text-purple-200 mt-1">Apoie o projeto</p>
+              </CardContent>
+            </Card>
+          </a>
         </div>
       </section>
 

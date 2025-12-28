@@ -295,7 +295,7 @@ export async function getSiteStats() {
   if (!db) {
     console.warn("[Database] Cannot get site stats: database not available");
     return {
-      totalMusicas: 29,
+      totalMusicas: 75,
       totalVisualizacoes: 0,
       totalDownloads: 0,
       totalMinisterios: 0,
@@ -335,8 +335,18 @@ export async function getSiteStats() {
       ? Math.round(((clicksThisMonth - clicksPreviousMonth) / clicksPreviousMonth) * 100)
       : 0;
 
+    // Calcular total de músicas dinamicamente
+    // Importar e contar do repertorioCompleto
+    let totalMusicas = 75; // Fallback: total atual conhecido
+    try {
+      const { repertorioCompleto } = await import('../client/src/data/repertorioCompleto');
+      totalMusicas = repertorioCompleto.reduce((acc, momento) => acc + momento.musicas.length, 0);
+    } catch (err) {
+      console.warn('[Stats] Could not import repertorioCompleto, using fallback count');
+    }
+
     return {
-      totalMusicas: 29, // Fixo: 29 músicas do Advento
+      totalMusicas: totalMusicas,
       totalVisualizacoes: totalVisualizacoes,
       totalDownloads: totalDownloads,
       totalMinisterios: uniqueMinisterios,
@@ -346,7 +356,7 @@ export async function getSiteStats() {
   } catch (error) {
     console.error("[Database] Failed to get site stats:", error);
     return {
-      totalMusicas: 29,
+      totalMusicas: 75,
       totalVisualizacoes: 0,
       totalDownloads: 0,
       totalMinisterios: 0,

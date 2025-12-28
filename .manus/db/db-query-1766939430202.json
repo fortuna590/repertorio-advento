@@ -1,0 +1,262 @@
+{
+  "query": "SELECT id, nome, isPublic, visualizacoes FROM repertorios ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT id, nome, isPublic, visualizacoes FROM repertorios ORDER BY id;",
+  "rows": [
+    {
+      "id": "1",
+      "nome": "Missa de Advento",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "2",
+      "nome": "Repertório 1",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "3",
+      "nome": "Repertório 2",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "4",
+      "nome": "Repertório Teste",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "5",
+      "nome": "Repertório Ordem",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "6",
+      "nome": "Repertório Público",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "7",
+      "nome": "Repertório Compartilhado",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "8",
+      "nome": "Repertório Privado",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "9",
+      "nome": "Repertório Original",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "10",
+      "nome": "Repertório Notas",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "11",
+      "nome": "Repertório para Deletar",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "12",
+      "nome": "Repertório do Usuário 1",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "13",
+      "nome": "Repertório Público Original",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30001",
+      "nome": "Missa de Advento",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30002",
+      "nome": "Repertório 1",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30003",
+      "nome": "Repertório 2",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30004",
+      "nome": "Repertório Teste",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30005",
+      "nome": "Repertório Ordem",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30006",
+      "nome": "Repertório Público",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30007",
+      "nome": "Repertório Compartilhado",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30008",
+      "nome": "Repertório Privado",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30009",
+      "nome": "Repertório Original",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30010",
+      "nome": "Repertório Notas",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30011",
+      "nome": "Repertório para Deletar",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30012",
+      "nome": "Repertório do Usuário 1",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30013",
+      "nome": "Repertório Público Original",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30014",
+      "nome": "Missa de Advento",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30015",
+      "nome": "Repertório 1",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30016",
+      "nome": "Repertório 2",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30017",
+      "nome": "Repertório Teste",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30018",
+      "nome": "Repertório Ordem",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30019",
+      "nome": "Repertório Público",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30020",
+      "nome": "Repertório Compartilhado",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30021",
+      "nome": "Repertório Privado",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30022",
+      "nome": "Repertório Original",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30023",
+      "nome": "Repertório Notas",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30024",
+      "nome": "Repertório para Deletar",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30025",
+      "nome": "Repertório do Usuário 1",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "30026",
+      "nome": "Repertório Público Original",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "120016",
+      "nome": "Missa advento",
+      "isPublic": "1",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "150001",
+      "nome": "Missa 4° domingo Advento",
+      "isPublic": "0",
+      "visualizacoes": "0"
+    },
+    {
+      "id": "420001",
+      "nome": "Missa Domingo 9h",
+      "isPublic": "1",
+      "visualizacoes": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tnome\tisPublic\tvisualizacoes\n1\tMissa de Advento\t0\t0\n2\tRepertório 1\t0\t0\n3\tRepertório 2\t0\t0\n4\tRepertório Teste\t0\t0\n5\tRepertório Ordem\t0\t0\n6\tRepertório Público\t0\t0\n7\tRepertório Compartilhado\t0\t0\n8\tRepertório Privado\t0\t0\n9\tRepertório Original\t0\t0\n10\tRepertório Notas\t0\t0\n11\tRepertório para Deletar\t0\t0\n12\tRepertório do Usuário 1\t0\t0\n13\tRepertório Público Original\t0\t0\n30001\tMissa de Advento\t0\t0\n30002\tRepertório 1\t0\t0\n30003\tRepertório 2\t0\t0\n30004\tRepertório Teste\t0\t0\n30005\tRepertório Ordem\t0\t0\n30006\tRepertório Público\t0\t0\n30007\tRepertório Compartilhado\t0\t0\n30008\tRepertório Privado\t0\t0\n30009\tRepertório Original\t0\t0\n30010\tRepertório Notas\t0\t0\n30011\tRepertório para Deletar\t0\t0\n30012\tRepertório do Usuário 1\t0\t0\n30013\tRepertório Público Original\t0\t0\n30014\tMissa de Advento\t0\t0\n30015\tRepertório 1\t0\t0\n30016\tRepertório 2\t0\t0\n30017\tRepertório Teste\t0\t0\n30018\tRepertório Ordem\t0\t0\n30019\tRepertório Público\t0\t0\n30020\tRepertório Compartilhado\t0\t0\n30021\tRepertório Privado\t0\t0\n30022\tRepertório Original\t0\t0\n30023\tRepertório Notas\t0\t0\n30024\tRepertório para Deletar\t0\t0\n30025\tRepertório do Usuário 1\t0\t0\n30026\tRepertório Público Original\t0\t0\n120016\tMissa advento\t1\t0\n150001\tMissa 4° domingo Advento\t0\t0\n420001\tMissa Domingo 9h\t1\t0\n",
+  "stderr": "",
+  "execution_time_ms": 164
+}

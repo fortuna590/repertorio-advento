@@ -760,4 +760,14 @@
 - [x] Redesenhar página inicial para ser mais compacta e objetiva
 - [x] Reduzir scroll necessário na home
 - [x] Testar contadores de estatísticas
-- [ ] Criar checkpoint com melhorias implementadas
+- [x] Criar checkpoint com melhorias implementadas
+
+## Ajustes de Estatísticas e Página Inicial
+- [x] Investigar por que só 2 repertórios aparecem ao invés de 4 nas estatísticas
+- [x] Corrigir query para exibir repertórios do usuário logado + públicos
+- [x] Tornar contador de músicas dinâmico (calcular automaticamente do repertorioCompleto.ts)
+- [x] Alterar "11 Momentos" para "Separadas por Momentos" na home
+- [x] Adicionar card de Blog na página inicial
+- [x] Adicionar card de Loja na página inicial
+- [x] Testar exibição de todos os repertórios (2 repertórios confirmados no banco)
+- [ ] Criar checkpoint com correções
