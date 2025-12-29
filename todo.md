@@ -770,4 +770,18 @@
 - [x] Adicionar card de Blog na página inicial
 - [x] Adicionar card de Loja na página inicial
 - [x] Testar exibição de todos os repertórios (2 repertórios confirmados no banco)
-- [ ] Criar checkpoint com correções
+- [x] Criar checkpoint com correções
+
+## Reestruturação Completa da Home
+- [x] Criar seção Hero (largura total, sem cards, H1 + subtítulo + 2 botões)
+- [x] Criar seção Proposta de Valor (texto centralizado, sem imagens)
+- [x] Criar seção Tempos Litúrgicos (grid 3 colunas, 6 cards clicáveis)
+- [x] Criar seção Como Funciona (4 cards numerados horizontais)
+- [x] Criar seção Ferramentas (grid 2-3 colunas, 6 benefícios)
+- [x] Criar seção Comunidade e Estatísticas (métricas visuais)
+- [x] Criar seção Blog (grid 3 cards com artigos)
+- [x] Criar seção Loja/Apoio (card único em destaque)
+- [x] Criar CTA Final (bloco centralizado com destaque)
+- [x] Ajustar Rodapé conforme especificações
+- [x] Testar responsividade desktop e mobile
+- [ ] Criar checkpoint com nova home
