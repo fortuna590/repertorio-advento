@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +12,17 @@ import { toast } from "sonner";
 
 export default function BlogAdmin() {
   const [, setLocation] = useLocation();
+  
+  // Verificar se é superadmin
+  const { data: adminCheck, isLoading: checkingAdmin } = trpc.admin.checkSuperAdmin.useQuery();
+
+  // Redirect se não é superadmin
+  useEffect(() => {
+    if (!checkingAdmin && adminCheck && !adminCheck.isSuperAdmin) {
+      toast.error("Acesso negado. Área restrita ao administrador.");
+      setLocation("/");
+    }
+  }, [checkingAdmin, adminCheck, setLocation]);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   
@@ -127,6 +138,25 @@ export default function BlogAdmin() {
       toast.error(error.message || "Erro ao deletar artigo");
     }
   };
+
+  // Loading state
+  if (checkingAdmin) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-flex items-center gap-2 text-muted-foreground">
+            <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            <span>Verificando permissões...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Proteção: não renderizar se não for superadmin
+  if (!adminCheck?.isSuperAdmin) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-background">

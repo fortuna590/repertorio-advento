@@ -801,4 +801,15 @@
 - [x] Criar página para Celebrações Especiais (em breve)
 - [x] Adicionar rotas no App.tsx
 - [x] Testar navegação de todos os cards (Quaresma, Páscoa, Tempo Comum, Celebrações)
-- [ ] Criar checkpoint
+- [x] Criar checkpoint
+
+## Painel Admin do Blog
+- [x] Criar schema de artigos no banco (título, conteúdo, autor, data, status, imagem) - Já existe
+- [x] Criar endpoints tRPC para CRUD de artigos (criar, listar, editar, excluir, publicar) - Já existe
+- [x] Implementar página BlogAdmin.tsx com lista de artigos - Já existe
+- [x] Criar formulário de criação/edição com editor rico de texto - Já existe (textarea)
+- [x] Adicionar upload de imagem de capa para artigos - Já existe (URL)
+- [x] Integrar Blog.tsx para buscar artigos do banco - Já integrado
+- [x] Adicionar controle de permissões (apenas superadmin)
+- [x] Testar fluxo completo de criação, edição e publicação
+- [ ] Criar checkpoint com painel admin do blog
