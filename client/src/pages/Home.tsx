@@ -22,7 +22,7 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <a href="/repertorio">
+            <a href="/repertorios">
               <Button size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-6 text-lg">
                 <Calendar className="w-5 h-5 mr-2" />
                 Ver repertórios por tempo litúrgico
@@ -303,7 +303,7 @@ export default function Home() {
                 Criar conta grátis
               </Button>
             </a>
-            <a href="/repertorio">
+            <a href="/repertorios">
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 px-8 py-6">
                 Explorar repertórios
               </Button>

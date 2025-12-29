@@ -784,4 +784,10 @@
 - [x] Criar CTA Final (bloco centralizado com destaque)
 - [x] Ajustar Rodapé conforme especificações
 - [x] Testar responsividade desktop e mobile
-- [ ] Criar checkpoint com nova home
+- [x] Criar checkpoint com nova home
+
+## Correção de Link na Home
+- [x] Corrigir botão "Ver repertórios por tempo litúrgico" para abrir página de seleção (/repertorios)
+- [x] Verificar se há outros links incorretos na Home (corrigidos 3 links)
+- [x] Testar navegação após correção (funcionando perfeitamente)
+- [ ] Criar checkpoint com correção
