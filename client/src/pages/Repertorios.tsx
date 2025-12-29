@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Music, Calendar, Sparkles, Church, Star } from "lucide-react";
+import { Music, Calendar, Sparkles, Church, Star, Cross, Sunrise, Sprout, PartyPopper } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import ModernHeader from "@/components/ModernHeader";
@@ -41,6 +41,58 @@ export default function Repertorios() {
       link: "/repertorio/tempo-do-natal",
       icone: Star,
       gradiente: "from-blue-500/20 to-cyan-500/20"
+    },
+    {
+      id: "quaresma",
+      titulo: "Tempo da Quaresma",
+      descricao: "Repertório em preparação para o tempo de conversão e silêncio",
+      tempoLiturgico: "Quaresma",
+      cor: "roxo",
+      totalMusicas: 0,
+      totalMomentos: 0,
+      link: "/repertorio/quaresma",
+      icone: Cross,
+      gradiente: "from-purple-500/20 to-violet-500/20",
+      emBreve: true
+    },
+    {
+      id: "pascoa",
+      titulo: "Tempo da Páscoa",
+      descricao: "Repertório em preparação para o tempo de ressurreição e vida nova",
+      tempoLiturgico: "Páscoa",
+      cor: "branco",
+      totalMusicas: 0,
+      totalMomentos: 0,
+      link: "/repertorio/pascoa",
+      icone: Sunrise,
+      gradiente: "from-yellow-500/20 to-amber-500/20",
+      emBreve: true
+    },
+    {
+      id: "tempo-comum",
+      titulo: "Tempo Comum",
+      descricao: "Repertório em preparação para a caminhada da fé",
+      tempoLiturgico: "Tempo Comum",
+      cor: "verde",
+      totalMusicas: 0,
+      totalMomentos: 0,
+      link: "/repertorio/tempo-comum",
+      icone: Sprout,
+      gradiente: "from-green-500/20 to-emerald-500/20",
+      emBreve: true
+    },
+    {
+      id: "celebracoes-especiais",
+      titulo: "Celebrações Especiais",
+      descricao: "Repertório em preparação para Ramos, Tríduo Pascal, Pentecostes e mais",
+      tempoLiturgico: "Especiais",
+      cor: "vermelho",
+      totalMusicas: 0,
+      totalMomentos: 0,
+      link: "/repertorio/celebracoes-especiais",
+      icone: PartyPopper,
+      gradiente: "from-red-500/20 to-rose-500/20",
+      emBreve: true
     }
   ];
 
@@ -65,7 +117,7 @@ export default function Repertorios() {
         </div>
 
         {/* Grid de Repertórios */}
-        <div className="grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-2 max-w-5xl mx-auto">
+        <div className="grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
           {repertorios.map((repertorio) => {
             const Icon = repertorio.icone;
             return (
@@ -78,6 +130,11 @@ export default function Repertorios() {
                           <Badge variant="outline" className="bg-purple-500/20 text-purple-300 border-purple-500/30">
                             {repertorio.tempoLiturgico}
                           </Badge>
+                          {repertorio.emBreve && (
+                            <Badge variant="secondary" className="bg-yellow-500/20 text-yellow-300 border-yellow-500/30">
+                              Em Breve
+                            </Badge>
+                          )}
                         </div>
                         <CardTitle className="text-2xl md:text-3xl flex items-center gap-3 text-white group-hover:text-purple-300 transition-colors">
                           <Icon className="w-6 h-6 shrink-0" />
@@ -92,25 +149,27 @@ export default function Repertorios() {
 
                   <CardContent className="space-y-4">
                     {/* Estatísticas */}
-                    <div className="flex items-center gap-6 text-sm">
-                      <div className="flex items-center gap-2">
-                        <Music className="w-4 h-4 text-purple-400" />
-                        <span className="text-gray-300">
-                          <strong className="text-white">{repertorio.totalMusicas}</strong> músicas
-                        </span>
+                    {!repertorio.emBreve && (
+                      <div className="flex items-center gap-6 text-sm">
+                        <div className="flex items-center gap-2">
+                          <Music className="w-4 h-4 text-purple-400" />
+                          <span className="text-gray-300">
+                            <strong className="text-white">{repertorio.totalMusicas}</strong> músicas
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-purple-400" />
+                          <span className="text-gray-300">
+                            <strong className="text-white">{repertorio.totalMomentos}</strong> momentos
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-purple-400" />
-                        <span className="text-gray-300">
-                          <strong className="text-white">{repertorio.totalMomentos}</strong> momentos
-                        </span>
-                      </div>
-                    </div>
+                    )}
 
                     {/* CTA */}
                     <div className="pt-2">
                       <div className="inline-flex items-center gap-2 text-purple-300 group-hover:text-purple-200 font-medium transition-colors">
-                        <span>Explorar Repertório</span>
+                        <span>{repertorio.emBreve ? "Ver detalhes" : "Explorar Repertório"}</span>
                         <span className="group-hover:translate-x-1 transition-transform">→</span>
                       </div>
                     </div>
@@ -119,18 +178,6 @@ export default function Repertorios() {
               </Link>
             );
           })}
-        </div>
-
-        {/* Seção de Informações */}
-        <div className="mt-16 text-center">
-          <div className="max-w-2xl mx-auto p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/20">
-            <h3 className="text-xl font-bold text-white mb-3">
-              Novos Repertórios em Breve
-            </h3>
-            <p className="text-gray-300">
-              Estamos preparando novos repertórios para outros tempos litúrgicos: Quaresma, Páscoa, Tempo Comum e celebrações especiais. Acompanhe nossas atualizações!
-            </p>
-          </div>
         </div>
       </main>
 

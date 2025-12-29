@@ -9,6 +9,10 @@ import Repertorio from "./pages/Repertorio";
 import Repertorios from "./pages/Repertorios";
 import RepertorioMissaDoGalo from "./pages/RepertorioMissaDoGalo";
 import RepertorioTempoDoNatal from "./pages/RepertorioTempoDoNatal";
+import RepertorioQuaresma from "./pages/RepertorioQuaresma";
+import RepertorioPascoa from "./pages/RepertorioPascoa";
+import RepertorioTempoComum from "./pages/RepertorioTempoComum";
+import RepertorioCelebracoes from "./pages/RepertorioCelebracoes";
 // import Stats from "./pages/Stats"; // Replaced with Estatisticas.tsx
 // import About from "./pages/About"; // Replaced with Sobre.tsx
 import Contact from "./pages/Contact";
@@ -47,6 +51,10 @@ function Router() {
       <Route path={"/repertorio"} component={Repertorio} />
       <Route path={"/repertorio/missa-do-galo"} component={RepertorioMissaDoGalo} />
       <Route path={"/repertorio/tempo-do-natal"} component={RepertorioTempoDoNatal} />
+      <Route path={"/repertorio/quaresma"} component={RepertorioQuaresma} />
+      <Route path={"/repertorio/pascoa"} component={RepertorioPascoa} />
+      <Route path={"/repertorio/tempo-comum"} component={RepertorioTempoComum} />
+      <Route path={"/repertorio/celebracoes-especiais"} component={RepertorioCelebracoes} />
       <Route path={"/estatisticas"} component={Estatisticas} />
       <Route path={"/contato"} component={Contact} />
       <Route path={"/doacao"} component={Donate} />

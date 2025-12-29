@@ -790,4 +790,15 @@
 - [x] Corrigir botão "Ver repertórios por tempo litúrgico" para abrir página de seleção (/repertorios)
 - [x] Verificar se há outros links incorretos na Home (corrigidos 3 links)
 - [x] Testar navegação após correção (funcionando perfeitamente)
-- [ ] Criar checkpoint com correção
+- [x] Criar checkpoint com correção
+
+## Expandir Página de Repertórios
+- [x] Adicionar os 6 cards de tempos litúrgicos na página /repertorios
+- [x] Criar componente EmBreve.tsx para tempos sem conteúdo
+- [x] Criar página para Quaresma (em breve)
+- [x] Criar página para Páscoa (em breve)
+- [x] Criar página para Tempo Comum (em breve)
+- [x] Criar página para Celebrações Especiais (em breve)
+- [x] Adicionar rotas no App.tsx
+- [x] Testar navegação de todos os cards (Quaresma, Páscoa, Tempo Comum, Celebrações)
+- [ ] Criar checkpoint
