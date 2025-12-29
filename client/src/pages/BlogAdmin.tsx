@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import RichTextEditor from "@/components/RichTextEditor";
+import ImageUpload from "@/components/ImageUpload";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, Plus, Edit, Trash2, Eye, Save, ArrowLeft } from "lucide-react";
 import { APP_LOGO } from "@/const";
@@ -248,24 +250,22 @@ export default function BlogAdmin() {
 
                 <div>
                   <label className="text-sm font-medium mb-2 block">Conteúdo * </label>
-                  <Textarea
+                  <RichTextEditor
+                    content={conteudo}
+                    onChange={setConteudo}
                     placeholder="Escreva o conteúdo completo do artigo aqui..."
-                    value={conteudo}
-                    onChange={(e) => setConteudo(e.target.value)}
-                    rows={12}
-                    className="font-mono text-sm"
+                  />
+                </div>
+
+                <div>
+                  <ImageUpload
+                    value={imagemCapa}
+                    onChange={setImagemCapa}
+                    label="Imagem de Capa"
                   />
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">URL da Imagem de Capa</label>
-                    <Input
-                      placeholder="https://exemplo.com/imagem.jpg"
-                      value={imagemCapa}
-                      onChange={(e) => setImagemCapa(e.target.value)}
-                    />
-                  </div>
                   <div>
                     <label className="text-sm font-medium mb-2 block">Categoria</label>
                     <Input

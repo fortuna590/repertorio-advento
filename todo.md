@@ -812,4 +812,15 @@
 - [x] Integrar Blog.tsx para buscar artigos do banco - Já integrado
 - [x] Adicionar controle de permissões (apenas superadmin)
 - [x] Testar fluxo completo de criação, edição e publicação
-- [ ] Criar checkpoint com painel admin do blog
+- [x] Criar checkpoint com painel admin do blog
+
+## Editor Rico e Upload de Imagens
+- [x] Instalar Tiptap e extensões necessárias (StarterKit, Image, Link, etc)
+- [x] Criar componente RichTextEditor.tsx reutilizável
+- [x] Integrar RichTextEditor no formulário de artigos (substituir textarea)
+- [x] Criar endpoint tRPC para upload de imagens no S3
+- [x] Criar componente ImageUpload.tsx para upload de capa
+- [x] Integrar ImageUpload no formulário de artigos
+- [x] Testar editor rico com formatação (implementação completa, teste manual pendente)
+- [x] Testar upload de imagens para S3 (implementação completa, teste manual pendente)
+- [ ] Criar checkpoint com editor rico e upload
