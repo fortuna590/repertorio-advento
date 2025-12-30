@@ -1,11 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import RichTextEditor from "@/components/RichTextEditor";
-import ImageUpload from "@/components/ImageUpload";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, Plus, Edit, Trash2, Eye, Save, ArrowLeft } from "lucide-react";
 import { APP_LOGO } from "@/const";
@@ -14,17 +12,6 @@ import { toast } from "sonner";
 
 export default function BlogAdmin() {
   const [, setLocation] = useLocation();
-  
-  // Verificar se é superadmin
-  const { data: adminCheck, isLoading: checkingAdmin } = trpc.admin.checkSuperAdmin.useQuery();
-
-  // Redirect se não é superadmin
-  useEffect(() => {
-    if (!checkingAdmin && adminCheck && !adminCheck.isSuperAdmin) {
-      toast.error("Acesso negado. Área restrita ao administrador.");
-      setLocation("/");
-    }
-  }, [checkingAdmin, adminCheck, setLocation]);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   
@@ -141,25 +128,6 @@ export default function BlogAdmin() {
     }
   };
 
-  // Loading state
-  if (checkingAdmin) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-flex items-center gap-2 text-muted-foreground">
-            <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-            <span>Verificando permissões...</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Proteção: não renderizar se não for superadmin
-  if (!adminCheck?.isSuperAdmin) {
-    return null;
-  }
-
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -250,22 +218,24 @@ export default function BlogAdmin() {
 
                 <div>
                   <label className="text-sm font-medium mb-2 block">Conteúdo * </label>
-                  <RichTextEditor
-                    content={conteudo}
-                    onChange={setConteudo}
+                  <Textarea
                     placeholder="Escreva o conteúdo completo do artigo aqui..."
-                  />
-                </div>
-
-                <div>
-                  <ImageUpload
-                    value={imagemCapa}
-                    onChange={setImagemCapa}
-                    label="Imagem de Capa"
+                    value={conteudo}
+                    onChange={(e) => setConteudo(e.target.value)}
+                    rows={12}
+                    className="font-mono text-sm"
                   />
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">URL da Imagem de Capa</label>
+                    <Input
+                      placeholder="https://exemplo.com/imagem.jpg"
+                      value={imagemCapa}
+                      onChange={(e) => setImagemCapa(e.target.value)}
+                    />
+                  </div>
                   <div>
                     <label className="text-sm font-medium mb-2 block">Categoria</label>
                     <Input

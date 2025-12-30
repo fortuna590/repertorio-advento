@@ -803,24 +803,14 @@
 - [x] Testar navegação de todos os cards (Quaresma, Páscoa, Tempo Comum, Celebrações)
 - [x] Criar checkpoint
 
-## Painel Admin do Blog
-- [x] Criar schema de artigos no banco (título, conteúdo, autor, data, status, imagem) - Já existe
-- [x] Criar endpoints tRPC para CRUD de artigos (criar, listar, editar, excluir, publicar) - Já existe
-- [x] Implementar página BlogAdmin.tsx com lista de artigos - Já existe
-- [x] Criar formulário de criação/edição com editor rico de texto - Já existe (textarea)
-- [x] Adicionar upload de imagem de capa para artigos - Já existe (URL)
-- [x] Integrar Blog.tsx para buscar artigos do banco - Já integrado
-- [x] Adicionar controle de permissões (apenas superadmin)
-- [x] Testar fluxo completo de criação, edição e publicação
-- [x] Criar checkpoint com painel admin do blog
 
-## Editor Rico e Upload de Imagens
-- [x] Instalar Tiptap e extensões necessárias (StarterKit, Image, Link, etc)
-- [x] Criar componente RichTextEditor.tsx reutilizável
-- [x] Integrar RichTextEditor no formulário de artigos (substituir textarea)
-- [x] Criar endpoint tRPC para upload de imagens no S3
-- [x] Criar componente ImageUpload.tsx para upload de capa
-- [x] Integrar ImageUpload no formulário de artigos
-- [x] Testar editor rico com formatação (implementação completa, teste manual pendente)
-- [x] Testar upload de imagens para S3 (implementação completa, teste manual pendente)
-- [ ] Criar checkpoint com editor rico e upload
+## Correção OAuth Callback Failed (29/12/2024)
+
+- [x] Investigar código do callback OAuth em server/_core/oauth.ts
+- [x] Adicionar logs detalhados em cada etapa do processo de autenticação
+- [x] Implementar tratamento de erro robusto com mensagens específicas
+- [x] Adicionar informações de debug (query params, headers, stack trace)
+- [x] Reiniciar servidor para aplicar correções
+- [x] Testar login com sucesso (usuário Tiago Fortuna Santos autenticado)
+- [x] Verificar criação de sessão e redirecionamento funcionando
+- [ ] Salvar checkpoint com correção
