@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -55,6 +55,8 @@ import {
   FileText,
   Clock,
   CheckCircle,
+  BookOpen,
+  ExternalLink,
 } from "lucide-react";
 import { Link } from "wouter";
 
@@ -301,6 +303,10 @@ export default function Admin() {
             <TabsTrigger value="emails" className="data-[state=active]:bg-purple-600">
               <Mail className="h-4 w-4 mr-2" />
               Emails
+            </TabsTrigger>
+            <TabsTrigger value="blog" className="data-[state=active]:bg-purple-600">
+              <FileText className="h-4 w-4 mr-2" />
+              Blog
             </TabsTrigger>
           </TabsList>
 
@@ -895,6 +901,44 @@ export default function Admin() {
                     <span className="text-white font-medium">Dicas</span>
                     <span className="text-slate-400 text-sm">Compartilhar dicas e tutoriais</span>
                   </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Tab Blog */}
+          <TabsContent value="blog" className="space-y-6">
+            <Card className="bg-slate-800/50 border-purple-500/20">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <BookOpen className="h-5 w-5 text-purple-400" />
+                  Gerenciador de Blog
+                </CardTitle>
+                <CardDescription className="text-slate-400">
+                  Acesse o painel de administracao do blog para criar, editar e publicar artigos
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <p className="text-slate-300">
+                    Clique no botao abaixo para acessar o painel de admin do blog onde voce pode:
+                  </p>
+                  <ul className="list-disc list-inside space-y-2 text-slate-300">
+                    <li>Criar novos artigos com editor rico</li>
+                    <li>Fazer upload de imagens de capa para S3</li>
+                    <li>Editar artigos existentes</li>
+                    <li>Publicar e despublicar artigos</li>
+                    <li>Gerenciar categorias e tags</li>
+                  </ul>
+                  <div className="pt-4">
+                    <Link href="/blog-admin">
+                      <Button className="bg-purple-600 hover:bg-purple-700 gap-2">
+                        <BookOpen className="h-4 w-4" />
+                        Ir para Painel do Blog
+                        <ExternalLink className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               </CardContent>
             </Card>

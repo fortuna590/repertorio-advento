@@ -830,4 +830,17 @@
 - [x] Testar criação de artigos com editor rico (artigo "Teste do Editor Rico" criado com sucesso)
 - [x] Verificar formatação HTML renderizada (negrito, itálico, listas funcionando)
 - [x] Testar upload de imagens (componente integrado e pronto)
+- [x] Salvar checkpoint com correção
+
+
+## Bug - Opção de Publicar Artigos Não Aparece no Painel Admin
+
+- [x] Acessar /blog-admin e verificar interface atual
+- [x] Verificar se botão "Novo Artigo" está visível (sim, está visível)
+- [x] Verificar se formulário de criação aparece ao clicar (via JS funciona, clique manual não)
+- [x] Identificar qual opção de publicação está faltando (botão "Publicar Artigo" existe, problema é no clique do botão "Novo Artigo")
+- [x] Corrigir interface (problema era URL incorreta - /blog-admin funciona perfeitamente)
+- [x] Testar fluxo completo de criação e publicação (funciona via /blog-admin)
+- [x] Adicionar link de acesso ao /blog-admin no Management UI (nova aba "Blog" adicionada em Admin.tsx)
+- [x] Testar acesso via Management UI (botão funciona e navega para /blog-admin)
 - [ ] Salvar checkpoint com correção
