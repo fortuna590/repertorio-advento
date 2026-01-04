@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Plus, Edit, Trash2, Eye, Save, ArrowLeft } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BookOpen, Plus, Edit, Trash2, Eye, Save, ArrowLeft, Search } from "lucide-react";
 import { APP_LOGO } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
@@ -16,6 +17,7 @@ export default function BlogAdmin() {
   const [, setLocation] = useLocation();
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [previewMode, setPreviewMode] = useState(false);
   
   const [titulo, setTitulo] = useState("");
   const [slug, setSlug] = useState("");
@@ -25,12 +27,24 @@ export default function BlogAdmin() {
   const [categoria, setCategoria] = useState("");
   const [tags, setTags] = useState("");
   const [autorNome, setAutorNome] = useState("LouvaMais");
+  
+  // Campos SEO
+  const [metaDescricao, setMetaDescricao] = useState("");
+  const [metaKeywords, setMetaKeywords] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { data: artigos, refetch } = trpc.artigos.getAll.useQuery({ includeRascunhos: true });
   const criarMutation = trpc.artigos.create.useMutation();
   const atualizarMutation = trpc.artigos.update.useMutation();
   const deletarMutation = trpc.artigos.delete.useMutation();
 
+  // Calcular tempo de leitura (média 200 palavras por minuto)
+  const tempoLeitura = useMemo(() => {
+    const palavras = conteudo.replace(/<[^>]*>/g, "").split(/\s+/).length;
+    return Math.ceil(palavras / 200);
+  }, [conteudo]);
+
+  // Gerar slug otimizado
   const gerarSlug = (texto: string) => {
     return texto
       .toLowerCase()
@@ -39,6 +53,9 @@ export default function BlogAdmin() {
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)/g, "");
   };
+
+  // Auto-gerar meta descrição se vazia
+  const metaDescricaoAuto = metaDescricao || resumo.substring(0, 160);
 
   const handleTituloChange = (value: string) => {
     setTitulo(value);
@@ -56,8 +73,11 @@ export default function BlogAdmin() {
     setCategoria("");
     setTags("");
     setAutorNome("LouvaMais");
+    setMetaDescricao("");
+    setMetaKeywords("");
     setEditingId(null);
     setShowForm(false);
+    setPreviewMode(false);
   };
 
   const handleEditar = (artigo: any) => {
@@ -70,7 +90,10 @@ export default function BlogAdmin() {
     setCategoria(artigo.categoria || "");
     setTags(artigo.tags ? artigo.tags.join(", ") : "");
     setAutorNome(artigo.autorNome || "LouvaMais");
+    setMetaDescricao(artigo.metaDescricao || "");
+    setMetaKeywords(artigo.metaKeywords || "");
     setShowForm(true);
+    setPreviewMode(false);
   };
 
   const handleSalvar = async () => {
@@ -91,9 +114,9 @@ export default function BlogAdmin() {
           conteudo,
           imagemCapa: imagemCapa || undefined,
           categoria: categoria || undefined,
-          tags: tagsArray.length > 0 ? tagsArray : undefined,
-          autorNome: autorNome || undefined,
-          publicado: 1,
+                  tags: tagsArray.length > 0 ? tagsArray : undefined,
+                  autorNome: autorNome || undefined,
+                  publicado: 1,
         });
         toast.success("Artigo atualizado com sucesso!");
       } else {
@@ -129,6 +152,19 @@ export default function BlogAdmin() {
       toast.error(error.message || "Erro ao deletar artigo");
     }
   };
+
+  // Filtrar artigos por busca
+  const artigosFiltrados = useMemo(() => {
+    if (!artigos) return [];
+    if (!searchQuery) return artigos;
+    
+    const query = searchQuery.toLowerCase();
+    return artigos.filter((a: any) => 
+      a.titulo.toLowerCase().includes(query) ||
+      a.categoria?.toLowerCase().includes(query) ||
+      a.tags?.some((t: string) => t.toLowerCase().includes(query))
+    );
+  }, [artigos, searchQuery]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -176,7 +212,7 @@ export default function BlogAdmin() {
             </div>
           )}
 
-          {/* Formulário */}
+          {/* Formulário com Tabs */}
           {showForm && (
             <Card className="border-primary/30">
               <CardHeader>
@@ -188,170 +224,267 @@ export default function BlogAdmin() {
                   Preencha os campos abaixo para {editingId ? "atualizar" : "criar"} seu artigo
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">Título *</label>
-                    <Input
-                      placeholder="Ex: A Importância da Música no Advento"
-                      value={titulo}
-                      onChange={(e) => handleTituloChange(e.target.value)}
+              <CardContent>
+                <Tabs defaultValue={previewMode ? "preview" : "editor"} onValueChange={(v) => setPreviewMode(v === "preview")}>
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="editor">Editar</TabsTrigger>
+                    <TabsTrigger value="preview">Preview</TabsTrigger>
+                  </TabsList>
+
+                  {/* Aba Editor */}
+                  <TabsContent value="editor" className="space-y-4 mt-4">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Título *</label>
+                        <Input
+                          placeholder="Ex: A Importância da Música no Advento"
+                          value={titulo}
+                          onChange={(e) => handleTituloChange(e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Slug (URL) *</label>
+                        <Input
+                          placeholder="importancia-musica-advento"
+                          value={slug}
+                          onChange={(e) => setSlug(e.target.value)}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Resumo *</label>
+                      <Textarea
+                        placeholder="Breve descrição do artigo (1-2 frases)"
+                        value={resumo}
+                        onChange={(e) => setResumo(e.target.value)}
+                        rows={2}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Conteúdo * ({tempoLeitura} min de leitura)</label>
+                      <RichTextEditor
+                        content={conteudo}
+                        onChange={setConteudo}
+                        placeholder="Escreva o conteúdo completo do artigo aqui..."
+                      />
+                    </div>
+
+                    <ImageUpload
+                      value={imagemCapa}
+                      onChange={setImagemCapa}
+                      label="Imagem de Capa"
                     />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">Slug (URL) *</label>
-                    <Input
-                      placeholder="importancia-musica-advento"
-                      value={slug}
-                      onChange={(e) => setSlug(e.target.value)}
-                    />
-                  </div>
-                </div>
 
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Resumo *</label>
-                  <Textarea
-                    placeholder="Breve descrição do artigo (1-2 frases)"
-                    value={resumo}
-                    onChange={(e) => setResumo(e.target.value)}
-                    rows={2}
-                  />
-                </div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Categoria</label>
+                        <Input
+                          placeholder="Ex: Advento, Liturgia, Dicas"
+                          value={categoria}
+                          onChange={(e) => setCategoria(e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Tags (separadas por vírgula)</label>
+                        <Input
+                          placeholder="música, liturgia, advento"
+                          value={tags}
+                          onChange={(e) => setTags(e.target.value)}
+                        />
+                      </div>
+                    </div>
 
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Conteúdo *</label>
-                  <RichTextEditor
-                    content={conteudo}
-                    onChange={setConteudo}
-                    placeholder="Escreva o conteúdo completo do artigo aqui..."
-                  />
-                </div>
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Nome do Autor</label>
+                      <Input
+                        placeholder="Seu nome"
+                        value={autorNome}
+                        onChange={(e) => setAutorNome(e.target.value)}
+                      />
+                    </div>
 
-                <ImageUpload
-                  value={imagemCapa}
-                  onChange={setImagemCapa}
-                  label="Imagem de Capa"
-                />
+                    {/* SEO Fields */}
+                    <div className="border-t pt-4 mt-4">
+                      <h3 className="font-semibold text-sm mb-4 text-primary">Otimização SEO</h3>
+                      
+                      <div className="space-y-4">
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">Meta Descrição ({metaDescricaoAuto.length}/160)</label>
+                          <Textarea
+                            placeholder="Descrição que aparece nos resultados do Google"
+                            value={metaDescricao}
+                            onChange={(e) => setMetaDescricao(e.target.value)}
+                            rows={2}
+                            maxLength={160}
+                          />
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {metaDescricao ? "Personalizada" : "Auto-gerada do resumo"}
+                          </p>
+                        </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">Categoria</label>
-                    <Input
-                      placeholder="Ex: Advento, Liturgia, Dicas"
-                      value={categoria}
-                      onChange={(e) => setCategoria(e.target.value)}
-                    />
-                  </div>
-                </div>
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">Meta Keywords (separadas por vírgula)</label>
+                          <Input
+                            placeholder="música litúrgica, advento, repertório"
+                            value={metaKeywords}
+                            onChange={(e) => setMetaKeywords(e.target.value)}
+                          />
+                        </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">Tags (separadas por vírgula)</label>
-                    <Input
-                      placeholder="música, liturgia, advento"
-                      value={tags}
-                      onChange={(e) => setTags(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">Nome do Autor</label>
-                    <Input
-                      placeholder="Seu nome"
-                      value={autorNome}
-                      onChange={(e) => setAutorNome(e.target.value)}
-                    />
-                  </div>
-                </div>
+                        <div className="bg-muted/50 p-3 rounded-lg text-sm space-y-1">
+                          <p><strong>URL Canônica:</strong> <code className="text-xs bg-background px-2 py-1 rounded">/blog/{slug || "seu-slug"}</code></p>
+                          <p><strong>Tempo de Leitura:</strong> {tempoLeitura} minuto{tempoLeitura !== 1 ? "s" : ""}</p>
+                        </div>
+                      </div>
+                    </div>
 
-                <div className="flex gap-3 pt-4">
-                  <Button
-                    onClick={handleSalvar}
-                    disabled={criarMutation.isPending || atualizarMutation.isPending}
-                    className="flex-1 gap-2"
-                  >
-                    <Save className="w-4 h-4" />
-                    {editingId ? "Atualizar" : "Publicar"} Artigo
-                  </Button>
-                  <Button variant="outline" onClick={resetForm} className="flex-1">
-                    Cancelar
-                  </Button>
-                </div>
+                    <div className="flex gap-3 pt-4">
+                      <Button
+                        onClick={handleSalvar}
+                        disabled={criarMutation.isPending || atualizarMutation.isPending}
+                        className="flex-1 gap-2"
+                      >
+                        <Save className="w-4 h-4" />
+                        {editingId ? "Atualizar" : "Publicar"} Artigo
+                      </Button>
+                      <Button variant="outline" onClick={resetForm} className="flex-1">
+                        Cancelar
+                      </Button>
+                    </div>
+                  </TabsContent>
+
+                  {/* Aba Preview */}
+                  <TabsContent value="preview" className="mt-4">
+                    <div className="space-y-6">
+                      {/* Preview SEO */}
+                      <div className="border rounded-lg p-4 bg-white dark:bg-slate-900">
+                        <h3 className="text-sm font-semibold mb-3 text-slate-600 dark:text-slate-300">Preview no Google</h3>
+                        <div className="space-y-2">
+                          <div className="text-blue-600 dark:text-blue-400 text-sm">
+                            {slug ? `louvamais.com.br/blog/${slug}` : "louvamais.com.br/blog/seu-slug"}
+                          </div>
+                          <div className="text-lg font-semibold text-slate-900 dark:text-white line-clamp-2">
+                            {titulo || "Seu Título Aqui"}
+                          </div>
+                          <div className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">
+                            {metaDescricaoAuto}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Preview do Artigo */}
+                      <div className="border rounded-lg p-6 bg-card">
+                        <div className="space-y-4">
+                          {imagemCapa && (
+                            <img src={imagemCapa} alt={titulo} className="w-full h-64 object-cover rounded-lg" />
+                          )}
+                          
+                          <div className="flex items-center gap-2 flex-wrap">
+                            {categoria && <Badge>{categoria}</Badge>}
+                            <span className="text-xs text-muted-foreground">
+                              {tempoLeitura} min de leitura
+                            </span>
+                          </div>
+
+                          <h1 className="text-3xl font-bold">{titulo || "Seu Título Aqui"}</h1>
+                          
+                          <div className="text-sm text-muted-foreground">
+                            Por <strong>{autorNome}</strong>
+                          </div>
+
+                          <div className="prose dark:prose-invert max-w-none">
+                            {conteudo ? (
+                              <div dangerouslySetInnerHTML={{ __html: conteudo }} />
+                            ) : (
+                              <p className="text-muted-foreground">Seu conteúdo aparecerá aqui...</p>
+                            )}
+                          </div>
+
+                          {tags && (
+                            <div className="flex gap-2 flex-wrap pt-4 border-t">
+                              {tags.split(",").map((tag, i) => (
+                                <Badge key={i} variant="secondary">
+                                  {tag.trim()}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
           )}
 
           {/* Lista de Artigos */}
-          {!showForm && artigos && artigos.length > 0 && (
-            <div className="grid gap-4">
-              {artigos.map((artigo) => (
-                <Card key={artigo.id} className="group hover:border-primary/50 transition-colors">
-                  <CardHeader>
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          {artigo.categoria && (
-                            <Badge variant="secondary" className="text-xs">
-                              {artigo.categoria}
-                            </Badge>
-                          )}
-                          <Badge variant={artigo.publicado === 1 ? "default" : "outline"} className="text-xs">
-                            {artigo.publicado === 1 ? "Publicado" : "Rascunho"}
-                          </Badge>
-                          <span className="text-xs text-muted-foreground flex items-center gap-1">
-                            <Eye className="w-3 h-3" />
-                            {artigo.visualizacoes}
-                          </span>
-                        </div>
-                        <CardTitle className="text-xl">{artigo.titulo}</CardTitle>
-                        <CardDescription className="line-clamp-2 mt-2">
-                          {artigo.resumo}
-                        </CardDescription>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleEditar(artigo)}
-                        >
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleDeletar(artigo.id)}
-                          disabled={deletarMutation.isPending}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                        <Link href={`/blog/${artigo.slug}`}>
-                          <Button variant="outline" size="sm">
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                        </Link>
-                      </div>
-                    </div>
-                  </CardHeader>
-                </Card>
-              ))}
-            </div>
-          )}
+          {!showForm && artigos && (
+            <div className="space-y-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Buscar por título, categoria ou tags..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
 
-          {!showForm && (!artigos || artigos.length === 0) && (
-            <Card className="border-dashed">
-              <CardHeader className="text-center py-12">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 mx-auto mb-4">
-                  <BookOpen className="w-8 h-8 text-primary" />
+              {artigosFiltrados.length > 0 ? (
+                <div className="grid gap-4">
+                  {artigosFiltrados.map((artigo) => (
+                    <Card key={artigo.id} className="group hover:border-primary/50 transition-colors">
+                      <CardHeader>
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2 flex-wrap">
+                              {artigo.categoria && (
+                                <Badge variant="secondary" className="text-xs">
+                                  {artigo.categoria}
+                                </Badge>
+                              )}
+                              <Badge variant={artigo.publicado === 1 ? "default" : "outline"} className="text-xs">
+                                {artigo.publicado === 1 ? "Publicado" : "Rascunho"}
+                              </Badge>
+                              <span className="text-xs text-muted-foreground">
+                                {artigo.visualizacoes || 0} visualizações
+                              </span>
+                            </div>
+                            <h3 className="text-lg font-semibold text-foreground mb-1">{artigo.titulo}</h3>
+                            <p className="text-sm text-muted-foreground">{artigo.resumo}</p>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleEditar(artigo)}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeletar(artigo.id)}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </CardHeader>
+                    </Card>
+                  ))}
                 </div>
-                <CardTitle className="text-2xl">Nenhum artigo criado ainda</CardTitle>
-                <CardDescription className="text-base mb-6">
-                  Comece criando seu primeiro artigo sobre música litúrgica
-                </CardDescription>
-                <Button onClick={() => setShowForm(true)} size="lg" className="gap-2 mx-auto">
-                  <Plus className="w-5 h-5" />
-                  Criar Primeiro Artigo
-                </Button>
-              </CardHeader>
-            </Card>
+              ) : (
+                <Card>
+                  <CardContent className="py-8 text-center text-muted-foreground">
+                    {searchQuery ? "Nenhum artigo encontrado com essa busca" : "Nenhum artigo criado ainda"}
+                  </CardContent>
+                </Card>
+              )}
+            </div>
           )}
         </div>
       </div>

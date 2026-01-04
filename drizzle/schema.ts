@@ -100,6 +100,9 @@ export const artigos = mysqlTable("artigos", {
   autorNome: varchar("autorNome", { length: 255 }),
   publicado: int("publicado").default(1).notNull(), // 0 = rascunho, 1 = publicado
   visualizacoes: int("visualizacoes").default(0).notNull(),
+  // SEO fields
+  metaDescricao: varchar("metaDescricao", { length: 160 }), // Meta description para Google
+  metaKeywords: varchar("metaKeywords", { length: 255 }), // Meta keywords para SEO
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

@@ -843,4 +843,28 @@
 - [x] Testar fluxo completo de criação e publicação (funciona via /blog-admin)
 - [x] Adicionar link de acesso ao /blog-admin no Management UI (nova aba "Blog" adicionada em Admin.tsx)
 - [x] Testar acesso via Management UI (botão funciona e navega para /blog-admin)
-- [ ] Salvar checkpoint com correção
+- [x] Salvar checkpoint com correção
+
+
+## Correção Editor Rico, Preview e SEO
+
+- [ ] Investigar por que editor rico não está editando texto
+- [ ] Corrigir componente RichTextEditor (verificar estado e onChange)
+- [ ] Adicionar preview em tempo real do artigo
+- [ ] Implementar campos SEO (meta description, meta keywords, og:image, canonical URL)
+- [ ] Adicionar slug automático otimizado para SEO
+- [ ] Adicionar campo de "Tempo de leitura" calculado automaticamente
+- [ ] Testar editor rico com todas as ferramentas de formatação
+- [ ] Testar preview antes de publicar
+- [ ] Testar geração automática de meta tags
+- [ ] Salvar checkpoint com todas as correções
+
+
+## Correção Editor Rico, Preview e SEO
+
+- [x] Investigar problemas do editor rico (sincronização corrigida)
+- [x] Corrigir editor rico Tiptap (funcionando com formatação completa)
+- [x] Adicionar preview de artigos (abas Editar/Preview implementadas)
+- [x] Implementar campos SEO (meta description, keywords, URL canônica, tempo de leitura)
+- [x] Testar fluxo completo (artigo "Música Litúrgica" criado e publicado com sucesso)
+- [x] Salvar checkpoint
