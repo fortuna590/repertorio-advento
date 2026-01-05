@@ -255,3 +255,62 @@ export const musicHistory = mysqlTable("musicHistory", {
 
 export type MusicHistory = typeof musicHistory.$inferSelect;
 export type InsertMusicHistory = typeof musicHistory.$inferInsert;
+
+/**
+ * Tabela para repertórios administrativos (criados pelo admin)
+ */
+export const repertoriosAdmin = mysqlTable("repertoriosAdmin", {
+  id: int("id").autoincrement().primaryKey(),
+  nome: varchar("nome", { length: 255 }).notNull(),
+  descricao: text("descricao"),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  corPrimaria: varchar("corPrimaria", { length: 7 }).default("#7c3aed").notNull(),
+  corSecundaria: varchar("corSecundaria", { length: 7 }).default("#d946ef").notNull(),
+  corFundo: varchar("corFundo", { length: 7 }).default("#1e1b4b").notNull(),
+  corTexto: varchar("corTexto", { length: 7 }).default("#ffffff").notNull(),
+  imagemCapa: varchar("imagemCapa", { length: 500 }),
+  publicado: int("publicado").default(1).notNull(),
+  visualizacoes: int("visualizacoes").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type RepertorioAdmin = typeof repertoriosAdmin.$inferSelect;
+export type InsertRepertorioAdmin = typeof repertoriosAdmin.$inferInsert;
+
+/**
+ * Tabela para momentos da missa (configuráveis por repertório)
+ */
+export const momentosMissa = mysqlTable("momentosMissa", {
+  id: int("id").autoincrement().primaryKey(),
+  repertorioId: int("repertorioId").notNull().references(() => repertoriosAdmin.id),
+  nome: varchar("nome", { length: 255 }).notNull(),
+  descricao: text("descricao"),
+  ordem: int("ordem").notNull(),
+  icone: varchar("icone", { length: 50 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MomentoMissa = typeof momentosMissa.$inferSelect;
+export type InsertMomentoMissa = typeof momentosMissa.$inferInsert;
+
+/**
+ * Tabela para músicas associadas a repertórios
+ */
+export const musicasRepertorio = mysqlTable("musicasRepertorio", {
+  id: int("id").autoincrement().primaryKey(),
+  repertorioId: int("repertorioId").notNull().references(() => repertoriosAdmin.id),
+  momentoId: int("momentoId").notNull().references(() => momentosMissa.id),
+  titulo: varchar("titulo", { length: 255 }).notNull(),
+  artista: varchar("artista", { length: 255 }),
+  descricao: text("descricao"),
+  linkYoutube: varchar("linkYoutube", { length: 500 }),
+  linkCifra: varchar("linkCifra", { length: 500 }),
+  ordem: int("ordem").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MusicaRepertorio = typeof musicasRepertorio.$inferSelect;
+export type InsertMusicaRepertorio = typeof musicasRepertorio.$inferInsert;

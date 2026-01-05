@@ -860,6 +860,19 @@
 - [ ] Salvar checkpoint com todas as correções
 
 
+## Painel de Administração de Repertórios
+
+- [x] Investigar e planejar arquitetura
+- [x] Atualizar schema do banco de dados (3 novas tabelas criadas)
+- [x] Criar router tRPC para repertórios (CRUD completo)
+- [x] Criar componentes reutilizáveis (ColorPicker implementado)
+- [x] Implementar página RepertorioAdmin (com abas Lista, Editar, Preview)
+- [x] Adicionar preview de repertórios (aba Preview funcional)
+- [x] Implementar personalização de cores (4 cores customizáveis com seletor visual)
+- [x] Padronizar design com blog (mesma estilização e layout)
+- [x] Testar fluxo completo (repertório "Natal 2025" criado com sucesso)
+- [x] Salvar checkpoint
+
 ## Correção Editor Rico, Preview e SEO
 
 - [x] Investigar problemas do editor rico (sincronização corrigida)
@@ -868,3 +881,25 @@
 - [x] Implementar campos SEO (meta description, keywords, URL canônica, tempo de leitura)
 - [x] Testar fluxo completo (artigo "Música Litúrgica" criado e publicado com sucesso)
 - [x] Salvar checkpoint
+
+
+## Painel de Administração de Repertórios
+
+- [ ] Investigar e planejar arquitetura (schema, routers, componentes)
+- [ ] Atualizar schema do banco para repertórios com personalização de cores
+- [ ] Criar tabela de momentos da missa (configurável por repertório)
+- [ ] Criar tabela de músicas por repertório com links YouTube e Cifra
+- [ ] Criar router tRPC para CRUD de repertórios
+- [ ] Criar router tRPC para CRUD de momentos da missa
+- [ ] Criar router tRPC para CRUD de músicas por repertório
+- [ ] Criar componentes reutilizáveis (FormularioRepertorio, ListaMusicasForm)
+- [ ] Implementar página RepertorioAdmin com abas Editar/Preview
+- [ ] Adicionar preview em tempo real do repertório
+- [ ] Implementar seletor de cores para personalização
+- [ ] Padronizar design com painel de blog (mesma estrutura)
+- [ ] Adicionar link de acesso ao painel de repertórios no Admin
+- [ ] Testar CRUD completo de repertórios
+- [ ] Testar CRUD de momentos da missa
+- [ ] Testar personalização de cores
+- [ ] Testar preview em tempo real
+- [ ] Salvar checkpoint

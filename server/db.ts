@@ -1,6 +1,6 @@
 import { eq, desc, gte, count } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, clicks, InsertClick, notifications, InsertNotification, Notification, artigos, repertorios, products, Product, InsertProduct, depoimentos, Depoimento, InsertDepoimento, liturgias, Liturgia, InsertLiturgia } from "../drizzle/schema";
+import { InsertUser, users, clicks, InsertClick, notifications, InsertNotification, Notification, artigos, repertorios, products, Product, InsertProduct, depoimentos, Depoimento, InsertDepoimento, liturgias, Liturgia, InsertLiturgia, repertoriosAdmin, momentosMissa, musicasRepertorio } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;

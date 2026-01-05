@@ -308,6 +308,10 @@ export default function Admin() {
               <FileText className="h-4 w-4 mr-2" />
               Blog
             </TabsTrigger>
+            <TabsTrigger value="repertorios" className="data-[state=active]:bg-purple-600">
+              <Music className="h-4 w-4 mr-2" />
+              Repertórios
+            </TabsTrigger>
           </TabsList>
 
           {/* Tab Usuários */}
@@ -935,6 +939,43 @@ export default function Admin() {
                       <Button className="bg-purple-600 hover:bg-purple-700 gap-2">
                         <BookOpen className="h-4 w-4" />
                         Ir para Painel do Blog
+                        <ExternalLink className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          {/* Tab Repertórios */}
+          <TabsContent value="repertorios" className="space-y-6">
+            <Card className="bg-slate-800/50 border-purple-500/20">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <Music className="h-5 w-5 text-purple-400" />
+                  Gerenciador de Repertórios
+                </CardTitle>
+                <CardDescription className="text-slate-400">
+                  Acesse o painel de administração de repertórios para criar, editar e personalizar
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <p className="text-slate-300">
+                    Clique no botão abaixo para acessar o painel de admin de repertórios onde você pode:
+                  </p>
+                  <ul className="list-disc list-inside space-y-2 text-slate-300">
+                    <li>Criar novos repertórios com personalização de cores</li>
+                    <li>Adicionar momentos da missa (Entrada, Glória, Comunhão, etc)</li>
+                    <li>Adicionar músicas com links para YouTube e Cifra</li>
+                    <li>Visualizar preview do repertório antes de publicar</li>
+                    <li>Editar e deletar repertórios existentes</li>
+                  </ul>
+                  <div className="pt-4">
+                    <Link href="/repertorio-admin">
+                      <Button className="bg-purple-600 hover:bg-purple-700 gap-2">
+                        <Music className="h-4 w-4" />
+                        Ir para Painel de Repertórios
                         <ExternalLink className="h-4 w-4" />
                       </Button>
                     </Link>
