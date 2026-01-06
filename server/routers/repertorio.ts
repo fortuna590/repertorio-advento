@@ -325,4 +325,32 @@ export const repertorioRouter = router({
 
       return { success: true };
     }),
+
+  incrementarVisualizacoes: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input }: any) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      try {
+        const repertorio = await db
+          .select()
+          .from(repertoriosAdmin)
+          .where(eq(repertoriosAdmin.id, input.id));
+
+        if (!repertorio[0]) return { success: false };
+
+        const novasVisualizacoes = (repertorio[0].visualizacoes || 0) + 1;
+
+        await db
+          .update(repertoriosAdmin)
+          .set({ visualizacoes: novasVisualizacoes })
+          .where(eq(repertoriosAdmin.id, input.id));
+
+        return { success: true, visualizacoes: novasVisualizacoes };
+      } catch (e) {
+        console.error("Error incrementing visualizacoes:", e);
+        return { success: false };
+      }
+    }),
 });

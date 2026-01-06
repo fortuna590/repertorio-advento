@@ -66,6 +66,9 @@ export function RepertorioAdmin() {
     ordem: 1,
   });
 
+  const [editingMomentoId, setEditingMomentoId] = useState<number | null>(null);
+  const [editingMusicaId, setEditingMusicaId] = useState<number | null>(null);
+
   // Queries
   const repertoriosQuery = (trpc as any).repertorio.list.useQuery();
   const momentosQuery = (trpc as any).repertorio.listMomentos.useQuery(
@@ -86,7 +89,11 @@ export function RepertorioAdmin() {
   const updateMutation = (trpc as any).repertorio.update.useMutation();
   const deleteMutation = (trpc as any).repertorio.delete.useMutation();
   const createMomentoMutation = (trpc as any).repertorio.createMomento.useMutation();
+  const updateMomentoMutation = (trpc as any).repertorio.updateMomento.useMutation();
+  const deleteMomentoMutation = (trpc as any).repertorio.deleteMomento.useMutation();
   const createMusicaMutation = (trpc as any).repertorio.createMusica.useMutation();
+  const updateMusicaMutation = (trpc as any).repertorio.updateMusica.useMutation();
+  const deleteMusicaMutation = (trpc as any).repertorio.deleteMusica.useMutation();
 
   const handleSaveRepertorio = async () => {
     try {
@@ -119,26 +126,64 @@ export function RepertorioAdmin() {
   const handleAddMomento = async () => {
     if (!editingId || !momentoForm.nome) return;
     try {
-      await createMomentoMutation.mutateAsync({
-        repertorioId: editingId,
-        ...momentoForm,
-      });
+      if (editingMomentoId) {
+        await updateMomentoMutation.mutateAsync({
+          id: editingMomentoId,
+          ...momentoForm,
+        });
+        setEditingMomentoId(null);
+      } else {
+        await createMomentoMutation.mutateAsync({
+          repertorioId: editingId,
+          ...momentoForm,
+        });
+      }
       setMomentoForm({ nome: "", descricao: "", ordem: 1, icone: "" });
       await momentosQuery.refetch();
     } catch (error) {
-      console.error("Erro ao adicionar momento:", error);
+      console.error("Erro ao salvar momento:", error);
     }
+  };
+
+  const handleDeleteMomento = async (id: number) => {
+    if (confirm("Tem certeza que deseja deletar este momento e todas as suas músicas?")) {
+      try {
+        await deleteMomentoMutation.mutateAsync({ id });
+        await momentosQuery.refetch();
+        await musicasQuery.refetch();
+      } catch (error) {
+        console.error("Erro ao deletar momento:", error);
+      }
+    }
+  };
+
+  const handleEditMomento = (momento: any) => {
+    setMomentoForm({
+      nome: momento.nome,
+      descricao: momento.descricao || "",
+      ordem: momento.ordem,
+      icone: momento.icone || "",
+    });
+    setEditingMomentoId(momento.id);
   };
 
   const handleAddMusica = async () => {
     if (!editingId || !musicaForm.titulo) return;
     try {
       const momento = momentos[0];
-      await createMusicaMutation.mutateAsync({
-        repertorioId: editingId,
-        momentoId: momento?.id || 1,
-        ...musicaForm,
-      });
+      if (editingMusicaId) {
+        await updateMusicaMutation.mutateAsync({
+          id: editingMusicaId,
+          ...musicaForm,
+        });
+        setEditingMusicaId(null);
+      } else {
+        await createMusicaMutation.mutateAsync({
+          repertorioId: editingId,
+          momentoId: momento?.id || 1,
+          ...musicaForm,
+        });
+      }
       setMusicaForm({
         titulo: "",
         artista: "",
@@ -149,8 +194,31 @@ export function RepertorioAdmin() {
       });
       await musicasQuery.refetch();
     } catch (error) {
-      console.error("Erro ao adicionar música:", error);
+      console.error("Erro ao salvar música:", error);
     }
+  };
+
+  const handleDeleteMusica = async (id: number) => {
+    if (confirm("Tem certeza que deseja deletar esta música?")) {
+      try {
+        await deleteMusicaMutation.mutateAsync({ id });
+        await musicasQuery.refetch();
+      } catch (error) {
+        console.error("Erro ao deletar música:", error);
+      }
+    }
+  };
+
+  const handleEditMusica = (musica: any) => {
+    setMusicaForm({
+      titulo: musica.titulo,
+      artista: musica.artista || "",
+      descricao: musica.descricao || "",
+      linkYoutube: musica.linkYoutube || "",
+      linkCifra: musica.linkCifra || "",
+      ordem: musica.ordem,
+    });
+    setEditingMusicaId(musica.id);
   };
 
   const resetForm = () => {
@@ -395,15 +463,25 @@ export function RepertorioAdmin() {
                           <p className="font-medium">{momento.nome}</p>
                           <p className="text-sm text-muted-foreground">Ordem: {momento.ordem}</p>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            // TODO: Implementar edição de momento
-                          }}
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleEditMomento(momento)}
+                            className="gap-1"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                            Editar
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDeleteMomento(momento.id)}
+                            className="gap-1 text-destructive hover:text-destructive"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
                       </div>
                     </Card>
                   ))}
@@ -474,15 +552,25 @@ export function RepertorioAdmin() {
                             )}
                           </div>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            // TODO: Implementar edição de música
-                          }}
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleEditMusica(musica)}
+                            className="gap-1"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                            Editar
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDeleteMusica(musica.id)}
+                            className="gap-1 text-destructive hover:text-destructive"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
                       </div>
                     </Card>
                   ))}

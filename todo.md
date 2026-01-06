@@ -903,3 +903,19 @@
 - [ ] Testar personalização de cores
 - [ ] Testar preview em tempo real
 - [ ] Salvar checkpoint
+
+
+## Publicação de Repertórios Admin no Site Público
+
+- [x] Analisar estrutura de dados dos repertórios admin
+- [x] Verificar e melhorar botões de edição (editar/excluir/novo) para músicas
+- [x] Verificar e melhorar botões de edição (editar/excluir/novo) para momentos da missa
+- [x] Implementar rastreamento de visualizações para repertórios admin
+- [ ] Implementar rastreamento de visualizações para músicas admin
+- [x] Criar página pública de repertórios admin com filtros por tempo litúrgico
+- [x] Adicionar cards clicáveis para visualizar detalhes dos repertórios
+- [x] Adicionar botão de voltar na página de repertórios
+- [x] Integrar dados de repertórios admin na página de estatísticas
+- [ ] Integrar dados de músicas admin na página de estatísticas
+- [ ] Testar fluxo completo de visualização e rastreamento
+- [ ] Salvar checkpoint final
