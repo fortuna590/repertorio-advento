@@ -929,3 +929,17 @@
 - [x] Adicionar badge diferenciador para repertórios admin
 - [x] Testar exibição unificada
 - [x] Salvar checkpoint final
+
+
+## Página de Detalhes do Repertório Admin
+
+- [x] Criar componente RepertorioAdminDetalhes.tsx
+- [x] Exibir informações do repertório (nome, descrição, cores)
+- [x] Listar todos os momentos da missa
+- [x] Exibir músicas de cada momento com links YouTube e Cifra
+- [x] Adicionar botão de voltar
+- [x] Incrementar visualizações ao acessar página
+- [x] Adicionar rota /repertorio-admin/:id no App.tsx
+- [x] Atualizar cards em Repertorios.tsx para navegar para detalhes
+- [x] Testar navegação completa
+- [x] Salvar checkpoint final

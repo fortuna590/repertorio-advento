@@ -220,11 +220,10 @@ export default function Repertorios() {
             // Repertórios Admin
             if (repertorio.tipo === "admin") {
               return (
-                <Card
-                  key={repertorio.id}
-                  className="group cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 border-border/50 bg-gradient-to-br from-orange-500/20 to-red-500/20 backdrop-blur-sm hover:border-purple-500/50"
-                  onClick={() => incrementarVisualizacoesMutation.mutate({ id: repertorio.adminId })}
-                >
+                <Link key={repertorio.id} href={`/repertorio-admin/${repertorio.adminId}`}>
+                  <Card
+                    className="group cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 border-border/50 bg-gradient-to-br from-orange-500/20 to-red-500/20 backdrop-blur-sm hover:border-purple-500/50"
+                  >
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1">
@@ -262,6 +261,7 @@ export default function Repertorios() {
                     </div>
                   </CardContent>
                 </Card>
+              </Link>
               );
             }
 
