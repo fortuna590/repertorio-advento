@@ -919,3 +919,13 @@
 - [ ] Integrar dados de músicas admin na página de estatísticas
 - [ ] Testar fluxo completo de visualização e rastreamento
 - [ ] Salvar checkpoint final
+
+
+## Integração de Repertórios Admin na Mesma Página
+
+- [x] Remover botão de alternância entre repertórios padrão e admin
+- [x] Integrar repertórios admin na mesma listagem dos repertórios padrão
+- [x] Manter filtros por tempo litúrgico funcionando para ambos
+- [x] Adicionar badge diferenciador para repertórios admin
+- [x] Testar exibição unificada
+- [x] Salvar checkpoint final

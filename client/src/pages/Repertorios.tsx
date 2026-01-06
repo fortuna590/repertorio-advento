@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { Music, Calendar, Sparkles, Church, Star, Cross, Sunrise, Sprout, PartyPopper, Eye, ArrowLeft } from "lucide-react";
+import { Music, Calendar, Sparkles, Church, Star, Cross, Sunrise, Sprout, PartyPopper, Eye } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,14 +9,13 @@ import { trpc } from "@/lib/trpc";
 
 export default function Repertorios() {
   const [filtroTempo, setFiltroTempo] = useState<string | null>(null);
-  const [mostrarAdmin, setMostrarAdmin] = useState(false);
 
   // Carregar repertórios admin
   const repertoriosAdminQuery = (trpc as any).repertorio.list.useQuery();
   const incrementarVisualizacoesMutation = (trpc as any).repertorio.incrementarVisualizacoes.useMutation();
   const repertoriosAdmin = repertoriosAdminQuery.data || [];
 
-  const repertorios = [
+  const repertoriosPadrao = [
     {
       id: "advento",
       titulo: "Tempo do Advento",
@@ -27,7 +26,8 @@ export default function Repertorios() {
       totalMomentos: 11,
       link: "/repertorio",
       icone: Sparkles,
-      gradiente: "from-purple-500/20 to-pink-500/20"
+      gradiente: "from-purple-500/20 to-pink-500/20",
+      tipo: "padrao"
     },
     {
       id: "missa-do-galo",
@@ -39,7 +39,8 @@ export default function Repertorios() {
       totalMomentos: 10,
       link: "/repertorio/missa-do-galo",
       icone: Church,
-      gradiente: "from-yellow-500/20 to-orange-500/20"
+      gradiente: "from-yellow-500/20 to-orange-500/20",
+      tipo: "padrao"
     },
     {
       id: "tempo-do-natal",
@@ -51,7 +52,8 @@ export default function Repertorios() {
       totalMomentos: 9,
       link: "/repertorio/tempo-do-natal",
       icone: Star,
-      gradiente: "from-blue-500/20 to-cyan-500/20"
+      gradiente: "from-blue-500/20 to-cyan-500/20",
+      tipo: "padrao"
     },
     {
       id: "quaresma",
@@ -64,7 +66,8 @@ export default function Repertorios() {
       link: "/repertorio/quaresma",
       icone: Cross,
       gradiente: "from-purple-500/20 to-violet-500/20",
-      emBreve: true
+      emBreve: true,
+      tipo: "padrao"
     },
     {
       id: "pascoa",
@@ -77,7 +80,8 @@ export default function Repertorios() {
       link: "/repertorio/pascoa",
       icone: Sunrise,
       gradiente: "from-yellow-500/20 to-amber-500/20",
-      emBreve: true
+      emBreve: true,
+      tipo: "padrao"
     },
     {
       id: "tempo-comum",
@@ -90,7 +94,8 @@ export default function Repertorios() {
       link: "/repertorio/tempo-comum",
       icone: Sprout,
       gradiente: "from-green-500/20 to-emerald-500/20",
-      emBreve: true
+      emBreve: true,
+      tipo: "padrao"
     },
     {
       id: "celebracoes-especiais",
@@ -103,9 +108,35 @@ export default function Repertorios() {
       link: "/repertorio/celebracoes-especiais",
       icone: PartyPopper,
       gradiente: "from-red-500/20 to-rose-500/20",
-      emBreve: true
+      emBreve: true,
+      tipo: "padrao"
     }
   ];
+
+  // Converter repertórios admin para o formato unificado
+  const repertoriosAdminFormatados = repertoriosAdmin.map((rep: any) => ({
+    id: `admin-${rep.id}`,
+    titulo: rep.nome,
+    descricao: rep.descricao || "Repertório personalizado",
+    tempoLiturgico: "Personalizado",
+    totalMusicas: 0, // Pode ser calculado se necessário
+    totalMomentos: 0,
+    icone: Music,
+    gradiente: "from-orange-500/20 to-red-500/20",
+    tipo: "admin",
+    visualizacoes: rep.visualizacoes || 0,
+    adminId: rep.id
+  }));
+
+  // Combinar todos os repertórios
+  const todosRepertorios = [...repertoriosPadrao, ...repertoriosAdminFormatados];
+
+  // Filtrar repertórios
+  const repertoriosFiltrados = todosRepertorios.filter((r) => {
+    if (filtroTempo === null) return true;
+    if (filtroTempo === "Personalizado") return r.tipo === "admin";
+    return r.tempoLiturgico === filtroTempo;
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-950 via-slate-900 to-blue-950">
@@ -119,112 +150,92 @@ export default function Repertorios() {
               <Music className="w-8 h-8 text-purple-400" />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white">
-              {mostrarAdmin ? "Repertórios Personalizados" : "Repertórios Litúrgicos"}
+              Repertórios Litúrgicos
             </h1>
           </div>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            {mostrarAdmin
-              ? "Explore os repertórios criados pelos administradores do LouvaMais"
-              : "Explore nossos repertórios organizados por tempo litúrgico, com músicas cuidadosamente selecionadas para cada momento da Santa Missa."}
+            Explore nossos repertórios organizados por tempo litúrgico, com músicas cuidadosamente selecionadas para cada momento da Santa Missa.
           </p>
         </div>
 
         {/* Filtros por Tempo Litúrgico */}
-        {!mostrarAdmin && (
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
+        <div className="flex flex-wrap justify-center gap-2 mb-8">
+          <Button
+            variant={filtroTempo === null ? "default" : "outline"}
+            onClick={() => setFiltroTempo(null)}
+            size="sm"
+            className="rounded-full"
+          >
+            Todos
+          </Button>
+          <Button
+            variant={filtroTempo === "Advento" ? "default" : "outline"}
+            onClick={() => setFiltroTempo("Advento")}
+            size="sm"
+            className="rounded-full"
+          >
+            Advento
+          </Button>
+          <Button
+            variant={filtroTempo === "Natal" ? "default" : "outline"}
+            onClick={() => setFiltroTempo("Natal")}
+            size="sm"
+            className="rounded-full"
+          >
+            Natal
+          </Button>
+          <Button
+            variant={filtroTempo === "Quaresma" ? "default" : "outline"}
+            onClick={() => setFiltroTempo("Quaresma")}
+            size="sm"
+            className="rounded-full"
+          >
+            Quaresma
+          </Button>
+          <Button
+            variant={filtroTempo === "Páscoa" ? "default" : "outline"}
+            onClick={() => setFiltroTempo("Páscoa")}
+            size="sm"
+            className="rounded-full"
+          >
+            Páscoa
+          </Button>
+          {repertoriosAdmin.length > 0 && (
             <Button
-              variant={filtroTempo === null ? "default" : "outline"}
-              onClick={() => setFiltroTempo(null)}
+              variant={filtroTempo === "Personalizado" ? "default" : "outline"}
+              onClick={() => setFiltroTempo("Personalizado")}
               size="sm"
               className="rounded-full"
             >
-              Todos
+              Personalizados
             </Button>
-            <Button
-              variant={filtroTempo === "Advento" ? "default" : "outline"}
-              onClick={() => setFiltroTempo("Advento")}
-              size="sm"
-              className="rounded-full"
-            >
-              Advento
-            </Button>
-            <Button
-              variant={filtroTempo === "Natal" ? "default" : "outline"}
-              onClick={() => setFiltroTempo("Natal")}
-              size="sm"
-              className="rounded-full"
-            >
-              Natal
-            </Button>
-            <Button
-              variant={filtroTempo === "Quaresma" ? "default" : "outline"}
-              onClick={() => setFiltroTempo("Quaresma")}
-              size="sm"
-              className="rounded-full"
-            >
-              Quaresma
-            </Button>
-            <Button
-              variant={filtroTempo === "Páscoa" ? "default" : "outline"}
-              onClick={() => setFiltroTempo("Páscoa")}
-              size="sm"
-              className="rounded-full"
-            >
-              Páscoa
-            </Button>
-          </div>
-        )}
-
-        {/* Botão para mostrar Repertórios Admin */}
-        {repertoriosAdmin.length > 0 && !mostrarAdmin && (
-          <div className="flex justify-center mb-8">
-            <Button
-              onClick={() => setMostrarAdmin(true)}
-              variant="outline"
-              className="gap-2"
-            >
-              <Music className="w-4 h-4" />
-              Ver Repertórios Personalizados ({repertoriosAdmin.length})
-            </Button>
-          </div>
-        )}
-
-        {/* Botão Voltar */}
-        {mostrarAdmin && (
-          <div className="flex justify-start mb-8">
-            <Button
-              onClick={() => setMostrarAdmin(false)}
-              variant="outline"
-              className="gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Voltar
-            </Button>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Grid de Repertórios */}
         <div className="grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
-          {mostrarAdmin ? (
-            // Mostrar Repertórios Admin
-            repertoriosAdmin.length > 0 ? (
-              repertoriosAdmin.map((repertorio: any) => (
+          {repertoriosFiltrados.map((repertorio) => {
+            const Icon = repertorio.icone;
+            
+            // Repertórios Admin
+            if (repertorio.tipo === "admin") {
+              return (
                 <Card
                   key={repertorio.id}
-                  className="group cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 border-border/50 bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-sm hover:border-purple-500/50"
-                  onClick={() => incrementarVisualizacoesMutation.mutate({ id: repertorio.id })}
+                  className="group cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 border-border/50 bg-gradient-to-br from-orange-500/20 to-red-500/20 backdrop-blur-sm hover:border-purple-500/50"
+                  onClick={() => incrementarVisualizacoesMutation.mutate({ id: repertorio.adminId })}
                 >
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <Badge variant="outline" className="bg-purple-500/20 text-purple-300 border-purple-500/30">
-                            Admin
+                          <Badge variant="outline" className="bg-orange-500/20 text-orange-300 border-orange-500/30">
+                            Personalizado
                           </Badge>
                         </div>
                         <CardTitle className="text-2xl md:text-3xl flex items-center gap-3 text-white group-hover:text-purple-300 transition-colors">
-                          <Music className="w-6 h-6 shrink-0" />
-                          <span>{repertorio.nome}</span>
+                          <Icon className="w-6 h-6 shrink-0" />
+                          <span>{repertorio.titulo}</span>
                         </CardTitle>
                       </div>
                     </div>
@@ -236,92 +247,83 @@ export default function Repertorios() {
                   <CardContent className="space-y-4">
                     <div className="flex items-center gap-6 text-sm">
                       <div className="flex items-center gap-2">
-                        <Eye className="w-4 h-4 text-purple-400" />
+                        <Eye className="w-4 h-4 text-orange-400" />
                         <span className="text-gray-300">
-                          <strong className="text-white">{repertorio.visualizacoes || 0}</strong> visualizações
+                          <strong className="text-white">{repertorio.visualizacoes}</strong> visualizações
                         </span>
                       </div>
                     </div>
 
                     <div className="pt-2">
-                      <div className="inline-flex items-center gap-2 text-purple-300 group-hover:text-purple-200 font-medium transition-colors">
+                      <div className="inline-flex items-center gap-2 text-orange-300 group-hover:text-orange-200 font-medium transition-colors">
                         <span>Ver Detalhes</span>
                         <span className="group-hover:translate-x-1 transition-transform">→</span>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
-              ))
-            ) : (
-              <div className="col-span-full text-center py-12">
-                <p className="text-gray-400">Nenhum repertório personalizado criado ainda</p>
-              </div>
-            )
-          ) : (
-            // Mostrar Repertórios Padrão
-            repertorios
-              .filter((r) => filtroTempo === null || r.tempoLiturgico === filtroTempo)
-              .map((repertorio) => {
-                const Icon = repertorio.icone;
-                return (
-                  <Link key={repertorio.id} href={repertorio.link}>
-                    <Card className={`group cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 border-border/50 bg-gradient-to-br ${repertorio.gradiente} backdrop-blur-sm hover:border-purple-500/50`}>
-                      <CardHeader className="pb-4">
-                        <div className="flex items-start justify-between gap-4">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <Badge variant="outline" className="bg-purple-500/20 text-purple-300 border-purple-500/30">
-                                {repertorio.tempoLiturgico}
-                              </Badge>
-                              {repertorio.emBreve && (
-                                <Badge variant="secondary" className="bg-yellow-500/20 text-yellow-300 border-yellow-500/30">
-                                  Em Breve
-                                </Badge>
-                              )}
-                            </div>
-                            <CardTitle className="text-2xl md:text-3xl flex items-center gap-3 text-white group-hover:text-purple-300 transition-colors">
-                              <Icon className="w-6 h-6 shrink-0" />
-                              <span>{repertorio.titulo}</span>
-                            </CardTitle>
-                          </div>
-                        </div>
-                        <CardDescription className="text-base text-gray-300 mt-2">
-                          {repertorio.descricao}
-                        </CardDescription>
-                      </CardHeader>
+              );
+            }
 
-                      <CardContent className="space-y-4">
-                        {/* Estatísticas */}
-                        {!repertorio.emBreve && (
-                          <div className="flex items-center gap-6 text-sm">
-                            <div className="flex items-center gap-2">
-                              <Music className="w-4 h-4 text-purple-400" />
-                              <span className="text-gray-300">
-                                <strong className="text-white">{repertorio.totalMusicas}</strong> músicas
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Calendar className="w-4 h-4 text-purple-400" />
-                              <span className="text-gray-300">
-                                <strong className="text-white">{repertorio.totalMomentos}</strong> momentos
-                              </span>
-                            </div>
-                          </div>
-                        )}
-
-                        {/* CTA */}
-                        <div className="pt-2">
-                          <div className="inline-flex items-center gap-2 text-purple-300 group-hover:text-purple-200 font-medium transition-colors">
-                            <span>{repertorio.emBreve ? "Ver detalhes" : "Explorar Repertório"}</span>
-                            <span className="group-hover:translate-x-1 transition-transform">→</span>
-                          </div>
+            // Repertórios Padrão
+            return (
+              <Link key={repertorio.id} href={repertorio.link || "#"}>
+                <Card className={`group cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 border-border/50 bg-gradient-to-br ${repertorio.gradiente} backdrop-blur-sm hover:border-purple-500/50`}>
+                  <CardHeader className="pb-4">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Badge variant="outline" className="bg-purple-500/20 text-purple-300 border-purple-500/30">
+                            {repertorio.tempoLiturgico}
+                          </Badge>
+                          {repertorio.emBreve && (
+                            <Badge variant="secondary" className="bg-yellow-500/20 text-yellow-300 border-yellow-500/30">
+                              Em Breve
+                            </Badge>
+                          )}
                         </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                );
-              })
-          )}
+                        <CardTitle className="text-2xl md:text-3xl flex items-center gap-3 text-white group-hover:text-purple-300 transition-colors">
+                          <Icon className="w-6 h-6 shrink-0" />
+                          <span>{repertorio.titulo}</span>
+                        </CardTitle>
+                      </div>
+                    </div>
+                    <CardDescription className="text-base text-gray-300 mt-2">
+                      {repertorio.descricao}
+                    </CardDescription>
+                  </CardHeader>
+
+                  <CardContent className="space-y-4">
+                    {/* Estatísticas */}
+                    {!repertorio.emBreve && (
+                      <div className="flex items-center gap-6 text-sm">
+                        <div className="flex items-center gap-2">
+                          <Music className="w-4 h-4 text-purple-400" />
+                          <span className="text-gray-300">
+                            <strong className="text-white">{repertorio.totalMusicas}</strong> músicas
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-purple-400" />
+                          <span className="text-gray-300">
+                            <strong className="text-white">{repertorio.totalMomentos}</strong> momentos
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* CTA */}
+                    <div className="pt-2">
+                      <div className="inline-flex items-center gap-2 text-purple-300 group-hover:text-purple-200 font-medium transition-colors">
+                        <span>{repertorio.emBreve ? "Ver detalhes" : "Explorar Repertório"}</span>
+                        <span className="group-hover:translate-x-1 transition-transform">→</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            );
+          })}
         </div>
       </main>
 
