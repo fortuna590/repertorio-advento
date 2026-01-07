@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useRoute, Link } from "wouter";
-import { ArrowLeft, Music, ExternalLink, Eye, Loader2 } from "lucide-react";
+import { ArrowLeft, Music, ExternalLink, Eye, Loader2, Heart } from "lucide-react";
+import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -25,8 +26,31 @@ export default function RepertorioAdminDetalhes() {
     { enabled: !!repertorioId }
   );
 
-  // Mutation para incrementar visualizações
+  // Mutations
   const incrementarVisualizacoesMutation = (trpc as any).repertorio.incrementarVisualizacoes.useMutation();
+  const incrementarCliqueMutation = (trpc as any).repertorio.incrementarCliqueMusica.useMutation();
+  const addFavoritaMutation = (trpc as any).musicasAdminFavoritas.add.useMutation();
+  const removeFavoritaMutation = (trpc as any).musicasAdminFavoritas.remove.useMutation();
+
+  const handleClickLink = (musicaId: number, tipo: "youtube" | "cifra", url: string) => {
+    incrementarCliqueMutation.mutate({ musicaId, tipo });
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  const handleToggleFavorite = async (musicaId: number, isFavorite: boolean) => {
+    try {
+      if (isFavorite) {
+        await removeFavoritaMutation.mutateAsync({ musicaRepertorioId: musicaId });
+        toast.success("Removida dos favoritos");
+      } else {
+        await addFavoritaMutation.mutateAsync({ musicaRepertorioId: musicaId });
+        toast.success("Adicionada aos favoritos");
+      }
+      musicasQuery.refetch();
+    } catch (error) {
+      toast.error("Erro ao atualizar favoritos");
+    }
+  };
 
   const repertorio = repertorioQuery.data;
   const momentos = momentosQuery.data || [];
@@ -211,14 +235,30 @@ export default function RepertorioAdminDetalhes() {
                                 </p>
                               )}
                               
+                              {/* Botão de Favoritar */}
+                              <div className="mb-3">
+                                <button
+                                  onClick={() => handleToggleFavorite(musica.id, false)}
+                                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 hover:scale-105"
+                                  style={{
+                                    backgroundColor: `${repertorio.corPrimaria}20`,
+                                    color: repertorio.corTexto,
+                                  }}
+                                >
+                                  <Heart className="w-4 h-4" />
+                                  Favoritar
+                                </button>
+                              </div>
+
                               {/* Links */}
                               <div className="flex flex-wrap gap-2">
                                 {musica.linkYoutube && (
-                                  <a
-                                    href={musica.linkYoutube}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 hover:scale-105"
+                                  <button
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      handleClickLink(musica.id, "youtube", musica.linkYoutube);
+                                    }}
+                                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 hover:scale-105 cursor-pointer"
                                     style={{
                                       backgroundColor: `${repertorio.corPrimaria}30`,
                                       color: repertorio.corTexto,
@@ -226,14 +266,15 @@ export default function RepertorioAdminDetalhes() {
                                   >
                                     <ExternalLink className="w-4 h-4" />
                                     YouTube
-                                  </a>
+                                  </button>
                                 )}
                                 {musica.linkCifra && (
-                                  <a
-                                    href={musica.linkCifra}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 hover:scale-105"
+                                  <button
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      handleClickLink(musica.id, "cifra", musica.linkCifra);
+                                    }}
+                                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 hover:scale-105 cursor-pointer"
                                     style={{
                                       backgroundColor: `${repertorio.corSecundaria}30`,
                                       color: repertorio.corTexto,
@@ -241,7 +282,7 @@ export default function RepertorioAdminDetalhes() {
                                   >
                                     <ExternalLink className="w-4 h-4" />
                                     Cifra
-                                  </a>
+                                  </button>
                                 )}
                               </div>
                             </div>

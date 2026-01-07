@@ -11,6 +11,7 @@ import { Music, Plus, Edit2, Trash2, Eye, Save } from "lucide-react";
 interface RepertorioForm {
   nome: string;
   descricao: string;
+  tempoLiturgico: string;
   corPrimaria: string;
   corSecundaria: string;
   corFundo: string;
@@ -43,6 +44,7 @@ export function RepertorioAdmin() {
   const [form, setForm] = useState<RepertorioForm>({
     nome: "",
     descricao: "",
+    tempoLiturgico: "Personalizado",
     corPrimaria: "#7c3aed",
     corSecundaria: "#d946ef",
     corFundo: "#1e1b4b",
@@ -225,6 +227,7 @@ export function RepertorioAdmin() {
     setForm({
       nome: "",
       descricao: "",
+      tempoLiturgico: "Personalizado",
       corPrimaria: "#7c3aed",
       corSecundaria: "#d946ef",
       corFundo: "#1e1b4b",
@@ -309,6 +312,23 @@ export function RepertorioAdmin() {
                   />
                 </div>
 
+                <div>
+                  <label className="text-sm font-medium">Tempo Litúrgico</label>
+                  <select
+                    value={form.tempoLiturgico}
+                    onChange={(e) => setForm({ ...form, tempoLiturgico: e.target.value })}
+                    className="w-full px-3 py-2 border rounded-md bg-background"
+                  >
+                    <option value="Personalizado">Personalizado</option>
+                    <option value="Advento">Advento</option>
+                    <option value="Natal">Natal</option>
+                    <option value="Quaresma">Quaresma</option>
+                    <option value="Páscoa">Páscoa</option>
+                    <option value="Tempo Comum">Tempo Comum</option>
+                    <option value="Especiais">Celebrações Especiais</option>
+                  </select>
+                </div>
+
                 <div className="grid grid-cols-2 gap-4">
                   <ColorPicker
                     value={form.corPrimaria}
@@ -366,6 +386,7 @@ export function RepertorioAdmin() {
                           setForm({
                             nome: repertorio.nome,
                             descricao: repertorio.descricao || "",
+                            tempoLiturgico: repertorio.tempoLiturgico || "Personalizado",
                             corPrimaria: repertorio.corPrimaria,
                             corSecundaria: repertorio.corSecundaria,
                             corFundo: repertorio.corFundo,

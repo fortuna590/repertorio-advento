@@ -219,6 +219,19 @@ export type MusicaFavorita = typeof musicasFavoritas.$inferSelect;
 export type InsertMusicaFavorita = typeof musicasFavoritas.$inferInsert;
 
 /**
+ * Tabela para músicas favoritas de repertórios admin
+ */
+export const musicasAdminFavoritas = mysqlTable("musicasAdminFavoritas", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  musicaRepertorioId: int("musicaRepertorioId").notNull().references(() => musicasRepertorio.id),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type MusicaAdminFavorita = typeof musicasAdminFavoritas.$inferSelect;
+export type InsertMusicaAdminFavorita = typeof musicasAdminFavoritas.$inferInsert;
+
+/**
  * Tabela para preferências de usuário (newsletter, notificações)
  */
 export const userPreferences = mysqlTable("userPreferences", {
@@ -264,6 +277,7 @@ export const repertoriosAdmin = mysqlTable("repertoriosAdmin", {
   nome: varchar("nome", { length: 255 }).notNull(),
   descricao: text("descricao"),
   slug: varchar("slug", { length: 255 }).notNull().unique(),
+  tempoLiturgico: varchar("tempoLiturgico", { length: 100 }).default("Personalizado"),
   corPrimaria: varchar("corPrimaria", { length: 7 }).default("#7c3aed").notNull(),
   corSecundaria: varchar("corSecundaria", { length: 7 }).default("#d946ef").notNull(),
   corFundo: varchar("corFundo", { length: 7 }).default("#1e1b4b").notNull(),
@@ -308,6 +322,8 @@ export const musicasRepertorio = mysqlTable("musicasRepertorio", {
   linkYoutube: varchar("linkYoutube", { length: 500 }),
   linkCifra: varchar("linkCifra", { length: 500 }),
   ordem: int("ordem").notNull(),
+  cliquesYoutube: int("cliquesYoutube").default(0).notNull(),
+  cliquesCifra: int("cliquesCifra").default(0).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

@@ -943,3 +943,36 @@
 - [x] Atualizar cards em Repertorios.tsx para navegar para detalhes
 - [x] Testar navegação completa
 - [x] Salvar checkpoint final
+
+
+## Melhorias nos Repertórios Admin
+
+### Contador de Cliques em Músicas Admin
+- [x] Adicionar campo de rastreamento de cliques na tabela musicasRepertorio
+- [x] Criar endpoint para registrar cliques em músicas admin
+- [x] Integrar contador na página RepertorioAdminDetalhes
+- [ ] Adicionar estatísticas de músicas admin na página de Estatísticas
+
+### Sistema de Favoritos para Músicas Admin
+- [x] Criar tabela musicasAdminFavoritas no schema
+- [x] Criar router tRPC para favoritos de músicas admin
+- [x] Adicionar botão de favoritar na página de detalhes
+- [ ] Criar página "Minhas Favoritas Admin" ou integrar com favoritas existentes
+
+### Tags/Rótulos Editáveis
+- [x] Adicionar campo tempoLiturgico na tabela repertoriosAdmin
+- [x] Atualizar formulário de criação/edição no RepertorioAdmin
+- [x] Adicionar seletor de tempo litúrgico (Advento, Natal, Quaresma, etc)
+- [x] Atualizar filtros na página Repertorios.tsx
+
+### Sistema de Busca
+- [x] Adicionar campo de busca na página Repertorios.tsx
+- [x] Implementar filtro por nome em tempo real
+- [x] Buscar em repertórios padrão e admin simultaneamente
+
+### Integração e Testes
+- [x] Testar contador de cliques
+- [x] Testar sistema de favoritos
+- [x] Testar edição de tags
+- [x] Testar busca por nome
+- [x] Salvar checkpoint final

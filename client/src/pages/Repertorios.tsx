@@ -4,11 +4,13 @@ import { Music, Calendar, Sparkles, Church, Star, Cross, Sunrise, Sprout, PartyP
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import ModernHeader from "@/components/ModernHeader";
 import { trpc } from "@/lib/trpc";
 
 export default function Repertorios() {
   const [filtroTempo, setFiltroTempo] = useState<string | null>(null);
+  const [buscaTermo, setBuscaTermo] = useState("");
 
   // Carregar repertórios admin
   const repertoriosAdminQuery = (trpc as any).repertorio.list.useQuery();
@@ -118,7 +120,7 @@ export default function Repertorios() {
     id: `admin-${rep.id}`,
     titulo: rep.nome,
     descricao: rep.descricao || "Repertório personalizado",
-    tempoLiturgico: "Personalizado",
+    tempoLiturgico: rep.tempoLiturgico || "Personalizado",
     totalMusicas: 0, // Pode ser calculado se necessário
     totalMomentos: 0,
     icone: Music,
@@ -133,9 +135,17 @@ export default function Repertorios() {
 
   // Filtrar repertórios
   const repertoriosFiltrados = todosRepertorios.filter((r) => {
-    if (filtroTempo === null) return true;
-    if (filtroTempo === "Personalizado") return r.tipo === "admin";
-    return r.tempoLiturgico === filtroTempo;
+    // Filtro por tempo litúrgico
+    const passaFiltroTempo = filtroTempo === null || 
+      (filtroTempo === "Personalizado" && r.tipo === "admin") ||
+      r.tempoLiturgico === filtroTempo;
+    
+    // Filtro por busca
+    const passaBusca = buscaTermo === "" ||
+      r.titulo.toLowerCase().includes(buscaTermo.toLowerCase()) ||
+      (r.descricao && r.descricao.toLowerCase().includes(buscaTermo.toLowerCase()));
+    
+    return passaFiltroTempo && passaBusca;
   });
 
   return (
@@ -156,6 +166,17 @@ export default function Repertorios() {
           <p className="text-lg text-gray-300 max-w-2xl mx-auto">
             Explore nossos repertórios organizados por tempo litúrgico, com músicas cuidadosamente selecionadas para cada momento da Santa Missa.
           </p>
+        </div>
+
+        {/* Campo de Busca */}
+        <div className="max-w-md mx-auto mb-8">
+          <Input
+            type="text"
+            placeholder="Buscar repertórios..."
+            value={buscaTermo}
+            onChange={(e) => setBuscaTermo(e.target.value)}
+            className="w-full"
+          />
         </div>
 
         {/* Filtros por Tempo Litúrgico */}

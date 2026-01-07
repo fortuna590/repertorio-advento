@@ -353,4 +353,64 @@ export const repertorioRouter = router({
         return { success: false };
       }
     }),
+
+  // Incrementar cliques em músicas
+  incrementarCliqueMusica: publicProcedure
+    .input(
+      z.object({
+        musicaId: z.number(),
+        tipo: z.enum(["youtube", "cifra"]),
+      })
+    )
+    .mutation(async ({ input }: any) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      try {
+        const musica = await db
+          .select()
+          .from(musicasRepertorio)
+          .where(eq(musicasRepertorio.id, input.musicaId));
+
+        if (!musica[0]) return { success: false };
+
+        const campo = input.tipo === "youtube" ? "cliquesYoutube" : "cliquesCifra";
+        const novosCliques = (musica[0][campo] || 0) + 1;
+
+        await db
+          .update(musicasRepertorio)
+          .set({ [campo]: novosCliques })
+          .where(eq(musicasRepertorio.id, input.musicaId));
+
+        return { success: true, cliques: novosCliques };
+      } catch (e) {
+        console.error("Error incrementing clique:", e);
+        return { success: false };
+      }
+    }),
+
+  // Atualizar tempo litúrgico
+  updateTempoLiturgico: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        tempoLiturgico: z.string(),
+      })
+    )
+    .mutation(async ({ input }: any) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      try {
+        await db
+          .update(repertoriosAdmin)
+          .set({ tempoLiturgico: input.tempoLiturgico })
+          .where(eq(repertoriosAdmin.id, input.id));
+
+        return { success: true };
+      } catch (e) {
+        console.error("Error updating tempo liturgico:", e);
+        return { success: false };
+      }
+    }),
 });
