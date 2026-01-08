@@ -116,6 +116,7 @@ function RepertoriosAdminMaisAcessados() {
 export default function Estatisticas() {
   const { data: stats, isLoading } = trpc.clicks.getSiteStats.useQuery();
   const { data: clickStats } = trpc.clicks.getStats.useQuery();
+  const { data: musicasAdminMaisClicadas } = (trpc as any).repertorio.getMusicasAdminMaisClicadas.useQuery({ limit: 10 });
 
   if (isLoading) {
     return (
@@ -313,6 +314,37 @@ export default function Estatisticas() {
               </div>
             ) : (
               <p className="text-purple-200 text-center py-8">Nenhum dado de músicas disponível ainda</p>
+            )}
+          </Card>
+        </div>
+
+        {/* Músicas Admin Mais Clicadas */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-white mb-6">Músicas Personalizadas Mais Clicadas</h2>
+          <Card className="p-8 bg-slate-800 border-purple-500/20">
+            {musicasAdminMaisClicadas && musicasAdminMaisClicadas.length > 0 ? (
+              <div className="space-y-4">
+                {musicasAdminMaisClicadas.map((musica: any, index: number) => (
+                  <div key={musica.id} className="flex items-center gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
+                      <span className="text-white font-bold text-sm">{index + 1}</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white font-semibold truncate">{musica.titulo}</p>
+                      {musica.artista && (
+                        <p className="text-purple-300 text-sm truncate">{musica.artista}</p>
+                      )}
+                      <p className="text-purple-400 text-xs">Repertório ID: {musica.repertorioId}</p>
+                    </div>
+                    <div className="flex-shrink-0 text-right">
+                      <p className="text-white font-bold">{musica.totalCliques}</p>
+                      <p className="text-purple-300 text-xs">cliques</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-purple-200 text-center py-8">Nenhuma música personalizada clicada ainda</p>
             )}
           </Card>
         </div>

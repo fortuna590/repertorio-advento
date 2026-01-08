@@ -413,4 +413,40 @@ export const repertorioRouter = router({
         return { success: false };
       }
     }),
+
+  getMusicasAdminMaisClicadas: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().default(10),
+      })
+    )
+    .query(async ({ input }: any) => {
+      const db = await getDb();
+      if (!db) return [];
+
+      try {
+        const musicas = await db
+          .select({
+            id: musicasRepertorio.id,
+            titulo: musicasRepertorio.titulo,
+            artista: musicasRepertorio.artista,
+            cliquesYoutube: musicasRepertorio.cliquesYoutube,
+            cliquesCifra: musicasRepertorio.cliquesCifra,
+            repertorioId: musicasRepertorio.repertorioId,
+          })
+          .from(musicasRepertorio);
+
+        const musicasComTotal = musicas.map((m: any) => ({
+          ...m,
+          totalCliques: (m.cliquesYoutube || 0) + (m.cliquesCifra || 0),
+        }));
+
+        return musicasComTotal
+          .sort((a: any, b: any) => b.totalCliques - a.totalCliques)
+          .slice(0, input.limit);
+      } catch (e) {
+        console.error("Error getting musicas admin mais clicadas:", e);
+        return [];
+      }
+    }),
 });

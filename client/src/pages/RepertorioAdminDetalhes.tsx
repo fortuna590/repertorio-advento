@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useRoute, Link } from "wouter";
-import { ArrowLeft, Music, ExternalLink, Eye, Loader2, Heart } from "lucide-react";
+import { ArrowLeft, Music, ExternalLink, Eye, Loader2, Heart, Download } from "lucide-react";
 import { toast } from "sonner";
+import jsPDF from "jspdf";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -52,6 +53,84 @@ export default function RepertorioAdminDetalhes() {
     }
   };
 
+  const handleExportarPDF = () => {
+    const repertorio = repertorioQuery.data;
+    if (!repertorio) return;
+
+    try {
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      let yPosition = 20;
+
+      doc.setFontSize(24);
+      doc.setTextColor(0, 0, 0);
+      doc.text(repertorio.nome, pageWidth / 2, yPosition, { align: "center" });
+      yPosition += 15;
+
+      if (repertorio.descricao) {
+        doc.setFontSize(10);
+        doc.setTextColor(100, 100, 100);
+        const descricaoLinhas = doc.splitTextToSize(repertorio.descricao, pageWidth - 20);
+        doc.text(descricaoLinhas, 10, yPosition);
+        yPosition += descricaoLinhas.length * 5 + 10;
+      }
+
+      doc.setFontSize(11);
+      doc.setTextColor(0, 0, 0);
+      doc.text(`Tempo Litúrgico: ${repertorio.tempoLiturgico}`, 10, yPosition);
+      yPosition += 10;
+
+      momentos.forEach((momento: any) => {
+        if (yPosition > pageHeight - 40) {
+          doc.addPage();
+          yPosition = 20;
+        }
+
+        doc.setFontSize(14);
+        doc.setTextColor(0, 0, 0);
+        doc.text(momento.nome, 10, yPosition);
+        yPosition += 10;
+
+        const musicasMomento = musicas.filter((m: any) => m.momentoId === momento.id);
+        musicasMomento.forEach((musica: any) => {
+          if (yPosition > pageHeight - 20) {
+            doc.addPage();
+            yPosition = 20;
+          }
+
+          doc.setFontSize(11);
+          doc.setTextColor(0, 0, 0);
+          doc.text(`• ${musica.titulo}`, 15, yPosition);
+          yPosition += 5;
+
+          doc.setFontSize(9);
+          doc.setTextColor(100, 100, 100);
+          if (musica.artista) {
+            doc.text(`  Artista: ${musica.artista}`, 15, yPosition);
+            yPosition += 5;
+          }
+
+          if (musica.descricao) {
+            const descLinhas = doc.splitTextToSize(`  ${musica.descricao}`, pageWidth - 30);
+            doc.text(descLinhas, 15, yPosition);
+            yPosition += descLinhas.length * 4;
+          }
+
+          yPosition += 3;
+        });
+
+        yPosition += 5;
+      });
+
+      doc.save(`${repertorio.nome}.pdf`);
+      toast.success("PDF exportado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao exportar PDF:", error);
+      toast.error("Erro ao exportar PDF");
+    }
+  };
+
   const repertorio = repertorioQuery.data;
   const momentos = momentosQuery.data || [];
   const musicas = musicasQuery.data || [];
@@ -77,12 +156,18 @@ export default function RepertorioAdminDetalhes() {
         <ModernHeader />
         <div className="container py-12 text-center">
           <p className="text-gray-300 text-xl">Repertório não encontrado</p>
-          <Link href="/repertorios">
-            <Button className="mt-6 gap-2">
-              <ArrowLeft className="w-4 h-4" />
-              Voltar para Repertórios
+          <div className="flex gap-3 mt-6">
+            <Link href="/repertorios">
+              <Button className="gap-2">
+                <ArrowLeft className="w-4 h-4" />
+                Voltar para Repertórios
+              </Button>
+            </Link>
+            <Button onClick={handleExportarPDF} variant="outline" className="gap-2">
+              <Download className="w-4 h-4" />
+              Exportar PDF
             </Button>
-          </Link>
+          </div>
         </div>
       </div>
     );

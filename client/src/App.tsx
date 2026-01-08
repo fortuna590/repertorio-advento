@@ -37,6 +37,7 @@ import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import Perfil from "./pages/Perfil";
 import MinhasFavoritas from "./pages/MinhasFavoritas";
+import MinhasFavoritasUnificadas from "./pages/MinhasFavoritasUnificadas";
 import MeusRepertorios from "./pages/MeusRepertorios";
 import RepertorioDetalhe from "./pages/RepertorioDetalhe";
 import Admin from "./pages/Admin";
@@ -79,6 +80,7 @@ function Router() {
       <Route path={"/cadastro"} component={Cadastro} />
       <Route path={"/perfil"} component={Perfil} />
       <Route path={"/minhas-favoritas"} component={MinhasFavoritas} />
+      <Route path={"/minhas-favoritas-unificadas"} component={MinhasFavoritasUnificadas} />
       <Route path={"/meus-repertorios"} component={MeusRepertorios} />
       <Route path={"/repertorio/:id"} component={RepertorioDetalhe} />
       <Route path="/admin" component={Admin} />

@@ -976,3 +976,29 @@
 - [x] Testar edição de tags
 - [x] Testar busca por nome
 - [x] Salvar checkpoint final
+
+
+## Próximos Passos - Fase 2
+
+### Estatísticas de Músicas Admin
+- [x] Criar endpoint para obter músicas admin mais clicadas
+- [x] Adicionar seção na página Estatísticas
+- [x] Exibir top 10 músicas admin por cliques
+
+### Página de Favoritas Unificada
+- [x] Criar página MinhasFavoritasUnificadas.tsx
+- [x] Listar favoritas padrão e admin juntas
+- [x] Adicionar rota /minhas-favoritas-unificadas
+- [ ] Adicionar link no menu de navegação
+
+### Exportação em PDF
+- [x] Criar endpoint para gerar PDF do repertório
+- [x] Adicionar botão de download na página RepertorioAdminDetalhes
+- [x] Incluir todos os momentos e músicas no PDF
+- [ ] Personalizar PDF com cores do repertório
+
+### Testes e Validação
+- [x] Testar estatísticas de músicas admin
+- [x] Testar página de favoritas unificada
+- [x] Testar exportação em PDF
+- [x] Salvar checkpoint final
