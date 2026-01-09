@@ -7,6 +7,7 @@ import { APP_LOGO } from "@/const";
 import { trpc } from "@/lib/trpc";
 import ModernHeader from "@/components/ModernHeader";
 import SocialLinks from "@/components/SocialLinks";
+import { ShareArticle } from "@/components/ShareArticle";
 
 export default function BlogArtigo() {
   const { slug } = useParams();
@@ -127,15 +128,22 @@ export default function BlogArtigo() {
 
         {/* Footer do Artigo */}
         <div className="mt-12 pt-8 border-t border-purple-500/20">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
             <Link href="/blog">
               <Button variant="outline" className="border-purple-500/30 text-purple-200 hover:text-white hover:bg-purple-500/10">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Voltar ao Blog
               </Button>
             </Link>
-            <div className="text-sm text-purple-300">
-              Atualizado em {formatDate(artigo.updatedAt)}
+            <div className="flex items-center gap-4">
+              <ShareArticle
+                titulo={artigo.titulo}
+                url={typeof window !== 'undefined' ? window.location.href : ''}
+                descricao={artigo.resumo}
+              />
+              <div className="text-sm text-purple-300">
+                Atualizado em {formatDate(artigo.updatedAt)}
+              </div>
             </div>
           </div>
         </div>
