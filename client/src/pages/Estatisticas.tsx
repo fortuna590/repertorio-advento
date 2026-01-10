@@ -59,6 +59,117 @@ function RepertoriosMaisAcessados() {
   );
 }
 
+function ArtigosMaisCompartilhados() {
+  const { data: artigos, isLoading } = (trpc as any).artigos.list.useQuery();
+
+  if (isLoading) {
+    return (
+      <Card className="p-8 bg-slate-800 border-purple-500/20">
+        <div className="flex justify-center py-8">
+          <Loader2 className="w-6 h-6 animate-spin text-purple-400" />
+        </div>
+      </Card>
+    );
+  }
+
+  const artigosOrdenados = (artigos || [])
+    .filter((a: any) => a.publicado === 1)
+    .sort((a: any, b: any) => (b.compartilhamentos || 0) - (a.compartilhamentos || 0))
+    .slice(0, 10);
+
+  if (!artigosOrdenados || artigosOrdenados.length === 0) {
+    return (
+      <Card className="p-8 bg-slate-800 border-purple-500/20">
+        <p className="text-purple-200 text-center py-8">Nenhum artigo compartilhado ainda</p>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="p-8 bg-slate-800 border-purple-500/20">
+      <div className="space-y-4">
+        {artigosOrdenados.map((artigo: any, index: number) => (
+          <a
+            key={artigo.id}
+            href={`/blog/${artigo.slug}`}
+            className="flex items-center gap-4 hover:bg-purple-500/5 p-3 rounded-lg transition-all duration-200"
+          >
+            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+              <span className="text-white font-bold text-sm">{index + 1}</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-white font-semibold truncate">{artigo.titulo}</p>
+              {artigo.resumo && (
+                <p className="text-purple-300 text-sm truncate">{artigo.resumo}</p>
+              )}
+              <p className="text-purple-400 text-xs">{artigo.categoria || 'Artigo'}</p>
+            </div>
+            <div className="flex-shrink-0 text-right">
+              <p className="text-white font-bold">{artigo.compartilhamentos || 0}</p>
+              <p className="text-purple-300 text-xs">compartilhamentos</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </Card>
+  );
+}
+
+function RepertoriosAdminMaisCompartilhados() {
+  const { data: repertorios, isLoading } = (trpc as any).repertorio.list.useQuery();
+
+  if (isLoading) {
+    return (
+      <Card className="p-8 bg-slate-800 border-purple-500/20">
+        <div className="flex justify-center py-8">
+          <Loader2 className="w-6 h-6 animate-spin text-purple-400" />
+        </div>
+      </Card>
+    );
+  }
+
+  const repertoriosOrdenados = (repertorios || [])
+    .sort((a: any, b: any) => (b.compartilhamentos || 0) - (a.compartilhamentos || 0))
+    .slice(0, 10);
+
+  if (!repertoriosOrdenados || repertoriosOrdenados.length === 0) {
+    return (
+      <Card className="p-8 bg-slate-800 border-purple-500/20">
+        <p className="text-purple-200 text-center py-8">Nenhum repertório compartilhado ainda</p>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="p-8 bg-slate-800 border-purple-500/20">
+      <div className="space-y-4">
+        {repertoriosOrdenados.map((repertorio: any, index: number) => (
+          <a
+            key={repertorio.id}
+            href={`/repertorio-admin/${repertorio.id}`}
+            className="flex items-center gap-4 hover:bg-purple-500/5 p-3 rounded-lg transition-all duration-200"
+          >
+            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-teal-500 flex items-center justify-center">
+              <span className="text-white font-bold text-sm">{index + 1}</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-white font-semibold truncate">{repertorio.nome}</p>
+              {repertorio.descricao && (
+                <p className="text-purple-300 text-sm truncate">{repertorio.descricao}</p>
+              )}
+              <p className="text-purple-400 text-xs">Repertório Personalizado</p>
+            </div>
+            <div className="flex-shrink-0 text-right">
+              <p className="text-white font-bold">{repertorio.compartilhamentos || 0}</p>
+              <p className="text-purple-300 text-xs">compartilhamentos</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </Card>
+  );
+}
+
 function RepertoriosAdminMaisAcessados() {
   const { data: repertorios, isLoading } = (trpc as any).repertorio.list.useQuery();
 
@@ -347,6 +458,18 @@ export default function Estatisticas() {
               <p className="text-purple-200 text-center py-8">Nenhuma música personalizada clicada ainda</p>
             )}
           </Card>
+        </div>
+
+        {/* Artigos Mais Compartilhados */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-white mb-6">Artigos Mais Compartilhados</h2>
+          <ArtigosMaisCompartilhados />
+        </div>
+
+        {/* Repertórios Admin Mais Compartilhados */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-white mb-6">Repertórios Personalizados Mais Compartilhados</h2>
+          <RepertoriosAdminMaisCompartilhados />
         </div>
 
         {/* Insights */}

@@ -3,6 +3,7 @@ import { useRoute, Link } from "wouter";
 import { ArrowLeft, Music, ExternalLink, Eye, Loader2, Heart, Download } from "lucide-react";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
+import { ShareArticle } from "@/components/ShareArticle";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -142,6 +143,47 @@ export default function RepertorioAdminDetalhes() {
     }
   }, [repertorioId, repertorio]);
 
+  // Adicionar meta tags Open Graph
+  useEffect(() => {
+    if (repertorio) {
+      const currentUrl = window.location.href;
+      
+      // Atualizar title
+      document.title = `${repertorio.nome} | LouvaMais`;
+      
+      // Remover meta tags antigas
+      const oldMetaTags = document.querySelectorAll('meta[property^="og:"], meta[name="twitter:"]');
+      oldMetaTags.forEach(tag => tag.remove());
+      
+      // Adicionar novas meta tags
+      const metaTags = [
+        { property: 'og:title', content: repertorio.nome },
+        { property: 'og:description', content: repertorio.descricao || 'Repertório personalizado de músicas litúrgicas' },
+        { property: 'og:url', content: currentUrl },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:site_name', content: 'LouvaMais' },
+        { name: 'twitter:card', content: 'summary' },
+        { name: 'twitter:title', content: repertorio.nome },
+        { name: 'twitter:description', content: repertorio.descricao || 'Repertório personalizado de músicas litúrgicas' },
+      ];
+      
+      if (repertorio.imagemCapa) {
+        metaTags.push(
+          { property: 'og:image', content: repertorio.imagemCapa },
+          { name: 'twitter:image', content: repertorio.imagemCapa }
+        );
+      }
+      
+      metaTags.forEach(({ property, name, content }) => {
+        const meta = document.createElement('meta');
+        if (property) meta.setAttribute('property', property);
+        if (name) meta.setAttribute('name', name);
+        meta.setAttribute('content', content);
+        document.head.appendChild(meta);
+      });
+    }
+  }, [repertorio]);
+
   if (repertorioQuery.isLoading || momentosQuery.isLoading || musicasQuery.isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-950 via-slate-900 to-blue-950 flex items-center justify-center">
@@ -189,14 +231,25 @@ export default function RepertorioAdminDetalhes() {
       <ModernHeader />
 
       <main className="container py-12 md:py-16">
-        {/* Botão Voltar */}
-        <div className="mb-8">
+        {/* Botões de Ação */}
+        <div className="mb-8 flex flex-wrap gap-3">
           <Link href="/repertorios">
             <Button variant="outline" className="gap-2">
               <ArrowLeft className="w-4 h-4" />
               Voltar
             </Button>
           </Link>
+          <Button onClick={handleExportarPDF} variant="outline" className="gap-2">
+            <Download className="w-4 h-4" />
+            Exportar PDF
+          </Button>
+          <ShareArticle
+            titulo={repertorio.nome}
+            url={typeof window !== 'undefined' ? window.location.href : ''}
+            descricao={repertorio.descricao || ''}
+            tipo="repertorio"
+            repertorioId={repertorio.id}
+          />
         </div>
 
         {/* Header do Repertório */}

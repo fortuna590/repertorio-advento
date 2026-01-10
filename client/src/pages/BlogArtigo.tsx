@@ -1,4 +1,5 @@
 import { Link, useParams } from "wouter";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +13,47 @@ import { ShareArticle } from "@/components/ShareArticle";
 export default function BlogArtigo() {
   const { slug } = useParams();
   const { data: artigo, isLoading, error } = trpc.artigos.getBySlug.useQuery({ slug: slug || "" });
+
+  // Adicionar meta tags Open Graph
+  useEffect(() => {
+    if (artigo) {
+      const currentUrl = window.location.href;
+      
+      // Atualizar title
+      document.title = `${artigo.titulo} | LouvaMais`;
+      
+      // Remover meta tags antigas
+      const oldMetaTags = document.querySelectorAll('meta[property^="og:"], meta[name="twitter:"]');
+      oldMetaTags.forEach(tag => tag.remove());
+      
+      // Adicionar novas meta tags
+      const metaTags = [
+        { property: 'og:title', content: artigo.titulo },
+        { property: 'og:description', content: artigo.resumo || artigo.metaDescricao || '' },
+        { property: 'og:url', content: currentUrl },
+        { property: 'og:type', content: 'article' },
+        { property: 'og:site_name', content: 'LouvaMais' },
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: artigo.titulo },
+        { name: 'twitter:description', content: artigo.resumo || artigo.metaDescricao || '' },
+      ];
+      
+      if (artigo.imagemCapa) {
+        metaTags.push(
+          { property: 'og:image', content: artigo.imagemCapa },
+          { name: 'twitter:image', content: artigo.imagemCapa }
+        );
+      }
+      
+      metaTags.forEach(({ property, name, content }) => {
+        const meta = document.createElement('meta');
+        if (property) meta.setAttribute('property', property);
+        if (name) meta.setAttribute('name', name);
+        meta.setAttribute('content', content);
+        document.head.appendChild(meta);
+      });
+    }
+  }, [artigo]);
 
   const formatDate = (date: Date | string) => {
     return new Date(date).toLocaleDateString("pt-BR", {
@@ -140,6 +182,8 @@ export default function BlogArtigo() {
                 titulo={artigo.titulo}
                 url={typeof window !== 'undefined' ? window.location.href : ''}
                 descricao={artigo.resumo}
+                slug={artigo.slug}
+                tipo="artigo"
               />
               <div className="text-sm text-purple-300">
                 Atualizado em {formatDate(artigo.updatedAt)}

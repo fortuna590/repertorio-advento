@@ -1018,3 +1018,33 @@
 - [x] Testar compartilhamento em E-mail
 - [x] Testar compartilhamento em Instagram
 - [x] Salvar checkpoint final
+
+
+## Compartilhamento e Meta Tags
+
+### Rastreamento de Compartilhamentos
+- [x] Adicionar campo compartilhamentos nas tabelas repertoriosAdmin e artigos
+- [x] Criar endpoints para incrementar contador de compartilhamentos
+- [x] Adicionar rastreamento no componente ShareArticle
+
+### Compartilhamento em Repertórios
+- [x] Adicionar botão de compartilhar em RepertorioAdminDetalhes
+- [ ] Adicionar botão de compartilhar nas páginas de repertórios padrão
+- [x] Criar componente ShareRepertorio reutilizável
+
+### Estatísticas de Compartilhamentos
+- [x] Adicionar seção de artigos mais compartilhados
+- [x] Adicionar seção de repertórios mais compartilhados
+- [x] Exibir contador apenas na página de Estatísticas
+
+### Meta Tags Open Graph
+- [x] Adicionar meta tags em BlogArtigo.tsx
+- [x] Adicionar meta tags em RepertorioAdminDetalhes.tsx
+- [ ] Adicionar meta tags nas páginas de repertórios padrão
+- [x] Configurar imagens de preview
+
+### Testes
+- [x] Testar compartilhamento de repertórios
+- [x] Testar rastreamento de compartilhamentos
+- [x] Testar preview em redes sociais
+- [x] Salvar checkpoint final

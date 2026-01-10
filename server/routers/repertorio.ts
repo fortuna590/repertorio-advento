@@ -2,7 +2,7 @@ import { z } from "zod";
 import { router, publicProcedure, protectedProcedure } from "../_core/trpc";
 import { getDb } from "../db";
 import { repertoriosAdmin, momentosMissa, musicasRepertorio } from "../../drizzle/schema";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 export const repertorioRouter = router({
   list: publicProcedure.query(async () => {
@@ -447,6 +447,29 @@ export const repertorioRouter = router({
       } catch (e) {
         console.error("Error getting musicas admin mais clicadas:", e);
         return [];
+      }
+    }),
+
+  incrementarCompartilhamentos: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      })
+    )
+    .mutation(async ({ input }: any) => {
+      const db = await getDb();
+      if (!db) return { success: false };
+
+      try {
+        await db
+          .update(repertoriosAdmin)
+          .set({ compartilhamentos: sql`compartilhamentos + 1` })
+          .where(eq(repertoriosAdmin.id, input.id));
+
+        return { success: true };
+      } catch (e) {
+        console.error("Error incrementing compartilhamentos:", e);
+        return { success: false };
       }
     }),
 });

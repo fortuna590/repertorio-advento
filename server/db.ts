@@ -658,7 +658,7 @@ export async function getAllArtigos(includeRascunhos = false) {
 /**
  * Atualizar um artigo
  */
-export async function updateArtigo(id: number, updates: { titulo?: string; slug?: string; resumo?: string; conteudo?: string; imagemCapa?: string; categoria?: string; tags?: string; autorNome?: string; publicado?: number }): Promise<void> {
+export async function updateArtigo(id: number, updates: { titulo?: string; slug?: string; resumo?: string; conteudo?: string; imagemCapa?: string; categoria?: string; tags?: string; autorNome?: string; publicado?: number; compartilhamentos?: number }): Promise<void> {
   const db = await getDb();
   if (!db) {
     console.warn("[Database] Cannot update artigo: database not available");

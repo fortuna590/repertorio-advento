@@ -124,15 +124,32 @@ export const artigosRouter = router({
       };
     }),
 
-  // Deletar artigo
+   // Deletar artigo
   delete: publicProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ input }) => {
       await deleteArtigo(input.id);
-
       return {
         success: true,
         message: "Artigo deletado com sucesso!",
+      };
+    }),
+
+  // Incrementar compartilhamentos
+  incrementarCompartilhamentos: publicProcedure
+    .input(z.object({ slug: z.string() }))
+    .mutation(async ({ input }) => {
+      const artigo = await getArtigoBySlug(input.slug);
+      if (!artigo) {
+        throw new Error("Artigo não encontrado");
+      }
+      
+      await updateArtigo(artigo.id, {
+        compartilhamentos: (artigo.compartilhamentos || 0) + 1,
+      });
+      
+      return {
+        success: true,
       };
     }),
 });

@@ -2,21 +2,36 @@ import { Share2, Mail, MessageCircle, Instagram, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useState } from "react";
+import { trpc } from "@/lib/trpc";
 
 interface ShareArticleProps {
   titulo: string;
   url: string;
   descricao?: string;
+  slug?: string;
+  tipo?: "artigo" | "repertorio";
+  repertorioId?: number;
 }
 
-export function ShareArticle({ titulo, url, descricao }: ShareArticleProps) {
+export function ShareArticle({ titulo, url, descricao, slug, tipo = "artigo", repertorioId }: ShareArticleProps) {
   const [showMenu, setShowMenu] = useState(false);
+  const incrementarCompartilhamentosArtigoMutation = (trpc as any).artigos.incrementarCompartilhamentos.useMutation();
+  const incrementarCompartilhamentosRepertorioMutation = (trpc as any).repertorio.incrementarCompartilhamentos.useMutation();
+
+  const registrarCompartilhamento = () => {
+    if (tipo === "artigo" && slug) {
+      incrementarCompartilhamentosArtigoMutation.mutate({ slug });
+    } else if (tipo === "repertorio" && repertorioId) {
+      incrementarCompartilhamentosRepertorioMutation.mutate({ id: repertorioId });
+    }
+  };
 
   const textoCompartilhamento = descricao
     ? `${titulo}\n\n${descricao}\n\nLeia mais em: ${url}`
     : `${titulo}\n\nLeia mais em: ${url}`;
 
   const handleShareWhatsApp = () => {
+    registrarCompartilhamento();
     const mensagem = encodeURIComponent(textoCompartilhamento);
     const whatsappUrl = `https://wa.me/?text=${mensagem}`;
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
@@ -24,7 +39,8 @@ export function ShareArticle({ titulo, url, descricao }: ShareArticleProps) {
   };
 
   const handleShareEmail = () => {
-    const assunto = encodeURIComponent(`Confira este artigo: ${titulo}`);
+    registrarCompartilhamento();
+    const assunto = encodeURIComponent(`Confira ${tipo === "artigo" ? "este artigo" : "este repertório"}: ${titulo}`);
     const corpo = encodeURIComponent(textoCompartilhamento);
     const emailUrl = `mailto:?subject=${assunto}&body=${corpo}`;
     window.location.href = emailUrl;
@@ -32,7 +48,8 @@ export function ShareArticle({ titulo, url, descricao }: ShareArticleProps) {
   };
 
   const handleShareInstagram = () => {
-    const mensagem = `Confira este artigo no LouvaMais:\n\n${titulo}\n\n${url}`;
+    registrarCompartilhamento();
+    const mensagem = `Confira ${tipo === "artigo" ? "este artigo" : "este repertório"} no LouvaMais:\n\n${titulo}\n\n${url}`;
     const textoParaCopiar = mensagem;
     
     navigator.clipboard.writeText(textoParaCopiar).then(() => {

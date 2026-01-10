@@ -100,6 +100,7 @@ export const artigos = mysqlTable("artigos", {
   autorNome: varchar("autorNome", { length: 255 }),
   publicado: int("publicado").default(1).notNull(), // 0 = rascunho, 1 = publicado
   visualizacoes: int("visualizacoes").default(0).notNull(),
+  compartilhamentos: int("compartilhamentos").default(0).notNull(),
   // SEO fields
   metaDescricao: varchar("metaDescricao", { length: 160 }), // Meta description para Google
   metaKeywords: varchar("metaKeywords", { length: 255 }), // Meta keywords para SEO
@@ -285,6 +286,7 @@ export const repertoriosAdmin = mysqlTable("repertoriosAdmin", {
   imagemCapa: varchar("imagemCapa", { length: 500 }),
   publicado: int("publicado").default(1).notNull(),
   visualizacoes: int("visualizacoes").default(0).notNull(),
+  compartilhamentos: int("compartilhamentos").default(0).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
