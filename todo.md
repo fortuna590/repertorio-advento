@@ -1048,3 +1048,10 @@
 - [x] Testar rastreamento de compartilhamentos
 - [x] Testar preview em redes sociais
 - [x] Salvar checkpoint final
+
+
+## Compartilhamento em Todos os Repertórios
+
+- [x] Adicionar botão de compartilhar na página de detalhes dos repertórios padrão
+- [x] Testar compartilhamento em repertórios padrão
+- [x] Salvar checkpoint final

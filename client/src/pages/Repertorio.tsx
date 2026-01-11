@@ -14,6 +14,7 @@ import { exportRepertorioPDF } from "@/utils/exportPDF";
 import SocialLinks from "@/components/SocialLinks";
 import ModernHeader from "@/components/ModernHeader";
 import FavoriteButton from "@/components/FavoriteButton";
+import { ShareArticle } from "@/components/ShareArticle";
 
 export default function Repertorio() {
   const [momentoSelecionado, setMomentoSelecionado] = useState<string | null>(null);
@@ -99,6 +100,11 @@ export default function Repertorio() {
                   <FileDown className="w-4 h-4" />
                   Exportar PDF
                 </Button>
+                <ShareArticle
+                  titulo="Repertório Litúrgico Completo - LouvaMais"
+                  url={typeof window !== 'undefined' ? window.location.href : ''}
+                  descricao="Repertório completo de músicas litúrgicas organizadas por momentos da missa e tempos litúrgicos"
+                />
                 <NotificationBell />
               </div>
             </div>
