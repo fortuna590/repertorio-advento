@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,6 +17,34 @@ export default function RepertorioMissaDoGalo() {
   const [buscaTexto, setBuscaTexto] = useState("");
   const [showPrintView, setShowPrintView] = useState(false);
   const registerClickMutation = trpc.clicks.register.useMutation();
+
+  // Adicionar meta tags Open Graph
+  useEffect(() => {
+    const currentUrl = window.location.href;
+    document.title = 'Missa do Galo | LouvaMais';
+    
+    const oldMetaTags = document.querySelectorAll('meta[property^="og:"], meta[name="twitter:"]');
+    oldMetaTags.forEach(tag => tag.remove());
+    
+    const metaTags = [
+      { property: 'og:title', content: 'Missa do Galo | LouvaMais' },
+      { property: 'og:description', content: 'Repertório completo de músicas para a Missa do Galo. Encontre as melhores músicas para celebrar o Natal.' },
+      { property: 'og:url', content: currentUrl },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:site_name', content: 'LouvaMais' },
+      { name: 'twitter:card', content: 'summary' },
+      { name: 'twitter:title', content: 'Missa do Galo | LouvaMais' },
+      { name: 'twitter:description', content: 'Repertório completo de músicas para a Missa do Galo.' },
+    ];
+    
+    metaTags.forEach(({ property, name, content }) => {
+      const meta = document.createElement('meta');
+      if (property) meta.setAttribute('property', property);
+      if (name) meta.setAttribute('name', name);
+      meta.setAttribute('content', content);
+      document.head.appendChild(meta);
+    });
+  }, []);
 
   const handleLinkClick = (musica: any, momento: any, linkType: "youtube" | "cifra") => {
     registerClickMutation.mutate({

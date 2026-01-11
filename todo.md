@@ -1055,3 +1055,16 @@
 - [x] Adicionar botão de compartilhar na página de detalhes dos repertórios padrão
 - [x] Testar compartilhamento em repertórios padrão
 - [x] Salvar checkpoint final
+
+
+## Meta Tags Open Graph nos Repertórios Padrão
+
+- [x] Adicionar meta tags no Repertorio.tsx (página principal)
+- [x] Adicionar meta tags no RepertorioMissaDoGalo.tsx
+- [x] Adicionar meta tags no RepertorioTempoDoNatal.tsx
+- [x] Adicionar meta tags no RepertorioQuaresma.tsx
+- [x] Adicionar meta tags no RepertorioPascoa.tsx
+- [x] Adicionar meta tags no RepertorioTempoComum.tsx
+- [x] Adicionar meta tags no RepertorioCelebracoes.tsx
+- [x] Testar preview em redes sociais
+- [x] Salvar checkpoint final
