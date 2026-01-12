@@ -1068,3 +1068,17 @@
 - [x] Adicionar meta tags no RepertorioCelebracoes.tsx
 - [x] Testar preview em redes sociais
 - [x] Salvar checkpoint final
+
+
+## Imagens de Preview para Tempos Litúrgicos
+
+- [x] Gerar imagem de preview para Repertório Principal
+- [x] Gerar imagem de preview para Missa do Galo
+- [x] Gerar imagem de preview para Tempo do Natal
+- [x] Gerar imagem de preview para Quaresma
+- [x] Gerar imagem de preview para Páscoa
+- [x] Gerar imagem de preview para Tempo Comum
+- [x] Gerar imagem de preview para Celebrações Especiais
+- [x] Adicionar imagens nas meta tags de cada página
+- [x] Testar preview em redes sociais
+- [x] Salvar checkpoint final

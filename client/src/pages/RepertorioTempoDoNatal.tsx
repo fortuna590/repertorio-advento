@@ -30,6 +30,7 @@ export default function RepertorioTempoDoNatal() {
       { property: 'og:url', content: currentUrl },
       { property: 'og:type', content: 'website' },
       { property: 'og:site_name', content: 'LouvaMais' },
+      { property: 'og:image', content: `${window.location.origin}/og-tempo-natal.jpg` },
       { name: 'twitter:card', content: 'summary' },
       { name: 'twitter:title', content: 'Tempo do Natal | LouvaMais' },
       { name: 'twitter:description', content: 'Repertório de músicas para o Tempo do Natal.' },

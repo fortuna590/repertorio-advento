@@ -41,6 +41,7 @@ export default function Repertorio() {
       { property: 'og:url', content: currentUrl },
       { property: 'og:type', content: 'website' },
       { property: 'og:site_name', content: 'LouvaMais' },
+      { property: 'og:image', content: `${window.location.origin}/og-repertorio-principal.jpg` },
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:title', content: 'Repertório Litúrgico Completo | LouvaMais' },
       { name: 'twitter:description', content: 'Repertório completo de músicas litúrgicas organizadas por momentos da missa e tempos litúrgicos.' },

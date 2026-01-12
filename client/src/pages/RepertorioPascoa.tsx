@@ -15,6 +15,7 @@ export default function RepertorioPascoa() {
       { property: 'og:url', content: currentUrl },
       { property: 'og:type', content: 'website' },
       { property: 'og:site_name', content: 'LouvaMais' },
+      { property: 'og:image', content: `${window.location.origin}/og-pascoa.jpg` },
       { name: 'twitter:card', content: 'summary' },
       { name: 'twitter:title', content: 'Páscoa | LouvaMais' },
       { name: 'twitter:description', content: 'Repertório de músicas para a Páscoa.' },

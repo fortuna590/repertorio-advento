@@ -32,6 +32,7 @@ export default function RepertorioMissaDoGalo() {
       { property: 'og:url', content: currentUrl },
       { property: 'og:type', content: 'website' },
       { property: 'og:site_name', content: 'LouvaMais' },
+      { property: 'og:image', content: `${window.location.origin}/og-missa-do-galo.jpg` },
       { name: 'twitter:card', content: 'summary' },
       { name: 'twitter:title', content: 'Missa do Galo | LouvaMais' },
       { name: 'twitter:description', content: 'Repertório completo de músicas para a Missa do Galo.' },
