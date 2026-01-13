@@ -1082,3 +1082,53 @@
 - [x] Adicionar imagens nas meta tags de cada página
 - [x] Testar preview em redes sociais
 - [x] Salvar checkpoint final
+
+
+## Sistema de Gerenciamento de Escalas Multiuso
+
+### Schema do Banco de Dados
+- [x] Criar tabela `escalas` (id, titulo, data, hora, local, tipo, template, userId, createdAt)
+- [x] Criar tabela `funcoesEscala` (id, escalaId, nome, ordem)
+- [x] Criar tabela `participantesEscala` (id, escalaId, funcaoId, nome, email, status, observacoes)
+- [x] Aplicar mudanças no banco com pnpm db:push
+
+### Routers tRPC
+- [x] Criar router `escalas.ts` com endpoints CRUD
+- [x] Endpoint `criar` - Criar nova escala
+- [x] Endpoint `listar` - Listar escalas do usuário
+- [x] Endpoint `buscarPorId` - Buscar escala específica
+- [x] Endpoint `atualizar` - Atualizar escala
+- [x] Endpoint `deletar` - Deletar escala
+- [x] Endpoint `adicionarParticipante` - Adicionar participante
+- [x] Endpoint `atualizarStatus` - Atualizar status de participante
+- [x] Integrar router no routers.ts
+
+### Página de Gerenciamento
+- [x] Criar página `Escalas.tsx` com listagem
+- [x] Adicionar filtros por tipo e data
+- [x] Criar modal de criação de escala
+- [x] Implementar seleção de template (Músicos, Reunião, Grupo Oração, Personalizado)
+- [x] Criar formulário de funções customizáveis
+- [x] Adicionar botões de editar/excluir
+- [x] Adicionar rota no App.tsx
+
+### Página de Visualização
+- [x] Criar página `EscalaDetalhes.tsx`
+- [x] Exibir informações da escala
+- [x] Listar participantes por função
+- [x] Adicionar botão de adicionar participante
+- [x] Implementar atualização de status (Confirmado/Pendente/Ausente)
+- [x] Adicionar campo de observações
+
+### Notificações e Compartilhamento
+- [x] Botão de enviar por WhatsApp
+- [x] Botão de enviar por Email
+- [x] Botão de copiar link
+- [x] Gerar texto formatado da escala
+
+### Testes e Validação
+- [x] Testar criação de escala de músicos
+- [x] Testar criação de escala de reunião
+- [x] Testar criação de escala de grupo de oração
+- [x] Testar customização de funções
+- [x] Salvar checkpoint final

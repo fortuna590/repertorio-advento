@@ -43,6 +43,8 @@ import RepertorioDetalhe from "./pages/RepertorioDetalhe";
 import Admin from "./pages/Admin";
 import { RepertorioAdmin } from "./pages/RepertorioAdmin";
 import RepertorioAdminDetalhes from "./pages/RepertorioAdminDetalhes";
+import Escalas from "./pages/Escalas";
+import EscalaDetalhes from "./pages/EscalaDetalhes";
 import WhatsAppButton from "./components/WhatsAppButton";
 
 function Router() {
@@ -86,6 +88,8 @@ function Router() {
       <Route path="/admin" component={Admin} />
       <Route path="/repertorio-admin" component={RepertorioAdmin} />
       <Route path="/repertorio-admin/:id" component={RepertorioAdminDetalhes} />
+      <Route path="/escalas" component={Escalas} />
+      <Route path="/escala/:id" component={EscalaDetalhes} />
       <Route path="/404" component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

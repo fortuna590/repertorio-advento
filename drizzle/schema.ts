@@ -332,3 +332,58 @@ export const musicasRepertorio = mysqlTable("musicasRepertorio", {
 
 export type MusicaRepertorio = typeof musicasRepertorio.$inferSelect;
 export type InsertMusicaRepertorio = typeof musicasRepertorio.$inferInsert;
+
+
+/**
+ * Tabela para escalas multiuso (músicos, reuniões, grupo de oração)
+ */
+export const escalas = mysqlTable("escalas", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: varchar("userId", { length: 255 }).notNull(),
+  titulo: varchar("titulo", { length: 255 }).notNull(),
+  descricao: text("descricao"),
+  data: date("data").notNull(),
+  hora: varchar("hora", { length: 10 }),
+  local: varchar("local", { length: 255 }),
+  tipo: varchar("tipo", { length: 50 }).notNull(), // "musicos", "reuniao", "grupo_oracao", "personalizado"
+  template: varchar("template", { length: 50 }), // Nome do template usado
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Escala = typeof escalas.$inferSelect;
+export type InsertEscala = typeof escalas.$inferInsert;
+
+/**
+ * Tabela para funções/momentos de uma escala
+ */
+export const funcoesEscala = mysqlTable("funcoesEscala", {
+  id: int("id").autoincrement().primaryKey(),
+  escalaId: int("escalaId").notNull().references(() => escalas.id, { onDelete: "cascade" }),
+  nome: varchar("nome", { length: 255 }).notNull(), // Ex: "Violão", "Acolhida", "Secretário"
+  descricao: text("descricao"),
+  ordem: int("ordem").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type FuncaoEscala = typeof funcoesEscala.$inferSelect;
+export type InsertFuncaoEscala = typeof funcoesEscala.$inferInsert;
+
+/**
+ * Tabela para participantes alocados em funções
+ */
+export const participantesEscala = mysqlTable("participantesEscala", {
+  id: int("id").autoincrement().primaryKey(),
+  escalaId: int("escalaId").notNull().references(() => escalas.id, { onDelete: "cascade" }),
+  funcaoId: int("funcaoId").notNull().references(() => funcoesEscala.id, { onDelete: "cascade" }),
+  nome: varchar("nome", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }),
+  telefone: varchar("telefone", { length: 20 }),
+  status: varchar("status", { length: 20 }).default("pendente").notNull(), // "confirmado", "pendente", "ausente"
+  observacoes: text("observacoes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ParticipanteEscala = typeof participantesEscala.$inferSelect;
+export type InsertParticipanteEscala = typeof participantesEscala.$inferInsert;
