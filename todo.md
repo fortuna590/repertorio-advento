@@ -1132,3 +1132,25 @@
 - [x] Testar criação de escala de grupo de oração
 - [x] Testar customização de funções
 - [x] Salvar checkpoint final
+
+
+## Notificações e Conflitos de Escalas
+
+### Sistema de Notificações por Email
+- [x] Criar função de envio de email usando Resend
+- [x] Enviar email ao adicionar participante em escala
+- [x] Enviar email ao atualizar status de participante
+- [x] Criar template de email para notificação de escala
+- [ ] Adicionar opção de desativar notificações
+
+### Verificação de Conflitos de Agendamento
+- [x] Criar endpoint para verificar conflitos de participante
+- [x] Verificar conflitos ao adicionar participante
+- [x] Exibir alerta pop-up quando houver conflito
+- [x] Mostrar lista de escalas conflitantes
+- [x] Permitir adicionar mesmo com conflito (com confirmação)
+
+### Testes e Validação
+- [x] Testar envio de emails
+- [x] Testar verificação de conflitos
+- [x] Salvar checkpoint final

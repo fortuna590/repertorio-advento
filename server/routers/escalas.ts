@@ -3,6 +3,7 @@ import { publicProcedure, router } from "../_core/trpc";
 import { escalas, funcoesEscala, participantesEscala } from "../../drizzle/schema";
 import { getDb } from "../db";
 import { eq, and, desc, gte, lte } from "drizzle-orm";
+import { sendEmail, templateEmailEscala, templateEmailStatusEscala } from "../_core/email";
 
 export const escalasRouter = router({
   // Criar nova escala
@@ -157,7 +158,88 @@ export const escalasRouter = router({
       const db = await getDb();
       if (!db) throw new Error("Database not available");
 
+      // Verificar conflitos de agendamento
+      const [escala] = await db.select().from(escalas).where(eq(escalas.id, input.escalaId));
+      
+      if (escala && input.email) {
+        // Buscar outras escalas do mesmo participante em datas próximas (7 dias antes e depois)
+        const dataEscala = new Date(escala.data);
+        const dataInicio = new Date(dataEscala);
+        dataInicio.setDate(dataInicio.getDate() - 7);
+        const dataFim = new Date(dataEscala);
+        dataFim.setDate(dataFim.getDate() + 7);
+
+        const dataInicioStr = dataInicio.toISOString().split('T')[0];
+        const dataFimStr = dataFim.toISOString().split('T')[0];
+        
+        const escalasProximas = await db.select()
+          .from(escalas)
+          .where(
+            and(
+              gte(escalas.data, dataInicioStr as any),
+              lte(escalas.data, dataFimStr as any)
+            )
+          );
+
+        // Verificar se o participante já está em alguma dessas escalas
+        const conflitos = [];
+        for (const escalaProxima of escalasProximas) {
+          if (escalaProxima.id === input.escalaId) continue;
+          
+          const participantesConflito = await db.select()
+            .from(participantesEscala)
+            .where(
+              and(
+                eq(participantesEscala.escalaId, escalaProxima.id),
+                eq(participantesEscala.email, input.email)
+              )
+            );
+          
+          if (participantesConflito.length > 0) {
+            conflitos.push({
+              titulo: escalaProxima.titulo,
+              data: escalaProxima.data,
+              hora: escalaProxima.hora,
+            });
+          }
+        }
+
+        // Se houver conflitos, retornar para exibir alerta
+        if (conflitos.length > 0) {
+          return { 
+            success: false, 
+            conflitos,
+            message: "Participante já está escalado em outra(s) data(s) próxima(s)"
+          };
+        }
+      }
+
+      // Inserir participante
       await db.insert(participantesEscala).values(input);
+
+      // Enviar email de notificação se tiver email
+      if (input.email && escala) {
+        const [funcao] = await db.select().from(funcoesEscala).where(eq(funcoesEscala.id, input.funcaoId));
+        
+        if (funcao) {
+          const dataFormatada = new Date(escala.data).toLocaleDateString('pt-BR');
+          
+          await sendEmail({
+            to: input.email,
+            subject: `Você foi escalado: ${escala.titulo}`,
+            html: templateEmailEscala(
+              input.nome,
+              escala.titulo,
+              funcao.nome,
+              dataFormatada,
+              escala.hora || null,
+              escala.local || null,
+              escala.descricao || null
+            ),
+          });
+        }
+      }
+
       return { success: true };
     }),
 
@@ -203,9 +285,39 @@ export const escalasRouter = router({
       const db = await getDb();
       if (!db) throw new Error("Database not available");
 
+      // Buscar participante antes de atualizar
+      const [participante] = await db.select()
+        .from(participantesEscala)
+        .where(eq(participantesEscala.id, input.participanteId));
+
+      if (!participante) {
+        throw new Error("Participante não encontrado");
+      }
+
+      // Atualizar status
       await db.update(participantesEscala)
         .set({ status: input.status })
         .where(eq(participantesEscala.id, input.participanteId));
+
+      // Enviar email de notificação se tiver email
+      if (participante.email) {
+        const [escala] = await db.select().from(escalas).where(eq(escalas.id, participante.escalaId));
+        const [funcao] = await db.select().from(funcoesEscala).where(eq(funcoesEscala.id, participante.funcaoId));
+
+        if (escala && funcao) {
+          await sendEmail({
+            to: participante.email,
+            subject: `Status atualizado: ${escala.titulo}`,
+            html: templateEmailStatusEscala(
+              participante.nome,
+              escala.titulo,
+              funcao.nome,
+              input.status
+            ),
+          });
+        }
+      }
+
       return { success: true };
     }),
 });

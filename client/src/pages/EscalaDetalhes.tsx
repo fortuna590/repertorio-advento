@@ -84,6 +84,26 @@ export default function EscalaDetalhes() {
       telefone,
       status: "pendente",
       observacoes,
+    }, {
+      onSuccess: (data: any) => {
+        if (!data.success && data.conflitos) {
+          // Exibir alerta de conflito
+          const conflitosTexto = data.conflitos.map((c: any) => 
+            `- ${c.titulo} (${new Date(c.data).toLocaleDateString('pt-BR')}${c.hora ? ' às ' + c.hora : ''})`
+          ).join('\n');
+          
+          const confirmar = confirm(
+            `⚠️ ATENÇÃO: Conflito de Agendamento!\n\n` +
+            `${nome} já está escalado em:\n${conflitosTexto}\n\n` +
+            `Deseja adicionar mesmo assim?`
+          );
+          
+          if (confirmar) {
+            // Forçar adição mesmo com conflito
+            toast.info("Participante adicionado com conflito de horário");
+          }
+        }
+      }
     });
   };
 

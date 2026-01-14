@@ -278,3 +278,164 @@ export function templateEmailPedido(nome: string, produtoNome: string, valor: nu
     </html>
   `;
 }
+
+
+/**
+ * Template de email para notificação de escala
+ */
+export function templateEmailEscala(
+  nomeParticipante: string,
+  tituloEscala: string,
+  funcao: string,
+  data: string,
+  hora: string | null,
+  local: string | null,
+  descricao: string | null
+): string {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+        .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+        .field { margin-bottom: 20px; }
+        .label { font-weight: bold; color: #7c3aed; margin-bottom: 5px; }
+        .value { background: white; padding: 15px; border-radius: 5px; border-left: 4px solid #7c3aed; }
+        .footer { text-align: center; margin-top: 30px; color: #666; font-size: 12px; }
+        .highlight { font-size: 20px; font-weight: bold; color: #7c3aed; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>📅 Você foi escalado!</h1>
+          <p>Repertório Católico - LouvaMais</p>
+        </div>
+        <div class="content">
+          <p>Olá ${nomeParticipante},</p>
+          <p>Você foi adicionado à seguinte escala:</p>
+          
+          <div class="field">
+            <div class="label">📋 Escala:</div>
+            <div class="value highlight">${tituloEscala}</div>
+          </div>
+          
+          <div class="field">
+            <div class="label">👤 Sua Função:</div>
+            <div class="value highlight">${funcao}</div>
+          </div>
+          
+          <div class="field">
+            <div class="label">📆 Data:</div>
+            <div class="value">${data}</div>
+          </div>
+          
+          ${hora ? `
+          <div class="field">
+            <div class="label">🕐 Horário:</div>
+            <div class="value">${hora}</div>
+          </div>
+          ` : ''}
+          
+          ${local ? `
+          <div class="field">
+            <div class="label">📍 Local:</div>
+            <div class="value">${local}</div>
+          </div>
+          ` : ''}
+          
+          ${descricao ? `
+          <div class="field">
+            <div class="label">📝 Observações:</div>
+            <div class="value">${descricao.replace(/\n/g, '<br>')}</div>
+          </div>
+          ` : ''}
+          
+          <p style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e5e7eb;">
+            <strong>💡 Importante:</strong> Por favor, confirme sua presença acessando o sistema.
+          </p>
+        </div>
+        <div class="footer">
+          <p>LouvaMais - Church Solutions | Repertório Católico</p>
+          <p>Para a maior glória de Deus ✨</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
+/**
+ * Template de email para atualização de status
+ */
+export function templateEmailStatusEscala(
+  nomeParticipante: string,
+  tituloEscala: string,
+  funcao: string,
+  novoStatus: string
+): string {
+  const statusEmoji = novoStatus === 'confirmado' ? '✅' : novoStatus === 'ausente' ? '❌' : '⏳';
+  const statusTexto = novoStatus === 'confirmado' ? 'Confirmado' : novoStatus === 'ausente' ? 'Ausente' : 'Pendente';
+  const statusCor = novoStatus === 'confirmado' ? '#10b981' : novoStatus === 'ausente' ? '#ef4444' : '#f59e0b';
+
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+        .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+        .field { margin-bottom: 20px; }
+        .label { font-weight: bold; color: #7c3aed; margin-bottom: 5px; }
+        .value { background: white; padding: 15px; border-radius: 5px; border-left: 4px solid #7c3aed; }
+        .footer { text-align: center; margin-top: 30px; color: #666; font-size: 12px; }
+        .status { font-size: 24px; font-weight: bold; color: ${statusCor}; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>${statusEmoji} Status Atualizado</h1>
+          <p>Repertório Católico - LouvaMais</p>
+        </div>
+        <div class="content">
+          <p>Olá ${nomeParticipante},</p>
+          <p>O status da sua participação foi atualizado:</p>
+          
+          <div class="field">
+            <div class="label">📋 Escala:</div>
+            <div class="value">${tituloEscala}</div>
+          </div>
+          
+          <div class="field">
+            <div class="label">👤 Função:</div>
+            <div class="value">${funcao}</div>
+          </div>
+          
+          <div class="field">
+            <div class="label">📊 Novo Status:</div>
+            <div class="value status">${statusEmoji} ${statusTexto}</div>
+          </div>
+          
+          <p style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e5e7eb;">
+            ${novoStatus === 'confirmado' ? '<strong>✅ Obrigado por confirmar sua presença!</strong>' : ''}
+            ${novoStatus === 'ausente' ? '<strong>❌ Registramos sua ausência.</strong>' : ''}
+            ${novoStatus === 'pendente' ? '<strong>⏳ Aguardamos sua confirmação.</strong>' : ''}
+          </p>
+        </div>
+        <div class="footer">
+          <p>LouvaMais - Church Solutions | Repertório Católico</p>
+          <p>Para a maior glória de Deus ✨</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+}
