@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Home, Music, BookOpen, ShoppingBag, BarChart3, Info, User, LogIn, UserPlus, Heart, ListMusic, Settings, LogOut, Shield } from "lucide-react";
+import { Menu, X, Home, Music, BookOpen, ShoppingBag, BarChart3, Info, User, LogIn, UserPlus, Heart, ListMusic, Settings, LogOut, Shield, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -120,6 +120,10 @@ export default function ModernHeader() {
                     <ListMusic className="w-4 h-4 mr-2" />
                     Meus Repertórios
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/escalas")} className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
+                    <Calendar className="w-4 h-4 mr-2" />
+                    Escalas
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate("/configuracoes")} className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
                     <Settings className="w-4 h-4 mr-2" />
                     Configurações
@@ -220,6 +224,15 @@ export default function ModernHeader() {
                     >
                       <ListMusic className="w-4 h-4" />
                       Meus Repertórios
+                    </a>
+                  </Link>
+                  <Link href="/escalas">
+                    <a
+                      onClick={() => setIsOpen(false)}
+                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2"
+                    >
+                      <Calendar className="w-4 h-4" />
+                      Escalas
                     </a>
                   </Link>
                   <Link href="/configuracoes">

@@ -1154,3 +1154,11 @@
 - [x] Testar envio de emails
 - [x] Testar verificação de conflitos
 - [x] Salvar checkpoint final
+
+
+## Menu Escalas para Usuários Logados
+
+- [x] Adicionar link "Escalas" no header de navegação
+- [x] Exibir link apenas para usuários autenticados
+- [x] Testar visibilidade do menu
+- [x] Salvar checkpoint final
