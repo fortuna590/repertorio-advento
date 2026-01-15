@@ -1169,3 +1169,11 @@
 - [x] Substituir navigate() por Link no ModernHeader
 - [x] Testar navegação para Escalas
 - [x] Salvar checkpoint final
+
+
+## Corrigir useNavigate na Página Escalas
+
+- [x] Remover useNavigate() da página Escalas.tsx
+- [x] Substituir por Link do wouter
+- [x] Testar acesso à página
+- [x] Salvar checkpoint final

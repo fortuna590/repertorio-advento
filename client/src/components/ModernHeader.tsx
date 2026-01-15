@@ -52,18 +52,18 @@ export default function ModernHeader() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/">
-            <a className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <div className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
               <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10 object-contain" />
               <span className="text-white font-bold hidden sm:inline">LouvaMais</span>
-            </a>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href}>
-                <a
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                <div
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 cursor-pointer ${
                     isActive(item.href)
                       ? "bg-purple-600 text-white shadow-lg shadow-purple-500/50"
                       : "text-purple-200 hover:text-white hover:bg-purple-600/30"
@@ -71,7 +71,7 @@ export default function ModernHeader() {
                 >
                   {item.icon}
                   {item.label}
-                </a>
+                </div>
               </Link>
             ))}
           </nav>
@@ -173,9 +173,9 @@ export default function ModernHeader() {
           <nav className="md:hidden pb-4 space-y-2">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href}>
-                <a
+                <div
                   onClick={() => setIsOpen(false)}
-                  className={`block px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                  className={`block px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 cursor-pointer ${
                     isActive(item.href)
                       ? "bg-purple-600 text-white"
                       : "text-purple-200 hover:text-white hover:bg-purple-600/30"
@@ -183,7 +183,7 @@ export default function ModernHeader() {
                 >
                   {item.icon}
                   {item.label}
-                </a>
+                </div>
               </Link>
             ))}
             
@@ -191,70 +191,70 @@ export default function ModernHeader() {
               {!user ? (
                 <>
                   <Link href="/login">
-                    <a
+                    <div
                       onClick={() => setIsOpen(false)}
-                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2"
+                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2 cursor-pointer"
                     >
                       <LogIn className="w-4 h-4" />
                       Entrar
-                    </a>
+                    </div>
                   </Link>
                   <Link href="/cadastro">
-                    <a
+                    <div
                       onClick={() => setIsOpen(false)}
-                      className="block px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-purple-600 to-pink-600 text-white transition-all duration-200 flex items-center gap-2 mt-2"
+                      className="block px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-purple-600 to-pink-600 text-white transition-all duration-200 flex items-center gap-2 mt-2 cursor-pointer"
                     >
                       <UserPlus className="w-4 h-4" />
                       Cadastrar
-                    </a>
+                    </div>
                   </Link>
                 </>
               ) : (
                 <>
                   <Link href="/perfil">
-                    <a
+                    <div
                       onClick={() => setIsOpen(false)}
-                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2"
+                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2 cursor-pointer"
                     >
                       <User className="w-4 h-4" />
                       Meu Perfil
-                    </a>
+                    </div>
                   </Link>
                   <Link href="/minhas-favoritas">
-                    <a
+                    <div
                       onClick={() => setIsOpen(false)}
-                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2"
+                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2 cursor-pointer"
                     >
                       <Heart className="w-4 h-4" />
                       Minhas Favoritas
-                    </a>
+                    </div>
                   </Link>
                   <Link href="/meus-repertorios">
-                    <a
+                    <div
                       onClick={() => setIsOpen(false)}
-                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2"
+                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2 cursor-pointer"
                     >
                       <ListMusic className="w-4 h-4" />
                       Meus Repertórios
-                    </a>
+                    </div>
                   </Link>
                   <Link href="/escalas">
-                    <a
+                    <div
                       onClick={() => setIsOpen(false)}
-                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2"
+                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2 cursor-pointer"
                     >
                       <Calendar className="w-4 h-4" />
                       Escalas
-                    </a>
+                    </div>
                   </Link>
                   <Link href="/configuracoes">
-                    <a
+                    <div
                       onClick={() => setIsOpen(false)}
-                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2"
+                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2 cursor-pointer"
                     >
                       <Settings className="w-4 h-4" />
                       Configurações
-                    </a>
+                    </div>
                   </Link>
                   <button
                     onClick={() => {

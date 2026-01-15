@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "wouter";
 import { trpc } from "../lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "../components/ui/button";
@@ -56,7 +56,7 @@ const TEMPLATES = {
 };
 
 export default function Escalas() {
-  const navigate = useNavigate();
+  // Navegação via Link do wouter
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [filtroTipo, setFiltroTipo] = useState<string>("todos");
@@ -341,15 +341,16 @@ export default function Escalas() {
               </div>
 
               <div className="flex gap-2 mt-4">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex-1"
-                  onClick={() => navigate(`/escala/${escala.id}`)}
-                >
-                  <Eye className="w-4 h-4 mr-2" />
-                  Ver
-                </Button>
+                <Link href={`/escala/${escala.id}`}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex-1 w-full"
+                  >
+                    <Eye className="w-4 h-4 mr-2" />
+                    Ver
+                  </Button>
+                </Link>
                 <Button
                   variant="ghost"
                   size="sm"
