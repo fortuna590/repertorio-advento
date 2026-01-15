@@ -108,33 +108,45 @@ export default function ModernHeader() {
                 <DropdownMenuContent align="end" className="w-56 bg-slate-800 border-purple-500/30">
                   <DropdownMenuLabel className="text-purple-200">Minha Conta</DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-purple-500/20" />
-                  <DropdownMenuItem onClick={() => navigate("/perfil")} className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
-                    <User className="w-4 h-4 mr-2" />
-                    Meu Perfil
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/minhas-favoritas")} className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
-                    <Heart className="w-4 h-4 mr-2" />
-                    Minhas Favoritas
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/meus-repertorios")} className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
-                    <ListMusic className="w-4 h-4 mr-2" />
-                    Meus Repertórios
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/escalas")} className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    Escalas
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/configuracoes")} className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
-                    <Settings className="w-4 h-4 mr-2" />
-                    Configurações
-                  </DropdownMenuItem>
+                  <Link href="/perfil">
+                    <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
+                      <User className="w-4 h-4 mr-2" />
+                      Meu Perfil
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/minhas-favoritas">
+                    <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
+                      <Heart className="w-4 h-4 mr-2" />
+                      Minhas Favoritas
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/meus-repertorios">
+                    <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
+                      <ListMusic className="w-4 h-4 mr-2" />
+                      Meus Repertórios
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/escalas">
+                    <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      Escalas
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/configuracoes">
+                    <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
+                      <Settings className="w-4 h-4 mr-2" />
+                      Configurações
+                    </DropdownMenuItem>
+                  </Link>
                   {adminCheck?.isSuperAdmin && (
                     <>
                       <DropdownMenuSeparator className="bg-purple-500/20" />
-                      <DropdownMenuItem onClick={() => navigate("/admin")} className="text-yellow-400 focus:bg-yellow-600/30 focus:text-yellow-300 cursor-pointer">
-                        <Shield className="w-4 h-4 mr-2" />
-                        Administração
-                      </DropdownMenuItem>
+                      <Link href="/admin">
+                        <DropdownMenuItem className="text-yellow-400 focus:bg-yellow-600/30 focus:text-yellow-300 cursor-pointer">
+                          <Shield className="w-4 h-4 mr-2" />
+                          Administração
+                        </DropdownMenuItem>
+                      </Link>
                     </>
                   )}
                   <DropdownMenuSeparator className="bg-purple-500/20" />

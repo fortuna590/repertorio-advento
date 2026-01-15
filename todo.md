@@ -1162,3 +1162,10 @@
 - [x] Exibir link apenas para usuários autenticados
 - [x] Testar visibilidade do menu
 - [x] Salvar checkpoint final
+
+
+## Corrigir Erro useNavigate no ModernHeader
+
+- [x] Substituir navigate() por Link no ModernHeader
+- [x] Testar navegação para Escalas
+- [x] Salvar checkpoint final
