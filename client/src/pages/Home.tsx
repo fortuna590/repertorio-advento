@@ -4,8 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import SocialLinks from "@/components/SocialLinks";
 import { APP_LOGO } from "@/const";
+import ProximasEscalas from "@/components/ProximasEscalas";
+import { useAuth } from "@/_core/hooks/useAuth";
 
 export default function Home() {
+  const { user } = useAuth();
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-purple-900 to-slate-900">
       <ModernHeader />
@@ -227,6 +231,13 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* 6.5 WIDGET DE ESCALAS (somente para usuários logados) */}
+      {user && (
+        <section className="max-w-4xl mx-auto px-4 py-16">
+          <ProximasEscalas />
+        </section>
+      )}
 
       {/* 7. BLOG */}
       <section className="max-w-6xl mx-auto px-4 py-16">

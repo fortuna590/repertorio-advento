@@ -439,3 +439,96 @@ export function templateEmailStatusEscala(
     </html>
   `;
 }
+
+/**
+ * Template de email de lembrete de escala (24h antes)
+ */
+export function templateEmailLembreteEscala(
+  nomeParticipante: string,
+  tituloEscala: string,
+  funcao: string,
+  data: string,
+  hora: string | null,
+  local: string | null,
+  linkConfirmacao: string
+): string {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+        .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+        .field { background: white; padding: 15px; margin: 15px 0; border-radius: 8px; border-left: 4px solid #7c3aed; }
+        .label { font-weight: bold; color: #7c3aed; margin-bottom: 5px; }
+        .value { color: #4b5563; }
+        .button { display: inline-block; background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 20px 0; }
+        .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
+        .alert { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 20px 0; border-radius: 8px; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1 style="margin: 0; font-size: 28px;">⏰ Lembrete de Escala</h1>
+          <p style="margin: 10px 0 0 0; opacity: 0.9;">Sua escala é amanhã!</p>
+        </div>
+        <div class="content">
+          <p style="font-size: 16px; margin-bottom: 20px;">Olá, <strong>${nomeParticipante}</strong>!</p>
+          
+          <div class="alert">
+            <strong>⚠️ Lembrete:</strong> Sua escala está agendada para <strong>amanhã</strong>!
+          </div>
+          
+          <div class="field">
+            <div class="label">🎵 Escala:</div>
+            <div class="value">${tituloEscala}</div>
+          </div>
+          
+          <div class="field">
+            <div class="label">🎭 Função:</div>
+            <div class="value">${funcao}</div>
+          </div>
+          
+          <div class="field">
+            <div class="label">📅 Data:</div>
+            <div class="value">${data}</div>
+          </div>
+          
+          ${hora ? `
+          <div class="field">
+            <div class="label">⏰ Horário:</div>
+            <div class="value">${hora}</div>
+          </div>
+          ` : ''}
+          
+          ${local ? `
+          <div class="field">
+            <div class="label">📍 Local:</div>
+            <div class="value">${local}</div>
+          </div>
+          ` : ''}
+          
+          <div style="text-align: center; margin: 30px 0;">
+            <p style="margin-bottom: 15px;"><strong>Por favor, confirme sua presença:</strong></p>
+            <a href="${linkConfirmacao}" class="button">
+              ✅ Confirmar Presença
+            </a>
+          </div>
+          
+          <p style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e5e7eb; text-align: center; color: #6b7280;">
+            Contamos com você! 🙏
+          </p>
+        </div>
+        <div class="footer">
+          <p>LouvaMais - Church Solutions | Repertório Católico</p>
+          <p>Para a maior glória de Deus ✨</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+}

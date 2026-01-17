@@ -381,6 +381,7 @@ export const participantesEscala = mysqlTable("participantesEscala", {
   telefone: varchar("telefone", { length: 20 }),
   status: varchar("status", { length: 20 }).default("pendente").notNull(), // "confirmado", "pendente", "ausente"
   observacoes: text("observacoes"),
+  token: varchar("token", { length: 64 }).unique(), // Token único para confirmação rápida
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

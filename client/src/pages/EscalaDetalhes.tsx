@@ -8,7 +8,8 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Textarea } from "../components/ui/textarea";
-import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2 } from "lucide-react";
+import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2, FileDown, Link as LinkIcon } from "lucide-react";
+import jsPDF from "jspdf";
 import { toast } from "sonner";
 
 export default function EscalaDetalhes() {
@@ -165,6 +166,110 @@ export default function EscalaDetalhes() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleExportarPDF = () => {
+    if (!escala) return;
+
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    let yPosition = 20;
+
+    // Título
+    doc.setFontSize(20);
+    doc.setFont("helvetica", "bold");
+    doc.text(escala.titulo, pageWidth / 2, yPosition, { align: "center" });
+    yPosition += 10;
+
+    // Informações da escala
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    const dataFormatada = new Date(escala.data).toLocaleDateString("pt-BR");
+    doc.text(`Data: ${dataFormatada}`, 20, yPosition);
+    yPosition += 7;
+
+    if (escala.hora) {
+      doc.text(`Horário: ${escala.hora}`, 20, yPosition);
+      yPosition += 7;
+    }
+
+    if (escala.local) {
+      doc.text(`Local: ${escala.local}`, 20, yPosition);
+      yPosition += 7;
+    }
+
+    if (escala.descricao) {
+      doc.text(`Descrição: ${escala.descricao}`, 20, yPosition);
+      yPosition += 7;
+    }
+
+    yPosition += 5;
+    doc.setLineWidth(0.5);
+    doc.line(20, yPosition, pageWidth - 20, yPosition);
+    yPosition += 10;
+
+    // Funções e Participantes
+    escala.funcoes?.forEach((funcao: any) => {
+      // Verificar se precisa de nova página
+      if (yPosition > 250) {
+        doc.addPage();
+        yPosition = 20;
+      }
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text(funcao.nome, 20, yPosition);
+      yPosition += 8;
+
+      const participantes = escala.participantes?.filter((p: any) => p.funcaoId === funcao.id);
+      
+      if (participantes && participantes.length > 0) {
+        doc.setFontSize(11);
+        doc.setFont("helvetica", "normal");
+        
+        participantes.forEach((participante: any) => {
+          if (yPosition > 270) {
+            doc.addPage();
+            yPosition = 20;
+          }
+
+          const status = participante.status === "confirmado" ? "✓" : participante.status === "ausente" ? "✗" : "?";
+          doc.text(`${status} ${participante.nome}`, 25, yPosition);
+          yPosition += 6;
+
+          if (participante.email) {
+            doc.setFontSize(9);
+            doc.setTextColor(100);
+            doc.text(`   Email: ${participante.email}`, 25, yPosition);
+            doc.setTextColor(0);
+            doc.setFontSize(11);
+            yPosition += 5;
+          }
+
+          if (participante.telefone) {
+            doc.setFontSize(9);
+            doc.setTextColor(100);
+            doc.text(`   Tel: ${participante.telefone}`, 25, yPosition);
+            doc.setTextColor(0);
+            doc.setFontSize(11);
+            yPosition += 5;
+          }
+        });
+      } else {
+        doc.setFontSize(10);
+        doc.setTextColor(150);
+        doc.text("Nenhum participante adicionado", 25, yPosition);
+        doc.setTextColor(0);
+        yPosition += 6;
+      }
+
+      yPosition += 5;
+    });
+
+    // Salvar PDF
+    const nomeArquivo = `escala-${escala.titulo.replace(/\s+/g, '-').toLowerCase()}.pdf`;
+    doc.save(nomeArquivo);
+    toast.success("PDF exportado com sucesso!");
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "confirmado":
@@ -211,13 +316,18 @@ export default function EscalaDetalhes() {
             </div>
           </div>
 
-          <Dialog open={openShare} onOpenChange={setOpenShare}>
-            <DialogTrigger asChild>
-              <Button variant="outline">
-                <Share2 className="w-5 h-5 mr-2" />
-                Compartilhar
-              </Button>
-            </DialogTrigger>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={handleExportarPDF}>
+              <FileDown className="w-5 h-5 mr-2" />
+              Exportar PDF
+            </Button>
+            <Dialog open={openShare} onOpenChange={setOpenShare}>
+              <DialogTrigger asChild>
+                <Button variant="outline">
+                  <Share2 className="w-5 h-5 mr-2" />
+                  Compartilhar
+                </Button>
+              </DialogTrigger>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Compartilhar Escala</DialogTitle>
@@ -238,6 +348,7 @@ export default function EscalaDetalhes() {
               </div>
             </DialogContent>
           </Dialog>
+          </div>
         </div>
 
         {/* Informações da Escala */}
@@ -329,6 +440,20 @@ export default function EscalaDetalhes() {
                           {participante.observacoes && <p className="text-sm text-gray-500 mt-1">{participante.observacoes}</p>}
                         </div>
                         <div className="flex items-center gap-2">
+                          {participante.token && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                const linkConfirmacao = `${window.location.origin}/confirmar/${participante.token}`;
+                                navigator.clipboard.writeText(linkConfirmacao);
+                                toast.success("Link de confirmação copiado!");
+                              }}
+                              title="Copiar link de confirmação"
+                            >
+                              <LinkIcon className="w-4 h-4 text-purple-600" />
+                            </Button>
+                          )}
                           <Select
                             value={participante.status}
                             onValueChange={(value) => handleAtualizarStatus(participante.id, value as any)}

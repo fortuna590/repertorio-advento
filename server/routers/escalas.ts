@@ -3,7 +3,7 @@ import { publicProcedure, router } from "../_core/trpc";
 import { escalas, funcoesEscala, participantesEscala } from "../../drizzle/schema";
 import { getDb } from "../db";
 import { eq, and, desc, gte, lte } from "drizzle-orm";
-import { sendEmail, templateEmailEscala, templateEmailStatusEscala } from "../_core/email";
+import { sendEmail, templateEmailEscala, templateEmailStatusEscala, templateEmailLembreteEscala } from "../_core/email";
 
 export const escalasRouter = router({
   // Criar nova escala
@@ -214,8 +214,14 @@ export const escalasRouter = router({
         }
       }
 
-      // Inserir participante
-      await db.insert(participantesEscala).values(input);
+      // Gerar token único para confirmação rápida
+      const token = Math.random().toString(36).substring(2) + Date.now().toString(36);
+
+      // Inserir participante com token
+      const [participanteInserido] = await db.insert(participantesEscala).values({
+        ...input,
+        token,
+      });
 
       // Enviar email de notificação se tiver email
       if (input.email && escala) {
@@ -223,24 +229,36 @@ export const escalasRouter = router({
         
         if (funcao) {
           const dataFormatada = new Date(escala.data).toLocaleDateString('pt-BR');
+          const linkConfirmacao = `${process.env.VITE_OAUTH_PORTAL_URL || 'http://localhost:3000'}/confirmar/${token}`;
+          
+          // Criar HTML do email com link de confirmação
+          const emailHtml = templateEmailEscala(
+            input.nome,
+            escala.titulo,
+            funcao.nome,
+            dataFormatada,
+            escala.hora || null,
+            escala.local || null,
+            escala.descricao || null
+          ).replace(
+            '</body>',
+            `<div style="text-align: center; margin: 30px 0; padding: 20px; background: #f3f4f6; border-radius: 8px;">
+              <p style="margin-bottom: 15px; font-weight: bold;">Confirme sua presença:</p>
+              <a href="${linkConfirmacao}" style="display: inline-block; background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                ✅ Confirmar Presença
+              </a>
+            </div></body>`
+          );
           
           await sendEmail({
             to: input.email,
             subject: `Você foi escalado: ${escala.titulo}`,
-            html: templateEmailEscala(
-              input.nome,
-              escala.titulo,
-              funcao.nome,
-              dataFormatada,
-              escala.hora || null,
-              escala.local || null,
-              escala.descricao || null
-            ),
+            html: emailHtml,
           });
         }
       }
 
-      return { success: true };
+      return { success: true, token, participanteId: participanteInserido.insertId };
     }),
 
   // Atualizar participante
@@ -319,5 +337,239 @@ export const escalasRouter = router({
       }
 
       return { success: true };
+    }),
+
+  // Buscar próximas escalas do usuário (para widget de dashboard)
+  proximasEscalas: publicProcedure
+    .input(z.object({
+      userId: z.string(),
+      limite: z.number().default(3),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) return [];
+
+      const hoje = new Date().toISOString().split('T')[0];
+      
+      const result = await db.select()
+        .from(escalas)
+        .where(
+          and(
+            eq(escalas.userId, input.userId),
+            gte(escalas.data, hoje as any)
+          )
+        )
+        .orderBy(escalas.data)
+        .limit(input.limite);
+      
+      return result;
+    }),
+
+  // Confirmar participação via token (público, sem autenticação)
+  confirmarPorToken: publicProcedure
+    .input(z.object({
+      token: z.string(),
+    }))
+    .mutation(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Buscar participante pelo token
+      const [participante] = await db.select()
+        .from(participantesEscala)
+        .where(eq(participantesEscala.token, input.token));
+
+      if (!participante) {
+        throw new Error("Token inválido ou participante não encontrado");
+      }
+
+      // Atualizar status para confirmado
+      await db.update(participantesEscala)
+        .set({ status: "confirmado" })
+        .where(eq(participantesEscala.id, participante.id));
+
+      // Buscar informações da escala para retornar
+      const [escala] = await db.select().from(escalas).where(eq(escalas.id, participante.escalaId));
+      const [funcao] = await db.select().from(funcoesEscala).where(eq(funcoesEscala.id, participante.funcaoId));
+
+      return { 
+        success: true,
+        participante: participante.nome,
+        escala: escala?.titulo,
+        funcao: funcao?.nome,
+        data: escala?.data,
+        hora: escala?.hora,
+        local: escala?.local,
+      };
+    }),
+
+  // Buscar informações de participante por token (para exibir página de confirmação)
+  buscarPorToken: publicProcedure
+    .input(z.object({
+      token: z.string(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const [participante] = await db.select()
+        .from(participantesEscala)
+        .where(eq(participantesEscala.token, input.token));
+
+      if (!participante) {
+        throw new Error("Token inválido");
+      }
+
+      const [escala] = await db.select().from(escalas).where(eq(escalas.id, participante.escalaId));
+      const [funcao] = await db.select().from(funcoesEscala).where(eq(funcoesEscala.id, participante.funcaoId));
+
+      return {
+        participante: participante.nome,
+        email: participante.email,
+        status: participante.status,
+        escala: escala?.titulo,
+        funcao: funcao?.nome,
+        data: escala?.data,
+        hora: escala?.hora,
+        local: escala?.local,
+        descricao: escala?.descricao,
+      };
+    }),
+
+  // Buscar escalas próximas (24h) com participantes pendentes (para lembretes)
+  escalasParaLembrete: publicProcedure
+    .input(z.object({
+      userId: z.string(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) return [];
+
+      // Data de amanhã (24h a partir de agora)
+      const amanha = new Date();
+      amanha.setDate(amanha.getDate() + 1);
+      const amanhaStr = amanha.toISOString().split('T')[0];
+
+      // Buscar escalas do usuário para amanhã
+      const escalasAmanha = await db.select()
+        .from(escalas)
+        .where(
+          and(
+            eq(escalas.userId, input.userId),
+            eq(escalas.data, amanhaStr as any)
+          )
+        );
+
+      const resultado = [];
+      
+      for (const escala of escalasAmanha) {
+        // Buscar participantes pendentes
+        const participantesPendentes = await db.select()
+          .from(participantesEscala)
+          .where(
+            and(
+              eq(participantesEscala.escalaId, escala.id),
+              eq(participantesEscala.status, "pendente")
+            )
+          );
+
+        if (participantesPendentes.length > 0) {
+          // Buscar funções para cada participante
+          for (const participante of participantesPendentes) {
+            const [funcao] = await db.select()
+              .from(funcoesEscala)
+              .where(eq(funcoesEscala.id, participante.funcaoId));
+
+            resultado.push({
+              escala,
+              participante,
+              funcao,
+            });
+          }
+        }
+      }
+
+      return resultado;
+    }),
+
+  // Enviar lembretes para escalas próximas (24h)
+  enviarLembretes: publicProcedure
+    .input(z.object({
+      userId: z.string(),
+    }))
+    .mutation(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Data de amanhã (24h a partir de agora)
+      const amanha = new Date();
+      amanha.setDate(amanha.getDate() + 1);
+      const amanhaStr = amanha.toISOString().split('T')[0];
+
+      // Buscar escalas do usuário para amanhã
+      const escalasAmanha = await db.select()
+        .from(escalas)
+        .where(
+          and(
+            eq(escalas.userId, input.userId),
+            eq(escalas.data, amanhaStr as any)
+          )
+        );
+
+      let emailsEnviados = 0;
+      let erros = 0;
+      
+      for (const escala of escalasAmanha) {
+        // Buscar participantes pendentes
+        const participantesPendentes = await db.select()
+          .from(participantesEscala)
+          .where(
+            and(
+              eq(participantesEscala.escalaId, escala.id),
+              eq(participantesEscala.status, "pendente")
+            )
+          );
+
+        for (const participante of participantesPendentes) {
+          if (!participante.email || !participante.token) continue;
+
+          // Buscar função
+          const [funcao] = await db.select()
+            .from(funcoesEscala)
+            .where(eq(funcoesEscala.id, participante.funcaoId));
+
+          if (!funcao) continue;
+
+          const dataFormatada = new Date(escala.data).toLocaleDateString('pt-BR');
+          const linkConfirmacao = `${process.env.VITE_OAUTH_PORTAL_URL || 'http://localhost:3000'}/confirmar/${participante.token}`;
+
+          try {
+            await sendEmail({
+              to: participante.email,
+              subject: `⏰ Lembrete: ${escala.titulo} é amanhã!`,
+              html: templateEmailLembreteEscala(
+                participante.nome,
+                escala.titulo,
+                funcao.nome,
+                dataFormatada,
+                escala.hora || null,
+                escala.local || null,
+                linkConfirmacao
+              ),
+            });
+            emailsEnviados++;
+          } catch (error) {
+            console.error(`Erro ao enviar lembrete para ${participante.email}:`, error);
+            erros++;
+          }
+        }
+      }
+
+      return { 
+        success: true,
+        emailsEnviados,
+        erros,
+        escalasProcessadas: escalasAmanha.length,
+      };
     }),
 });

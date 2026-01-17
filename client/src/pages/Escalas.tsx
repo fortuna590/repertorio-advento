@@ -9,7 +9,7 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Textarea } from "../components/ui/textarea";
-import { Calendar, Clock, MapPin, Plus, Music, Users, Heart, Sparkles, Trash2, Edit, Eye } from "lucide-react";
+import { Calendar, Clock, MapPin, Plus, Music, Users, Heart, Sparkles, Trash2, Edit, Eye, Bell } from "lucide-react";
 import { toast } from "sonner";
 
 // Templates padrão
@@ -75,6 +75,18 @@ export default function Escalas() {
   const { data: escalas, refetch } = trpc.escalas.listar.useQuery({
     userId: user?.openId || "",
     tipo: filtroTipo as any,
+  });
+
+  const enviarLembretesMutation = trpc.escalas.enviarLembretes.useMutation({
+    onSuccess: (data) => {
+      toast.success(`Lembretes enviados! ${data.emailsEnviados} emails enviados.`);
+      if (data.erros > 0) {
+        toast.error(`${data.erros} erros ao enviar lembretes.`);
+      }
+    },
+    onError: (error) => {
+      toast.error("Erro ao enviar lembretes: " + error.message);
+    },
   });
 
   const criarMutation = trpc.escalas.criar.useMutation({
@@ -172,7 +184,16 @@ export default function Escalas() {
             <p className="text-gray-600 mt-2">Organize músicos, reuniões e grupos de oração</p>
           </div>
 
-          <Dialog open={open} onOpenChange={setOpen}>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline"
+              onClick={() => enviarLembretesMutation.mutate({ userId: user?.openId || "" })}
+              disabled={enviarLembretesMutation.isPending}
+            >
+              <Bell className="w-5 h-5 mr-2" />
+              {enviarLembretesMutation.isPending ? "Enviando..." : "Enviar Lembretes"}
+            </Button>
+            <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                 <Plus className="w-5 h-5 mr-2" />
@@ -279,6 +300,7 @@ export default function Escalas() {
               </div>
             </DialogContent>
           </Dialog>
+          </div>
         </div>
 
         {/* Filtros */}

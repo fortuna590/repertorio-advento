@@ -1177,3 +1177,41 @@
 - [x] Substituir por Link do wouter
 - [x] Testar acesso à página
 - [x] Salvar checkpoint final
+
+
+## Melhorias no Sistema de Escalas - Novas Funcionalidades
+
+### Widget de Dashboard
+- [x] Criar endpoint para buscar próximas 3 escalas do usuário
+- [x] Criar componente ProximasEscalas.tsx
+- [x] Integrar widget na página Home.tsx
+- [x] Adicionar link "Ver todas as escalas"
+
+### Exportação em PDF
+- [x] Instalar biblioteca jsPDF
+- [x] Criar função de exportação em PDF
+- [x] Adicionar botão "Exportar PDF" na página EscalaDetalhes
+- [x] Incluir todos os participantes e funções no PDF
+
+### Sistema de Confirmação Rápida
+- [x] Criar campo token na tabela participantesEscala
+- [x] Criar endpoint para confirmar participação via token
+- [x] Gerar token único para cada participante ao adicionar
+- [x] Criar página de confirmação pública (sem login) /confirmar/:token
+- [x] Adicionar botão de confirmação rápida na página de detalhes
+- [x] Exibir link de confirmação copiável
+- [x] Incluir link de confirmação nos emails de notificação
+
+### Sistema de Lembretes Automáticos
+- [x] Criar endpoint para buscar escalas próximas (24h)
+- [x] Criar template de email de lembrete
+- [x] Implementar job/cron para enviar lembretes automáticos
+- [x] Enviar apenas para participantes com status "Pendente"
+- [x] Incluir link de confirmação rápida no email de lembrete
+- [x] Adicionar botão manual para enviar lembretes### Testes e Validação
+- [x] Testar widget de dashboard
+- [x] Testar exportação em PDF
+- [x] Testar sistema de confirmação rápida
+- [x] Testar envio de lembretes
+- [x] Verificar emails de notificação
+- [ ] Salvar checkpoint final
