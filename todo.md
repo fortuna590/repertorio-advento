@@ -1215,3 +1215,28 @@
 - [x] Testar envio de lembretes
 - [x] Verificar emails de notificação
 - [ ] Salvar checkpoint final
+
+
+## Funcionalidades Avançadas - Fase 3
+
+### 1. Cron Job Automático
+- [x] Instalar node-cron
+- [x] Criar serviço de cron jobs
+- [x] Configurar execução diária às 9h
+- [x] Integrar com sistema de lembretes
+- [ ] Testar execução automática### 2. Painel Minhas Escalas
+- [x] Adicionar campo userId em participantesEscala
+- [x] Criar endpoint minhasEscalas
+- [x] Criar endpoint buscarUsuarios
+- [x] Criar página MinhasEscalas.tsx
+- [x] Adicionar rota /minhas-escalas
+- [x] Adicionar link no menu de usuário
+### 3. Notificações WhatsApp
+- [x] Criar helper whatsapp.ts
+- [x] Criar templates de mensagens
+- [x] Integrar ao adicionar participante
+- [x] Integrar no cron de lembretes
+- [x] Criar documentação WHATSAPP_SETUP.md
+- [ ] Testar envio## 4. Checkpoint Final
+- [ ] Testar todas as funcionalidades
+- [ ] Salvar checkpoint

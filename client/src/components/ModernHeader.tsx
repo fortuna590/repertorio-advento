@@ -132,6 +132,12 @@ export default function ModernHeader() {
                       Escalas
                     </DropdownMenuItem>
                   </Link>
+                  <Link href="/minhas-escalas">
+                    <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      Minhas Escalas
+                    </DropdownMenuItem>
+                  </Link>
                   <Link href="/configuracoes">
                     <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
                       <Settings className="w-4 h-4 mr-2" />

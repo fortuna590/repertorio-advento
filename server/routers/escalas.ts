@@ -4,6 +4,7 @@ import { escalas, funcoesEscala, participantesEscala } from "../../drizzle/schem
 import { getDb } from "../db";
 import { eq, and, desc, gte, lte } from "drizzle-orm";
 import { sendEmail, templateEmailEscala, templateEmailStatusEscala, templateEmailLembreteEscala } from "../_core/email";
+import { sendWhatsApp, templateWhatsAppConvite, formatPhoneNumber } from "../_core/whatsapp";
 
 export const escalasRouter = router({
   // Criar nova escala
@@ -255,6 +256,24 @@ export const escalasRouter = router({
             subject: `Você foi escalado: ${escala.titulo}`,
             html: emailHtml,
           });
+
+          // Enviar WhatsApp se tiver telefone
+          if (input.telefone) {
+            const telefoneFormatado = formatPhoneNumber(input.telefone);
+            const mensagemWhatsApp = templateWhatsAppConvite(
+              input.nome,
+              escala.titulo,
+              funcao.nome,
+              dataFormatada,
+              escala.hora || null,
+              escala.local || null,
+              linkConfirmacao
+            );
+            await sendWhatsApp({
+              to: telefoneFormatado,
+              message: mensagemWhatsApp,
+            });
+          }
         }
       }
 
@@ -571,5 +590,81 @@ export const escalasRouter = router({
         erros,
         escalasProcessadas: escalasAmanha.length,
       };
+    }),
+
+  // Buscar usuários cadastrados
+  buscarUsuarios: publicProcedure
+    .input(z.object({
+      busca: z.string(),
+    }))
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const { users } = await import("../../drizzle/schema");
+
+      // Buscar todos os usuários (filtro simples)
+      const todosUsuarios = await db.select({
+        id: users.id,
+        openId: users.openId,
+        name: users.name,
+        email: users.email,
+      })
+      .from(users)
+      .limit(100);
+
+      // Filtrar no JavaScript
+      const resultados = input.busca
+        ? todosUsuarios.filter(u => 
+            u.name?.toLowerCase().includes(input.busca.toLowerCase()) ||
+            u.email?.toLowerCase().includes(input.busca.toLowerCase())
+          ).slice(0, 10)
+        : todosUsuarios.slice(0, 10);
+
+      return resultados;
+    }),
+
+  // Minhas escalas (escalas do usuário logado)
+  minhasEscalas: publicProcedure
+    .input(z.object({
+      userId: z.number(),
+    }))
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Buscar escalas onde o usuário é participante
+      const participacoes = await db.select()
+        .from(participantesEscala)
+        .where(eq(participantesEscala.userId, input.userId));
+
+      const escalasIds = participacoes.map(p => p.escalaId);
+      if (escalasIds.length === 0) return [];
+
+      // Buscar detalhes das escalas
+      const minhasEscalas = [];
+      for (const id of escalasIds) {
+        const [escala] = await db.select().from(escalas).where(eq(escalas.id, id));
+        if (!escala) continue;
+
+        // Buscar participantes
+        const participantes = await db.select().from(participantesEscala)
+          .where(eq(participantesEscala.escalaId, id));
+
+        // Buscar funções
+        const participantesComFuncao = [];
+        for (const p of participantes) {
+          const [funcao] = await db.select().from(funcoesEscala)
+            .where(eq(funcoesEscala.id, p.funcaoId));
+          participantesComFuncao.push({ ...p, funcao });
+        }
+
+        minhasEscalas.push({
+          ...escala,
+          participantes: participantesComFuncao,
+        });
+      }
+
+      return minhasEscalas;
     }),
 });

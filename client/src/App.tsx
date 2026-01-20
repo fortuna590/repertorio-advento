@@ -46,6 +46,7 @@ import RepertorioAdminDetalhes from "./pages/RepertorioAdminDetalhes";
 import Escalas from "./pages/Escalas";
 import EscalaDetalhes from "./pages/EscalaDetalhes";
 import ConfirmarPresenca from "./pages/ConfirmarPresenca";
+import MinhasEscalas from "./pages/MinhasEscalas";
 import WhatsAppButton from "./components/WhatsAppButton";
 
 function Router() {
@@ -90,6 +91,7 @@ function Router() {
       <Route path="/repertorio-admin" component={RepertorioAdmin} />
       <Route path="/repertorio-admin/:id" component={RepertorioAdminDetalhes} />
       <Route path="/escalas" component={Escalas} />
+      <Route path="/minhas-escalas" component={MinhasEscalas} />
       <Route path="/escala/:id" component={EscalaDetalhes} />
       <Route path="/confirmar/:token" component={ConfirmarPresenca} />
       <Route path="/404" component={NotFound} />

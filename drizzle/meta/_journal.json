@@ -127,6 +127,13 @@
       "when": 1768558740101,
       "tag": "0017_premium_captain_universe",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "5",
+      "when": 1768819663926,
+      "tag": "0018_uneven_gertrude_yorkes",
+      "breakpoints": true
     }
   ]
 }

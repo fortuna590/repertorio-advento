@@ -376,6 +376,7 @@ export const participantesEscala = mysqlTable("participantesEscala", {
   id: int("id").autoincrement().primaryKey(),
   escalaId: int("escalaId").notNull().references(() => escalas.id, { onDelete: "cascade" }),
   funcaoId: int("funcaoId").notNull().references(() => funcoesEscala.id, { onDelete: "cascade" }),
+  userId: int("userId").references(() => users.id), // Referência ao usuário cadastrado
   nome: varchar("nome", { length: 255 }).notNull(),
   email: varchar("email", { length: 255 }),
   telefone: varchar("telefone", { length: 20 }),
