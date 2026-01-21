@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Home, Music, BookOpen, ShoppingBag, BarChart3, Info, User, LogIn, UserPlus, Heart, ListMusic, Settings, LogOut, Shield, Calendar } from "lucide-react";
+import { Menu, X, Home, Music, BookOpen, ShoppingBag, BarChart3, Info, User, LogIn, UserPlus, Heart, ListMusic, Settings, LogOut, Shield, Calendar, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -136,6 +136,18 @@ export default function ModernHeader() {
                     <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
                       <Calendar className="w-4 h-4 mr-2" />
                       Minhas Escalas
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/estatisticas-escalas">
+                    <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
+                      <BarChart3 className="w-4 h-4 mr-2" />
+                      Estatísticas
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/historico-escalas">
+                    <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
+                      <Clock className="w-4 h-4 mr-2" />
+                      Histórico
                     </DropdownMenuItem>
                   </Link>
                   <Link href="/configuracoes">

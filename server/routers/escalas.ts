@@ -667,4 +667,136 @@ export const escalasRouter = router({
 
       return minhasEscalas;
     }),
+
+  // Estatísticas gerais
+  estatisticas: publicProcedure
+    .input(z.object({
+      userId: z.union([z.string(), z.number()]),
+    }))
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Buscar todas as escalas do usuário
+      const todasEscalas = await db.select().from(escalas);
+
+      // Buscar todos os participantes
+      const todosParticipantes = await db.select().from(participantesEscala);
+
+      // Taxa de confirmação
+      const confirmados = todosParticipantes.filter(p => p.status === "confirmado").length;
+      const total = todosParticipantes.length;
+      const taxaConfirmacao = total > 0 ? Math.round((confirmados / total) * 100) : 0;
+
+      // Participantes mais ativos (top 5)
+      const participantesPorNome: Record<string, number> = {};
+      todosParticipantes.forEach(p => {
+        participantesPorNome[p.nome] = (participantesPorNome[p.nome] || 0) + 1;
+      });
+      const participantesAtivos = Object.entries(participantesPorNome)
+        .map(([nome, count]) => ({ nome, participacoes: count }))
+        .sort((a, b) => b.participacoes - a.participacoes)
+        .slice(0, 5);
+
+      // Escalas por mês (últimos 6 meses)
+      const hoje = new Date();
+      const escalasPorMes: Record<string, number> = {};
+      for (let i = 5; i >= 0; i--) {
+        const data = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1);
+        const mesAno = `${data.toLocaleString('pt-BR', { month: 'short' })}/${data.getFullYear().toString().slice(-2)}`;
+        escalasPorMes[mesAno] = 0;
+      }
+      todasEscalas.forEach(e => {
+        const data = new Date(e.data);
+        const mesAno = `${data.toLocaleString('pt-BR', { month: 'short' })}/${data.getFullYear().toString().slice(-2)}`;
+        if (mesAno in escalasPorMes) {
+          escalasPorMes[mesAno]++;
+        }
+      });
+
+      // Funções mais requisitadas
+      const funcoesPorId: Record<number, number> = {};
+      todosParticipantes.forEach(p => {
+        funcoesPorId[p.funcaoId] = (funcoesPorId[p.funcaoId] || 0) + 1;
+      });
+      const funcoesComNome = [];
+      for (const [id, count] of Object.entries(funcoesPorId)) {
+        const [funcao] = await db.select().from(funcoesEscala)
+          .where(eq(funcoesEscala.id, parseInt(id)));
+        if (funcao) {
+          funcoesComNome.push({ nome: funcao.nome, count });
+        }
+      }
+      const funcoesRequisitadas = funcoesComNome
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 5);
+
+      return {
+        totalEscalas: todasEscalas.length,
+        totalParticipantes: total,
+        taxaConfirmacao,
+        participantesAtivos,
+        escalasPorMes,
+        funcoesRequisitadas,
+      };
+    }),
+
+  // Histórico de participações
+  historicoParticipacoes: publicProcedure
+    .input(z.object({
+      userId: z.number(),
+      dataInicio: z.string().optional(),
+      dataFim: z.string().optional(),
+      funcaoId: z.number().optional(),
+      status: z.enum(["confirmado", "pendente", "ausente"]).optional(),
+    }))
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Buscar participações do usuário
+      let participacoes = await db.select()
+        .from(participantesEscala)
+        .where(eq(participantesEscala.userId, input.userId));
+
+      // Aplicar filtros
+      if (input.funcaoId) {
+        participacoes = participacoes.filter(p => p.funcaoId === input.funcaoId);
+      }
+      if (input.status) {
+        participacoes = participacoes.filter(p => p.status === input.status);
+      }
+
+      // Buscar detalhes das escalas
+      const historico = [];
+      for (const p of participacoes) {
+        const [escala] = await db.select().from(escalas)
+          .where(eq(escalas.id, p.escalaId));
+        if (!escala) continue;
+
+        // Filtrar por data
+        if (input.dataInicio && new Date(escala.data) < new Date(input.dataInicio)) continue;
+        if (input.dataFim && new Date(escala.data) > new Date(input.dataFim)) continue;
+
+        const [funcao] = await db.select().from(funcoesEscala)
+          .where(eq(funcoesEscala.id, p.funcaoId));
+
+        historico.push({
+          id: p.id,
+          escalaId: escala.id,
+          tituloEscala: escala.titulo,
+          data: escala.data,
+          hora: escala.hora,
+          local: escala.local,
+          funcao: funcao?.nome || "Desconhecida",
+          status: p.status,
+          observacoes: p.observacoes,
+        });
+      }
+
+      // Ordenar por data (mais recente primeiro)
+      historico.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
+
+      return historico;
+    }),
 });

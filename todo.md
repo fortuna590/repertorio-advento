@@ -989,7 +989,7 @@
 - [x] Criar página MinhasFavoritasUnificadas.tsx
 - [x] Listar favoritas padrão e admin juntas
 - [x] Adicionar rota /minhas-favoritas-unificadas
-- [ ] Adicionar link no menu de navegação
+- [x] Adicionar link no menu de navegação
 
 ### Exportação em PDF
 - [x] Criar endpoint para gerar PDF do repertório
@@ -1238,5 +1238,37 @@
 - [x] Integrar no cron de lembretes
 - [x] Criar documentação WHATSAPP_SETUP.md
 - [ ] Testar envio## 4. Checkpoint Final
-- [ ] Testar todas as funcionalidades
+- [x] Testar todas as funcionalidades
+- [x] Salvar checkpoint
+
+
+## Funcionalidades Avançadas - Fase 4
+
+### 1. Busca Inteligente de Participantes
+- [x] Criar componente de autocomplete
+- [x] Integrar com endpoint buscarUsuarios
+- [x] Preencher automaticamente nome, email e telefone
+- [x] Adicionar ao formulário de adicionar participante
+- [ ] Testar busca e preenchimento automático
+
+### 2. Dashboard de Estatísticas
+- [ ] Criar endpoint de estatísticas
+- [ ] Calcular taxa de confirmação
+- [ ] Identificar participantes mais ativos
+- [ ] Contar escalas por mês
+- [ ] Listar funções mais requisitadas
+- [ ] Criar página EstatisticasEscalas.tsx
+- [ ] Adicionar gráficos e métricas visuais
+- [x] Adicionar link no menu
+
+### 3. Histórico de Participações
+- [x] Criar endpoint historicoParticipacoes
+- [x] Implementar filtros (período, função, status)
+- [x] Criar página HistoricoEscalas.tsx
+- [x] Adicionar tabela com paginação
+- [x] Adicionar exportação para Excel/CSV
+- [x] Adicionar link no menu
+
+### 4. Checkpoint Final
+- [x] Testar todas as funcionalidades
 - [ ] Salvar checkpoint

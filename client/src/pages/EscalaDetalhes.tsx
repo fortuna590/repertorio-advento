@@ -11,6 +11,7 @@ import { Textarea } from "../components/ui/textarea";
 import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2, FileDown, Link as LinkIcon } from "lucide-react";
 import jsPDF from "jspdf";
 import { toast } from "sonner";
+import { UserAutocomplete } from "@/components/UserAutocomplete";
 
 export default function EscalaDetalhes() {
   const [, params] = useRoute("/escala/:id");
@@ -405,6 +406,19 @@ export default function EscalaDetalhes() {
                         <DialogTitle>Adicionar Participante - {funcao.nome}</DialogTitle>
                       </DialogHeader>
                       <div className="space-y-4 mt-4">
+                        <div>
+                          <Label>Buscar Usuário Cadastrado</Label>
+                          <UserAutocomplete
+                            value={nome}
+                            onSelect={(user) => {
+                              setNome(user.name);
+                              setEmail(user.email);
+                            }}
+                          />
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Ou preencha manualmente abaixo
+                          </p>
+                        </div>
                         <div>
                           <Label>Nome *</Label>
                           <Input value={nome} onChange={(e) => setNome(e.target.value)} placeholder="Nome completo" />
