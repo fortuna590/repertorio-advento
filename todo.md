@@ -1271,4 +1271,24 @@
 
 ### 4. Checkpoint Final
 - [x] Testar todas as funcionalidades
+- [x] Salvar checkpoint
+
+
+## Ajustes Finais - Fase 5
+
+### 1. Corrigir Contraste em Modo Escuro
+- [x] Identificar elementos com baixo contraste na página Escalas
+- [x] Ajustar cores de texto para melhor visibilidade
+- [x] Ajustar cores de ícones e botões
+- [x] Testar em modo escuro
+
+### 2. Integração com Google Calendar
+- [x] Criar função para gerar link .ics
+- [x] Adicionar botão "Adicionar ao Google Calendar"
+- [x] Implementar na página EscalaDetalhes
+- [x] Implementar na página MinhasEscalas
+- [x] Testar exportação
+
+### 3. Checkpoint Final
+- [x] Testar todas as correções
 - [ ] Salvar checkpoint

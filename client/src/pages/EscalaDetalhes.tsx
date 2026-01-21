@@ -8,10 +8,11 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Textarea } from "../components/ui/textarea";
-import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2, FileDown, Link as LinkIcon } from "lucide-react";
+import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2, FileDown, Link as LinkIcon, CalendarPlus } from "lucide-react";
 import jsPDF from "jspdf";
 import { toast } from "sonner";
 import { UserAutocomplete } from "@/components/UserAutocomplete";
+import { adicionarAoGoogleCalendar } from "@/lib/googleCalendar";
 
 export default function EscalaDetalhes() {
   const [, params] = useRoute("/escala/:id");
@@ -318,6 +319,26 @@ export default function EscalaDetalhes() {
           </div>
 
           <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                if (!escala) return;
+                const dataFormatada = typeof escala.data === 'string' 
+                  ? escala.data 
+                  : new Date(escala.data).toISOString().split('T')[0];
+                adicionarAoGoogleCalendar({
+                  titulo: escala.titulo,
+                  descricao: escala.descricao || undefined,
+                  local: escala.local || undefined,
+                  dataInicio: dataFormatada,
+                  horaInicio: escala.hora || undefined,
+                });
+                toast.success("Abrindo Google Calendar...");
+              }}
+            >
+              <CalendarPlus className="w-5 h-5 mr-2" />
+              Google Calendar
+            </Button>
             <Button variant="outline" onClick={handleExportarPDF}>
               <FileDown className="w-5 h-5 mr-2" />
               Exportar PDF

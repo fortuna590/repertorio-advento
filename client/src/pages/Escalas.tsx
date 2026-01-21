@@ -330,20 +330,20 @@ export default function Escalas() {
         {/* Lista de Escalas */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {escalasFiltradas?.map((escala) => (
-            <Card key={escala.id} className="p-6 hover:shadow-lg transition-shadow">
+            <Card key={escala.id} className="p-6 hover:shadow-lg transition-shadow bg-card text-card-foreground">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
                   {getIconeTipo(escala.tipo)}
                   <div>
-                    <h3 className="font-semibold text-lg">{escala.titulo}</h3>
-                    <p className="text-sm text-gray-500">{TEMPLATES[escala.tipo as keyof typeof TEMPLATES]?.nome}</p>
+                    <h3 className="font-semibold text-lg text-foreground">{escala.titulo}</h3>
+                    <p className="text-sm text-muted-foreground">{TEMPLATES[escala.tipo as keyof typeof TEMPLATES]?.nome}</p>
                   </div>
                 </div>
               </div>
 
-              {escala.descricao && <p className="text-sm text-gray-600 mb-4">{escala.descricao}</p>}
+              {escala.descricao && <p className="text-sm text-muted-foreground mb-4">{escala.descricao}</p>}
 
-              <div className="space-y-2 text-sm text-gray-600">
+              <div className="space-y-2 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   {new Date(escala.data).toLocaleDateString("pt-BR")}
