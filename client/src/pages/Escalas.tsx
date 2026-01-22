@@ -178,13 +178,13 @@ export default function Escalas() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 py-12 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900">Gerenciamento de Escalas</h1>
-            <p className="text-gray-600 mt-2">Organize músicos, reuniões e grupos de oração</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground">Gerenciamento de Escalas</h1>
+            <p className="text-muted-foreground mt-2">Organize músicos, reuniões e grupos de oração</p>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
             <Button 
               variant="outline"
               onClick={() => enviarLembretesMutation.mutate({ userId: user?.openId || "" })}
@@ -304,9 +304,9 @@ export default function Escalas() {
         </div>
 
         {/* Filtros */}
-        <div className="flex gap-4 mb-6">
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <Select value={filtroTipo} onValueChange={setFiltroTipo}>
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger className="w-full sm:w-[200px]">
               <SelectValue placeholder="Filtrar por tipo" />
             </SelectTrigger>
             <SelectContent>
@@ -322,7 +322,7 @@ export default function Escalas() {
             type="month"
             value={filtroMes}
             onChange={(e) => setFiltroMes(e.target.value)}
-            className="w-[200px]"
+            className="w-full sm:w-[200px]"
             placeholder="Filtrar por mês"
           />
         </div>
@@ -387,7 +387,7 @@ export default function Escalas() {
 
         {escalasFiltradas?.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500">Nenhuma escala encontrada. Crie sua primeira escala!</p>
+            <p className="text-muted-foreground">Nenhuma escala encontrada. Crie sua primeira escala!</p>
           </div>
         )}
       </div>

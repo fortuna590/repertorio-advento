@@ -1291,4 +1291,21 @@
 
 ### 3. Checkpoint Final
 - [x] Testar todas as correções
-- [ ] Salvar checkpoint
+- [x] Salvar checkpoint
+
+
+## Correções Urgentes - Contraste e Responsividade
+
+### Problemas Identificados:
+- [ ] Textos em cinza escuro (gray-600) invisíveis sobre fundo escuro
+- [ ] Botões "Enviar Lembretes" e "Nova Escala" cortados no mobile
+- [ ] Layout não responsivo para telas pequenas
+- [ ] Filtros (select) sem contraste adequado
+
+### Correções a Implementar:
+- [x] Mudar todos os textos gray-600 para text-white ou text-gray-100
+- [x] Tornar botões do header responsivos (stack vertical em mobile)
+- [x] Ajustar grid de cards para 1 coluna em mobile
+- [x] Aumentar contraste dos selects e inputs
+- [x] Testar em modo escuro no mobile
+- [ ] Salvar checkpoint final
