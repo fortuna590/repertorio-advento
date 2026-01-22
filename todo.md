@@ -1308,4 +1308,24 @@
 - [x] Ajustar grid de cards para 1 coluna em mobile
 - [x] Aumentar contraste dos selects e inputs
 - [x] Testar em modo escuro no mobile
+- [x] Salvar checkpoint final
+
+
+## Correção de Contadores de Acessos
+
+### Problema Identificado:
+- Contadores de acessos não estão funcionando na página de estatísticas
+- Acessos aos repertórios não sendo contabilizados
+- Acessos ao blog não sendo registrados
+- Acessos às músicas não sendo rastreados
+
+### Tarefas:
+- [ ] Investigar implementação atual dos contadores
+- [ ] Verificar se existe tabela de analytics no banco
+- [ ] Criar/atualizar endpoints de tracking
+- [ ] Implementar registro de acessos em repertórios
+- [ ] Implementar registro de acessos no blog
+- [ ] Implementar registro de acessos em músicas
+- [ ] Atualizar página de estatísticas para exibir dados corretos
+- [ ] Testar contadores em tempo real
 - [ ] Salvar checkpoint final

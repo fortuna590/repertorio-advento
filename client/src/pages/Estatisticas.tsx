@@ -59,8 +59,8 @@ function RepertoriosMaisAcessados() {
   );
 }
 
-function ArtigosMaisCompartilhados() {
-  const { data: artigos, isLoading } = (trpc as any).artigos.list.useQuery();
+function ArtigosMaisVisualizados() {
+  const { data: artigos, isLoading } = trpc.artigos.getAll.useQuery();
 
   if (isLoading) {
     return (
@@ -74,13 +74,13 @@ function ArtigosMaisCompartilhados() {
 
   const artigosOrdenados = (artigos || [])
     .filter((a: any) => a.publicado === 1)
-    .sort((a: any, b: any) => (b.compartilhamentos || 0) - (a.compartilhamentos || 0))
+    .sort((a: any, b: any) => (b.visualizacoes || 0) - (a.visualizacoes || 0))
     .slice(0, 10);
 
   if (!artigosOrdenados || artigosOrdenados.length === 0) {
     return (
       <Card className="p-8 bg-slate-800 border-purple-500/20">
-        <p className="text-purple-200 text-center py-8">Nenhum artigo compartilhado ainda</p>
+        <p className="text-purple-200 text-center py-8">Nenhum artigo visualizado ainda</p>
       </Card>
     );
   }
@@ -105,8 +105,8 @@ function ArtigosMaisCompartilhados() {
               <p className="text-purple-400 text-xs">{artigo.categoria || 'Artigo'}</p>
             </div>
             <div className="flex-shrink-0 text-right">
-              <p className="text-white font-bold">{artigo.compartilhamentos || 0}</p>
-              <p className="text-purple-300 text-xs">compartilhamentos</p>
+              <p className="text-white font-bold">{artigo.visualizacoes || 0}</p>
+              <p className="text-purple-300 text-xs">visualizações</p>
             </div>
           </a>
         ))}
@@ -462,8 +462,8 @@ export default function Estatisticas() {
 
         {/* Artigos Mais Compartilhados */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Artigos Mais Compartilhados</h2>
-          <ArtigosMaisCompartilhados />
+          <h2 className="text-2xl font-bold text-white mb-6">Artigos Mais Visualizados</h2>
+          <ArtigosMaisVisualizados />
         </div>
 
         {/* Repertórios Admin Mais Compartilhados */}
