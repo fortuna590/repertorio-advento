@@ -333,6 +333,25 @@ export const musicasRepertorio = mysqlTable("musicasRepertorio", {
 export type MusicaRepertorio = typeof musicasRepertorio.$inferSelect;
 export type InsertMusicaRepertorio = typeof musicasRepertorio.$inferInsert;
 
+/**
+ * Tabela para músicas adicionais aos repertórios base (Advento, Quaresma, etc.)
+ */
+export const musicasRepertorioBase = mysqlTable("musicasRepertorioBase", {
+  id: int("id").autoincrement().primaryKey(),
+  repertorioId: varchar("repertorioId", { length: 100 }).notNull(), // ID do repertório (ex: "advento")
+  momentoId: varchar("momentoId", { length: 100 }).notNull(), // ID do momento (ex: "entrada")
+  titulo: varchar("titulo", { length: 255 }).notNull(),
+  artista: varchar("artista", { length: 255 }),
+  youtube: varchar("youtube", { length: 500 }),
+  cifra: varchar("cifra", { length: 500 }),
+  observacao: text("observacao"),
+  ordem: int("ordem").default(999), // Ordem de exibição
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MusicaRepertorioBase = typeof musicasRepertorioBase.$inferSelect;
+export type InsertMusicaRepertorioBase = typeof musicasRepertorioBase.$inferInsert;
 
 /**
  * Tabela para escalas multiuso (músicos, reuniões, grupo de oração)

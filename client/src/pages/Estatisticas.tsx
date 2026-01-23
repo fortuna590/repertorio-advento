@@ -377,18 +377,6 @@ export default function Estatisticas() {
           </Card>
         </div>
 
-        {/* Repertórios Mais Acessados */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Repertórios Mais Acessados</h2>
-          <RepertoriosMaisAcessados />
-        </div>
-
-        {/* Repertórios Admin Mais Acessados */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Repertórios Personalizados Mais Acessados</h2>
-          <RepertoriosAdminMaisAcessados />
-        </div>
-
         {/* Músicas Mais Acessadas */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-white mb-6">Músicas Mais Acessadas</h2>

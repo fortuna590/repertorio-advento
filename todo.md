@@ -1335,4 +1335,20 @@
 
 - [x] Remover seção de crescimento mensal da página Estatisticas.tsx
 - [x] Testar página de estatísticas
-- [ ] Salvar checkpoint
+- [x] Salvar checkpoint
+
+
+## Ajustes em Estatísticas e Repertórios Editáveis
+
+### Remoção de Repertórios Pessoais das Estatísticas
+- [x] Remover seção "Repertórios Mais Acessados" da página Estatisticas.tsx
+- [ ] Testar página de estatísticas
+
+### Sistema de Edição de Repertórios Existentes
+- [ ] Criar endpoint para adicionar músicas a repertórios existentes
+- [ ] Criar interface de edição de repertórios (botão "Editar" em cada repertório)
+- [ ] Implementar formulário para adicionar novas músicas
+- [ ] Permitir edição de músicas existentes
+- [ ] Permitir remoção de músicas
+- [ ] Testar sistema de edição completo
+- [ ] Salvar checkpoint final

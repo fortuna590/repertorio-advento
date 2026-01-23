@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS `musicasRepertorioBase` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `repertorioId` varchar(100) NOT NULL,\n  `momentoId` varchar(100) NOT NULL,\n  `titulo` varchar(255) NOT NULL,\n  `artista` varchar(255),\n  `youtube` varchar(500),\n  `cifra` varchar(500),\n  `observacao` text,\n  `ordem` int DEFAULT 999,\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  `updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n  CONSTRAINT `musicasRepertorioBase_id` PRIMARY KEY(`id`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute CREATE TABLE IF NOT EXISTS `musicasRepertorioBase` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `repertorioId` varchar(100) NOT NULL,\n  `momentoId` varchar(100) NOT NULL,\n  `titulo` varchar(255) NOT NULL,\n  `artista` varchar(255),\n  `youtube` varchar(500),\n  `cifra` varchar(500),\n  `observacao` text,\n  `ordem` int DEFAULT 999,\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  `updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n  CONSTRAINT `musicasRepertorioBase_id` PRIMARY KEY(`id`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 572
+}

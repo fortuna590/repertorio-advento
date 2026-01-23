@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3, Heart, Printer, FileDown, ShoppingBag, ListMusic, BookOpen } from "lucide-react";
+import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3, Heart, Printer, FileDown, ShoppingBag, ListMusic, BookOpen, Plus } from "lucide-react";
 import { APP_LOGO } from "@/const";
 import { repertorio, type MomentoMissa } from "@/data/repertorio";
 import { NotificationBell } from "@/components/NotificationBell";
@@ -15,13 +15,25 @@ import SocialLinks from "@/components/SocialLinks";
 import ModernHeader from "@/components/ModernHeader";
 import FavoriteButton from "@/components/FavoriteButton";
 import { ShareArticle } from "@/components/ShareArticle";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { AdicionarMusicaModal } from "@/components/AdicionarMusicaModal";
 
 export default function Repertorio() {
+  const { user } = useAuth();
   const [momentoSelecionado, setMomentoSelecionado] = useState<string | null>(null);
   const [buscaTexto, setBuscaTexto] = useState("");
   const [showPrintView, setShowPrintView] = useState(false);
+  const [modalAberto, setModalAberto] = useState(false);
+  const [momentoSelecionadoModal, setMomentoSelecionadoModal] = useState<{ id: string; titulo: string } | null>(null);
   const registerClickMutation = trpc.clicks.register.useMutation();
   const registerNewsletterMutation = trpc.newsletter.subscribe.useMutation();
+  
+  // Buscar músicas adicionais do banco
+  const { data: musicasAdicionais = [], refetch: refetchMusicasAdicionais } = trpc.musicasBase.listar.useQuery({
+    repertorioId: "advento",
+  });
+  
+  const isAdmin = user?.role === "admin";
 
   // Adicionar meta tags Open Graph
   useEffect(() => {
@@ -67,6 +79,29 @@ export default function Repertorio() {
     });
   };
 
+  // Mesclar músicas do JSON com músicas adicionais do banco
+  const mesclarMusicasAdicionais = (momento: any) => {
+    const musicasDoMomento = musicasAdicionais.filter(
+      (m: any) => m.momentoId === momento.id
+    );
+    
+    // Converter músicas adicionais para o formato esperado
+    const musicasAdicionaisFormatadas = musicasDoMomento.map((m: any, index: number) => ({
+      numero: 900 + index, // Número alto para não conflitar com as existentes
+      titulo: m.titulo,
+      artista: m.artista || "Artista desconhecido",
+      youtube: m.youtube || undefined,
+      cifra: m.cifra || undefined,
+      observacao: m.observacao || undefined,
+      isAdicional: true, // Flag para identificar músicas adicionais
+    }));
+    
+    return {
+      ...momento,
+      musicas: [...momento.musicas, ...musicasAdicionaisFormatadas],
+    };
+  };
+
   const momentoFiltrado = momentoSelecionado
     ? repertorio.find((m) => m.id === momentoSelecionado)
     : null;
@@ -88,6 +123,7 @@ export default function Repertorio() {
   };
 
   const momentosComBusca = (momentoFiltrado ? [momentoFiltrado] : repertorio)
+    .map(mesclarMusicasAdicionais) // Adicionar músicas do banco
     .map(filtrarPorBusca)
     .filter(Boolean);
 
@@ -202,16 +238,31 @@ export default function Repertorio() {
           <div className="space-y-12 md:space-y-16 mb-16">
             {momentosParaExibir.map((momento) => (
               <section key={momento.id} className="space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-                  <h2 className="text-3xl md:text-4xl font-bold text-white">
-                    <span className="text-pink-400">{momento.numero}</span> {momento.titulo}
-                  </h2>
-                  {momento.observacao && (
-                    <Badge 
-                      className="text-xs w-fit bg-purple-500/30 text-purple-200 border-purple-500/50"
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                    <h2 className="text-3xl md:text-4xl font-bold text-white">
+                      <span className="text-pink-400">{momento.numero}</span> {momento.titulo}
+                    </h2>
+                    {momento.observacao && (
+                      <Badge 
+                        className="text-xs w-fit bg-purple-500/30 text-purple-200 border-purple-500/50"
+                      >
+                        {momento.observacao}
+                      </Badge>
+                    )}
+                  </div>
+                  {isAdmin && (
+                    <Button
+                      size="sm"
+                      className="gap-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white"
+                      onClick={() => {
+                        setMomentoSelecionadoModal({ id: momento.id, titulo: momento.titulo });
+                        setModalAberto(true);
+                      }}
                     >
-                      {momento.observacao}
-                    </Badge>
+                      <Plus className="w-4 h-4" />
+                      Adicionar Música
+                    </Button>
                   )}
                 </div>
 
@@ -397,6 +448,20 @@ export default function Repertorio() {
           </div>
         </footer>
       </div>
+
+      {/* Modal de Adicionar Música */}
+      {modalAberto && momentoSelecionadoModal && (
+        <AdicionarMusicaModal
+          open={modalAberto}
+          onOpenChange={setModalAberto}
+          repertorioId="advento"
+          momentoId={momentoSelecionadoModal.id}
+          momentoTitulo={momentoSelecionadoModal.titulo}
+          onSuccess={() => {
+            refetchMusicasAdicionais();
+          }}
+        />
+      )}
     </>
   );
 }
