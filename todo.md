@@ -1329,3 +1329,10 @@
 - [ ] Atualizar página de estatísticas para exibir dados corretos
 - [ ] Testar contadores em tempo real
 - [ ] Salvar checkpoint final
+
+
+## Remoção de Crescimento Mensal
+
+- [x] Remover seção de crescimento mensal da página Estatisticas.tsx
+- [x] Testar página de estatísticas
+- [ ] Salvar checkpoint

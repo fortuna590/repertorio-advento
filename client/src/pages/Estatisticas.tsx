@@ -242,8 +242,7 @@ export default function Estatisticas() {
     totalVisualizacoes: 0,
     totalDownloads: 0,
     totalMinisterios: 0,
-    totalArtigos: 0,
-    crescimentoMensal: 0
+    totalArtigos: 0
   };
 
   const clickStatsByMomento = clickStats?.clicksByMomento || [];
@@ -302,17 +301,7 @@ export default function Estatisticas() {
             <p className="text-xs text-blue-400 mt-2">Repertórios criados</p>
           </Card>
 
-          <Card className="p-8 bg-gradient-to-br from-yellow-600/20 to-yellow-600/10 border-yellow-500/30">
-            <div className="flex items-center justify-between mb-4">
-              <TrendingUp className="w-8 h-8 text-yellow-400" />
-              <span className="text-xs bg-yellow-500/30 text-yellow-200 px-3 py-1 rounded-full">
-                Crescimento
-              </span>
-            </div>
-            <p className="text-4xl font-bold text-white mb-2">{siteStats.crescimentoMensal > 0 ? '+' : ''}{siteStats.crescimentoMensal}%</p>
-            <p className="text-yellow-200">Crescimento Mensal</p>
-            <p className="text-xs text-yellow-400 mt-2">Comparado ao mês anterior</p>
-          </Card>
+
         </div>
 
         {/* Total de Cliques */}
