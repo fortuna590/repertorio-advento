@@ -5,17 +5,35 @@ import { repertoriosAdmin, momentosMissa, musicasRepertorio } from "../../drizzl
 import { eq, sql } from "drizzle-orm";
 
 export const repertorioRouter = router({
-  list: publicProcedure.query(async () => {
-    const db = await getDb();
-    if (!db) return [];
-    try {
-      const result = await db.select().from(repertoriosAdmin);
-      return result || [];
-    } catch (e) {
-      console.error("Error listing repertorios:", e);
-      return [];
-    }
-  }),
+  list: publicProcedure
+    .input(
+      z.object({
+        incluirOcultos: z.boolean().optional().default(false),
+      }).optional()
+    )
+    .query(async ({ input }: any) => {
+      const db = await getDb();
+      if (!db) return [];
+      try {
+        const incluirOcultos = input?.incluirOcultos || false;
+        
+        if (incluirOcultos) {
+          // Admin: retornar todos os repertórios
+          const result = await db.select().from(repertoriosAdmin);
+          return result || [];
+        } else {
+          // Público: retornar apenas os publicados
+          const result = await db
+            .select()
+            .from(repertoriosAdmin)
+            .where(eq(repertoriosAdmin.publicado, 1));
+          return result || [];
+        }
+      } catch (e) {
+        console.error("Error listing repertorios:", e);
+        return [];
+      }
+    }),
 
   create: protectedProcedure
     .input(
@@ -470,6 +488,43 @@ export const repertorioRouter = router({
       } catch (e) {
         console.error("Error incrementing compartilhamentos:", e);
         return { success: false };
+      }
+    }),
+
+  // Toggle visibilidade do repertório
+  toggleVisibilidade: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      })
+    )
+    .mutation(async ({ input }: any) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      try {
+        // Buscar estado atual
+        const repertorio = await db
+          .select()
+          .from(repertoriosAdmin)
+          .where(eq(repertoriosAdmin.id, input.id));
+
+        if (!repertorio[0]) {
+          throw new Error("Repertório não encontrado");
+        }
+
+        // Inverter estado
+        const novoEstado = repertorio[0].publicado === 1 ? 0 : 1;
+
+        await db
+          .update(repertoriosAdmin)
+          .set({ publicado: novoEstado })
+          .where(eq(repertoriosAdmin.id, input.id));
+
+        return { success: true, publicado: novoEstado };
+      } catch (e) {
+        console.error("Error toggling visibilidade:", e);
+        throw e;
       }
     }),
 });

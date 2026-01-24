@@ -1352,3 +1352,13 @@
 - [ ] Permitir remoção de músicas
 - [ ] Testar sistema de edição completo
 - [ ] Salvar checkpoint final
+
+## Repertórios Base na Página de Admin e Sistema de Visibilidade
+
+- [x] Adicionar repertórios base existentes (Advento, Quaresma, Páscoa, etc.) à tabela repertoriosAdmin
+- [x] Criar script de seed para popular repertórios base no banco
+- [x] Implementar sistema de visibilidade com campo publicado (0 = oculto, 1 = visível)
+- [x] Adicionar botão de toggle de visibilidade na interface de admin (RepertorioAdmin.tsx)
+- [x] Filtrar repertórios não publicados no frontend público
+- [x] Atualizar menu de navegação para mostrar apenas repertórios publicados
+- [x] Testar sistema completo de visibilidade

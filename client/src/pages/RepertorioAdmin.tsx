@@ -72,7 +72,7 @@ export function RepertorioAdmin() {
   const [editingMusicaId, setEditingMusicaId] = useState<number | null>(null);
 
   // Queries
-  const repertoriosQuery = (trpc as any).repertorio.list.useQuery();
+  const repertoriosQuery = (trpc as any).repertorio.list.useQuery({ incluirOcultos: true });
   const momentosQuery = (trpc as any).repertorio.listMomentos.useQuery(
     { repertorioId: editingId || 0 },
     { enabled: !!editingId }
@@ -96,6 +96,7 @@ export function RepertorioAdmin() {
   const createMusicaMutation = (trpc as any).repertorio.createMusica.useMutation();
   const updateMusicaMutation = (trpc as any).repertorio.updateMusica.useMutation();
   const deleteMusicaMutation = (trpc as any).repertorio.deleteMusica.useMutation();
+  const toggleVisibilidadeMutation = (trpc as any).repertorio.toggleVisibilidade.useMutation();
 
   const handleSaveRepertorio = async () => {
     try {
@@ -379,6 +380,23 @@ export function RepertorioAdmin() {
                     </div>
                     <div className="flex gap-2">
                       <Button
+                        variant={repertorio.publicado === 1 ? "default" : "outline"}
+                        size="sm"
+                        onClick={async () => {
+                          try {
+                            await toggleVisibilidadeMutation.mutateAsync({ id: repertorio.id });
+                            await repertoriosQuery.refetch();
+                          } catch (error) {
+                            console.error("Erro ao alternar visibilidade:", error);
+                          }
+                        }}
+                        className="gap-1"
+                        title={repertorio.publicado === 1 ? "Ocultar do site" : "Tornar visível no site"}
+                      >
+                        <Eye className="w-4 h-4" />
+                        {repertorio.publicado === 1 ? "Visível" : "Oculto"}
+                      </Button>
+                      <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => {
@@ -399,18 +417,6 @@ export function RepertorioAdmin() {
                       >
                         <Edit2 className="w-4 h-4" />
                         Editar
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => {
-                          setEditingId(repertorio.id);
-                          setActiveTab("preview");
-                        }}
-                        className="gap-1"
-                      >
-                        <Eye className="w-4 h-4" />
-                        Preview
                       </Button>
                       <Button
                         variant="ghost"
