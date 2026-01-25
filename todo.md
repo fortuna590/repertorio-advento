@@ -1362,3 +1362,35 @@
 - [x] Filtrar repertórios não publicados no frontend público
 - [x] Atualizar menu de navegação para mostrar apenas repertórios publicados
 - [x] Testar sistema completo de visibilidade
+
+## Edição, Reordenação e Bulk Import de Músicas
+
+### Edição e Remoção de Músicas
+- [x] Adicionar botões de editar/remover nas músicas dos repertórios base
+- [x] Criar modal de edição de música com todos os campos
+- [x] Implementar endpoint de atualização de música base
+- [x] Implementar endpoint de remoção de música base
+- [x] Adicionar confirmação antes de remover música
+
+### Sistema de Reordenação Drag-and-Drop
+- [x] Instalar biblioteca dnd-kit para drag-and-drop
+- [x] Implementar componente de lista arrastável de músicas
+- [x] Adicionar indicadores visuais de drag (handle, preview)
+- [x] Criar endpoint de reordenação em lote
+- [x] Atualizar interface para mostrar nova ordem imediatamente
+
+### Bulk Import via CSV
+- [x] Criar modal de import com upload de arquivo CSV
+- [x] Implementar parser de CSV no frontend
+- [x] Validar formato e campos obrigatórios
+- [x] Criar endpoint de import em lote no backend (reutiliza endpoint adicionar)
+- [x] Adicionar preview dos dados antes de confirmar import
+- [x] Mostrar relatório de sucesso/erros após import
+- [x] Criar template CSV de exemplo para download
+
+### Testes e Validação
+- [x] Escrever testes para edição/remoção de músicas
+- [x] Escrever testes para reordenação
+- [x] Escrever testes para bulk import (reutiliza testes de adição)
+- [x] Testar fluxo completo no navegador
+- [x] Salvar checkpoint final

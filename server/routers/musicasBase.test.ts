@@ -53,4 +53,48 @@ describe("Router de Músicas Base", () => {
       })
     ).rejects.toThrow("Apenas administradores podem adicionar músicas");
   });
+
+  it("deve rejeitar edição de música por usuário não-admin", async () => {
+    const caller = appRouter.createCaller({
+      user: { id: 1, openId: "test", role: "user" } as any,
+      req: {} as any,
+      res: {} as any,
+    });
+
+    await expect(
+      caller.musicasBase.editar({
+        id: 1,
+        titulo: "Música Editada",
+      })
+    ).rejects.toThrow("Apenas administradores podem editar músicas");
+  });
+
+  it("deve rejeitar remoção de música por usuário não-admin", async () => {
+    const caller = appRouter.createCaller({
+      user: { id: 1, openId: "test", role: "user" } as any,
+      req: {} as any,
+      res: {} as any,
+    });
+
+    await expect(
+      caller.musicasBase.remover({ id: 1 })
+    ).rejects.toThrow("Apenas administradores podem remover músicas");
+  });
+
+  it("deve rejeitar reordenação por usuário não-admin", async () => {
+    const caller = appRouter.createCaller({
+      user: { id: 1, openId: "test", role: "user" } as any,
+      req: {} as any,
+      res: {} as any,
+    });
+
+    await expect(
+      caller.musicasBase.reordenar({
+        musicas: [
+          { id: 1, ordem: 2 },
+          { id: 2, ordem: 1 },
+        ],
+      })
+    ).rejects.toThrow("Apenas administradores podem reordenar músicas");
+  });
 });

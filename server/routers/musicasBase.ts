@@ -144,4 +144,43 @@ export const musicasBaseRouter = router({
 
       return { success: true };
     }),
+
+  // Reordenar músicas
+  reordenar: protectedProcedure
+    .input(
+      z.object({
+        musicas: z.array(
+          z.object({
+            id: z.number(),
+            ordem: z.number(),
+          })
+        ),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      if (ctx.user.role !== "admin") {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Apenas administradores podem reordenar músicas",
+        });
+      }
+
+      const db = await getDb();
+      if (!db) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Banco de dados não disponível",
+        });
+      }
+
+      // Atualizar ordem de cada música
+      for (const musica of input.musicas) {
+        await db
+          .update(musicasRepertorioBase)
+          .set({ ordem: musica.ordem })
+          .where(eq(musicasRepertorioBase.id, musica.id));
+      }
+
+      return { success: true };
+    }),
 });

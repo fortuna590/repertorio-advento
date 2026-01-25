@@ -11,6 +11,9 @@ describe("Sistema de Visibilidade de Repertórios", () => {
   beforeAll(async () => {
     db = await getDb();
     
+    // Limpar repertório de teste anterior (se existir)
+    await db!.delete(repertoriosAdmin).where(eq(repertoriosAdmin.slug, "teste-visibilidade"));
+    
     // Criar repertório de teste
     const result = await db!.insert(repertoriosAdmin).values({
       nome: "Teste Visibilidade",

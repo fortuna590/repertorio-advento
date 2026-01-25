@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3, Heart, Printer, FileDown, ShoppingBag, ListMusic, BookOpen, Plus } from "lucide-react";
+import { Music, Youtube, Guitar, Sparkles, Church, Filter, BarChart3, Heart, Printer, FileDown, ShoppingBag, ListMusic, BookOpen, Plus, Edit2, Trash2, GripVertical } from "lucide-react";
 import { APP_LOGO } from "@/const";
 import { repertorio, type MomentoMissa } from "@/data/repertorio";
 import { NotificationBell } from "@/components/NotificationBell";
@@ -17,6 +17,9 @@ import FavoriteButton from "@/components/FavoriteButton";
 import { ShareArticle } from "@/components/ShareArticle";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { AdicionarMusicaModal } from "@/components/AdicionarMusicaModal";
+import { EditarMusicaModal } from "@/components/EditarMusicaModal";
+import { ReordenarMusicasModal } from "@/components/ReordenarMusicasModal";
+import { BulkImportMusicasModal } from "@/components/BulkImportMusicasModal";
 
 export default function Repertorio() {
   const { user } = useAuth();
@@ -25,8 +28,15 @@ export default function Repertorio() {
   const [showPrintView, setShowPrintView] = useState(false);
   const [modalAberto, setModalAberto] = useState(false);
   const [momentoSelecionadoModal, setMomentoSelecionadoModal] = useState<{ id: string; titulo: string } | null>(null);
+  const [modalEditarAberto, setModalEditarAberto] = useState(false);
+  const [musicaSelecionada, setMusicaSelecionada] = useState<any>(null);
+  const [modalReordenarAberto, setModalReordenarAberto] = useState(false);
+  const [momentoReordenar, setMomentoReordenar] = useState<{ id: string; titulo: string } | null>(null);
+  const [modalBulkImportAberto, setModalBulkImportAberto] = useState(false);
+  const [momentoBulkImport, setMomentoBulkImport] = useState<{ id: string; titulo: string } | null>(null);
   const registerClickMutation = trpc.clicks.register.useMutation();
   const registerNewsletterMutation = trpc.newsletter.subscribe.useMutation();
+  const removerMusicaMutation = trpc.musicasBase.remover.useMutation();
   
   // Buscar músicas adicionais do banco
   const { data: musicasAdicionais = [], refetch: refetchMusicasAdicionais } = trpc.musicasBase.listar.useQuery({
@@ -252,17 +262,43 @@ export default function Repertorio() {
                     )}
                   </div>
                   {isAdmin && (
-                    <Button
-                      size="sm"
-                      className="gap-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white"
-                      onClick={() => {
-                        setMomentoSelecionadoModal({ id: momento.id, titulo: momento.titulo });
-                        setModalAberto(true);
-                      }}
-                    >
-                      <Plus className="w-4 h-4" />
-                      Adicionar Música
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        className="gap-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white"
+                        onClick={() => {
+                          setMomentoSelecionadoModal({ id: momento.id, titulo: momento.titulo });
+                          setModalAberto(true);
+                        }}
+                      >
+                        <Plus className="w-4 h-4" />
+                        Adicionar Música
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="gap-2 border-purple-500/30 text-purple-200 hover:bg-purple-500/20"
+                        onClick={() => {
+                          setMomentoReordenar({ id: momento.id, titulo: momento.titulo });
+                          setModalReordenarAberto(true);
+                        }}
+                      >
+                        <GripVertical className="w-4 h-4" />
+                        Reordenar
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="gap-2 border-purple-500/30 text-purple-200 hover:bg-purple-500/20"
+                        onClick={() => {
+                          setMomentoBulkImport({ id: momento.id, titulo: momento.titulo });
+                          setModalBulkImportAberto(true);
+                        }}
+                      >
+                        <FileDown className="w-4 h-4" />
+                        Importar CSV
+                      </Button>
+                    </div>
                   )}
                 </div>
 
@@ -304,6 +340,43 @@ export default function Repertorio() {
                           >
                             {musica.observacao}
                           </Badge>
+                        )}
+                        {/* Botões de edição/remoção para músicas adicionadas (apenas admin) */}
+                        {isAdmin && typeof musica.id === 'number' && (
+                          <div className="flex gap-2 mt-3">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="gap-1 text-purple-300 hover:text-purple-100 hover:bg-purple-500/20"
+                              onClick={() => {
+                                setMusicaSelecionada(musica);
+                                setModalEditarAberto(true);
+                              }}
+                            >
+                              <Edit2 className="w-3 h-3" />
+                              Editar
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="gap-1 text-red-300 hover:text-red-100 hover:bg-red-500/20"
+                              onClick={() => {
+                                if (confirm('Tem certeza que deseja remover esta música?')) {
+                                  removerMusicaMutation.mutate(
+                                    { id: Number(musica.id) },
+                                    {
+                                      onSuccess: () => {
+                                        refetchMusicasAdicionais();
+                                      },
+                                    }
+                                  );
+                                }
+                              }}
+                            >
+                              <Trash2 className="w-3 h-3" />
+                              Remover
+                            </Button>
+                          </div>
                         )}
                       </CardHeader>
                       <CardContent className="space-y-2 pt-0">
@@ -457,6 +530,55 @@ export default function Repertorio() {
           repertorioId="advento"
           momentoId={momentoSelecionadoModal.id}
           momentoTitulo={momentoSelecionadoModal.titulo}
+          onSuccess={() => {
+            refetchMusicasAdicionais();
+          }}
+        />
+      )}
+      
+      {/* Modal de Edição de Música */}
+      {modalEditarAberto && musicaSelecionada && (
+        <EditarMusicaModal
+          open={modalEditarAberto}
+          onClose={() => {
+            setModalEditarAberto(false);
+            setMusicaSelecionada(null);
+          }}
+          musica={musicaSelecionada}
+          onSuccess={() => {
+            refetchMusicasAdicionais();
+          }}
+        />
+      )}
+      
+      {/* Modal de Reordenação de Músicas */}
+      {modalReordenarAberto && momentoReordenar && (
+        <ReordenarMusicasModal
+          open={modalReordenarAberto}
+          onClose={() => {
+            setModalReordenarAberto(false);
+            setMomentoReordenar(null);
+          }}
+          repertorioId="advento"
+          momentoId={momentoReordenar.id}
+          momentoTitulo={momentoReordenar.titulo}
+          onSuccess={() => {
+            refetchMusicasAdicionais();
+          }}
+        />
+      )}
+      
+      {/* Modal de Bulk Import */}
+      {modalBulkImportAberto && momentoBulkImport && (
+        <BulkImportMusicasModal
+          open={modalBulkImportAberto}
+          onClose={() => {
+            setModalBulkImportAberto(false);
+            setMomentoBulkImport(null);
+          }}
+          repertorioId="advento"
+          momentoId={momentoBulkImport.id}
+          momentoTitulo={momentoBulkImport.titulo}
           onSuccess={() => {
             refetchMusicasAdicionais();
           }}
