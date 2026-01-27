@@ -43,6 +43,7 @@ import RepertorioDetalhe from "./pages/RepertorioDetalhe";
 import Admin from "./pages/Admin";
 import { RepertorioAdmin } from "./pages/RepertorioAdmin";
 import RepertorioAdminDetalhes from "./pages/RepertorioAdminDetalhes";
+import RepertorioBaseAdmin from "./pages/RepertorioBaseAdmin";
 import Escalas from "./pages/Escalas";
 import EscalaDetalhes from "./pages/EscalaDetalhes";
 import ConfirmarPresenca from "./pages/ConfirmarPresenca";
@@ -92,6 +93,7 @@ function Router() {
       <Route path="/admin" component={Admin} />
       <Route path="/repertorio-admin" component={RepertorioAdmin} />
       <Route path="/repertorio-admin/:id" component={RepertorioAdminDetalhes} />
+      <Route path="/repertorio-base-admin/:id" component={RepertorioBaseAdmin} />
       <Route path="/escalas" component={Escalas} />
       <Route path="/minhas-escalas" component={MinhasEscalas} />
       <Route path="/estatisticas-escalas" component={EstatisticasEscalas} />

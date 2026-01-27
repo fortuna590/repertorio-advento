@@ -1394,3 +1394,40 @@
 - [x] Escrever testes para bulk import (reutiliza testes de adição)
 - [x] Testar fluxo completo no navegador
 - [x] Salvar checkpoint final
+
+## Correção de Cores e Novas Funcionalidades
+
+### Correção de Cores da Página de Escalas
+- [x] Atualizar cores da página de escalas para seguir tema padrão (roxo/rosa)
+- [x] Substituir cores preto/branco/cinza por cores do tema
+- [x] Garantir legibilidade e consistência visual com outras páginas
+
+### Histórico de Alterações (Log de Auditoria)
+- [x] Criar tabela de histórico de alterações no banco
+- [x] Registrar quem adicionou/editou/removeu cada música
+- [x] Registrar timestamp de cada alteração
+- [ ] Criar endpoint para listar histórico
+- [ ] Adicionar interface para visualizar histórico (modal ou seção)
+- [ ] Mostrar histórico na página de admin de repertórios
+
+### Sistema de Tags/Categorias
+- [ ] Criar tabela de tags no banco
+- [ ] Criar tabela de relacionamento música-tag
+- [ ] Adicionar campo de tags nos modais de adicionar/editar música
+- [ ] Criar interface de seleção de tags (multi-select)
+- [ ] Implementar filtro por tags na listagem de músicas
+- [ ] Adicionar tags predefinidas (contemplativa, animada, tradicional, moderna, etc.)
+
+### Sugestões Inteligentes de Músicas
+- [ ] Criar algoritmo de sugestão baseado em padrões de uso
+- [ ] Considerar tempo litúrgico nas sugestões
+- [ ] Considerar momento da missa nas sugestões
+- [ ] Criar endpoint de sugestões
+- [ ] Adicionar seção de "Músicas Sugeridas" nos modais de adicionar música
+- [ ] Implementar cache de sugestões para performance
+
+### Mover Funcionalidades de Edição para Painel Admin
+- [x] Remover botões "Adicionar Música", "Reordenar" e "Importar CSV" da página pública de repertórios
+- [x] Criar página de admin específica para edição de repertórios base (/repertorio-base-admin/:id)
+- [x] Adicionar botão "Gerenciar Músicas" na página de admin de repertórios para cada repertório base
+- [x] Manter funcionalidades de edição apenas no painel admin

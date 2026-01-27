@@ -261,45 +261,7 @@ export default function Repertorio() {
                       </Badge>
                     )}
                   </div>
-                  {isAdmin && (
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        className="gap-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white"
-                        onClick={() => {
-                          setMomentoSelecionadoModal({ id: momento.id, titulo: momento.titulo });
-                          setModalAberto(true);
-                        }}
-                      >
-                        <Plus className="w-4 h-4" />
-                        Adicionar Música
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="gap-2 border-purple-500/30 text-purple-200 hover:bg-purple-500/20"
-                        onClick={() => {
-                          setMomentoReordenar({ id: momento.id, titulo: momento.titulo });
-                          setModalReordenarAberto(true);
-                        }}
-                      >
-                        <GripVertical className="w-4 h-4" />
-                        Reordenar
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="gap-2 border-purple-500/30 text-purple-200 hover:bg-purple-500/20"
-                        onClick={() => {
-                          setMomentoBulkImport({ id: momento.id, titulo: momento.titulo });
-                          setModalBulkImportAberto(true);
-                        }}
-                      >
-                        <FileDown className="w-4 h-4" />
-                        Importar CSV
-                      </Button>
-                    </div>
-                  )}
+
                 </div>
 
                 <div className="grid gap-4 sm:gap-5 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">

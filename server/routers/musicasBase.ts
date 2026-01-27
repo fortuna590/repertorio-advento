@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { publicProcedure, router, protectedProcedure } from "../_core/trpc";
 import { getDb } from "../db";
-import { musicasRepertorioBase } from "../../drizzle/schema";
+import { musicasRepertorioBase, historicoMusicasBase } from "../../drizzle/schema";
 import { eq, and } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 
@@ -75,6 +75,24 @@ export const musicasBaseRouter = router({
         ordem: input.ordem || 999,
       });
 
+      // Registrar no histórico
+      await db.insert(historicoMusicasBase).values({
+        musicaId: Number(musica.insertId),
+        repertorioId: input.repertorioId,
+        momentoId: input.momentoId,
+        usuarioId: ctx.user.id,
+        usuarioNome: ctx.user.name,
+        acao: "adicionar",
+        dadosNovos: JSON.stringify({
+          titulo: input.titulo,
+          artista: input.artista,
+          youtube: input.youtube,
+          cifra: input.cifra,
+          observacao: input.observacao,
+          ordem: input.ordem || 999,
+        }),
+      });
+
       return { success: true, id: musica.insertId };
     }),
 
@@ -109,6 +127,13 @@ export const musicasBaseRouter = router({
 
       const { id, ...data } = input;
 
+      // Buscar dados antigos
+      const [musicaAntiga] = await db
+        .select()
+        .from(musicasRepertorioBase)
+        .where(eq(musicasRepertorioBase.id, id))
+        .limit(1);
+
       await db
         .update(musicasRepertorioBase)
         .set({
@@ -117,6 +142,20 @@ export const musicasBaseRouter = router({
           cifra: data.cifra || null,
         })
         .where(eq(musicasRepertorioBase.id, id));
+
+      // Registrar no histórico
+      if (musicaAntiga) {
+        await db.insert(historicoMusicasBase).values({
+          musicaId: id,
+          repertorioId: musicaAntiga.repertorioId,
+          momentoId: musicaAntiga.momentoId,
+          usuarioId: ctx.user.id,
+          usuarioNome: ctx.user.name,
+          acao: "editar",
+          dadosAntigos: JSON.stringify(musicaAntiga),
+          dadosNovos: JSON.stringify({ ...musicaAntiga, ...data }),
+        });
+      }
 
       return { success: true };
     }),
@@ -140,7 +179,27 @@ export const musicasBaseRouter = router({
         });
       }
 
+      // Buscar dados antes de remover
+      const [musicaRemovida] = await db
+        .select()
+        .from(musicasRepertorioBase)
+        .where(eq(musicasRepertorioBase.id, input.id))
+        .limit(1);
+
       await db.delete(musicasRepertorioBase).where(eq(musicasRepertorioBase.id, input.id));
+
+      // Registrar no histórico
+      if (musicaRemovida) {
+        await db.insert(historicoMusicasBase).values({
+          musicaId: input.id,
+          repertorioId: musicaRemovida.repertorioId,
+          momentoId: musicaRemovida.momentoId,
+          usuarioId: ctx.user.id,
+          usuarioNome: ctx.user.name,
+          acao: "remover",
+          dadosAntigos: JSON.stringify(musicaRemovida),
+        });
+      }
 
       return { success: true };
     }),

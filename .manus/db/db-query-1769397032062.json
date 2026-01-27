@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS `historicoMusicasBase` (\n  `id` int AUTO_INCREMENT PRIMARY KEY,\n  `musicaId` int,\n  `repertorioId` varchar(100) NOT NULL,\n  `momentoId` varchar(100) NOT NULL,\n  `acao` enum('adicionar', 'editar', 'remover', 'reordenar') NOT NULL,\n  `usuarioId` int,\n  `usuarioNome` varchar(255),\n  `dadosAntigos` text,\n  `dadosNovos` text,\n  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  FOREIGN KEY (`usuarioId`) REFERENCES `users`(`id`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute CREATE TABLE IF NOT EXISTS `historicoMusicasBase` (\n  `id` int AUTO_INCREMENT PRIMARY KEY,\n  `musicaId` int,\n  `repertorioId` varchar(100) NOT NULL,\n  `momentoId` varchar(100) NOT NULL,\n  `acao` enum('adicionar', 'editar', 'remover', 'reordenar') NOT NULL,\n  `usuarioId` int,\n  `usuarioNome` varchar(255),\n  `dadosAntigos` text,\n  `dadosNovos` text,\n  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  FOREIGN KEY (`usuarioId`) REFERENCES `users`(`id`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1256
+}

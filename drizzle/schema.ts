@@ -408,3 +408,22 @@ export const participantesEscala = mysqlTable("participantesEscala", {
 
 export type ParticipanteEscala = typeof participantesEscala.$inferSelect;
 export type InsertParticipanteEscala = typeof participantesEscala.$inferInsert;
+
+/**
+ * Tabela para histórico de alterações em músicas dos repertórios base
+ */
+export const historicoMusicasBase = mysqlTable("historicoMusicasBase", {
+  id: int("id").autoincrement().primaryKey(),
+  musicaId: int("musicaId"), // ID da música (null se foi deletada)
+  repertorioId: varchar("repertorioId", { length: 100 }).notNull(),
+  momentoId: varchar("momentoId", { length: 100 }).notNull(),
+  acao: mysqlEnum("acao", ["adicionar", "editar", "remover", "reordenar"]).notNull(),
+  usuarioId: int("usuarioId").references(() => users.id),
+  usuarioNome: varchar("usuarioNome", { length: 255 }),
+  dadosAntigos: text("dadosAntigos"), // JSON com dados antes da alteração
+  dadosNovos: text("dadosNovos"), // JSON com dados após a alteração
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type HistoricoMusicaBase = typeof historicoMusicasBase.$inferSelect;
+export type InsertHistoricoMusicaBase = typeof historicoMusicasBase.$inferInsert;

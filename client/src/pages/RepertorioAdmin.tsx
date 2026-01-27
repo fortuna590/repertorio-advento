@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -6,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ColorPicker } from "@/components/ColorPicker";
 import { trpc } from "@/lib/trpc";
-import { Music, Plus, Edit2, Trash2, Eye, Save } from "lucide-react";
+import { Music, Plus, Edit2, Trash2, Eye, Save, Settings } from "lucide-react";
 
 interface RepertorioForm {
   nome: string;
@@ -36,6 +37,7 @@ interface MusicaForm {
 }
 
 export function RepertorioAdmin() {
+  const [, setLocation] = useLocation();
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState("lista");
@@ -396,6 +398,30 @@ export function RepertorioAdmin() {
                         <Eye className="w-4 h-4" />
                         {repertorio.publicado === 1 ? "Visível" : "Oculto"}
                       </Button>
+                      {/* Botão de gerenciar músicas para repertórios base */}
+                      {["Advento", "Quaresma", "Páscoa", "Natal", "Tempo Comum", "Celebrações Especiais", "Celebrações Marianas"].includes(repertorio.tempoLiturgico) && (
+                        <Button
+                          variant="default"
+                          size="sm"
+                          onClick={() => {
+                            const idMap: Record<string, string> = {
+                              "Advento": "advento",
+                              "Quaresma": "quaresma",
+                              "Páscoa": "pascoa",
+                              "Natal": "natal",
+                              "Tempo Comum": "tempo-comum",
+                              "Celebrações Especiais": "especiais",
+                              "Celebrações Marianas": "maria",
+                            };
+                            const baseId = idMap[repertorio.tempoLiturgico];
+                            setLocation(`/repertorio-base-admin/${baseId}`);
+                          }}
+                          className="gap-1"
+                        >
+                          <Settings className="w-4 h-4" />
+                          Gerenciar Músicas
+                        </Button>
+                      )}
                       <Button
                         variant="ghost"
                         size="sm"

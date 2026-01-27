@@ -175,13 +175,13 @@ export default function Escalas() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900 py-12 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground">Gerenciamento de Escalas</h1>
-            <p className="text-muted-foreground mt-2">Organize músicos, reuniões e grupos de oração</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-white">Gerenciamento de Escalas</h1>
+            <p className="text-purple-200 mt-2">Organize músicos, reuniões e grupos de oração</p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
@@ -330,20 +330,20 @@ export default function Escalas() {
         {/* Lista de Escalas */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {escalasFiltradas?.map((escala) => (
-            <Card key={escala.id} className="p-6 hover:shadow-lg transition-shadow bg-card text-card-foreground">
+            <Card key={escala.id} className="p-6 hover:shadow-lg transition-shadow bg-slate-900/80 backdrop-blur-sm border-purple-500/20 hover:border-purple-500/40">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
                   {getIconeTipo(escala.tipo)}
                   <div>
-                    <h3 className="font-semibold text-lg text-foreground">{escala.titulo}</h3>
-                    <p className="text-sm text-muted-foreground">{TEMPLATES[escala.tipo as keyof typeof TEMPLATES]?.nome}</p>
+                    <h3 className="font-semibold text-lg text-white">{escala.titulo}</h3>
+                    <p className="text-sm text-purple-300">{TEMPLATES[escala.tipo as keyof typeof TEMPLATES]?.nome}</p>
                   </div>
                 </div>
               </div>
 
-              {escala.descricao && <p className="text-sm text-muted-foreground mb-4">{escala.descricao}</p>}
+              {escala.descricao && <p className="text-sm text-purple-200 mb-4">{escala.descricao}</p>}
 
-              <div className="space-y-2 text-sm text-muted-foreground">
+              <div className="space-y-2 text-sm text-purple-300">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   {new Date(escala.data).toLocaleDateString("pt-BR")}
@@ -387,7 +387,7 @@ export default function Escalas() {
 
         {escalasFiltradas?.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">Nenhuma escala encontrada. Crie sua primeira escala!</p>
+            <p className="text-purple-200">Nenhuma escala encontrada. Crie sua primeira escala!</p>
           </div>
         )}
       </div>
