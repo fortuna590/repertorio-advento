@@ -70,11 +70,12 @@ export default function HistoricoEscalas() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 py-8">
+      <div className="container mx-auto px-4 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Histórico de Participações</h1>
-          <p className="text-gray-600 mt-1">Visualize todas as suas escalas anteriores</p>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Histórico de Participações</h1>
+          <p className="text-gray-700 mt-1">Visualize todas as suas escalas anteriores</p>
         </div>
         <Link href="/minhas-escalas">
           <Button variant="outline">
@@ -212,6 +213,7 @@ export default function HistoricoEscalas() {
           )}
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

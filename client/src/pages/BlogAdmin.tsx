@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookOpen, Plus, Edit, Trash2, Eye, Save, ArrowLeft, Search } from "lucide-react";
+import { VoltarPainelAdminButton } from "@/components/VoltarPainelAdminButton";
 import { APP_LOGO } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
@@ -204,7 +205,10 @@ export default function BlogAdmin() {
           {/* Botão Novo Artigo */}
           {!showForm && (
             <div className="flex justify-between items-center">
-              <h2 className="text-3xl font-bold text-foreground">Meus Artigos</h2>
+              <div>
+                <h2 className="text-3xl font-bold text-foreground">Meus Artigos</h2>
+                <VoltarPainelAdminButton />
+              </div>
               <Button onClick={() => setShowForm(true)} size="lg" className="gap-2">
                 <Plus className="w-5 h-5" />
                 Novo Artigo

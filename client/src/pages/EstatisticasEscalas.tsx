@@ -33,11 +33,12 @@ export default function EstatisticasEscalas() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 py-8">
+      <div className="container mx-auto px-4 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Estatísticas de Escalas</h1>
-          <p className="text-gray-600 mt-1">Métricas e análises do seu gerenciamento de escalas</p>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Estatísticas de Escalas</h1>
+          <p className="text-gray-700 mt-1">Métricas e análises do seu gerenciamento de escalas</p>
         </div>
         <Link href="/escalas">
           <Button variant="outline">Voltar para Escalas</Button>
@@ -184,6 +185,7 @@ export default function EstatisticasEscalas() {
             </div>
           </CardContent>
         </Card>
+      </div>
       </div>
     </div>
   );

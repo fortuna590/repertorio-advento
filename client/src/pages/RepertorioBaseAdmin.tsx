@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
 import { Plus, GripVertical, FileDown, Edit, Trash2, ArrowLeft, Music } from "lucide-react";
+import { VoltarPainelAdminButton } from "@/components/VoltarPainelAdminButton";
 import { toast } from "sonner";
 import { AdicionarMusicaModal } from "@/components/AdicionarMusicaModal";
 import { EditarMusicaModal } from "@/components/EditarMusicaModal";
@@ -70,14 +71,17 @@ export default function RepertorioBaseAdmin() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <Button
-            variant="ghost"
-            onClick={() => setLocation("/repertorio-admin")}
-            className="mb-4 text-purple-200 hover:text-white"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Voltar para Repertórios
-          </Button>
+          <div className="flex items-center gap-2 mb-4">
+            <Button
+              variant="ghost"
+              onClick={() => setLocation("/repertorio-admin")}
+              className="text-purple-200 hover:text-white"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Voltar para Repertórios
+            </Button>
+            <VoltarPainelAdminButton />
+          </div>
           <h1 className="text-4xl font-bold text-white mb-2">
             {repertorioBase.titulo}
           </h1>

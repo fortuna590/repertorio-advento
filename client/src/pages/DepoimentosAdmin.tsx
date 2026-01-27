@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, Check, X, Clock } from "lucide-react";
+import { VoltarPainelAdminButton } from "@/components/VoltarPainelAdminButton";
 import { APP_LOGO } from "@/const";
 import ModernHeader from "@/components/ModernHeader";
 import { trpc } from "@/lib/trpc";
@@ -50,6 +51,9 @@ export default function DepoimentosAdmin() {
       <div className="max-w-6xl mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-16">
+          <div className="flex justify-center mb-4">
+            <VoltarPainelAdminButton />
+          </div>
           <h1 className="text-5xl font-bold text-white mb-4">Moderação de Depoimentos</h1>
           <p className="text-xl text-purple-200 mb-8">
             Revise e aprove depoimentos antes de publicá-los

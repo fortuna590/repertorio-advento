@@ -79,9 +79,9 @@ export default function MinhasEscalas() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
       {/* Header */}
-      <div className="border-b border-border/50 bg-card/50">
+      <div className="border-b border-purple-200/50 bg-white/80 backdrop-blur-sm">
         <div className="container py-8">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
             Minhas Escalas

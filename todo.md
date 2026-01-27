@@ -1431,3 +1431,18 @@
 - [x] Criar página de admin específica para edição de repertórios base (/repertorio-base-admin/:id)
 - [x] Adicionar botão "Gerenciar Músicas" na página de admin de repertórios para cada repertório base
 - [x] Manter funcionalidades de edição apenas no painel admin
+
+## Correções de UX no Painel Admin
+
+### Padronizar Cores das Páginas de Visualização de Escalas
+- [x] Identificar páginas de visualização de escalas criadas
+- [x] Atualizar cores para tema roxo/rosa padrão do site
+- [x] Garantir consistência visual com outras páginas
+
+### Botão "Voltar ao Painel Admin"
+- [x] Adicionar botão em RepertorioAdmin.tsx
+- [x] Adicionar botão em RepertorioBaseAdmin.tsx
+- [x] Adicionar botão em BlogAdmin.tsx
+- [x] Adicionar botão em DepoimentosAdmin.tsx
+- [x] Criar componente reutilizável VoltarPainelAdminButton
+- [x] Posicionar botão de forma consistente (topo esquerdo ou breadcrumb)

@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ColorPicker } from "@/components/ColorPicker";
 import { trpc } from "@/lib/trpc";
 import { Music, Plus, Edit2, Trash2, Eye, Save, Settings } from "lucide-react";
+import { VoltarPainelAdminButton } from "@/components/VoltarPainelAdminButton";
 
 interface RepertorioForm {
   nome: string;
@@ -248,10 +249,15 @@ export function RepertorioAdmin() {
   return (
     <div className="container py-8">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">Gerenciador de Repertórios</h1>
-        <p className="text-muted-foreground">
-          Crie e organize repertórios litúrgicos com momentos da missa e músicas
-        </p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">Gerenciador de Repertórios</h1>
+            <p className="text-muted-foreground">
+              Crie e organize repertórios litúrgicos com momentos da missa e músicas
+            </p>
+          </div>
+          <VoltarPainelAdminButton />
+        </div>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
