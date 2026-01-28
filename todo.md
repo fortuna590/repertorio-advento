@@ -1459,3 +1459,11 @@
 - [x] Remover ou corrigir validação que impede mesmo usuário em escalas diferentes
 - [x] Permitir mesmo usuário em múltiplas escalas com datas/horários distintos
 - [x] Validar conflito apenas para mesmo dia E mesmo horário
+
+## Correção Final de Cores da Página de Visualização de Escala
+
+- [x] Verificar classes CSS aplicadas na página EscalaDetalhes.tsx
+- [x] Adicionar fundo gradiente roxo/rosa na página
+- [x] Atualizar cards para usar bg-white/80 backdrop-blur-sm border-purple-200
+- [x] Atualizar ícones e textos para cores roxas/rosas vibrantes
+- [x] Testar visualmente no navegador

@@ -376,29 +376,29 @@ export default function EscalaDetalhes() {
         {/* Informações da Escala */}
         <Card className="p-6 mb-6 bg-white/80 backdrop-blur-sm border-purple-200 shadow-lg">
           <div className="space-y-3">
-            <div className="flex items-center gap-2 text-gray-700">
-              <Calendar className="w-5 h-5" />
+            <div className="flex items-center gap-2 text-purple-700">
+              <Calendar className="w-5 h-5 text-purple-600" />
               <span className="font-semibold">Data:</span>
               {new Date(escala.data).toLocaleDateString("pt-BR")}
             </div>
             {escala.hora && (
-              <div className="flex items-center gap-2 text-gray-700">
-                <Clock className="w-5 h-5" />
+              <div className="flex items-center gap-2 text-purple-700">
+                <Clock className="w-5 h-5 text-purple-600" />
                 <span className="font-semibold">Horário:</span>
                 {escala.hora}
               </div>
             )}
             {escala.local && (
-              <div className="flex items-center gap-2 text-gray-700">
-                <MapPin className="w-5 h-5" />
+              <div className="flex items-center gap-2 text-purple-700">
+                <MapPin className="w-5 h-5 text-purple-600" />
                 <span className="font-semibold">Local:</span>
                 {escala.local}
               </div>
             )}
             {escala.descricao && (
               <div className="mt-4">
-                <p className="font-semibold text-gray-700 mb-2">Descrição:</p>
-                <p className="text-gray-600">{escala.descricao}</p>
+                <p className="font-semibold text-purple-700 mb-2">Descrição:</p>
+                <p className="text-purple-600">{escala.descricao}</p>
               </div>
             )}
           </div>
@@ -411,7 +411,7 @@ export default function EscalaDetalhes() {
             return (
               <Card key={funcao.id} className="p-6 bg-white/80 backdrop-blur-sm border-purple-200 shadow-lg">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-semibold text-gray-900">{funcao.nome}</h3>
+                  <h3 className="text-xl font-semibold text-purple-900">{funcao.nome}</h3>
                   <Dialog open={openAddParticipante && funcaoId === funcao.id} onOpenChange={(open) => {
                     setOpenAddParticipante(open);
                     if (open) setFuncaoId(funcao.id);
