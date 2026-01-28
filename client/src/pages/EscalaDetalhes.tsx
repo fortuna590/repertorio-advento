@@ -275,11 +275,11 @@ export default function EscalaDetalhes() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "confirmado":
-        return "bg-green-100 text-green-800 border-green-300";
+        return "bg-green-900/50 text-green-300 border-green-500/50";
       case "ausente":
-        return "bg-red-100 text-red-800 border-red-300";
+        return "bg-red-900/50 text-red-300 border-red-500/50";
       default:
-        return "bg-yellow-100 text-yellow-800 border-yellow-300";
+        return "bg-yellow-900/50 text-yellow-300 border-yellow-500/50";
     }
   };
 
@@ -303,7 +303,7 @@ export default function EscalaDetalhes() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-purple-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900 py-12 px-4">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="flex flex-col gap-4 mb-8 md:flex-row md:items-center md:justify-between">
@@ -313,8 +313,8 @@ export default function EscalaDetalhes() {
               Voltar
             </Button>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">{escala.titulo}</h1>
-              <p className="text-sm sm:text-base text-purple-700 mt-1 font-medium">{escala.template}</p>
+              <h1 className="text-2xl sm:text-3xl font-bold text-white">{escala.titulo}</h1>
+              <p className="text-sm sm:text-base text-purple-300 mt-1 font-medium">{escala.template}</p>
             </div>
           </div>
 
@@ -376,31 +376,31 @@ export default function EscalaDetalhes() {
         </div>
 
         {/* Informações da Escala */}
-        <Card className="p-6 mb-6 bg-white/80 backdrop-blur-sm border-purple-200 shadow-lg">
+        <Card className="p-6 mb-6 bg-slate-800/50 backdrop-blur-sm border-purple-500/30 shadow-lg">
           <div className="space-y-3">
-            <div className="flex items-center gap-2 text-purple-700">
-              <Calendar className="w-5 h-5 text-purple-600" />
+            <div className="flex items-center gap-2 text-purple-200">
+              <Calendar className="w-5 h-5 text-purple-400" />
               <span className="font-semibold">Data:</span>
               {new Date(escala.data).toLocaleDateString("pt-BR")}
             </div>
             {escala.hora && (
-              <div className="flex items-center gap-2 text-purple-700">
-                <Clock className="w-5 h-5 text-purple-600" />
+              <div className="flex items-center gap-2 text-purple-200">
+                <Clock className="w-5 h-5 text-purple-400" />
                 <span className="font-semibold">Horário:</span>
                 {escala.hora}
               </div>
             )}
             {escala.local && (
-              <div className="flex items-center gap-2 text-purple-700">
-                <MapPin className="w-5 h-5 text-purple-600" />
+              <div className="flex items-center gap-2 text-purple-200">
+                <MapPin className="w-5 h-5 text-purple-400" />
                 <span className="font-semibold">Local:</span>
                 {escala.local}
               </div>
             )}
             {escala.descricao && (
               <div className="mt-4">
-                <p className="font-semibold text-purple-700 mb-2">Descrição:</p>
-                <p className="text-purple-600">{escala.descricao}</p>
+                <p className="font-semibold text-purple-200 mb-2">Descrição:</p>
+                <p className="text-purple-300">{escala.descricao}</p>
               </div>
             )}
           </div>
@@ -411,15 +411,15 @@ export default function EscalaDetalhes() {
           {escala.funcoes?.map((funcao: any) => {
             const participantes = escala.participantes?.filter((p: any) => p.funcaoId === funcao.id);
             return (
-              <Card key={funcao.id} className="p-6 bg-white/80 backdrop-blur-sm border-purple-200 shadow-lg">
+              <Card key={funcao.id} className="p-6 bg-slate-800/50 backdrop-blur-sm border-purple-500/30 shadow-lg">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-semibold text-purple-900">{funcao.nome}</h3>
+                  <h3 className="text-xl font-semibold text-white">{funcao.nome}</h3>
                   <Dialog open={openAddParticipante && funcaoId === funcao.id} onOpenChange={(open) => {
                     setOpenAddParticipante(open);
                     if (open) setFuncaoId(funcao.id);
                   }}>
                     <DialogTrigger asChild>
-                      <Button size="sm" variant="outline" className="border-purple-300 hover:bg-purple-50 hover:text-purple-700 hover:border-purple-400 transition-colors">
+                      <Button size="sm" variant="outline" className="border-purple-400 text-purple-300 hover:bg-purple-900/50 hover:text-purple-200 hover:border-purple-300 transition-colors">
                         <Plus className="w-4 h-4 mr-2" />
                         Adicionar
                       </Button>
@@ -469,12 +469,12 @@ export default function EscalaDetalhes() {
                 {participantes && participantes.length > 0 ? (
                   <div className="space-y-3">
                     {participantes.map((participante: any) => (
-                      <div key={participante.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div key={participante.id} className="flex items-center justify-between p-4 border border-purple-500/30 rounded-lg bg-slate-900/30">
                         <div className="flex-1">
-                          <p className="font-semibold text-gray-900">{participante.nome}</p>
-                          {participante.email && <p className="text-sm text-gray-600">{participante.email}</p>}
-                          {participante.telefone && <p className="text-sm text-gray-600">{participante.telefone}</p>}
-                          {participante.observacoes && <p className="text-sm text-gray-500 mt-1">{participante.observacoes}</p>}
+                          <p className="font-semibold text-white">{participante.nome}</p>
+                          {participante.email && <p className="text-sm text-purple-300">{participante.email}</p>}
+                          {participante.telefone && <p className="text-sm text-purple-300">{participante.telefone}</p>}
+                          {participante.observacoes && <p className="text-sm text-purple-400 mt-1">{participante.observacoes}</p>}
                         </div>
                         <div className="flex items-center gap-2">
                           {participante.token && (
@@ -516,7 +516,7 @@ export default function EscalaDetalhes() {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-500 text-center py-4">Nenhum participante adicionado</p>
+                  <p className="text-purple-400 text-center py-4">Nenhum participante adicionado</p>
                 )}
               </Card>
             );

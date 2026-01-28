@@ -1484,3 +1484,6 @@
 - [ ] Estilizar botões "Adicionar" com tema roxo/rosa
 - [ ] Ajustar cards para ter mais destaque visual
 - [ ] Garantir consistência com outras páginas do LouvaMais
+
+- [x] Ajustar fundo da página EscalaDetalhes para roxo escuro (seguir padrão das outras páginas do site)
+- [x] Melhorar contraste de textos e elementos visuais na página de visualização de escala
