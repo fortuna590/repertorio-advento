@@ -1467,3 +1467,12 @@
 - [x] Atualizar cards para usar bg-white/80 backdrop-blur-sm border-purple-200
 - [x] Atualizar ícones e textos para cores roxas/rosas vibrantes
 - [x] Testar visualmente no navegador
+
+## Ajustes de Responsividade da Página de Visualização de Escala
+
+- [x] Identificar botões que não se adaptam a telas de celular
+- [x] Ajustar botões "Google Calendar", "Exportar PDF" e "Compartilhar" para mobile
+- [x] Implementar layout flex-wrap para botões em telas pequenas
+- [x] Ajustar tamanho de fonte do título (2xl em mobile, 3xl em desktop)
+- [x] Ocultar texto dos botões em mobile, mostrar apenas ícones
+- [x] Adicionar classes responsive (sm:, md:) para adaptação automática

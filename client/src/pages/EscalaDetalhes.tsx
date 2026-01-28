@@ -306,21 +306,23 @@ export default function EscalaDetalhes() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 py-12 px-4">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" onClick={() => setLocation("/escalas")}>
+        <div className="flex flex-col gap-4 mb-8 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+            <Button variant="ghost" onClick={() => setLocation("/escalas")} className="self-start">
               <ArrowLeft className="w-5 h-5 mr-2" />
               Voltar
             </Button>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{escala.titulo}</h1>
-              <p className="text-gray-600 mt-1">{escala.template}</p>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{escala.titulo}</h1>
+              <p className="text-sm sm:text-base text-gray-600 mt-1">{escala.template}</p>
             </div>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Button 
-              variant="outline" 
+              variant="outline"
+              size="sm"
+              className="flex-1 sm:flex-none"
               onClick={() => {
                 if (!escala) return;
                 const dataFormatada = typeof escala.data === 'string' 
@@ -336,18 +338,18 @@ export default function EscalaDetalhes() {
                 toast.success("Abrindo Google Calendar...");
               }}
             >
-              <CalendarPlus className="w-5 h-5 mr-2" />
-              Google Calendar
+              <CalendarPlus className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
+              <span className="hidden sm:inline">Google Calendar</span>
             </Button>
-            <Button variant="outline" onClick={handleExportarPDF}>
-              <FileDown className="w-5 h-5 mr-2" />
-              Exportar PDF
+            <Button variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={handleExportarPDF}>
+              <FileDown className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
+              <span className="hidden sm:inline">Exportar PDF</span>
             </Button>
             <Dialog open={openShare} onOpenChange={setOpenShare}>
               <DialogTrigger asChild>
-                <Button variant="outline">
-                  <Share2 className="w-5 h-5 mr-2" />
-                  Compartilhar
+                <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+                  <Share2 className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
+                  <span className="hidden sm:inline">Compartilhar</span>
                 </Button>
               </DialogTrigger>
             <DialogContent>
