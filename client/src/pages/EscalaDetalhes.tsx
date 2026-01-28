@@ -303,7 +303,7 @@ export default function EscalaDetalhes() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-purple-50 py-12 px-4">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="flex flex-col gap-4 mb-8 md:flex-row md:items-center md:justify-between">
@@ -313,8 +313,8 @@ export default function EscalaDetalhes() {
               Voltar
             </Button>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{escala.titulo}</h1>
-              <p className="text-sm sm:text-base text-gray-600 mt-1">{escala.template}</p>
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">{escala.titulo}</h1>
+              <p className="text-sm sm:text-base text-purple-700 mt-1 font-medium">{escala.template}</p>
             </div>
           </div>
 
@@ -419,7 +419,7 @@ export default function EscalaDetalhes() {
                     if (open) setFuncaoId(funcao.id);
                   }}>
                     <DialogTrigger asChild>
-                      <Button size="sm" variant="outline">
+                      <Button size="sm" variant="outline" className="border-purple-300 hover:bg-purple-50 hover:text-purple-700 hover:border-purple-400 transition-colors">
                         <Plus className="w-4 h-4 mr-2" />
                         Adicionar
                       </Button>
@@ -458,7 +458,7 @@ export default function EscalaDetalhes() {
                           <Label>Observações</Label>
                           <Textarea value={observacoes} onChange={(e) => setObservacoes(e.target.value)} placeholder="Informações adicionais..." />
                         </div>
-                        <Button onClick={handleAdicionarParticipante} className="w-full" disabled={adicionarParticipanteMutation.isPending}>
+                        <Button onClick={handleAdicionarParticipante} className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700" disabled={adicionarParticipanteMutation.isPending}>
                           {adicionarParticipanteMutation.isPending ? "Adicionando..." : "Adicionar Participante"}
                         </Button>
                       </div>

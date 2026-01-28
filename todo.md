@@ -1476,3 +1476,11 @@
 - [x] Ajustar tamanho de fonte do título (2xl em mobile, 3xl em desktop)
 - [x] Ocultar texto dos botões em mobile, mostrar apenas ícones
 - [x] Adicionar classes responsive (sm:, md:) para adaptação automática
+
+## Ajuste de Design e Cores da Página de Visualização de Escala
+
+- [ ] Tornar gradiente de fundo roxo/rosa mais visível e vibrante
+- [ ] Aplicar cor roxa/rosa no título da escala
+- [ ] Estilizar botões "Adicionar" com tema roxo/rosa
+- [ ] Ajustar cards para ter mais destaque visual
+- [ ] Garantir consistência com outras páginas do LouvaMais
