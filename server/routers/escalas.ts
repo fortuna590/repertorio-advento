@@ -163,26 +163,19 @@ export const escalasRouter = router({
       const [escala] = await db.select().from(escalas).where(eq(escalas.id, input.escalaId));
       
       if (escala && input.email) {
-        // Buscar outras escalas do mesmo participante em datas próximas (7 dias antes e depois)
-        const dataEscala = new Date(escala.data);
-        const dataInicio = new Date(dataEscala);
-        dataInicio.setDate(dataInicio.getDate() - 7);
-        const dataFim = new Date(dataEscala);
-        dataFim.setDate(dataFim.getDate() + 7);
-
-        const dataInicioStr = dataInicio.toISOString().split('T')[0];
-        const dataFimStr = dataFim.toISOString().split('T')[0];
+        // Buscar outras escalas do mesmo participante APENAS no mesmo dia e horário
+        const dataEscalaStr = typeof escala.data === 'string' ? escala.data : new Date(escala.data).toISOString().split('T')[0];
         
         const escalasProximas = await db.select()
           .from(escalas)
           .where(
             and(
-              gte(escalas.data, dataInicioStr as any),
-              lte(escalas.data, dataFimStr as any)
+              eq(escalas.data, dataEscalaStr as any),
+              escala.hora ? eq(escalas.hora, escala.hora) : undefined
             )
           );
 
-        // Verificar se o participante já está em alguma dessas escalas
+        // Verificar se o participante já está em alguma dessas escalas (mesmo dia e horário)
         const conflitos = [];
         for (const escalaProxima of escalasProximas) {
           if (escalaProxima.id === input.escalaId) continue;
@@ -210,7 +203,7 @@ export const escalasRouter = router({
           return { 
             success: false, 
             conflitos,
-            message: "Participante já está escalado em outra(s) data(s) próxima(s)"
+            message: "Participante já está escalado em outra escala no mesmo dia e horário"
           };
         }
       }

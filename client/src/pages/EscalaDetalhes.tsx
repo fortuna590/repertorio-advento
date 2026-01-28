@@ -374,7 +374,7 @@ export default function EscalaDetalhes() {
         </div>
 
         {/* Informações da Escala */}
-        <Card className="p-6 mb-6">
+        <Card className="p-6 mb-6 bg-white/80 backdrop-blur-sm border-purple-200 shadow-lg">
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-gray-700">
               <Calendar className="w-5 h-5" />
@@ -409,7 +409,7 @@ export default function EscalaDetalhes() {
           {escala.funcoes?.map((funcao: any) => {
             const participantes = escala.participantes?.filter((p: any) => p.funcaoId === funcao.id);
             return (
-              <Card key={funcao.id} className="p-6">
+              <Card key={funcao.id} className="p-6 bg-white/80 backdrop-blur-sm border-purple-200 shadow-lg">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-xl font-semibold text-gray-900">{funcao.nome}</h3>
                   <Dialog open={openAddParticipante && funcaoId === funcao.id} onOpenChange={(open) => {

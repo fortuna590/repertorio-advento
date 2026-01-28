@@ -1446,3 +1446,16 @@
 - [x] Adicionar botão em DepoimentosAdmin.tsx
 - [x] Criar componente reutilizável VoltarPainelAdminButton
 - [x] Posicionar botão de forma consistente (topo esquerdo ou breadcrumb)
+
+## Correções de Escalas
+
+### Cores da Página de Visualização de Escala
+- [x] Identificar página de visualização de escala individual
+- [x] Atualizar cores dos cards para tema roxo/rosa
+- [x] Garantir consistência visual com outras páginas do site
+
+### Conflito de Agendamento Incorreto
+- [x] Localizar validação de conflito de agendamento no código
+- [x] Remover ou corrigir validação que impede mesmo usuário em escalas diferentes
+- [x] Permitir mesmo usuário em múltiplas escalas com datas/horários distintos
+- [x] Validar conflito apenas para mesmo dia E mesmo horário
