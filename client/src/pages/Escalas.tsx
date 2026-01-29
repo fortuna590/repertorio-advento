@@ -10,6 +10,7 @@ import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Textarea } from "../components/ui/textarea";
 import { Calendar, Clock, MapPin, Plus, Music, Users, Heart, Sparkles, Trash2, Edit, Eye, Bell } from "lucide-react";
+import { EscalasNavigation } from "../components/EscalasNavigation";
 import { toast } from "sonner";
 
 // Templates padrão
@@ -61,6 +62,7 @@ export default function Escalas() {
   const [open, setOpen] = useState(false);
   const [filtroTipo, setFiltroTipo] = useState<string>("todos");
   const [filtroMes, setFiltroMes] = useState<string>("");
+  const [filtroStatus, setFiltroStatus] = useState<string>("todos");
 
   // Form state
   const [titulo, setTitulo] = useState("");
@@ -158,11 +160,29 @@ export default function Escalas() {
   };
 
   const escalasFiltradas = escalas?.filter((escala) => {
+    // Filtro por mês
     if (filtroMes) {
       const [ano, mes] = filtroMes.split("-");
       const dataEscala = new Date(escala.data);
-      return dataEscala.getFullYear() === parseInt(ano) && dataEscala.getMonth() + 1 === parseInt(mes);
+      const mesMatch = dataEscala.getFullYear() === parseInt(ano) && dataEscala.getMonth() + 1 === parseInt(mes);
+      if (!mesMatch) return false;
     }
+
+    // Filtro por status
+    if (filtroStatus !== "todos") {
+      const participantes = (escala as any).participantes || [];
+      if (filtroStatus === "confirmadas") {
+        // Escala confirmada: todos participantes confirmados
+        return participantes.length > 0 && participantes.every((p: any) => p.status === "confirmado");
+      } else if (filtroStatus === "pendentes") {
+        // Escala pendente: pelo menos um participante pendente
+        return participantes.some((p: any) => p.status === "pendente");
+      } else if (filtroStatus === "com_ausencias") {
+        // Escala com ausências: pelo menos um participante ausente
+        return participantes.some((p: any) => p.status === "ausente");
+      }
+    }
+
     return true;
   });
 
@@ -175,8 +195,9 @@ export default function Escalas() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900 py-12 px-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900">
+      <EscalasNavigation />
+      <div className="max-w-7xl mx-auto py-12 px-4">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
           <div>
@@ -325,6 +346,18 @@ export default function Escalas() {
             className="w-full sm:w-[200px]"
             placeholder="Filtrar por mês"
           />
+
+          <Select value={filtroStatus} onValueChange={setFiltroStatus}>
+            <SelectTrigger className="w-full sm:w-[200px]">
+              <SelectValue placeholder="Filtrar por status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="todos">Todos os Status</SelectItem>
+              <SelectItem value="confirmadas">✅ Confirmadas</SelectItem>
+              <SelectItem value="pendentes">⏳ Pendentes</SelectItem>
+              <SelectItem value="com_ausencias">❌ Com Ausências</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Lista de Escalas */}

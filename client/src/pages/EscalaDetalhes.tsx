@@ -9,6 +9,7 @@ import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Textarea } from "../components/ui/textarea";
 import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2, FileDown, Link as LinkIcon, CalendarPlus } from "lucide-react";
+import { EscalasNavigation } from "@/components/EscalasNavigation";
 import jsPDF from "jspdf";
 import { toast } from "sonner";
 import { UserAutocomplete } from "@/components/UserAutocomplete";
@@ -303,7 +304,9 @@ export default function EscalaDetalhes() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900">
+      <EscalasNavigation />
+      <div className="py-12 px-4">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="flex flex-col gap-4 mb-8 md:flex-row md:items-center md:justify-between">
@@ -352,7 +355,7 @@ export default function EscalaDetalhes() {
                   <span className="hidden sm:inline">Compartilhar</span>
                 </Button>
               </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="animate-in fade-in-0 zoom-in-95 duration-300">
               <DialogHeader>
                 <DialogTitle>Compartilhar Escala</DialogTitle>
               </DialogHeader>
@@ -419,12 +422,12 @@ export default function EscalaDetalhes() {
                     if (open) setFuncaoId(funcao.id);
                   }}>
                     <DialogTrigger asChild>
-                      <Button size="sm" variant="outline" className="border-purple-400 text-purple-300 hover:bg-purple-900/50 hover:text-purple-200 hover:border-purple-300 transition-colors">
+                      <Button size="sm" variant="outline" className="border-purple-400 text-purple-300 hover:bg-purple-900/50 hover:text-purple-200 hover:border-purple-300 transition-all duration-300 hover:scale-105">
                         <Plus className="w-4 h-4 mr-2" />
                         Adicionar
                       </Button>
                     </DialogTrigger>
-                    <DialogContent>
+                    <DialogContent className="animate-in fade-in-0 zoom-in-95 duration-300">
                       <DialogHeader>
                         <DialogTitle>Adicionar Participante - {funcao.nome}</DialogTitle>
                       </DialogHeader>
@@ -495,7 +498,7 @@ export default function EscalaDetalhes() {
                             value={participante.status}
                             onValueChange={(value) => handleAtualizarStatus(participante.id, value as any)}
                           >
-                            <SelectTrigger className={`w-[140px] ${getStatusColor(participante.status)}`}>
+                            <SelectTrigger className={`w-[140px] ${getStatusColor(participante.status)} transition-all duration-300`}>
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -522,6 +525,7 @@ export default function EscalaDetalhes() {
             );
           })}
         </div>
+      </div>
       </div>
     </div>
   );

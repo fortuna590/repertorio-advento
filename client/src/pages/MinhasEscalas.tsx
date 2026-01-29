@@ -4,10 +4,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, MapPin, Users, CheckCircle2, XCircle, Clock3 } from "lucide-react";
+import { EscalasNavigation } from "@/components/EscalasNavigation";
 import { toast } from "sonner";
+import { useEscalasNotifications } from "@/hooks/useEscalasNotifications";
 
 export default function MinhasEscalas() {
   const { user, loading: authLoading } = useAuth();
+  
+  // Hook de notificações em tempo real
+  const { totalEscalas, escalasNaoConfirmadas } = useEscalasNotifications(user?.id);
 
   const { data: escalas, isLoading, refetch } = trpc.escalas.minhasEscalas.useQuery(
     { userId: user?.id || 0 },
@@ -79,14 +84,15 @@ export default function MinhasEscalas() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900">
+      <EscalasNavigation />
       {/* Header */}
-      <div className="border-b border-purple-200/50 bg-white/80 backdrop-blur-sm">
+      <div className="border-b border-purple-500/30 bg-slate-900/50 backdrop-blur-sm">
         <div className="container py-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
             Minhas Escalas
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-purple-200">
             Escalas em que você foi convidado para participar
           </p>
         </div>
@@ -111,19 +117,19 @@ export default function MinhasEscalas() {
               );
 
               return (
-                <Card key={escala.id} className="hover:shadow-lg transition-shadow">
+                <Card key={escala.id} className="bg-slate-800/50 backdrop-blur-sm border-purple-500/30 hover:shadow-2xl hover:shadow-purple-500/20 transition-all">
                   <CardHeader>
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1">
-                        <CardTitle className="text-xl mb-2">{escala.titulo}</CardTitle>
+                        <CardTitle className="text-xl mb-2 text-white">{escala.titulo}</CardTitle>
                         {escala.descricao && (
-                          <CardDescription>{escala.descricao}</CardDescription>
+                          <CardDescription className="text-purple-300">{escala.descricao}</CardDescription>
                         )}
                       </div>
                       {minhaParticipacao && getStatusBadge(minhaParticipacao.status)}
                     </div>
 
-                    <div className="flex flex-wrap gap-4 mt-4 text-sm text-muted-foreground">
+                    <div className="flex flex-wrap gap-4 mt-4 text-sm text-purple-200">
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
                         {new Date(escala.data).toLocaleDateString("pt-BR")}
@@ -146,11 +152,11 @@ export default function MinhasEscalas() {
                   <CardContent className="space-y-4">
                     {/* Minha Função */}
                     {minhaParticipacao && (
-                      <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
+                      <div className="p-4 bg-purple-900/30 rounded-lg border border-purple-500/30">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="font-semibold text-foreground">Sua função:</p>
-                            <p className="text-lg text-primary font-bold">
+                            <p className="font-semibold text-white">Sua função:</p>
+                            <p className="text-lg text-purple-300 font-bold">
                               {minhaParticipacao.funcao?.nome || "Função não encontrada"}
                             </p>
                           </div>
@@ -184,10 +190,10 @@ export default function MinhasEscalas() {
                               <p className="font-medium">
                                 {p.nome}
                                 {p.userId === user.id && (
-                                  <span className="text-primary ml-2">(Você)</span>
+                                  <span className="text-purple-300 ml-2">(Você)</span>
                                 )}
                               </p>
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-sm text-purple-400">
                                 {p.funcao?.nome || "Função não encontrada"}
                               </p>
                             </div>

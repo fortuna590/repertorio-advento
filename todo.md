@@ -1487,3 +1487,13 @@
 
 - [x] Ajustar fundo da página EscalaDetalhes para roxo escuro (seguir padrão das outras páginas do site)
 - [x] Melhorar contraste de textos e elementos visuais na página de visualização de escala
+
+
+## Melhorias de Navegação e UX em Escalas
+
+- [x] Adicionar menu de navegação global em todas as páginas de escalas (Gerenciamento, Minhas Escalas, Detalhes)
+- [x] Ajustar cores da página "Minhas Escalas" para tema roxo escuro (seguir padrão das outras páginas)
+- [x] Implementar animações de transição ao abrir/fechar modais
+- [x] Implementar animações ao mudar status de participantes
+- [x] Criar filtro de escalas por status (confirmadas, pendentes, com ausências)
+- [x] Implementar sistema de notificações push em tempo real para participantes
