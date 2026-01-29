@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { publicProcedure, router } from "../_core/trpc";
+import { publicProcedure, protectedProcedure, router } from "../_core/trpc";
 import { escalas, funcoesEscala, participantesEscala } from "../../drizzle/schema";
 import { getDb } from "../db";
 import { eq, and, desc, gte, lte } from "drizzle-orm";
@@ -113,7 +113,7 @@ export const escalasRouter = router({
     }),
 
   // Atualizar escala
-  atualizar: publicProcedure
+  atualizar: protectedProcedure
     .input(z.object({
       escalaId: z.number(),
       titulo: z.string().optional(),
@@ -662,75 +662,89 @@ export const escalasRouter = router({
     }),
 
   // Estatísticas gerais
-  estatisticas: publicProcedure
+  estatisticas: protectedProcedure
     .input(z.object({
       userId: z.union([z.string(), z.number()]),
     }))
     .query(async ({ input }) => {
       const db = await getDb();
-      if (!db) throw new Error("Database not available");
+      if (!db) return { participantes: [], resumo: {} };
+
+      const userId = typeof input.userId === 'number' ? input.userId.toString() : input.userId;
 
       // Buscar todas as escalas do usuário
-      const todasEscalas = await db.select().from(escalas);
+      const minhasEscalas = await db
+        .select()
+        .from(escalas)
+        .where(eq(escalas.userId, userId))
+        .orderBy(desc(escalas.data));
 
-      // Buscar todos os participantes
-      const todosParticipantes = await db.select().from(participantesEscala);
+      const escalaIds = minhasEscalas.map(e => e.id);
 
-      // Taxa de confirmação
-      const confirmados = todosParticipantes.filter(p => p.status === "confirmado").length;
-      const total = todosParticipantes.length;
-      const taxaConfirmacao = total > 0 ? Math.round((confirmados / total) * 100) : 0;
-
-      // Participantes mais ativos (top 5)
-      const participantesPorNome: Record<string, number> = {};
-      todosParticipantes.forEach(p => {
-        participantesPorNome[p.nome] = (participantesPorNome[p.nome] || 0) + 1;
-      });
-      const participantesAtivos = Object.entries(participantesPorNome)
-        .map(([nome, count]) => ({ nome, participacoes: count }))
-        .sort((a, b) => b.participacoes - a.participacoes)
-        .slice(0, 5);
-
-      // Escalas por mês (últimos 6 meses)
-      const hoje = new Date();
-      const escalasPorMes: Record<string, number> = {};
-      for (let i = 5; i >= 0; i--) {
-        const data = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1);
-        const mesAno = `${data.toLocaleString('pt-BR', { month: 'short' })}/${data.getFullYear().toString().slice(-2)}`;
-        escalasPorMes[mesAno] = 0;
+      if (escalaIds.length === 0) {
+        return { participantes: [], resumo: { totalEscalas: 0, totalParticipacoes: 0, totalConfirmados: 0, totalAusentes: 0, taxaConfirmacaoGeral: 0 } };
       }
-      todasEscalas.forEach(e => {
-        const data = new Date(e.data);
-        const mesAno = `${data.toLocaleString('pt-BR', { month: 'short' })}/${data.getFullYear().toString().slice(-2)}`;
-        if (mesAno in escalasPorMes) {
-          escalasPorMes[mesAno]++;
-        }
-      });
 
-      // Funções mais requisitadas
-      const funcoesPorId: Record<number, number> = {};
-      todosParticipantes.forEach(p => {
-        funcoesPorId[p.funcaoId] = (funcoesPorId[p.funcaoId] || 0) + 1;
-      });
-      const funcoesComNome = [];
-      for (const [id, count] of Object.entries(funcoesPorId)) {
-        const [funcao] = await db.select().from(funcoesEscala)
-          .where(eq(funcoesEscala.id, parseInt(id)));
-        if (funcao) {
-          funcoesComNome.push({ nome: funcao.nome, count });
+      // Agrupar estatísticas por participante
+      const estatisticasPorParticipante: any = {};
+
+      for (const escalaId of escalaIds) {
+        const participantes = await db
+          .select()
+          .from(participantesEscala)
+          .where(eq(participantesEscala.escalaId, escalaId));
+
+        for (const p of participantes) {
+          const key = `${p.userId}-${p.nome}`;
+          if (!estatisticasPorParticipante[key]) {
+            estatisticasPorParticipante[key] = {
+              userId: p.userId,
+              nome: p.nome,
+              email: p.email,
+              totalParticipacoes: 0,
+              confirmados: 0,
+              pendentes: 0,
+              ausentes: 0,
+            };
+          }
+
+          estatisticasPorParticipante[key].totalParticipacoes++;
+          if (p.status === "confirmado") estatisticasPorParticipante[key].confirmados++;
+          if (p.status === "pendente") estatisticasPorParticipante[key].pendentes++;
+          if (p.status === "ausente") estatisticasPorParticipante[key].ausentes++;
         }
       }
-      const funcoesRequisitadas = funcoesComNome
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 5);
+
+      // Converter para array e calcular taxas
+      const participantesArray = Object.values(estatisticasPorParticipante).map((p: any) => ({
+        ...p,
+        taxaConfirmacao: p.totalParticipacoes > 0
+          ? Math.round((p.confirmados / p.totalParticipacoes) * 100)
+          : 0,
+        taxaAusencia: p.totalParticipacoes > 0
+          ? Math.round((p.ausentes / p.totalParticipacoes) * 100)
+          : 0,
+      }));
+
+      // Ordenar por total de participações
+      participantesArray.sort((a: any, b: any) => b.totalParticipacoes - a.totalParticipacoes);
+
+      // Calcular resumo geral
+      const totalParticipacoes = participantesArray.reduce((sum: number, p: any) => sum + p.totalParticipacoes, 0);
+      const totalConfirmados = participantesArray.reduce((sum: number, p: any) => sum + p.confirmados, 0);
+      const totalAusentes = participantesArray.reduce((sum: number, p: any) => sum + p.ausentes, 0);
 
       return {
-        totalEscalas: todasEscalas.length,
-        totalParticipantes: total,
-        taxaConfirmacao,
-        participantesAtivos,
-        escalasPorMes,
-        funcoesRequisitadas,
+        participantes: participantesArray,
+        resumo: {
+          totalEscalas: minhasEscalas.length,
+          totalParticipacoes,
+          totalConfirmados,
+          totalAusentes,
+          taxaConfirmacaoGeral: totalParticipacoes > 0
+            ? Math.round((totalConfirmados / totalParticipacoes) * 100)
+            : 0,
+        },
       };
     }),
 

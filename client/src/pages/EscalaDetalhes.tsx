@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRoute, useLocation } from "wouter";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "../lib/trpc";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
@@ -8,7 +9,7 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Textarea } from "../components/ui/textarea";
-import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2, FileDown, Link as LinkIcon, CalendarPlus } from "lucide-react";
+import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2, FileDown, Link as LinkIcon, CalendarPlus, Edit } from "lucide-react";
 import { EscalasNavigation } from "@/components/EscalasNavigation";
 import jsPDF from "jspdf";
 import { toast } from "sonner";
@@ -16,13 +17,22 @@ import { UserAutocomplete } from "@/components/UserAutocomplete";
 import { adicionarAoGoogleCalendar } from "@/lib/googleCalendar";
 
 export default function EscalaDetalhes() {
+  const { user } = useAuth();
   const [, params] = useRoute("/escala/:id");
   const [, setLocation] = useLocation();
   const escalaId = parseInt(params?.id || "0");
 
   const [openAddParticipante, setOpenAddParticipante] = useState(false);
   const [openShare, setOpenShare] = useState(false);
+  const [openEditEscala, setOpenEditEscala] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  // Form state para edição de escala
+  const [editTitulo, setEditTitulo] = useState("");
+  const [editDescricao, setEditDescricao] = useState("");
+  const [editData, setEditData] = useState("");
+  const [editHora, setEditHora] = useState("");
+  const [editLocal, setEditLocal] = useState("");
 
   // Form state
   const [funcaoId, setFuncaoId] = useState<number>(0);
@@ -56,6 +66,17 @@ export default function EscalaDetalhes() {
     },
   });
 
+  const atualizarEscalaMutation = trpc.escalas.atualizar.useMutation({
+    onSuccess: () => {
+      toast.success("Escala atualizada com sucesso!");
+      refetch();
+      setOpenEditEscala(false);
+    },
+    onError: (error) => {
+      toast.error("Erro ao atualizar escala: " + error.message);
+    },
+  });
+
   const removerParticipanteMutation = trpc.escalas.removerParticipante.useMutation({
     onSuccess: () => {
       toast.success("Participante removido!");
@@ -72,6 +93,34 @@ export default function EscalaDetalhes() {
     setEmail("");
     setTelefone("");
     setObservacoes("");
+  };
+
+  // Preencher formulário de edição quando abrir o modal
+  const handleAbrirEdicao = () => {
+    if (escala) {
+      setEditTitulo(escala.titulo);
+      setEditDescricao(escala.descricao || "");
+      setEditData(typeof escala.data === 'string' ? escala.data : new Date(escala.data).toISOString().split('T')[0]);
+      setEditHora(escala.hora || "");
+      setEditLocal(escala.local || "");
+      setOpenEditEscala(true);
+    }
+  };
+
+  const handleAtualizarEscala = () => {
+    if (!editTitulo || !editData) {
+      toast.error("Preencha os campos obrigatórios");
+      return;
+    }
+
+    atualizarEscalaMutation.mutate({
+      escalaId,
+      titulo: editTitulo,
+      descricao: editDescricao,
+      data: editData,
+      hora: editHora,
+      local: editLocal,
+    });
   };
 
   const handleAdicionarParticipante = () => {
@@ -322,6 +371,17 @@ export default function EscalaDetalhes() {
           </div>
 
           <div className="flex flex-wrap gap-2">
+            {user && escala.userId === user.openId && (
+              <Button 
+                variant="outline"
+                size="sm"
+                className="flex-1 sm:flex-none border-purple-400 text-purple-300 hover:bg-purple-900/50"
+                onClick={handleAbrirEdicao}
+              >
+                <Edit className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
+                <span className="hidden sm:inline">Editar</span>
+              </Button>
+            )}
             <Button 
               variant="outline"
               size="sm"
@@ -371,6 +431,69 @@ export default function EscalaDetalhes() {
                 <Button onClick={handleCopiarTexto} className="w-full" variant="outline">
                   {copied ? <Check className="w-5 h-5 mr-2" /> : <Copy className="w-5 h-5 mr-2" />}
                   {copied ? "Copiado!" : "Copiar Texto"}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          {/* Modal de Edição */}
+          <Dialog open={openEditEscala} onOpenChange={setOpenEditEscala}>
+            <DialogContent className="animate-in fade-in-0 zoom-in-95 duration-300">
+              <DialogHeader>
+                <DialogTitle>Editar Escala</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 mt-4">
+                <div>
+                  <Label htmlFor="edit-titulo">Título *</Label>
+                  <Input
+                    id="edit-titulo"
+                    value={editTitulo}
+                    onChange={(e) => setEditTitulo(e.target.value)}
+                    placeholder="Ex: Missa Domingo 07h"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-descricao">Descrição</Label>
+                  <Textarea
+                    id="edit-descricao"
+                    value={editDescricao}
+                    onChange={(e) => setEditDescricao(e.target.value)}
+                    placeholder="Informações adicionais sobre a escala"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-data">Data *</Label>
+                  <Input
+                    id="edit-data"
+                    type="date"
+                    value={editData}
+                    onChange={(e) => setEditData(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-hora">Horário</Label>
+                  <Input
+                    id="edit-hora"
+                    type="time"
+                    value={editHora}
+                    onChange={(e) => setEditHora(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-local">Local</Label>
+                  <Input
+                    id="edit-local"
+                    value={editLocal}
+                    onChange={(e) => setEditLocal(e.target.value)}
+                    placeholder="Ex: Igreja Matriz"
+                  />
+                </div>
+                <Button
+                  onClick={handleAtualizarEscala}
+                  className="w-full"
+                  disabled={atualizarEscalaMutation.isPending}
+                >
+                  {atualizarEscalaMutation.isPending ? "Salvando..." : "Salvar Alterações"}
                 </Button>
               </div>
             </DialogContent>

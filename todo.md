@@ -1497,3 +1497,22 @@
 - [x] Implementar animações ao mudar status de participantes
 - [x] Criar filtro de escalas por status (confirmadas, pendentes, com ausências)
 - [x] Implementar sistema de notificações push em tempo real para participantes
+
+
+## Novas Funcionalidades de Escalas
+
+- [x] Implementar botão de edição de escala (título, data, horário, local) na página de detalhes
+- [x] Criar procedimento tRPC para atualizar dados básicos da escala
+- [x] Adicionar modal de edição com formulário na página EscalaDetalhes
+- [ ] Implementar exportação em lote para Google Calendar na página de gerenciamento
+- [ ] Adicionar seleção múltipla de escalas com checkboxes
+- [ ] Criar botão "Exportar Selecionadas" que gera múltiplos eventos no Google Calendar
+- [x] Desenvolver página de estatísticas de participação (/escalas/estatisticas)
+- [x] Criar procedimento tRPC para calcular métricas de participação
+- [x] Exibir taxa de confirmação por participante
+- [x] Mostrar frequência de ausências e histórico de participações
+- [x] Adicionar gráficos visuais com as estatísticas
+
+- [x] Adicionar verificação de autenticação nos procedimentos de edição e estatísticas
+- [x] Restringir acesso às páginas de estatísticas apenas para usuários logados
+- [x] Ocultar botão de edição para usuários não autenticados

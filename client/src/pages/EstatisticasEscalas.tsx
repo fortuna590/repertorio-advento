@@ -1,191 +1,165 @@
-import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, Users, CheckCircle2, TrendingUp, Calendar, Award } from "lucide-react";
-import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
+import { EscalasNavigation } from "@/components/EscalasNavigation";
+import { Users, CheckCircle2, XCircle, Clock3, TrendingUp } from "lucide-react";
 
 export default function EstatisticasEscalas() {
   const { user } = useAuth();
+
   const { data: stats, isLoading } = trpc.escalas.estatisticas.useQuery(
-    { userId: user?.id || "" },
-    { enabled: !!user }
+    { userId: user?.openId || "" },
+    { enabled: !!user?.openId }
   );
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900 flex items-center justify-center">
+        <Card className="bg-slate-800/50 border-purple-500/30">
+          <CardHeader>
+            <CardTitle className="text-white">Acesso Restrito</CardTitle>
+            <CardDescription className="text-purple-300">
+              Você precisa estar logado para ver as estatísticas.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="flex items-center justify-center h-64">
-          <div className="text-lg text-muted-foreground">Carregando estatísticas...</div>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900 flex items-center justify-center">
+        <div className="text-white">Carregando estatísticas...</div>
       </div>
     );
   }
 
-  if (!stats) {
-    return (
-      <div className="container mx-auto p-6">
-        <div className="text-center">
-          <p className="text-muted-foreground">Nenhuma estatística disponível</p>
-        </div>
-      </div>
-    );
-  }
+  const resumo = stats?.resumo || {};
+  const participantes = stats?.participantes || [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 py-8">
-      <div className="container mx-auto px-4 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Estatísticas de Escalas</h1>
-          <p className="text-gray-700 mt-1">Métricas e análises do seu gerenciamento de escalas</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900">
+      <EscalasNavigation />
+      
+      {/* Header */}
+      <div className="border-b border-purple-500/30 bg-slate-900/50 backdrop-blur-sm">
+        <div className="container py-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+            Estatísticas de Participação
+          </h1>
+          <p className="text-purple-200">
+            Métricas e análises de participação nas escalas
+          </p>
         </div>
-        <Link href="/escalas">
-          <Button variant="outline">Voltar para Escalas</Button>
-        </Link>
       </div>
 
-      {/* Cards de Métricas Principais */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Escalas</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+      <div className="container py-8">
+        {/* Cards de Resumo */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <Card className="bg-slate-800/50 backdrop-blur-sm border-purple-500/30">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-purple-200 flex items-center gap-2">
+                <Users className="w-4 h-4" />
+                Total de Escalas
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-white">{resumo.totalEscalas || 0}</div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-800/50 backdrop-blur-sm border-purple-500/30">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-purple-200 flex items-center gap-2">
+                <TrendingUp className="w-4 h-4" />
+                Total de Participações
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-white">{resumo.totalParticipacoes || 0}</div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-800/50 backdrop-blur-sm border-purple-500/30">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-green-300 flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4" />
+                Confirmados
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-green-400">{resumo.totalConfirmados || 0}</div>
+              <p className="text-sm text-purple-300 mt-1">
+                {resumo.taxaConfirmacaoGeral || 0}% de taxa
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-800/50 backdrop-blur-sm border-purple-500/30">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-red-300 flex items-center gap-2">
+                <XCircle className="w-4 h-4" />
+                Ausentes
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-red-400">{resumo.totalAusentes || 0}</div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Tabela de Participantes */}
+        <Card className="bg-slate-800/50 backdrop-blur-sm border-purple-500/30">
+          <CardHeader>
+            <CardTitle className="text-white">Estatísticas por Participante</CardTitle>
+            <CardDescription className="text-purple-300">
+              Desempenho individual de cada participante
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalEscalas}</div>
-            <p className="text-xs text-muted-foreground">Escalas criadas</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Participantes</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.totalParticipantes}</div>
-            <p className="text-xs text-muted-foreground">Participantes cadastrados</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Taxa de Confirmação</CardTitle>
-            <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">{stats.taxaConfirmacao}%</div>
-            <p className="text-xs text-muted-foreground">Participantes confirmados</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tendência</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-600">
-              {Object.values(stats.escalasPorMes).slice(-1)[0] || 0}
-            </div>
-            <p className="text-xs text-muted-foreground">Escalas este mês</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Gráfico de Escalas por Mês */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BarChart3 className="h-5 w-5" />
-            Escalas por Mês (Últimos 6 meses)
-          </CardTitle>
-          <CardDescription>Evolução do número de escalas criadas</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {Object.entries(stats.escalasPorMes).map(([mes, count]) => (
-              <div key={mes} className="flex items-center gap-4">
-                <div className="w-20 text-sm font-medium text-gray-700">{mes}</div>
-                <div className="flex-1">
-                  <div className="h-8 bg-gray-200 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-purple-600 transition-all duration-500"
-                      style={{
-                        width: `${Math.max((count / Math.max(...Object.values(stats.escalasPorMes))) * 100, 5)}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="w-12 text-right text-sm font-semibold text-gray-900">{count}</div>
+            {participantes.length === 0 ? (
+              <p className="text-purple-400 text-center py-8">
+                Nenhum dado de participação disponível ainda.
+              </p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-purple-500/30">
+                      <th className="text-left py-3 px-4 text-purple-200 font-semibold">Nome</th>
+                      <th className="text-center py-3 px-4 text-purple-200 font-semibold">Participações</th>
+                      <th className="text-center py-3 px-4 text-green-300 font-semibold">Confirmados</th>
+                      <th className="text-center py-3 px-4 text-yellow-300 font-semibold">Pendentes</th>
+                      <th className="text-center py-3 px-4 text-red-300 font-semibold">Ausentes</th>
+                      <th className="text-center py-3 px-4 text-purple-200 font-semibold">Taxa Confirmação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {participantes.map((p: any, index: number) => (
+                      <tr key={index} className="border-b border-purple-500/20 hover:bg-purple-900/20 transition-colors">
+                        <td className="py-3 px-4 text-white font-medium">{p.nome}</td>
+                        <td className="py-3 px-4 text-center text-purple-200">{p.totalParticipacoes}</td>
+                        <td className="py-3 px-4 text-center text-green-400">{p.confirmados}</td>
+                        <td className="py-3 px-4 text-center text-yellow-400">{p.pendentes}</td>
+                        <td className="py-3 px-4 text-center text-red-400">{p.ausentes}</td>
+                        <td className="py-3 px-4 text-center">
+                          <span className={`font-semibold ${
+                            p.taxaConfirmacao >= 80 ? 'text-green-400' :
+                            p.taxaConfirmacao >= 50 ? 'text-yellow-400' :
+                            'text-red-400'
+                          }`}>
+                            {p.taxaConfirmacao}%
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Participantes Mais Ativos */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Award className="h-5 w-5" />
-              Participantes Mais Ativos
-            </CardTitle>
-            <CardDescription>Top 5 participantes com mais escalas</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {stats.participantesAtivos.length > 0 ? (
-                stats.participantesAtivos.map((p: any, index: number) => (
-                  <div key={p.nome} className="flex items-center gap-4">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-purple-100 text-purple-700 font-bold">
-                      {index + 1}
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-medium text-gray-900">{p.nome}</div>
-                      <div className="text-sm text-gray-600">{p.participacoes} participações</div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-muted-foreground text-center py-4">Nenhum participante ainda</p>
-              )}
-            </div>
+            )}
           </CardContent>
         </Card>
-
-        {/* Funções Mais Requisitadas */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Users className="h-5 w-5" />
-              Funções Mais Requisitadas
-            </CardTitle>
-            <CardDescription>Top 5 funções mais utilizadas</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {stats.funcoesRequisitadas.length > 0 ? (
-                stats.funcoesRequisitadas.map((f: any, index: number) => (
-                  <div key={f.nome} className="flex items-center gap-4">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold">
-                      {index + 1}
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-medium text-gray-900">{f.nome}</div>
-                      <div className="text-sm text-gray-600">{f.count} vezes</div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-muted-foreground text-center py-4">Nenhuma função ainda</p>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
       </div>
     </div>
   );
