@@ -1516,3 +1516,31 @@
 - [x] Adicionar verificação de autenticação nos procedimentos de edição e estatísticas
 - [x] Restringir acesso às páginas de estatísticas apenas para usuários logados
 - [x] Ocultar botão de edição para usuários não autenticados
+
+
+## Painel de Administração de Usuários
+
+### Backend (Procedimentos tRPC)
+- [x] Criar procedimento para listar todos os usuários com filtros e busca
+- [x] Criar procedimento para obter estatísticas de um usuário específico
+- [x] Criar procedimento para promover/rebaixar role de usuário (admin/user)
+- [x] Criar procedimento para suspender/reativar conta de usuário
+- [x] Criar procedimento para excluir usuário permanentemente
+- [x] Criar procedimento para editar informações do perfil do usuário
+- [x] Criar procedimento para adicionar notas administrativas
+- [x] Criar procedimento para enviar email direto para usuário
+- [ ] Criar procedimento para redefinir senha (enviar email de reset)
+
+### Frontend (Página de Administração)
+- [x] Criar página de administração de usuários (/admin/usuarios)
+- [x] Implementar tabela com lista de usuários e informações principais
+- [x] Adicionar filtros por data, status, role
+- [x] Implementar busca por nome ou email
+- [x] Exibir estatísticas gerais (total usuários, novos no mês, ativos)
+- [x] Criar modal de edição completo com todas as opções
+- [x] Implementar seção de gerenciamento de permissões
+- [x] Adicionar visualização de histórico de atividades do usuário
+- [x] Implementar seção de dados de escalas do usuário
+- [x] Adicionar formulário de notas administrativas
+- [x] Implementar funcionalidade de envio de email direto
+- [x] Adicionar confirmações duplas para ações críticas (excluir, suspender)

@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "59d5a61d-320a-4bec-aa86-9c1984c18163",
-  "prevId": "c2bdc2fa-1fce-439f-84b5-c622ce39da13",
+  "id": "7ee12716-4391-4845-83c9-c058e8393147",
+  "prevId": "59d5a61d-320a-4bec-aa86-9c1984c18163",
   "tables": {
     "artigos": {
       "name": "artigos",
@@ -2094,6 +2094,21 @@
           "notNull": true,
           "autoincrement": false,
           "default": "'user'"
+        },
+        "status": {
+          "name": "status",
+          "type": "enum('active','suspended')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'active'"
+        },
+        "adminNotes": {
+          "name": "adminNotes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         },
         "paroquia": {
           "name": "paroquia",

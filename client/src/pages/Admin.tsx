@@ -312,6 +312,10 @@ export default function Admin() {
               <Music className="h-4 w-4 mr-2" />
               Repertórios
             </TabsTrigger>
+            <TabsTrigger value="gerenciar-usuarios" className="data-[state=active]:bg-purple-600">
+              <Shield className="h-4 w-4 mr-2" />
+              Gerenciar
+            </TabsTrigger>
           </TabsList>
 
           {/* Tab Usuários */}
@@ -947,6 +951,46 @@ export default function Admin() {
               </CardContent>
             </Card>
           </TabsContent>
+          {/* Tab Gerenciamento de Usuários */}
+          <TabsContent value="gerenciar-usuarios" className="space-y-6">
+            <Card className="bg-slate-800/50 border-purple-500/20">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <Users className="h-5 w-5 text-purple-400" />
+                  Gerenciamento Avançado de Usuários
+                </CardTitle>
+                <CardDescription className="text-slate-400">
+                  Acesse o painel completo de administração de usuários
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <p className="text-slate-300">
+                    Clique no botão abaixo para acessar o painel avançado de gerenciamento de usuários onde você pode:
+                  </p>
+                  <ul className="list-disc list-inside space-y-2 text-slate-300">
+                    <li>Visualizar estatísticas detalhadas de cada usuário</li>
+                    <li>Promover ou rebaixar permissões (admin/usuário)</li>
+                    <li>Suspender ou reativar contas</li>
+                    <li>Editar informações de perfil dos usuários</li>
+                    <li>Adicionar notas administrativas</li>
+                    <li>Enviar emails diretos para usuários específicos</li>
+                    <li>Excluir contas permanentemente</li>
+                  </ul>
+                  <div className="pt-4">
+                    <Link href="/admin/usuarios">
+                      <Button className="bg-purple-600 hover:bg-purple-700 gap-2">
+                        <Users className="h-4 w-4" />
+                        Ir para Gerenciamento de Usuários
+                        <ExternalLink className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           {/* Tab Repertórios */}
           <TabsContent value="repertorios" className="space-y-6">
             <Card className="bg-slate-800/50 border-purple-500/20">

@@ -48,6 +48,7 @@ import Escalas from "./pages/Escalas";
 import EscalaDetalhes from "./pages/EscalaDetalhes";
 import ConfirmarPresenca from "./pages/ConfirmarPresenca";
 import MinhasEscalas from "./pages/MinhasEscalas";
+import AdminUsuarios from "./pages/AdminUsuarios";
 import EstatisticasEscalas from "./pages/EstatisticasEscalas";
 import HistoricoEscalas from "./pages/HistoricoEscalas";
 import WhatsAppButton from "./components/WhatsAppButton";
@@ -91,6 +92,7 @@ function Router() {
       <Route path={"/meus-repertorios"} component={MeusRepertorios} />
       <Route path={"/repertorio/:id"} component={RepertorioDetalhe} />
       <Route path="/admin" component={Admin} />
+      <Route path="/admin/usuarios" component={AdminUsuarios} />
       <Route path="/repertorio-admin" component={RepertorioAdmin} />
       <Route path="/repertorio-admin/:id" component={RepertorioAdminDetalhes} />
       <Route path="/repertorio-base-admin/:id" component={RepertorioBaseAdmin} />

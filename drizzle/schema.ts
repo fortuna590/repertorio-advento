@@ -17,6 +17,8 @@ export const users = mysqlTable("users", {
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  status: mysqlEnum("status", ["active", "suspended"]).default("active").notNull(), // Status da conta
+  adminNotes: text("adminNotes"), // Notas administrativas sobre o usuário
   paroquia: varchar("paroquia", { length: 255 }), // Paróquia ou ministério do usuário
   foto: varchar("foto", { length: 500 }), // URL da foto de perfil
   bio: text("bio"), // Biografia/descrição do usuário
