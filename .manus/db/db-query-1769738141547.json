@@ -1,0 +1,9 @@
+{
+  "query": "\n-- Resetar auto-increment de todas as tabelas para começar do ID 1\nALTER TABLE users AUTO_INCREMENT = 1;\nALTER TABLE escalas AUTO_INCREMENT = 1;\nALTER TABLE participantesEscala AUTO_INCREMENT = 1;\nALTER TABLE repertorios AUTO_INCREMENT = 1;\nALTER TABLE musicasFavoritas AUTO_INCREMENT = 1;\nALTER TABLE historicoMusicasBase AUTO_INCREMENT = 1;\nALTER TABLE auditLogs AUTO_INCREMENT = 1;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute \n-- Resetar auto-increment de todas as tabelas para começar do ID 1\nALTER TABLE users AUTO_INCREMENT = 1;\nALTER TABLE escalas AUTO_INCREMENT = 1;\nALTER TABLE participantesEscala AUTO_INCREMENT = 1;\nALTER TABLE repertorios AUTO_INCREMENT = 1;\nALTER TABLE musicasFavoritas AUTO_INCREMENT = 1;\nALTER TABLE historicoMusicasBase AUTO_INCREMENT = 1;\nALTER TABLE auditLogs AUTO_INCREMENT = 1;\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1575
+}

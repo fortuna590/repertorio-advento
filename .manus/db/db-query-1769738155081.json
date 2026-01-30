@@ -1,0 +1,38 @@
+{
+  "query": "\n-- Verificar contagem de registros em cada tabela\nSELECT 'users' as tabela, COUNT(*) as total FROM users\nUNION ALL\nSELECT 'escalas', COUNT(*) FROM escalas\nUNION ALL\nSELECT 'participantesEscala', COUNT(*) FROM participantesEscala\nUNION ALL\nSELECT 'repertorios', COUNT(*) FROM repertorios\nUNION ALL\nSELECT 'musicasFavoritas', COUNT(*) FROM musicasFavoritas\nUNION ALL\nSELECT 'historicoMusicasBase', COUNT(*) FROM historicoMusicasBase\nUNION ALL\nSELECT 'auditLogs', COUNT(*) FROM auditLogs;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute \n-- Verificar contagem de registros em cada tabela\nSELECT 'users' as tabela, COUNT(*) as total FROM users\nUNION ALL\nSELECT 'escalas', COUNT(*) FROM escalas\nUNION ALL\nSELECT 'participantesEscala', COUNT(*) FROM participantesEscala\nUNION ALL\nSELECT 'repertorios', COUNT(*) FROM repertorios\nUNION ALL\nSELECT 'musicasFavoritas', COUNT(*) FROM musicasFavoritas\nUNION ALL\nSELECT 'historicoMusicasBase', COUNT(*) FROM historicoMusicasBase\nUNION ALL\nSELECT 'auditLogs', COUNT(*) FROM auditLogs;\n",
+  "rows": [
+    {
+      "tabela": "musicasFavoritas",
+      "total": "0"
+    },
+    {
+      "tabela": "users",
+      "total": "0"
+    },
+    {
+      "tabela": "escalas",
+      "total": "0"
+    },
+    {
+      "tabela": "repertorios",
+      "total": "0"
+    },
+    {
+      "tabela": "participantesEscala",
+      "total": "0"
+    },
+    {
+      "tabela": "historicoMusicasBase",
+      "total": "0"
+    },
+    {
+      "tabela": "auditLogs",
+      "total": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "tabela\ttotal\nmusicasFavoritas\t0\nusers\t0\nescalas\t0\nrepertorios\t0\nparticipantesEscala\t0\nhistoricoMusicasBase\t0\nauditLogs\t0\n",
+  "stderr": "",
+  "execution_time_ms": 361
+}

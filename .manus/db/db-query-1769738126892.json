@@ -1,0 +1,9 @@
+{
+  "query": "\n-- Desabilitar verificação de foreign keys temporariamente\nSET FOREIGN_KEY_CHECKS = 0;\n\n-- Limpar todas as tabelas relacionadas a usuários\nDELETE FROM auditLogs;\nDELETE FROM historicoMusicasBase;\nDELETE FROM musicasFavoritas;\nDELETE FROM participantesEscala;\nDELETE FROM escalas;\nDELETE FROM repertorios;\nDELETE FROM users;\n\n-- Reabilitar verificação de foreign keys\nSET FOREIGN_KEY_CHECKS = 1;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute \n-- Desabilitar verificação de foreign keys temporariamente\nSET FOREIGN_KEY_CHECKS = 0;\n\n-- Limpar todas as tabelas relacionadas a usuários\nDELETE FROM auditLogs;\nDELETE FROM historicoMusicasBase;\nDELETE FROM musicasFavoritas;\nDELETE FROM participantesEscala;\nDELETE FROM escalas;\nDELETE FROM repertorios;\nDELETE FROM users;\n\n-- Reabilitar verificação de foreign keys\nSET FOREIGN_KEY_CHECKS = 1;\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 915
+}
