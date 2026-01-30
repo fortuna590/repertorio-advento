@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "7ee12716-4391-4845-83c9-c058e8393147",
-  "prevId": "59d5a61d-320a-4bec-aa86-9c1984c18163",
+  "id": "0e9c64d3-0c1a-46b1-b0b5-445a03d68b57",
+  "prevId": "7ee12716-4391-4845-83c9-c058e8393147",
   "tables": {
     "artigos": {
       "name": "artigos",
@@ -144,6 +144,94 @@
           ]
         }
       },
+      "checkConstraint": {}
+    },
+    "auditLogs": {
+      "name": "auditLogs",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "userName": {
+          "name": "userName",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "userRole": {
+          "name": "userRole",
+          "type": "enum('admin','moderator')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "action": {
+          "name": "action",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "targetType": {
+          "name": "targetType",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "targetId": {
+          "name": "targetId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "targetName": {
+          "name": "targetName",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "details": {
+          "name": "details",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "auditLogs_id": {
+          "name": "auditLogs_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
       "checkConstraint": {}
     },
     "clicks": {
@@ -2089,7 +2177,7 @@
         },
         "role": {
           "name": "role",
-          "type": "enum('user','admin')",
+          "type": "enum('user','moderator','admin')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
@@ -2102,6 +2190,13 @@
           "notNull": true,
           "autoincrement": false,
           "default": "'active'"
+        },
+        "suspensionReason": {
+          "name": "suspensionReason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         },
         "adminNotes": {
           "name": "adminNotes",

@@ -16,8 +16,9 @@ export const users = mysqlTable("users", {
   name: text("name"),
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
-  role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  role: mysqlEnum("role", ["user", "moderator", "admin"]).default("user").notNull(),
   status: mysqlEnum("status", ["active", "suspended"]).default("active").notNull(), // Status da conta
+  suspensionReason: text("suspensionReason"), // Motivo da suspensão (obrigatório ao suspender)
   adminNotes: text("adminNotes"), // Notas administrativas sobre o usuário
   paroquia: varchar("paroquia", { length: 255 }), // Paróquia ou ministério do usuário
   foto: varchar("foto", { length: 500 }), // URL da foto de perfil
@@ -29,6 +30,25 @@ export const users = mysqlTable("users", {
 
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
+
+/**
+ * Tabela de logs de auditoria para rastrear ações administrativas
+ */
+export const auditLogs = mysqlTable("auditLogs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(), // Quem executou a ação
+  userName: varchar("userName", { length: 255 }).notNull(), // Nome do usuário que executou
+  userRole: mysqlEnum("userRole", ["admin", "moderator"]).notNull(), // Role do usuário que executou
+  action: varchar("action", { length: 100 }).notNull(), // Tipo de ação (excluir, suspender, ativar, alterar_role)
+  targetType: varchar("targetType", { length: 50 }).notNull(), // Tipo de alvo (user, escala, repertorio)
+  targetId: int("targetId").notNull(), // ID do alvo da ação
+  targetName: varchar("targetName", { length: 255 }), // Nome do alvo (para referência)
+  details: text("details"), // Detalhes adicionais em JSON (valores antigos/novos, justificativa)
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type AuditLog = typeof auditLogs.$inferSelect;
+export type InsertAuditLog = typeof auditLogs.$inferInsert;
 
 /**
  * Tabela para rastrear cliques em links de músicas

@@ -141,6 +141,13 @@
       "when": 1769138957209,
       "tag": "0019_bright_quasimodo",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "5",
+      "when": 1769735880951,
+      "tag": "0020_pink_harpoon",
+      "breakpoints": true
     }
   ]
 }

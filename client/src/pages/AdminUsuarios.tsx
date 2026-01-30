@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { Button } from "@/components/ui/button";
+import { useLocation } from "wouter";
+import * as XLSX from "xlsx";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -37,7 +39,6 @@ import {
   StickyNote
 } from "lucide-react";
 import { toast } from "sonner";
-import { useLocation } from "wouter";
 
 export default function AdminUsuarios() {
   const { user } = useAuth();
@@ -45,8 +46,10 @@ export default function AdminUsuarios() {
 
   // Filtros
   const [busca, setBusca] = useState("");
-  const [roleFilter, setRoleFilter] = useState<"all" | "admin" | "user">("all");
+  const [roleFilter, setRoleFilter] = useState<"all" | "admin" | "moderator" | "user">("all");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "suspended">("all");
+  const [dataInicio, setDataInicio] = useState("");
+  const [dataFim, setDataFim] = useState("");
 
   // Modal de edição
   const [openEdit, setOpenEdit] = useState(false);
@@ -54,7 +57,7 @@ export default function AdminUsuarios() {
   const [editName, setEditName] = useState("");
   const [editParoquia, setEditParoquia] = useState("");
   const [editBio, setEditBio] = useState("");
-  const [editRole, setEditRole] = useState<"user" | "admin">("user");
+  const [editRole, setEditRole] = useState<"user" | "moderator" | "admin">("user");
   const [editStatus, setEditStatus] = useState<"active" | "suspended">("active");
   const [editNotes, setEditNotes] = useState("");
 
@@ -76,6 +79,8 @@ export default function AdminUsuarios() {
     busca,
     role: roleFilter,
     status: statusFilter,
+    dataInicio: dataInicio || undefined,
+    dataFim: dataFim || undefined,
   });
 
   const { data: stats } = trpc.adminUsers.estatisticasGerais.useQuery();
@@ -398,7 +403,7 @@ export default function AdminUsuarios() {
             <CardTitle className="text-white">Filtros</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <div>
                 <Label htmlFor="busca" className="text-purple-200">Buscar</Label>
                 <div className="relative">
@@ -422,9 +427,30 @@ export default function AdminUsuarios() {
                   <SelectContent>
                     <SelectItem value="all">Todos</SelectItem>
                     <SelectItem value="admin">Administradores</SelectItem>
+                    <SelectItem value="moderator">Moderadores</SelectItem>
                     <SelectItem value="user">Usuários</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="dataInicio" className="text-purple-200">Data Início</Label>
+                <Input
+                  id="dataInicio"
+                  type="date"
+                  value={dataInicio}
+                  onChange={(e) => setDataInicio(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="dataFim" className="text-purple-200">Data Fim</Label>
+                <Input
+                  id="dataFim"
+                  type="date"
+                  value={dataFim}
+                  onChange={(e) => setDataFim(e.target.value)}
+                />
               </div>
 
               <div>

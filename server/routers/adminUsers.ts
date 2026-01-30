@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { adminProcedure, router } from "../_core/trpc";
+import { adminProcedure, moderatorProcedure, router } from "../_core/trpc";
+import { registrarLog } from "./audit";
 import { users, escalas, participantesEscala, repertorios, historicoMusicasBase } from "../../drizzle/schema";
 import { getDb } from "../db";
 import { eq, like, or, desc, gte, sql } from "drizzle-orm";
@@ -10,7 +11,7 @@ export const adminUsersRouter = router({
   listar: adminProcedure
     .input(z.object({
       busca: z.string().optional(),
-      role: z.enum(["all", "admin", "user"]).optional(),
+      role: z.enum(["all", "admin", "moderator", "user"]).optional(),
       status: z.enum(["all", "active", "suspended"]).optional(),
       dataInicio: z.string().optional(),
       dataFim: z.string().optional(),
@@ -131,34 +132,75 @@ export const adminUsersRouter = router({
   atualizarRole: adminProcedure
     .input(z.object({
       userId: z.number(),
-      role: z.enum(["user", "admin"]),
+      role: z.enum(["user", "moderator", "admin"]),
     }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new Error("Database not available");
+
+      // Buscar dados antigos para log
+      const usuarioAntigo = await db.select().from(users).where(eq(users.id, input.userId)).limit(1);
+      const oldRole = usuarioAntigo[0]?.role;
 
       await db
         .update(users)
         .set({ role: input.role })
         .where(eq(users.id, input.userId));
 
+      // Registrar log
+      await registrarLog({
+        userId: ctx.user.id,
+        userName: ctx.user.name || "Admin",
+        userRole: ctx.user.role as "admin" | "moderator",
+        action: "alterar_role",
+        targetType: "user",
+        targetId: input.userId,
+        targetName: usuarioAntigo[0]?.name || undefined,
+        details: { oldRole, newRole: input.role },
+      });
+
       return { success: true };
     }),
 
-  // Suspender ou reativar conta
-  atualizarStatus: adminProcedure
+  // Suspender ou reativar conta (moderadores podem suspender com justificativa)
+  atualizarStatus: moderatorProcedure
     .input(z.object({
       userId: z.number(),
       status: z.enum(["active", "suspended"]),
+      motivo: z.string().optional(), // Obrigatório ao suspender
     }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new Error("Database not available");
 
+      // Validar motivo ao suspender
+      if (input.status === "suspended" && !input.motivo) {
+        throw new Error("É obrigatório informar o motivo da suspensão");
+      }
+
+      // Buscar dados antigos para log
+      const usuarioAntigo = await db.select().from(users).where(eq(users.id, input.userId)).limit(1);
+      const oldStatus = usuarioAntigo[0]?.status;
+
       await db
         .update(users)
-        .set({ status: input.status })
+        .set({ 
+          status: input.status,
+          suspensionReason: input.status === "suspended" ? input.motivo : null,
+        })
         .where(eq(users.id, input.userId));
+
+      // Registrar log
+      await registrarLog({
+        userId: ctx.user.id,
+        userName: ctx.user.name || "Admin",
+        userRole: ctx.user.role as "admin" | "moderator",
+        action: input.status === "suspended" ? "suspender" : "ativar",
+        targetType: "user",
+        targetId: input.userId,
+        targetName: usuarioAntigo[0]?.name || undefined,
+        details: { oldStatus, newStatus: input.status, motivo: input.motivo },
+      });
 
       return { success: true };
     }),
@@ -246,7 +288,7 @@ export const adminUsersRouter = router({
     .input(z.object({
       userId: z.number(),
     }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new Error("Database not available");
 
@@ -270,7 +312,19 @@ export const adminUsersRouter = router({
       // 3. Excluir histórico de edições de músicas base
       await db.delete(historicoMusicasBase).where(eq(historicoMusicasBase.usuarioId, input.userId));
 
-      // 4. Finalmente excluir o usuário
+      // 4. Registrar log antes de excluir
+      await registrarLog({
+        userId: ctx.user.id,
+        userName: ctx.user.name || "Admin",
+        userRole: ctx.user.role as "admin" | "moderator",
+        action: "excluir",
+        targetType: "user",
+        targetId: input.userId,
+        targetName: usuario.name || undefined,
+        details: { email: usuario.email, role: usuario.role },
+      });
+
+      // 5. Finalmente excluir o usuário
       await db
         .delete(users)
         .where(eq(users.id, input.userId));
@@ -283,7 +337,7 @@ export const adminUsersRouter = router({
     .input(z.object({
       userIds: z.array(z.number()),
     }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new Error("Database not available");
 
@@ -292,11 +346,26 @@ export const adminUsersRouter = router({
 
       for (const userId of input.userIds) {
         try {
+          // Buscar dados do usuário para log
+          const [usuario] = await db.select().from(users).where(eq(users.id, userId));
+
           // Excluir dados relacionados
           await db.delete(repertorios).where(eq(repertorios.userId, userId));
           await db.delete(participantesEscala).where(eq(participantesEscala.userId, userId));
           await db.delete(historicoMusicasBase).where(eq(historicoMusicasBase.usuarioId, userId));
           
+          // Registrar log
+          await registrarLog({
+            userId: ctx.user.id,
+            userName: ctx.user.name || "Admin",
+            userRole: ctx.user.role as "admin" | "moderator",
+            action: "excluir_massa",
+            targetType: "user",
+            targetId: userId,
+            targetName: usuario?.name || undefined,
+            details: { email: usuario?.email },
+          });
+
           // Excluir usuário
           await db.delete(users).where(eq(users.id, userId));
           excluidos++;
@@ -313,16 +382,34 @@ export const adminUsersRouter = router({
   suspenderEmMassa: adminProcedure
     .input(z.object({
       userIds: z.array(z.number()),
+      motivo: z.string().optional(),
     }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new Error("Database not available");
 
       for (const userId of input.userIds) {
+        const [usuario] = await db.select().from(users).where(eq(users.id, userId));
+
         await db
           .update(users)
-          .set({ status: "suspended" })
+          .set({ 
+            status: "suspended",
+            suspensionReason: input.motivo || "Suspensão em massa",
+          })
           .where(eq(users.id, userId));
+
+        // Registrar log
+        await registrarLog({
+          userId: ctx.user.id,
+          userName: ctx.user.name || "Admin",
+          userRole: ctx.user.role as "admin" | "moderator",
+          action: "suspender_massa",
+          targetType: "user",
+          targetId: userId,
+          targetName: usuario?.name || undefined,
+          details: { motivo: input.motivo },
+        });
       }
 
       return { success: true, total: input.userIds.length };
@@ -333,15 +420,32 @@ export const adminUsersRouter = router({
     .input(z.object({
       userIds: z.array(z.number()),
     }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new Error("Database not available");
 
       for (const userId of input.userIds) {
+        const [usuario] = await db.select().from(users).where(eq(users.id, userId));
+
         await db
           .update(users)
-          .set({ status: "active" })
+          .set({ 
+            status: "active",
+            suspensionReason: null,
+          })
           .where(eq(users.id, userId));
+
+        // Registrar log
+        await registrarLog({
+          userId: ctx.user.id,
+          userName: ctx.user.name || "Admin",
+          userRole: ctx.user.role as "admin" | "moderator",
+          action: "ativar_massa",
+          targetType: "user",
+          targetId: userId,
+          targetName: usuario?.name || undefined,
+          details: {},
+        });
       }
 
       return { success: true, total: input.userIds.length };

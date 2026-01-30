@@ -43,3 +43,22 @@ export const adminProcedure = t.procedure.use(
     });
   }),
 );
+
+export const moderatorProcedure = t.procedure.use(
+  t.middleware(async opts => {
+    const { ctx, next } = opts;
+
+    if (!ctx.user || (ctx.user.role !== 'moderator' && ctx.user.role !== 'admin')) {
+      throw new TRPCError({ code: "FORBIDDEN", message: "Acesso restrito a moderadores e administradores" });
+    }
+
+    return next({
+      ctx: {
+        ...ctx,
+        user: ctx.user,
+      },
+    });
+  }),
+);
+
+export const adminOrModeratorProcedure = moderatorProcedure;

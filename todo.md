@@ -1558,3 +1558,38 @@
 - [x] Implementar modal de confirmação para ações em massa
 - [x] Adicionar contador de usuários selecionados
 - [x] Testar exclusão em massa com usuários de teste
+
+
+## Sistema de Auditoria, Moderadores e Melhorias no Painel
+
+### Log de Auditoria
+- [x] Criar tabela auditLogs no schema com campos: id, userId, userName, action, targetType, targetId, details, createdAt
+- [x] Criar procedimento tRPC para registrar logs de auditoria
+- [ ] Integrar registro de logs em todas as ações administrativas (excluir, suspender, ativar, alterar role)
+- [ ] Criar página de visualização de logs de auditoria para admins
+
+### Perfil de Moderador
+- [x] Adicionar "moderator" ao enum de role no schema users
+- [x] Criar moderatorProcedure no tRPC para verificar permissões de moderador
+- [ ] Atualizar verificações de permissões em routers relevantes
+- [ ] Adicionar opção de promover usuário para moderador no painel admin
+- [ ] Implementar restrições específicas para moderadores (não pode excluir usuários, não pode alterar permissões)
+
+### Filtro por Data de Cadastro
+- [ ] Adicionar campos de data inicial e final nos filtros do painel de usuários
+- [ ] Atualizar procedimento listar para aceitar filtros de data
+- [ ] Implementar lógica de filtragem por intervalo de datas no backend
+
+### Exportação de Dados
+- [ ] Instalar biblioteca para geração de Excel (xlsx)
+- [ ] Criar procedimento tRPC para exportar dados de usuários
+- [ ] Adicionar botão de exportação no painel de usuários
+- [ ] Implementar geração de arquivo CSV/Excel com dados filtrados
+- [ ] Incluir estatísticas de cada usuário no arquivo exportado
+
+### Justificativa para Suspensões
+- [ ] Adicionar campo suspensionReason na tabela users
+- [ ] Atualizar procedimento de suspensão para aceitar motivo obrigatório
+- [ ] Adicionar campo de texto para justificativa no modal de suspensão
+- [ ] Exibir motivo da suspensão no painel de detalhes do usuário
+- [ ] Registrar suspensões no log de auditoria com justificativa
