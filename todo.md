@@ -1593,3 +1593,34 @@
 - [ ] Adicionar campo de texto para justificativa no modal de suspensão
 - [ ] Exibir motivo da suspensão no painel de detalhes do usuário
 - [ ] Registrar suspensões no log de auditoria com justificativa
+
+
+## Finalização da Interface de Auditoria e Dashboard de Moderadores
+
+### Exportação Excel e Justificativas
+- [x] Adicionar função exportarParaExcel no AdminUsuarios.tsx
+- [x] Adicionar botão de exportação no header do painel de usuários
+- [x] Adicionar campo de justificativa no modal de suspensão individual
+- [x] Adicionar campo de justificativa no modal de suspensão em massa
+- [ ] Exibir motivo da suspensão no painel de detalhes do usuário
+
+### Página de Logs de Auditoria
+- [ ] Criar página AdminLogs.tsx para visualização de logs
+- [ ] Adicionar filtros por ação, tipo de alvo, usuário e data
+- [ ] Exibir tabela com todos os logs de auditoria
+- [ ] Adicionar link para página de logs no painel admin
+
+### Dashboard de Moderadores
+- [ ] Criar página ModeradorDashboard.tsx
+- [ ] Adicionar navegação específica para moderadores
+- [ ] Restringir acesso apenas a funcionalidades permitidas (escalas, repertórios, depoimentos, blog)
+- [ ] Adicionar rota /moderador no App.tsx
+- [ ] Redirecionar moderadores para dashboard específico após login
+
+### Notificações por Email
+- [ ] Criar função de envio de email no procedimento atualizarStatus
+- [ ] Criar função de envio de email no procedimento atualizarRole
+- [ ] Criar template de email para suspensão de conta
+- [ ] Criar template de email para reativação de conta
+- [ ] Criar template de email para alteração de permissões
+- [ ] Testar envio de emails em todas as situações

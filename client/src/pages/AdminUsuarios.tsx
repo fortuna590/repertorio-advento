@@ -60,6 +60,7 @@ export default function AdminUsuarios() {
   const [editRole, setEditRole] = useState<"user" | "moderator" | "admin">("user");
   const [editStatus, setEditStatus] = useState<"active" | "suspended">("active");
   const [editNotes, setEditNotes] = useState("");
+  const [suspensionReason, setSuspensionReason] = useState("");
 
   // Modal de email
   const [openEmail, setOpenEmail] = useState(false);
@@ -73,6 +74,7 @@ export default function AdminUsuarios() {
   const [usuariosSelecionados, setUsuariosSelecionados] = useState<number[]>([]);
   const [openBulkAction, setOpenBulkAction] = useState(false);
   const [bulkAction, setBulkAction] = useState<'excluir' | 'suspender' | 'ativar' | null>(null);
+  const [bulkSuspensionReason, setBulkSuspensionReason] = useState("");
 
   // Queries
   const { data: usuarios = [], refetch } = trpc.adminUsers.listar.useQuery({
@@ -199,6 +201,51 @@ export default function AdminUsuarios() {
     },
   });
 
+  // Exportar dados para Excel
+  const exportarParaExcel = () => {
+    if (!usuarios || usuarios.length === 0) {
+      toast.error("Nenhum usuário para exportar");
+      return;
+    }
+
+    // Preparar dados para exportação
+    const dadosExportacao = usuarios.map((u: any) => ({
+      ID: u.id,
+      Nome: u.name || "-",
+      Email: u.email || "-",
+      Role: u.role === "admin" ? "Administrador" : u.role === "moderator" ? "Moderador" : "Usuário",
+      Status: u.status === "active" ? "Ativo" : "Suspenso",
+      Paróquia: u.paroquia || "-",
+      "Data de Cadastro": new Date(u.createdAt).toLocaleDateString("pt-BR"),
+      "Último Acesso": new Date(u.lastSignedIn).toLocaleDateString("pt-BR"),
+    }));
+
+    // Criar workbook e worksheet
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(dadosExportacao);
+
+    // Ajustar largura das colunas
+    const colWidths = [
+      { wch: 10 }, // ID
+      { wch: 25 }, // Nome
+      { wch: 30 }, // Email
+      { wch: 15 }, // Role
+      { wch: 12 }, // Status
+      { wch: 25 }, // Paróquia
+      { wch: 18 }, // Data de Cadastro
+      { wch: 18 }, // Último Acesso
+    ];
+    ws["!cols"] = colWidths;
+
+    XLSX.utils.book_append_sheet(wb, ws, "Usuários");
+
+    // Gerar arquivo
+    const dataAtual = new Date().toISOString().split("T")[0];
+    XLSX.writeFile(wb, `usuarios_louvamais_${dataAtual}.xlsx`);
+
+    toast.success(`${usuarios.length} usuários exportados com sucesso!`);
+  };
+
   const handleAbrirEdicao = (usuario: any) => {
     setUsuarioSelecionado(usuario);
     setEditName(usuario.name || "");
@@ -207,6 +254,7 @@ export default function AdminUsuarios() {
     setEditRole(usuario.role);
     setEditStatus(usuario.status);
     setEditNotes(usuario.adminNotes || "");
+    setSuspensionReason(usuario.suspensionReason || "");
     setOpenEdit(true);
   };
 
@@ -231,9 +279,14 @@ export default function AdminUsuarios() {
 
     // Atualizar status se mudou
     if (editStatus !== usuarioSelecionado.status) {
+      if (editStatus === "suspended" && !suspensionReason.trim()) {
+        toast.error("Informe o motivo da suspensão");
+        return;
+      }
       atualizarStatusMutation.mutate({
         userId: usuarioSelecionado.id,
         status: editStatus,
+        motivo: editStatus === "suspended" ? suspensionReason : undefined,
       });
     }
 
@@ -293,17 +346,29 @@ export default function AdminUsuarios() {
   const handleConfirmarAcaoEmMassa = () => {
     if (usuariosSelecionados.length === 0) return;
 
+    // Validar motivo se for suspensão
+    if (bulkAction === 'suspender' && !bulkSuspensionReason.trim()) {
+      toast.error("Informe o motivo da suspensão em massa");
+      return;
+    }
+
     switch (bulkAction) {
       case 'excluir':
         excluirEmMassaMutation.mutate({ userIds: usuariosSelecionados });
         break;
       case 'suspender':
-        suspenderEmMassaMutation.mutate({ userIds: usuariosSelecionados });
+        suspenderEmMassaMutation.mutate({ 
+          userIds: usuariosSelecionados,
+          motivo: bulkSuspensionReason 
+        });
         break;
       case 'ativar':
         ativarEmMassaMutation.mutate({ userIds: usuariosSelecionados });
         break;
     }
+
+    // Resetar motivo após ação
+    setBulkSuspensionReason("");
   };
 
   if (!user || user.role !== "admin") {
@@ -336,12 +401,27 @@ export default function AdminUsuarios() {
               Voltar ao Painel
             </Button>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-            Gerenciamento de Usuários
-          </h1>
-          <p className="text-purple-200">
-            Administre usuários, permissões e estatísticas
-          </p>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                Gerenciamento de Usuários
+              </h1>
+              <p className="text-purple-200">
+                Administre usuários, permissões e estatísticas
+              </p>
+            </div>
+            <Button
+              onClick={exportarParaExcel}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Exportar Excel
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -699,6 +779,25 @@ export default function AdminUsuarios() {
                   </Select>
                 </div>
               </div>
+
+              {/* Campo de justificativa (aparece apenas se suspender) */}
+              {editStatus === "suspended" && (
+                <div className="space-y-2">
+                  <Label htmlFor="suspension-reason" className="text-red-400">
+                    Motivo da Suspensão *
+                  </Label>
+                  <Textarea
+                    id="suspension-reason"
+                    value={suspensionReason}
+                    onChange={(e) => setSuspensionReason(e.target.value)}
+                    placeholder="Descreva brevemente o motivo da suspensão..."
+                    className="min-h-[80px]"
+                  />
+                  <p className="text-sm text-muted-foreground">
+                    Este motivo será registrado nos logs de auditoria.
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Notas Administrativas */}
@@ -807,10 +906,27 @@ export default function AdminUsuarios() {
                 </span>
               )}
               {bulkAction === 'suspender' && (
-                <span>
-                  Tem certeza que deseja <strong className="text-yellow-500">suspender</strong> {usuariosSelecionados.length} usuário(s)?
-                  Eles não poderão acessar o sistema até serem reativados.
-                </span>
+                <>
+                  <span className="block mb-4">
+                    Tem certeza que deseja <strong className="text-yellow-500">suspender</strong> {usuariosSelecionados.length} usuário(s)?
+                    Eles não poderão acessar o sistema até serem reativados.
+                  </span>
+                  <div className="space-y-2">
+                    <Label htmlFor="bulk-suspension-reason" className="text-red-400">
+                      Motivo da Suspensão *
+                    </Label>
+                    <Textarea
+                      id="bulk-suspension-reason"
+                      value={bulkSuspensionReason}
+                      onChange={(e) => setBulkSuspensionReason(e.target.value)}
+                      placeholder="Descreva brevemente o motivo da suspensão em massa..."
+                      className="min-h-[80px]"
+                    />
+                    <p className="text-sm text-muted-foreground">
+                      Este motivo será registrado nos logs de auditoria.
+                    </p>
+                  </div>
+                </>
               )}
               {bulkAction === 'ativar' && (
                 <span>
