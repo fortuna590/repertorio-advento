@@ -66,6 +66,11 @@ export default function AdminUsuarios() {
   // Modal de confirmação de exclusão
   const [openDelete, setOpenDelete] = useState(false);
 
+  // Seleção múltipla
+  const [usuariosSelecionados, setUsuariosSelecionados] = useState<number[]>([]);
+  const [openBulkAction, setOpenBulkAction] = useState(false);
+  const [bulkAction, setBulkAction] = useState<'excluir' | 'suspender' | 'ativar' | null>(null);
+
   // Queries
   const { data: usuarios = [], refetch } = trpc.adminUsers.listar.useQuery({
     busca,
@@ -150,6 +155,45 @@ export default function AdminUsuarios() {
     },
   });
 
+  const excluirEmMassaMutation = trpc.adminUsers.excluirEmMassa.useMutation({
+    onSuccess: (data) => {
+      toast.success(`${data.excluidos} usuário(s) excluído(s)!`);
+      if (data.erros > 0) {
+        toast.warning(`${data.erros} erro(s) ao excluir alguns usuários`);
+      }
+      refetch();
+      setUsuariosSelecionados([]);
+      setOpenBulkAction(false);
+    },
+    onError: (error) => {
+      toast.error("Erro: " + error.message);
+    },
+  });
+
+  const suspenderEmMassaMutation = trpc.adminUsers.suspenderEmMassa.useMutation({
+    onSuccess: (data) => {
+      toast.success(`${data.total} usuário(s) suspendido(s)!`);
+      refetch();
+      setUsuariosSelecionados([]);
+      setOpenBulkAction(false);
+    },
+    onError: (error) => {
+      toast.error("Erro: " + error.message);
+    },
+  });
+
+  const ativarEmMassaMutation = trpc.adminUsers.ativarEmMassa.useMutation({
+    onSuccess: (data) => {
+      toast.success(`${data.total} usuário(s) ativado(s)!`);
+      refetch();
+      setUsuariosSelecionados([]);
+      setOpenBulkAction(false);
+    },
+    onError: (error) => {
+      toast.error("Erro: " + error.message);
+    },
+  });
+
   const handleAbrirEdicao = (usuario: any) => {
     setUsuarioSelecionado(usuario);
     setEditName(usuario.name || "");
@@ -218,6 +262,43 @@ export default function AdminUsuarios() {
     excluirMutation.mutate({
       userId: usuarioSelecionado.id,
     });
+  };
+
+  const handleToggleSelecionarUsuario = (userId: number) => {
+    setUsuariosSelecionados(prev => 
+      prev.includes(userId) 
+        ? prev.filter(id => id !== userId)
+        : [...prev, userId]
+    );
+  };
+
+  const handleSelecionarTodos = () => {
+    if (usuariosSelecionados.length === usuarios.length) {
+      setUsuariosSelecionados([]);
+    } else {
+      setUsuariosSelecionados(usuarios.map((u: any) => u.id));
+    }
+  };
+
+  const handleAbrirAcaoEmMassa = (acao: 'excluir' | 'suspender' | 'ativar') => {
+    setBulkAction(acao);
+    setOpenBulkAction(true);
+  };
+
+  const handleConfirmarAcaoEmMassa = () => {
+    if (usuariosSelecionados.length === 0) return;
+
+    switch (bulkAction) {
+      case 'excluir':
+        excluirEmMassaMutation.mutate({ userIds: usuariosSelecionados });
+        break;
+      case 'suspender':
+        suspenderEmMassaMutation.mutate({ userIds: usuariosSelecionados });
+        break;
+      case 'ativar':
+        ativarEmMassaMutation.mutate({ userIds: usuariosSelecionados });
+        break;
+    }
   };
 
   if (!user || user.role !== "admin") {
@@ -363,6 +444,48 @@ export default function AdminUsuarios() {
           </CardContent>
         </Card>
 
+        {/* Botões de Ações em Massa */}
+        {usuariosSelecionados.length > 0 && (
+          <Card className="bg-purple-900/30 backdrop-blur-sm border-purple-500/50 mb-4">
+            <CardContent className="py-4">
+              <div className="flex items-center justify-between">
+                <div className="text-white font-medium">
+                  {usuariosSelecionados.length} usuário(s) selecionado(s)
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleAbrirAcaoEmMassa('ativar')}
+                    className="border-green-500/50 text-green-300 hover:bg-green-500/20"
+                  >
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Ativar
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleAbrirAcaoEmMassa('suspender')}
+                    className="border-yellow-500/50 text-yellow-300 hover:bg-yellow-500/20"
+                  >
+                    <Ban className="w-4 h-4 mr-2" />
+                    Suspender
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleAbrirAcaoEmMassa('excluir')}
+                    className="border-red-500/50 text-red-300 hover:bg-red-500/20"
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Excluir
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Tabela de Usuários */}
         <Card className="bg-slate-800/50 backdrop-blur-sm border-purple-500/30">
           <CardHeader>
@@ -376,6 +499,14 @@ export default function AdminUsuarios() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-purple-500/30">
+                    <th className="text-center py-3 px-4 text-purple-200 font-semibold w-12">
+                      <input
+                        type="checkbox"
+                        checked={usuariosSelecionados.length === usuarios.length && usuarios.length > 0}
+                        onChange={handleSelecionarTodos}
+                        className="w-4 h-4 rounded border-purple-500/50 bg-slate-700 text-purple-600 focus:ring-purple-500"
+                      />
+                    </th>
                     <th className="text-left py-3 px-4 text-purple-200 font-semibold">Nome</th>
                     <th className="text-left py-3 px-4 text-purple-200 font-semibold">Email</th>
                     <th className="text-center py-3 px-4 text-purple-200 font-semibold">Permissão</th>
@@ -387,6 +518,14 @@ export default function AdminUsuarios() {
                 <tbody>
                   {usuarios.map((usuario: any) => (
                     <tr key={usuario.id} className="border-b border-purple-500/20 hover:bg-purple-900/20 transition-colors">
+                      <td className="py-3 px-4 text-center">
+                        <input
+                          type="checkbox"
+                          checked={usuariosSelecionados.includes(usuario.id)}
+                          onChange={() => handleToggleSelecionarUsuario(usuario.id)}
+                          className="w-4 h-4 rounded border-purple-500/50 bg-slate-700 text-purple-600 focus:ring-purple-500"
+                        />
+                      </td>
                       <td className="py-3 px-4 text-white font-medium">{usuario.name || "Sem nome"}</td>
                       <td className="py-3 px-4 text-purple-200">{usuario.email || "Sem email"}</td>
                       <td className="py-3 px-4 text-center">
@@ -620,6 +759,58 @@ export default function AdminUsuarios() {
               disabled={enviarEmailMutation.isPending}
             >
               {enviarEmailMutation.isPending ? "Enviando..." : "Enviar Email"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal de Confirmação de Ações em Massa */}
+      <Dialog open={openBulkAction} onOpenChange={setOpenBulkAction}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {bulkAction === 'excluir' && 'Confirmar Exclusão em Massa'}
+              {bulkAction === 'suspender' && 'Confirmar Suspensão em Massa'}
+              {bulkAction === 'ativar' && 'Confirmar Ativação em Massa'}
+            </DialogTitle>
+            <DialogDescription>
+              {bulkAction === 'excluir' && (
+                <span>
+                  Tem certeza que deseja <strong className="text-red-500">excluir permanentemente</strong> {usuariosSelecionados.length} usuário(s)?
+                  Esta ação não pode ser desfeita e todos os dados relacionados (repertórios, participações em escalas) serão excluídos.
+                </span>
+              )}
+              {bulkAction === 'suspender' && (
+                <span>
+                  Tem certeza que deseja <strong className="text-yellow-500">suspender</strong> {usuariosSelecionados.length} usuário(s)?
+                  Eles não poderão acessar o sistema até serem reativados.
+                </span>
+              )}
+              {bulkAction === 'ativar' && (
+                <span>
+                  Tem certeza que deseja <strong className="text-green-500">ativar</strong> {usuariosSelecionados.length} usuário(s)?
+                  Eles poderão acessar o sistema normalmente.
+                </span>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex gap-2 mt-4">
+            <Button
+              variant="outline"
+              onClick={() => setOpenBulkAction(false)}
+              className="flex-1"
+            >
+              Cancelar
+            </Button>
+            <Button
+              variant={bulkAction === 'excluir' ? 'destructive' : 'default'}
+              onClick={handleConfirmarAcaoEmMassa}
+              className="flex-1"
+            >
+              {bulkAction === 'excluir' && 'Excluir'}
+              {bulkAction === 'suspender' && 'Suspender'}
+              {bulkAction === 'ativar' && 'Ativar'}
             </Button>
           </div>
         </DialogContent>

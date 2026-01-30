@@ -1544,3 +1544,17 @@
 - [x] Adicionar formulário de notas administrativas
 - [x] Implementar funcionalidade de envio de email direto
 - [x] Adicionar confirmações duplas para ações críticas (excluir, suspender)
+
+
+## Correções e Melhorias no Painel de Usuários
+
+- [x] Investigar e corrigir erro ao excluir usuários
+- [x] Adicionar tratamento de foreign keys ao excluir usuários
+- [x] Implementar seleção múltipla com checkboxes na tabela de usuários
+- [x] Criar procedimento tRPC para exclusão em massa
+- [x] Criar procedimento tRPC para suspender múltiplos usuários
+- [x] Criar procedimento tRPC para ativar múltiplos usuários
+- [x] Adicionar botões de ações em massa no frontend
+- [x] Implementar modal de confirmação para ações em massa
+- [x] Adicionar contador de usuários selecionados
+- [x] Testar exclusão em massa com usuários de teste

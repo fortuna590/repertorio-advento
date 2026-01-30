@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { adminProcedure, router } from "../_core/trpc";
-import { users, escalas, participantesEscala } from "../../drizzle/schema";
+import { users, escalas, participantesEscala, repertorios, historicoMusicasBase } from "../../drizzle/schema";
 import { getDb } from "../db";
 import { eq, like, or, desc, gte, sql } from "drizzle-orm";
 import { sendEmail } from "../_core/email";
@@ -260,11 +260,90 @@ export const adminUsersRouter = router({
         throw new Error("Usuário não encontrado");
       }
 
-      // Excluir usuário (as escalas e participações podem ser mantidas ou excluídas conforme necessidade)
+      // Excluir dados relacionados antes de excluir o usuário
+      // 1. Excluir repertórios do usuário
+      await db.delete(repertorios).where(eq(repertorios.userId, input.userId));
+
+      // 2. Excluir participações em escalas (atualizar para null ou excluir)
+      await db.delete(participantesEscala).where(eq(participantesEscala.userId, input.userId));
+
+      // 3. Excluir histórico de edições de músicas base
+      await db.delete(historicoMusicasBase).where(eq(historicoMusicasBase.usuarioId, input.userId));
+
+      // 4. Finalmente excluir o usuário
       await db
         .delete(users)
         .where(eq(users.id, input.userId));
 
       return { success: true };
+    }),
+
+  // Excluir múltiplos usuários em massa
+  excluirEmMassa: adminProcedure
+    .input(z.object({
+      userIds: z.array(z.number()),
+    }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      let excluidos = 0;
+      let erros = 0;
+
+      for (const userId of input.userIds) {
+        try {
+          // Excluir dados relacionados
+          await db.delete(repertorios).where(eq(repertorios.userId, userId));
+          await db.delete(participantesEscala).where(eq(participantesEscala.userId, userId));
+          await db.delete(historicoMusicasBase).where(eq(historicoMusicasBase.usuarioId, userId));
+          
+          // Excluir usuário
+          await db.delete(users).where(eq(users.id, userId));
+          excluidos++;
+        } catch (error) {
+          console.error(`Erro ao excluir usuário ${userId}:`, error);
+          erros++;
+        }
+      }
+
+      return { success: true, excluidos, erros };
+    }),
+
+  // Suspender múltiplos usuários em massa
+  suspenderEmMassa: adminProcedure
+    .input(z.object({
+      userIds: z.array(z.number()),
+    }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      for (const userId of input.userIds) {
+        await db
+          .update(users)
+          .set({ status: "suspended" })
+          .where(eq(users.id, userId));
+      }
+
+      return { success: true, total: input.userIds.length };
+    }),
+
+  // Ativar múltiplos usuários em massa
+  ativarEmMassa: adminProcedure
+    .input(z.object({
+      userIds: z.array(z.number()),
+    }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      for (const userId of input.userIds) {
+        await db
+          .update(users)
+          .set({ status: "active" })
+          .where(eq(users.id, userId));
+      }
+
+      return { success: true, total: input.userIds.length };
     }),
 });
