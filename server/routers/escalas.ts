@@ -2,7 +2,7 @@ import { z } from "zod";
 import { publicProcedure, protectedProcedure, router } from "../_core/trpc";
 import { escalas, funcoesEscala, participantesEscala } from "../../drizzle/schema";
 import { getDb } from "../db";
-import { eq, and, desc, gte, lte } from "drizzle-orm";
+import { eq, and, or, desc, gte, lte } from "drizzle-orm";
 import { sendEmail, templateEmailEscala, templateEmailStatusEscala, templateEmailLembreteEscala } from "../_core/email";
 import { sendWhatsApp, templateWhatsAppConvite, formatPhoneNumber } from "../_core/whatsapp";
 
@@ -805,5 +805,72 @@ export const escalasRouter = router({
       historico.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
 
       return historico;
+    }),
+
+  // Enviar lembretes por email
+  enviarLembretesEmail: protectedProcedure
+    .input(z.object({
+      escalaId: z.number(),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Buscar escala
+      const [escala] = await db.select().from(escalas)
+        .where(eq(escalas.id, input.escalaId));
+      if (!escala) throw new Error("Escala não encontrada");
+
+      // Buscar participantes confirmados ou pendentes
+      const participantes = await db.select()
+        .from(participantesEscala)
+        .where(
+          and(
+            eq(participantesEscala.escalaId, input.escalaId),
+            or(
+              eq(participantesEscala.status, "confirmado"),
+              eq(participantesEscala.status, "pendente")
+            )
+          )
+        );
+
+      if (participantes.length === 0) {
+        throw new Error("Nenhum participante para enviar lembretes");
+      }
+
+      // Importar helper de email
+      const { sendEscalaReminder } = await import("../_core/emailReminder");
+
+      let enviados = 0;
+      let erros = 0;
+
+      // Enviar email para cada participante
+      for (const participante of participantes) {
+        // Buscar função
+        const [funcao] = await db.select().from(funcoesEscala)
+          .where(eq(funcoesEscala.id, participante.funcaoId));
+
+        const success = await sendEscalaReminder({
+          to: participante.email || "",
+          escalaTitle: escala.titulo,
+          escalaDate: new Date(escala.data).toLocaleDateString("pt-BR"),
+          escalaTime: escala.hora || "Não informado",
+          escalaLocal: escala.local || "Não informado",
+          participantName: participante.nome,
+          participantRole: funcao?.nome || "Não especificada",
+        });
+
+        if (success) {
+          enviados++;
+        } else {
+          erros++;
+        }
+      }
+
+      return {
+        total: participantes.length,
+        enviados,
+        erros,
+      };
     }),
 });

@@ -87,6 +87,15 @@ export default function EscalaDetalhes() {
     },
   });
 
+  const enviarLembretesMutation = trpc.escalas.enviarLembretesEmail.useMutation({
+    onSuccess: (data) => {
+      toast.success(`Lembretes enviados! ${data.enviados} de ${data.total} emails enviados com sucesso.`);
+    },
+    onError: (error) => {
+      toast.error("Erro ao enviar lembretes: " + error.message);
+    },
+  });
+
   const resetForm = () => {
     setFuncaoId(0);
     setNome("");
@@ -404,6 +413,20 @@ export default function EscalaDetalhes() {
               <CalendarPlus className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
               <span className="hidden sm:inline">Google Calendar</span>
             </Button>
+            {user && escala && escala.userId === user.openId && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex-1 sm:flex-none bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700"
+                onClick={() => enviarLembretesMutation.mutate({ escalaId })}
+                disabled={enviarLembretesMutation.isPending}
+              >
+                <Mail className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
+                <span className="hidden sm:inline">
+                  {enviarLembretesMutation.isPending ? "Enviando..." : "Enviar Lembretes"}
+                </span>
+              </Button>
+            )}
             <Button variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={handleExportarPDF}>
               <FileDown className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
               <span className="hidden sm:inline">Exportar PDF</span>
