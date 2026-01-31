@@ -24,7 +24,7 @@ export async function sendEmail({
   to,
   subject,
   html,
-  from = 'LouvaMais <onboarding@resend.dev>',
+  from = 'LouvaMais <noreply@louvamais.com>',
   replyTo = 'louvamais590@gmail.com' // Email de contato para respostas
 }: SendEmailParams): Promise<{ success: boolean; messageId?: string; error?: string }> {
   

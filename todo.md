@@ -1633,3 +1633,9 @@
 - [x] Implementar função de geração de mensagem formatada para WhatsApp
 - [x] Adicionar botão de compartilhamento WhatsApp na página de detalhes da escala
 - [x] Testar envio de emails e compartilhamento WhatsApp
+
+
+## Configuração de Email de Envio
+- [x] Identificar todos os arquivos que enviam emails no sistema
+- [x] Atualizar email de envio para noreply@louvamais.com em todos os arquivos
+- [x] Verificar se todas as alterações foram aplicadas corretamente

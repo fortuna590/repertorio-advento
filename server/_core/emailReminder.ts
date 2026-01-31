@@ -18,7 +18,7 @@ export async function sendEscalaReminder(data: ReminderEmailData): Promise<boole
     const { to, escalaTitle, escalaDate, escalaTime, escalaLocal, participantName, participantRole } = data;
 
     await resend.emails.send({
-      from: "LouvaMais <noreply@louvamais.com.br>",
+      from: "LouvaMais <noreply@louvamais.com>",
       to,
       subject: `Lembrete: ${escalaTitle} - ${escalaDate}`,
       html: `
