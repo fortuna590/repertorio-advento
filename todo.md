@@ -1639,3 +1639,13 @@
 - [x] Identificar todos os arquivos que enviam emails no sistema
 - [x] Atualizar email de envio para noreply@louvamais.com em todos os arquivos
 - [x] Verificar se todas as alterações foram aplicadas corretamente
+
+
+## Guia de Verificação de Domínio e Dashboards
+- [x] Criar documento guia para verificação de domínio louvamais.com no Resend
+- [x] Incluir instruções passo a passo para configuração DNS
+- [x] Criar página de logs de auditoria em /admin/logs
+- [x] Implementar filtros por usuário, ação e período nos logs
+- [x] Criar dashboard de moderadores em /moderador
+- [x] Implementar controle de acesso para moderadores
+- [x] Adicionar navegação específica para moderadores

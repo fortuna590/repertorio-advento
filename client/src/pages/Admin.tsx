@@ -978,13 +978,22 @@ export default function Admin() {
                     <li>Excluir contas permanentemente</li>
                   </ul>
                   <div className="pt-4">
-                    <Link href="/admin/usuarios">
-                      <Button className="bg-purple-600 hover:bg-purple-700 gap-2">
-                        <Users className="h-4 w-4" />
-                        Ir para Gerenciamento de Usuários
-                        <ExternalLink className="h-4 w-4" />
-                      </Button>
-                    </Link>
+                    <div className="flex gap-3">
+                      <Link href="/admin/usuarios">
+                        <Button className="bg-purple-600 hover:bg-purple-700 gap-2">
+                          <Users className="h-4 w-4" />
+                          Gerenciar Usuários
+                          <ExternalLink className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                      <Link href="/admin/logs">
+                        <Button variant="outline" className="border-purple-600 text-purple-600 hover:bg-purple-600/10 gap-2">
+                          <Shield className="h-4 w-4" />
+                          Ver Logs de Auditoria
+                          <ExternalLink className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </CardContent>
