@@ -1816,3 +1816,21 @@
 - [ ] Registrar log de lembretes enviados
 - [ ] Evitar envio duplicado
 - [ ] Testar sistema de agendamento
+
+
+## Bugs Críticos
+
+### Bug 1: Data não atualiza ao editar escala
+- [ ] Investigar por que data editada não é salva (mostra data antiga)
+- [ ] Verificar procedimento tRPC `atualizarEscala`
+- [ ] Verificar se campo `data` está sendo enviado corretamente
+- [ ] Testar atualização de data e verificar persistência
+
+### Bug 2: Escalas confirmadas não aparecem em "Minhas Escalas"
+- [x] Investigar por que escalas confirmadas não aparecem em "Minhas Escalas"
+- [x] Identificar problema: userId não estava sendo vinculado ao adicionar participante
+- [x] Adicionar busca de userId por email ao adicionar participante
+- [x] Adicionar logs de debug
+- [x] Criar script de migração para participantes antigos
+- [x] Executar migração (1 participante vinculado com sucesso)
+- [ ] Testar fluxo completo: adicionar participante → confirmar → verificar em "Minhas Escalas"

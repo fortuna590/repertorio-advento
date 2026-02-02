@@ -128,7 +128,14 @@ export const escalasRouter = router({
       if (!db) throw new Error("Database not available");
 
       const { escalaId, ...updates } = input;
+      console.log("[Escalas] Atualizando escala", escalaId, "com dados:", updates);
+      
       await db.update(escalas).set(updates).where(eq(escalas.id, escalaId));
+      
+      // Verificar se foi atualizado
+      const [escalaAtualizada] = await db.select().from(escalas).where(eq(escalas.id, escalaId));
+      console.log("[Escalas] Escala após update:", escalaAtualizada);
+      
       return { success: true };
     }),
 
@@ -212,11 +219,27 @@ export const escalasRouter = router({
       // Gerar token único para confirmação rápida
       const token = Math.random().toString(36).substring(2) + Date.now().toString(36);
 
-      // Inserir participante com token
+      // Buscar userId pelo email se fornecido
+      let userId = null;
+      if (input.email) {
+        const { users } = await import("../../drizzle/schema");
+        const [usuario] = await db.select().from(users).where(eq(users.email, input.email));
+        if (usuario) {
+          userId = usuario.id;
+          console.log("[Escalas] Usuário encontrado pelo email:", input.email, "-> userId:", userId);
+        } else {
+          console.log("[Escalas] Nenhum usuário encontrado com email:", input.email);
+        }
+      }
+
+      // Inserir participante com token e userId
       const [participanteInserido] = await db.insert(participantesEscala).values({
         ...input,
+        userId,
         token,
       });
+      
+      console.log("[Escalas] Participante inserido com userId:", userId);
 
       // Enviar email de notificação se tiver email
       if (input.email && escala) {
