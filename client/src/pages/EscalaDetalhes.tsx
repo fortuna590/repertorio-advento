@@ -665,7 +665,14 @@ export default function EscalaDetalhes() {
             <div className="flex items-center gap-2 text-purple-200">
               <Calendar className="w-5 h-5 text-purple-400" />
               <span className="font-semibold">Data:</span>
-              {new Date(escala.data).toLocaleDateString("pt-BR")}
+              {(() => {
+                const dataStr = escala.data.toString();
+                if (dataStr.includes('-')) {
+                  const [ano, mes, dia] = dataStr.split('T')[0].split('-');
+                  return `${dia}/${mes}/${ano}`;
+                }
+                return new Date(escala.data).toLocaleDateString("pt-BR");
+              })()}
             </div>
             {escala.hora && (
               <div className="flex items-center gap-2 text-purple-200">
@@ -758,14 +765,14 @@ export default function EscalaDetalhes() {
                 {participantes && participantes.length > 0 ? (
                   <div className="space-y-3">
                     {participantes.map((participante: any) => (
-                      <div key={participante.id} className="flex items-center justify-between p-4 border border-purple-500/30 rounded-lg bg-slate-900/30">
-                        <div className="flex-1">
-                          <p className="font-semibold text-white">{participante.nome}</p>
-                          {participante.email && <p className="text-sm text-purple-300">{participante.email}</p>}
+                      <div key={participante.id} className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 border border-purple-500/30 rounded-lg bg-slate-900/30">
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-white truncate">{participante.nome}</p>
+                          {participante.email && <p className="text-sm text-purple-300 truncate">{participante.email}</p>}
                           {participante.telefone && <p className="text-sm text-purple-300">{participante.telefone}</p>}
-                          {participante.observacoes && <p className="text-sm text-purple-400 mt-1">{participante.observacoes}</p>}
+                          {participante.observacoes && <p className="text-sm text-purple-400 mt-1 line-clamp-2">{participante.observacoes}</p>}
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
                           {participante.token && (
                             <>
                               <Button
@@ -808,7 +815,7 @@ export default function EscalaDetalhes() {
                             value={participante.status}
                             onValueChange={(value) => handleAtualizarStatus(participante.id, value as any)}
                           >
-                            <SelectTrigger className={`w-[140px] ${getStatusColor(participante.status)} transition-all duration-300`}>
+                            <SelectTrigger className={`w-full sm:w-[140px] ${getStatusColor(participante.status)} transition-all duration-300`}>
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>

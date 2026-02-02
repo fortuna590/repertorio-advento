@@ -1900,3 +1900,37 @@
 - [x] Adicionar ícone verde do WhatsApp (MessageCircle) no botão
 - [x] Botão desabilitado se participante não tiver telefone cadastrado
 - [ ] Testar em desktop e mobile
+
+
+## Bugs a Corrigir
+
+### Responsividade dos Botões em Mobile
+- [ ] Ajustar layout dos botões de ação dos participantes para mobile
+- [ ] Evitar quebra de layout com nomes longos
+- [ ] Usar flex-wrap ou grid responsivo
+- [ ] Testar em diferentes tamanhos de tela
+
+### Data Errada no Painel (Timezone)
+- [ ] Investigar onde a data está sendo exibida incorretamente
+- [ ] Verificar se é no card de informações ou no título
+- [ ] Corrigir conversão de data para evitar problema de timezone
+- [ ] Testar com diferentes datas
+
+
+## Bugs Corrigidos ✅
+
+### Responsividade dos Botões em Mobile (02/02/2026)
+- [x] Ajustar layout dos botões de ação dos participantes para mobile
+- [x] Evitar quebra de layout com nomes longos
+- [x] Usar flex-wrap e flex-col/sm:flex-row para responsividade
+- [x] Adicionar truncate e line-clamp para textos longos
+- [x] Testar em diferentes tamanhos de tela
+
+### Data Errada no Painel - Problema de Timezone (02/02/2026)
+- [x] Investigar onde a data está sendo exibida incorretamente
+- [x] Identificar problema: new Date() com string YYYY-MM-DD causa conversão UTC
+- [x] Corrigir conversão de data em EscalaDetalhes.tsx (card de informações)
+- [x] Corrigir conversão de data em ProximasEscalas.tsx
+- [x] Corrigir conversão de data em ConfirmarPresenca.tsx (2 ocorrências)
+- [x] Aplicar solução: split de string direto sem passar por Date object
+- [x] Testar com diferentes datas

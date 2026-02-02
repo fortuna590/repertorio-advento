@@ -74,7 +74,14 @@ export default function ConfirmarPresenca() {
               <h3 className="font-semibold text-gray-900 mb-3">{info.escala}</h3>
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Calendar className="w-4 h-4" />
-                {new Date(info.data).toLocaleDateString("pt-BR")}
+                {(() => {
+                  const dataStr = info.data.toString();
+                  if (dataStr.includes('-')) {
+                    const [ano, mes, dia] = dataStr.split('T')[0].split('-');
+                    return `${dia}/${mes}/${ano}`;
+                  }
+                  return new Date(info.data).toLocaleDateString("pt-BR");
+                })()}
               </div>
               {info.hora && (
                 <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -127,7 +134,14 @@ export default function ConfirmarPresenca() {
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <Calendar className="w-4 h-4" />
-                  {new Date(info.data).toLocaleDateString("pt-BR")}
+                  {(() => {
+                    const dataStr = info.data.toString();
+                    if (dataStr.includes('-')) {
+                      const [ano, mes, dia] = dataStr.split('T')[0].split('-');
+                      return `${dia}/${mes}/${ano}`;
+                    }
+                    return new Date(info.data).toLocaleDateString("pt-BR");
+                  })()}
                 </div>
                 {info.hora && (
                   <div className="flex items-center gap-2 text-sm text-gray-600">

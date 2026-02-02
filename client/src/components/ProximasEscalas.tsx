@@ -70,7 +70,14 @@ export default function ProximasEscalas() {
       <CardContent className="space-y-4">
         {escalas.map((escala) => {
           const Icon = ICONS[escala.tipo as keyof typeof ICONS] || Sparkles;
-          const dataFormatada = new Date(escala.data).toLocaleDateString("pt-BR");
+          const dataFormatada = (() => {
+            const dataStr = escala.data.toString();
+            if (dataStr.includes('-')) {
+              const [ano, mes, dia] = dataStr.split('T')[0].split('-');
+              return `${dia}/${mes}/${ano}`;
+            }
+            return new Date(escala.data).toLocaleDateString("pt-BR");
+          })();
 
           return (
             <Link key={escala.id} href={`/escala/${escala.id}`}>
