@@ -1889,3 +1889,14 @@
 - [ ] Registrar log de lembretes enviados
 - [ ] Testar job com escalas de teste
 - [ ] Configurar horário ideal de envio (ex: 9h da manhã)
+
+
+## Compartilhar Convite de Escala por WhatsApp
+
+- [x] Adicionar botão de compartilhar por WhatsApp na lista de participantes
+- [x] Gerar link de confirmação individual para cada participante (já existia)
+- [x] Criar mensagem padrão para WhatsApp com link de confirmação
+- [x] Abrir WhatsApp Web/App com mensagem pronta ao clicar no botão
+- [x] Adicionar ícone verde do WhatsApp (MessageCircle) no botão
+- [x] Botão desabilitado se participante não tiver telefone cadastrado
+- [ ] Testar em desktop e mobile

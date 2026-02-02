@@ -767,18 +767,34 @@ export default function EscalaDetalhes() {
                         </div>
                         <div className="flex items-center gap-2">
                           {participante.token && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => {
-                                const linkConfirmacao = `${window.location.origin}/confirmar/${participante.token}`;
-                                navigator.clipboard.writeText(linkConfirmacao);
-                                toast.success("Link de confirmação copiado!");
-                              }}
-                              title="Copiar link de confirmação"
-                            >
-                              <LinkIcon className="w-4 h-4 text-purple-600" />
-                            </Button>
+                            <>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  const linkConfirmacao = `${window.location.origin}/confirmar/${participante.token}`;
+                                  navigator.clipboard.writeText(linkConfirmacao);
+                                  toast.success("Link de confirmação copiado!");
+                                }}
+                                title="Copiar link de confirmação"
+                              >
+                                <LinkIcon className="w-4 h-4 text-purple-600" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  const linkConfirmacao = `${window.location.origin}/confirmar/${participante.token}`;
+                                  const mensagem = `Olá ${participante.nome}! Você foi convidado(a) para participar da escala *${escala?.titulo}* no dia ${new Date(escala?.data || '').toLocaleDateString('pt-BR')}${escala?.hora ? ` às ${escala.hora}` : ''}. Por favor, confirme sua presença clicando no link: ${linkConfirmacao}`;
+                                  const urlWhatsApp = `https://wa.me/${participante.telefone?.replace(/\D/g, '')}?text=${encodeURIComponent(mensagem)}`;
+                                  window.open(urlWhatsApp, '_blank');
+                                }}
+                                title="Compartilhar por WhatsApp"
+                                disabled={!participante.telefone}
+                              >
+                                <MessageCircle className="w-4 h-4 text-green-600" />
+                              </Button>
+                            </>
                           )}
                           <Button
                             variant="ghost"
