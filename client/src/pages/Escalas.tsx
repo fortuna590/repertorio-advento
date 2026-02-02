@@ -418,7 +418,28 @@ export default function Escalas() {
               <SelectItem value="com_ausencias">❌ Com Ausências</SelectItem>
             </SelectContent>
           </Select>
+
+          {(filtroTipo !== "todos" || filtroMes || filtroStatus !== "todos") && (
+            <Button 
+              variant="ghost" 
+              onClick={() => {
+                setFiltroTipo("todos");
+                setFiltroMes("");
+                setFiltroStatus("todos");
+              }}
+              className="text-purple-300 hover:text-white"
+            >
+              Limpar filtros
+            </Button>
+          )}
         </div>
+
+        {/* Contador de escalas */}
+        {escalasFiltradas && (
+          <div className="text-sm text-purple-300 mb-4">
+            Exibindo {escalasFiltradas.length} de {escalas?.length || 0} escala(s)
+          </div>
+        )}
 
          {/* Barra de seleção em massa */}
         {escalasFiltradas && escalasFiltradas.length > 0 && (

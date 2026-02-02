@@ -1848,3 +1848,44 @@
 - [x] Criar script de migração para participantes antigos
 - [x] Executar migração (1 participante vinculado com sucesso)
 - [ ] Testar fluxo completo: adicionar participante → confirmar → verificar em "Minhas Escalas"
+
+
+## Novas Funcionalidades - Gestão Avançada de Escalas
+
+### Filtros de Visualização por Período
+- [x] Adicionar seletor de mês/ano na página de listagem de escalas
+- [x] Implementar filtro por período no backend (procedimento tRPC)
+- [x] Adicionar botão "Limpar filtros" para voltar à visualização completa
+- [x] Adicionar contador de escalas filtradas vs total
+- [x] Filtro funciona no frontend com input type="month"
+- [ ] Salvar preferência de filtro no localStorage
+- [ ] Testar filtros com diferentes períodos
+
+### Dashboard de Histórico de Participação
+- [ ] Criar página/componente de histórico de participação
+- [ ] Implementar query para calcular estatísticas por participante
+- [ ] Exibir taxa de presença (confirmados / total de escalas)
+- [ ] Mostrar número de confirmações, faltas e pendências
+- [ ] Adicionar gráfico de evolução temporal (últimos 6 meses)
+- [ ] Permitir filtrar por período e por tipo de escala
+- [ ] Adicionar ranking dos participantes mais assíduos
+- [ ] Testar com diferentes cenários de participação
+
+### Sistema de Notificações Push no Site
+- [ ] Implementar service worker para push notifications
+- [ ] Criar procedimento tRPC para solicitar permissão de notificações
+- [ ] Salvar token de push notification no banco de dados (tabela users)
+- [ ] Criar função de envio de notificações push
+- [ ] Implementar UI para gerenciar preferências de notificações
+- [ ] Testar notificações em diferentes navegadores
+- [ ] Adicionar fallback para navegadores sem suporte
+
+### Lembretes Automáticos 24h Antes
+- [ ] Criar job agendado que roda diariamente
+- [ ] Buscar escalas que acontecerão em 24h
+- [ ] Filtrar participantes com status "pendente"
+- [ ] Enviar email de lembrete (template já existe)
+- [ ] Enviar notificação push (se usuário tiver habilitado)
+- [ ] Registrar log de lembretes enviados
+- [ ] Testar job com escalas de teste
+- [ ] Configurar horário ideal de envio (ex: 9h da manhã)
