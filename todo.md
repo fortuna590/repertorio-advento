@@ -1649,3 +1649,92 @@
 - [x] Criar dashboard de moderadores em /moderador
 - [x] Implementar controle de acesso para moderadores
 - [x] Adicionar navegação específica para moderadores
+
+
+## Novos Recursos - Fase Final
+
+### Notificações por Email Automáticas
+- [x] Criar template de email para notificação de suspensão
+- [x] Criar template de email para notificação de reativação
+- [x] Criar template de email para notificação de mudança de permissões
+- [x] Integrar envio de email no procedimento atualizarStatus
+- [x] Integrar envio de email no procedimento atualizarRole
+- [x] Testar envio de emails em todas as situações
+
+### Exportação em Lote para Google Calendar
+- [ ] Adicionar checkboxes de seleção na página de listagem de escalas
+- [ ] Criar botão "Exportar Selecionadas para Google Calendar"
+- [ ] Implementar função de geração de múltiplos eventos .ics
+- [ ] Criar procedimento tRPC para exportação em lote
+- [ ] Testar exportação de múltiplas escalas
+
+### Sistema de Backup Automático
+- [ ] Criar procedimento tRPC para backup do banco de dados
+- [ ] Implementar função de exportação de dados em formato SQL
+- [ ] Integrar com S3 para armazenamento de backups
+- [ ] Criar agendamento automático de backups diários
+- [ ] Criar página de gerenciamento de backups em /admin/backups
+- [ ] Implementar função de restauração de backups
+- [ ] Adicionar logs de backup na auditoria
+
+### Guia Manual Visual para Vídeo
+- [ ] Capturar screenshots da página inicial (landing page)
+- [ ] Capturar screenshots do processo de cadastro/login
+- [ ] Capturar screenshots da criação de escala (passo a passo)
+- [ ] Capturar screenshots dos recursos da escala (compartilhar, agenda, lembretes)
+- [ ] Capturar screenshots de adição de participantes
+- [ ] Capturar screenshots do repertório e músicas
+- [ ] Criar documento Markdown com roteiro completo
+- [ ] Organizar screenshots em ordem lógica
+- [ ] Adicionar textos explicativos para cada etapa
+- [ ] Adicionar sugestões de narração
+- [ ] Exportar guia em formato otimizado para Canva
+
+
+## Novas Funcionalidades - Fase 2
+
+### Sistema de Notificações por Email Automáticas
+- [x] Criar função de envio de email no procedimento atualizarStatus (suspensão/reativação)
+- [x] Criar função de envio de email no procedimento atualizarRole (mudança de permissões)
+- [x] Criar template de email para suspensão de conta com motivo
+- [x] Criar template de email para reativação de conta
+- [x] Criar template de email para alteração de permissões (admin/moderador/usuário)
+- [x] Adicionar envio de emails em ações em massa (suspenderEmMassa, ativarEmMassa)
+- [ ] Testar envio de emails em todas as situações
+
+### Exportação em Lote para Google Calendar
+- [x] Adicionar checkboxes de seleção múltipla na página de gerenciamento de escalas
+- [x] Criar botão "Exportar Selecionadas para Google Calendar"
+- [x] Implementar função de geração de múltiplos arquivos .ics
+- [x] Criar procedimento tRPC para exportação em lote
+- [x] Adicionar feedback visual (toast) após exportação bem-sucedida
+- [x] Criar gerador de arquivos ICS com suporte a múltiplos eventos
+- [ ] Testar exportação de múltiplas escalas simultaneamente
+
+### Sistema de Backup Automático do Banco de Dados
+- [ ] Criar procedimento tRPC para backup do banco de dados
+- [ ] Implementar função de dump do banco MySQL/PostgreSQL
+- [ ] Integrar com S3 para armazenamento dos backups
+- [ ] Criar agendamento automático diário de backups
+- [ ] Adicionar página de gerenciamento de backups no painel admin
+- [ ] Implementar função de restauração de backup
+- [ ] Adicionar listagem de backups disponíveis com datas
+- [ ] Criar botão de download de backups
+- [ ] Testar processo completo de backup e restauração
+- [ ] Adicionar logs de auditoria para operações de backup
+
+### Guia Manual Visual para Vídeo no Canva
+- [ ] Capturar screenshots de alta qualidade de todas as telas principais
+- [ ] Capturar tela de cadastro/login
+- [ ] Capturar tela de criação de escala
+- [ ] Capturar tela de detalhes da escala com recursos
+- [ ] Capturar tela de compartilhamento WhatsApp
+- [ ] Capturar tela de exportação para Google Calendar
+- [ ] Capturar tela de lembretes por email
+- [ ] Capturar tela de gerenciamento de participantes
+- [ ] Criar documento Markdown com roteiro completo do vídeo
+- [ ] Adicionar textos explicativos para cada etapa
+- [ ] Adicionar sugestões de narração para cada cena
+- [ ] Adicionar ordem recomendada das cenas
+- [ ] Adicionar dicas de transições e efeitos
+- [ ] Exportar guia em formato otimizado para Canva

@@ -5,6 +5,11 @@ import { users, escalas, participantesEscala, repertorios, historicoMusicasBase 
 import { getDb } from "../db";
 import { eq, like, or, desc, gte, sql } from "drizzle-orm";
 import { sendEmail } from "../_core/email";
+import { 
+  templateEmailSuspensao, 
+  templateEmailReativacao, 
+  templateEmailAlteracaoPermissoes 
+} from "../_core/emailTemplates";
 
 export const adminUsersRouter = router({
   // Listar todos os usuários com filtros
@@ -159,6 +164,25 @@ export const adminUsersRouter = router({
         details: { oldRole, newRole: input.role },
       });
 
+      // Enviar email de notificação ao usuário
+      const usuario = usuarioAntigo[0];
+      if (usuario && usuario.email) {
+        try {
+          await sendEmail({
+            to: usuario.email,
+            subject: "🔐 Suas permissões foram atualizadas - LouvaMais",
+            html: templateEmailAlteracaoPermissoes(
+              usuario.name || "Usuário",
+              input.role,
+              ctx.user.name || "Administrador"
+            ),
+          });
+        } catch (error) {
+          console.error("Erro ao enviar email de notificação:", error);
+          // Não falha a operação se o email não for enviado
+        }
+      }
+
       return { success: true };
     }),
 
@@ -201,6 +225,36 @@ export const adminUsersRouter = router({
         targetName: usuarioAntigo[0]?.name || undefined,
         details: { oldStatus, newStatus: input.status, motivo: input.motivo },
       });
+
+      // Enviar email de notificação ao usuário
+      const usuario = usuarioAntigo[0];
+      if (usuario && usuario.email) {
+        try {
+          if (input.status === "suspended" && input.motivo) {
+            await sendEmail({
+              to: usuario.email,
+              subject: "⚠️ Sua conta foi suspensa - LouvaMais",
+              html: templateEmailSuspensao(
+                usuario.name || "Usuário",
+                input.motivo,
+                ctx.user.name || "Administrador"
+              ),
+            });
+          } else if (input.status === "active") {
+            await sendEmail({
+              to: usuario.email,
+              subject: "✅ Sua conta foi reativada - LouvaMais",
+              html: templateEmailReativacao(
+                usuario.name || "Usuário",
+                ctx.user.name || "Administrador"
+              ),
+            });
+          }
+        } catch (error) {
+          console.error("Erro ao enviar email de notificação:", error);
+          // Não falha a operação se o email não for enviado
+        }
+      }
 
       return { success: true };
     }),
@@ -410,6 +464,23 @@ export const adminUsersRouter = router({
           targetName: usuario?.name || undefined,
           details: { motivo: input.motivo },
         });
+
+        // Enviar email de notificação
+        if (usuario && usuario.email && input.motivo) {
+          try {
+            await sendEmail({
+              to: usuario.email,
+              subject: "⚠️ Sua conta foi suspensa - LouvaMais",
+              html: templateEmailSuspensao(
+                usuario.name || "Usuário",
+                input.motivo,
+                ctx.user.name || "Administrador"
+              ),
+            });
+          } catch (error) {
+            console.error(`Erro ao enviar email para ${usuario.email}:`, error);
+          }
+        }
       }
 
       return { success: true, total: input.userIds.length };
@@ -446,6 +517,22 @@ export const adminUsersRouter = router({
           targetName: usuario?.name || undefined,
           details: {},
         });
+
+        // Enviar email de notificação
+        if (usuario && usuario.email) {
+          try {
+            await sendEmail({
+              to: usuario.email,
+              subject: "✅ Sua conta foi reativada - LouvaMais",
+              html: templateEmailReativacao(
+                usuario.name || "Usuário",
+                ctx.user.name || "Administrador"
+              ),
+            });
+          } catch (error) {
+            console.error(`Erro ao enviar email para ${usuario.email}:`, error);
+          }
+        }
       }
 
       return { success: true, total: input.userIds.length };

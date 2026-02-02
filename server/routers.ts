@@ -20,6 +20,7 @@ import { uploadRouter } from "./routers/upload";
 import { repertorioRouter } from "./routers/repertorio";
 import { musicasAdminFavoritasRouter } from "./routers/musicasAdminFavoritas";
 import { escalasRouter } from "./routers/escalas";
+import { escalasExportRouter } from "./routers/escalasExport";
 import { musicasBaseRouter } from "./routers/musicasBase";
 import { adminUsersRouter } from "./routers/adminUsers";
 import { auditRouter } from "./routers/audit";
@@ -41,6 +42,7 @@ export const appRouter = router({
   repertorio: repertorioRouter,
   musicasAdminFavoritas: musicasAdminFavoritasRouter,
   escalas: escalasRouter,
+  escalasExport: escalasExportRouter,
   musicasBase: musicasBaseRouter,
   adminUsers: adminUsersRouter,
   audit: auditRouter,

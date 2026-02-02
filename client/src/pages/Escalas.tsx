@@ -9,7 +9,8 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Textarea } from "../components/ui/textarea";
-import { Calendar, Clock, MapPin, Plus, Music, Users, Heart, Sparkles, Trash2, Edit, Eye, Bell } from "lucide-react";
+import { Calendar, Clock, MapPin, Plus, Music, Users, Heart, Sparkles, Trash2, Edit, Eye, Bell, Download } from "lucide-react";
+import { Checkbox } from "../components/ui/checkbox";
 import { EscalasNavigation } from "../components/EscalasNavigation";
 import { toast } from "sonner";
 
@@ -63,6 +64,7 @@ export default function Escalas() {
   const [filtroTipo, setFiltroTipo] = useState<string>("todos");
   const [filtroMes, setFiltroMes] = useState<string>("");
   const [filtroStatus, setFiltroStatus] = useState<string>("todos");
+  const [escalasSelecionadas, setEscalasSelecionadas] = useState<number[]>([]);
 
   // Form state
   const [titulo, setTitulo] = useState("");
@@ -90,6 +92,54 @@ export default function Escalas() {
       toast.error("Erro ao enviar lembretes: " + error.message);
     },
   });
+
+  const exportarEmLoteMutation = trpc.escalasExport.exportarEmLote.useQuery(
+    { escalaIds: escalasSelecionadas },
+    { enabled: false }
+  );
+
+  const handleExportarEmLote = async () => {
+    if (escalasSelecionadas.length === 0) {
+      toast.error("Selecione pelo menos uma escala para exportar");
+      return;
+    }
+
+    try {
+      const result = await exportarEmLoteMutation.refetch();
+      if (result.data) {
+        const blob = new Blob([result.data.icsContent], { type: 'text/calendar' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = result.data.filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+        toast.success(`${result.data.totalEscalas} escalas exportadas para Google Calendar!`);
+        setEscalasSelecionadas([]);
+      }
+    } catch (error: any) {
+      toast.error("Erro ao exportar escalas: " + error.message);
+    }
+  };
+
+  const handleToggleSelecao = (escalaId: number) => {
+    setEscalasSelecionadas(prev => 
+      prev.includes(escalaId) 
+        ? prev.filter(id => id !== escalaId)
+        : [...prev, escalaId]
+    );
+  };
+
+  const handleSelecionarTodas = () => {
+    if (escalasSelecionadas.length === escalasFiltradas?.length) {
+      setEscalasSelecionadas([]);
+    } else {
+      setEscalasSelecionadas(escalasFiltradas?.map(e => e.id) || []);
+    }
+  };
 
   const criarMutation = trpc.escalas.criar.useMutation({
     onSuccess: () => {
@@ -206,6 +256,16 @@ export default function Escalas() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+            {escalasSelecionadas.length > 0 && (
+              <Button 
+                variant="outline"
+                onClick={handleExportarEmLote}
+                className="border-purple-400 text-purple-300 hover:bg-purple-50 hover:text-purple-700"
+              >
+                <Download className="w-5 h-5 mr-2" />
+                Exportar {escalasSelecionadas.length} para Google Calendar
+              </Button>
+            )}
             <Button 
               variant="outline"
               onClick={() => enviarLembretesMutation.mutate({ userId: user?.openId || "" })}
@@ -360,11 +420,31 @@ export default function Escalas() {
           </Select>
         </div>
 
-        {/* Lista de Escalas */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+         {/* Barra de seleção em massa */}
+        {escalasFiltradas && escalasFiltradas.length > 0 && (
+          <div className="flex items-center gap-3 mb-4 p-3 bg-slate-800/50 rounded-lg border border-purple-500/20">
+            <Checkbox 
+              checked={escalasSelecionadas.length === escalasFiltradas.length}
+              onCheckedChange={handleSelecionarTodas}
+            />
+            <span className="text-sm text-purple-200">
+              {escalasSelecionadas.length > 0 
+                ? `${escalasSelecionadas.length} escala(s) selecionada(s)`
+                : "Selecionar todas"}
+            </span>
+          </div>
+        )}
+
+        {/* Listagem de Escalas */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {escalasFiltradas?.map((escala) => (
             <Card key={escala.id} className="p-6 hover:shadow-lg transition-shadow bg-slate-900/80 backdrop-blur-sm border-purple-500/20 hover:border-purple-500/40">
               <div className="flex items-start justify-between mb-4">
+                <Checkbox 
+                  checked={escalasSelecionadas.includes(escala.id)}
+                  onCheckedChange={() => handleToggleSelecao(escala.id)}
+                  className="mt-1 mr-3"
+                />
                 <div className="flex items-center gap-3">
                   {getIconeTipo(escala.tipo)}
                   <div>
