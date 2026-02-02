@@ -15,6 +15,7 @@ import jsPDF from "jspdf";
 import { toast } from "sonner";
 import { UserAutocomplete } from "@/components/UserAutocomplete";
 import { adicionarAoGoogleCalendar } from "@/lib/googleCalendar";
+import { EstatisticasConfirmacao } from "@/components/EstatisticasConfirmacao";
 
 export default function EscalaDetalhes() {
   const { user } = useAuth();
@@ -26,8 +27,14 @@ export default function EscalaDetalhes() {
   const [openShare, setOpenShare] = useState(false);
   const [openEditEscala, setOpenEditEscala] = useState(false);
   const [openEditParticipante, setOpenEditParticipante] = useState(false);
+  const [openDuplicar, setOpenDuplicar] = useState(false);
   const [copied, setCopied] = useState(false);
   const [participanteEditando, setParticipanteEditando] = useState<any>(null);
+
+  // Form state para duplicação
+  const [duplicarData, setDuplicarData] = useState("");
+  const [duplicarHora, setDuplicarHora] = useState("");
+  const [copiarParticipantes, setCopiarParticipantes] = useState(false);
 
   // Form state para edição de escala
   const [editTitulo, setEditTitulo] = useState("");
@@ -108,6 +115,18 @@ export default function EscalaDetalhes() {
     },
   });
 
+  const duplicarEscalaMutation = trpc.escalas.duplicarEscala.useMutation({
+    onSuccess: (data) => {
+      toast.success(data.mensagem);
+      setOpenDuplicar(false);
+      // Redirecionar para a nova escala
+      setLocation(`/escala/${data.novaEscalaId}`);
+    },
+    onError: (error) => {
+      toast.error("Erro ao duplicar escala: " + error.message);
+    },
+  });
+
   const enviarLembretesMutation = trpc.escalas.enviarLembretesEmail.useMutation({
     onSuccess: (data) => {
       toast.success(`Lembretes enviados! ${data.enviados} de ${data.total} emails enviados com sucesso.`);
@@ -176,6 +195,32 @@ export default function EscalaDetalhes() {
       email: editEmail,
       telefone: editTelefone,
       observacoes: editObservacoes,
+    });
+  };
+
+  const handleAbrirDuplicacao = () => {
+    if (escala) {
+      // Sugerir data uma semana depois
+      const dataOriginal = new Date(escala.data);
+      dataOriginal.setDate(dataOriginal.getDate() + 7);
+      setDuplicarData(dataOriginal.toISOString().split('T')[0]);
+      setDuplicarHora(escala.hora || "");
+      setCopiarParticipantes(false);
+      setOpenDuplicar(true);
+    }
+  };
+
+  const handleDuplicarEscala = () => {
+    if (!duplicarData) {
+      toast.error("Selecione uma data para a nova escala");
+      return;
+    }
+
+    duplicarEscalaMutation.mutate({
+      escalaId,
+      novaData: duplicarData,
+      novaHora: duplicarHora,
+      copiarParticipantes,
     });
   };
 
@@ -461,18 +506,29 @@ export default function EscalaDetalhes() {
               <span className="hidden sm:inline">Google Calendar</span>
             </Button>
             {user && escala && escala.userId === user.openId && (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="flex-1 sm:flex-none bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700"
-                onClick={() => enviarLembretesMutation.mutate({ escalaId })}
-                disabled={enviarLembretesMutation.isPending}
-              >
-                <Mail className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
-                <span className="hidden sm:inline">
-                  {enviarLembretesMutation.isPending ? "Enviando..." : "Enviar Lembretes"}
-                </span>
-              </Button>
+              <>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="flex-1 sm:flex-none"
+                  onClick={handleAbrirDuplicacao}
+                >
+                  <Copy className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
+                  <span className="hidden sm:inline">Duplicar</span>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="flex-1 sm:flex-none bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700"
+                  onClick={() => enviarLembretesMutation.mutate({ escalaId })}
+                  disabled={enviarLembretesMutation.isPending}
+                >
+                  <Mail className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
+                  <span className="hidden sm:inline">
+                    {enviarLembretesMutation.isPending ? "Enviando..." : "Enviar Lembretes"}
+                  </span>
+                </Button>
+              </>
             )}
             <Button variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={handleExportarPDF}>
               <FileDown className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
@@ -616,6 +672,11 @@ export default function EscalaDetalhes() {
           </div>
         </Card>
 
+        {/* Estatísticas de Confirmação */}
+        {escala.participantes && escala.participantes.length > 0 && (
+          <EstatisticasConfirmacao participantes={escala.participantes} />
+        )}
+
         {/* Funções e Participantes */}
         <div className="space-y-6">
           {escala.funcoes?.map((funcao: any) => {
@@ -740,6 +801,57 @@ export default function EscalaDetalhes() {
             );
           })}
         </div>
+
+        {/* Modal de Duplicação de Escala */}
+        <Dialog open={openDuplicar} onOpenChange={setOpenDuplicar}>
+          <DialogContent className="animate-in fade-in-0 zoom-in-95 duration-300">
+            <DialogHeader>
+              <DialogTitle>Duplicar Escala</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 mt-4">
+              <p className="text-sm text-muted-foreground">
+                Criar uma cópia desta escala com uma nova data. Você pode optar por copiar os participantes ou começar com uma escala vazia.
+              </p>
+              <div>
+                <Label htmlFor="duplicar-data">Nova Data *</Label>
+                <Input 
+                  id="duplicar-data"
+                  type="date" 
+                  value={duplicarData} 
+                  onChange={(e) => setDuplicarData(e.target.value)} 
+                />
+              </div>
+              <div>
+                <Label htmlFor="duplicar-hora">Horário</Label>
+                <Input 
+                  id="duplicar-hora"
+                  type="time" 
+                  value={duplicarHora} 
+                  onChange={(e) => setDuplicarHora(e.target.value)} 
+                />
+              </div>
+              <div className="flex items-center space-x-2 p-4 border rounded-lg">
+                <input
+                  type="checkbox"
+                  id="copiar-participantes"
+                  checked={copiarParticipantes}
+                  onChange={(e) => setCopiarParticipantes(e.target.checked)}
+                  className="w-4 h-4 text-purple-600 rounded focus:ring-purple-500"
+                />
+                <Label htmlFor="copiar-participantes" className="cursor-pointer">
+                  Copiar participantes (status será resetado para pendente)
+                </Label>
+              </div>
+              <Button 
+                onClick={handleDuplicarEscala} 
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700" 
+                disabled={duplicarEscalaMutation.isPending}
+              >
+                {duplicarEscalaMutation.isPending ? "Duplicando..." : "Duplicar Escala"}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {/* Modal de Edição de Participante */}
         <Dialog open={openEditParticipante} onOpenChange={setOpenEditParticipante}>

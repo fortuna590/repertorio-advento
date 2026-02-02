@@ -1768,3 +1768,51 @@
 - [x] Adicionar toast de confirmação
 - [x] Validar dados antes de salvar (nome obrigatório)
 - [ ] Testar edição de participantes em diferentes escalas
+
+
+## Novas Funcionalidades de Escalas - Fase 3
+
+### Duplicação de Escala
+- [x] Criar procedimento tRPC `duplicarEscala` no backend
+- [x] Copiar dados da escala (título, descrição, tipo, local)
+- [x] Copiar todas as funções da escala
+- [x] Copiar todos os participantes (opcional)
+- [x] Adicionar botão "Duplicar" na página de detalhes da escala
+- [x] Implementar modal de confirmação com opções (nova data, copiar participantes)
+- [x] Adicionar toast de sucesso e redirecionar para nova escala
+- [x] Resetar status dos participantes para pendente
+- [x] Sugerir data uma semana depois automaticamente
+- [ ] Testar duplicação com diferentes tipos de escala
+
+### Sistema de Confirmação Visual com Dashboard
+- [x] Criar componente Card de estatísticas de confirmação
+- [x] Calcular porcentagem de confirmados/pendentes/ausentes
+- [x] Exibir gráfico visual (barra de progresso colorida)
+- [x] Adicionar indicadores coloridos por status (verde/amarelo/vermelho)
+- [x] Mostrar lista de quem confirmou e quem está pendente
+- [x] Implementar na página de detalhes da escala
+- [x] Cards individuais com números e porcentagens
+- [x] Listas detalhadas por status com nome e função
+- [ ] Testar com diferentes cenários de confirmação
+
+### Filtros Avançados de Escalas
+- [ ] Adicionar seletor de mês e ano na listagem de escalas
+- [ ] Implementar filtro por status de confirmação (todas, confirmadas, pendentes)
+- [ ] Adicionar busca por nome de participante
+- [ ] Criar filtro por tipo de escala (Músicos, Reunião, etc)
+- [ ] Implementar ordenação (data, título, tipo)
+- [ ] Adicionar contador de resultados filtrados
+- [ ] Salvar preferências de filtro no localStorage
+- [ ] Testar performance com muitas escalas
+
+### Notificações Automáticas de Lembrete 24h Antes
+- [ ] Criar job/scheduler para verificar escalas próximas
+- [ ] Implementar lógica de envio 24h antes da escala
+- [ ] Enviar email apenas para participantes com status "pendente"
+- [ ] Enviar WhatsApp para quem tem telefone cadastrado
+- [ ] Criar template de email de lembrete
+- [ ] Criar template de WhatsApp de lembrete
+- [ ] Incluir link de confirmação rápida no lembrete
+- [ ] Registrar log de lembretes enviados
+- [ ] Evitar envio duplicado
+- [ ] Testar sistema de agendamento

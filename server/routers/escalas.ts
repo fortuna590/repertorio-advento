@@ -808,6 +808,88 @@ export const escalasRouter = router({
       return historico;
     }),
 
+  // Duplicar escala
+  duplicarEscala: protectedProcedure
+    .input(z.object({
+      escalaId: z.number(),
+      novaData: z.string(),
+      novaHora: z.string().optional(),
+      copiarParticipantes: z.boolean().default(false),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Buscar escala original
+      const [escalaOriginal] = await db.select().from(escalas)
+        .where(eq(escalas.id, input.escalaId));
+      if (!escalaOriginal) throw new Error("Escala não encontrada");
+
+      // Criar nova escala com dados da original
+      const [novaEscala] = await db.insert(escalas).values({
+        userId: escalaOriginal.userId,
+        titulo: `${escalaOriginal.titulo} (Cópia)`,
+        descricao: escalaOriginal.descricao,
+        data: new Date(input.novaData),
+        hora: input.novaHora || escalaOriginal.hora,
+        local: escalaOriginal.local,
+        tipo: escalaOriginal.tipo,
+        template: escalaOriginal.template,
+      });
+
+      const novaEscalaId = novaEscala.insertId;
+
+      // Copiar funções
+      const funcoesOriginais = await db.select().from(funcoesEscala)
+        .where(eq(funcoesEscala.escalaId, input.escalaId));
+
+      const mapFuncoesIds: { [oldId: number]: number } = {};
+
+      for (const funcao of funcoesOriginais) {
+        const [novaFuncao] = await db.insert(funcoesEscala).values({
+          escalaId: novaEscalaId,
+          nome: funcao.nome,
+          descricao: funcao.descricao,
+          ordem: funcao.ordem,
+        });
+        mapFuncoesIds[funcao.id] = novaFuncao.insertId;
+      }
+
+      // Copiar participantes se solicitado
+      if (input.copiarParticipantes) {
+        const participantesOriginais = await db.select().from(participantesEscala)
+          .where(eq(participantesEscala.escalaId, input.escalaId));
+
+        for (const participante of participantesOriginais) {
+          const novaFuncaoId = mapFuncoesIds[participante.funcaoId];
+          if (!novaFuncaoId) continue;
+
+          // Gerar novo token
+          const token = Math.random().toString(36).substring(2) + Date.now().toString(36);
+
+          await db.insert(participantesEscala).values({
+            escalaId: novaEscalaId,
+            funcaoId: novaFuncaoId,
+            userId: participante.userId,
+            nome: participante.nome,
+            email: participante.email,
+            telefone: participante.telefone,
+            status: "pendente", // Resetar status para pendente
+            observacoes: participante.observacoes,
+            token,
+          });
+        }
+      }
+
+      return { 
+        success: true, 
+        novaEscalaId,
+        mensagem: input.copiarParticipantes 
+          ? "Escala duplicada com sucesso, incluindo participantes!"
+          : "Escala duplicada com sucesso!"
+      };
+    }),
+
   // Enviar lembretes por email
   enviarLembretesEmail: protectedProcedure
     .input(z.object({
