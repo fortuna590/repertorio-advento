@@ -1827,7 +1827,10 @@
 - [x] Adicionar logs de debug no backend
 - [x] Identificar causa raiz: título contém data antiga e não é atualizado
 - [x] Implementar atualização automática do título quando data for alterada
-- [ ] Testar atualização de data e verificar se título é atualizado
+- [x] Testar atualização de data - PROBLEMA DE TIMEZONE: mostra 1 dia a menos
+- [x] Corrigir conversão de data para evitar problema de timezone (GMT-3)
+- [x] Usar split de string ao invés de new Date() para evitar conversão de timezone
+- [ ] Testar novamente para confirmar que data está correta
 
 ### Bug 3: Cores do dashboard de confirmações fora do padrão
 - [x] Ajustar cores para padrão roxo/rosa do LouvaMais

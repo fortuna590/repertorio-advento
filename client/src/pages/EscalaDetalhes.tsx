@@ -166,8 +166,14 @@ export default function EscalaDetalhes() {
     // Atualizar título se contiver data antiga
     let tituloAtualizado = editTitulo;
     if (escala) {
-      const dataAntigaFormatada = new Date(escala.data).toLocaleDateString('pt-BR');
-      const dataNovaFormatada = new Date(editData).toLocaleDateString('pt-BR');
+      // Converter data antiga (formato YYYY-MM-DD ou Date) para DD/MM/YYYY sem timezone
+      const dataAntigaStr = typeof escala.data === 'string' ? escala.data : escala.data.toISOString().split('T')[0];
+      const [anoAntigo, mesAntigo, diaAntigo] = dataAntigaStr.split('-');
+      const dataAntigaFormatada = `${diaAntigo}/${mesAntigo}/${anoAntigo}`;
+      
+      // Converter data nova (formato YYYY-MM-DD) para DD/MM/YYYY
+      const [anoNovo, mesNovo, diaNovo] = editData.split('-');
+      const dataNovaFormatada = `${diaNovo}/${mesNovo}/${anoNovo}`;
       
       // Se o título contém a data antiga, substituir pela nova
       if (tituloAtualizado.includes(dataAntigaFormatada)) {
