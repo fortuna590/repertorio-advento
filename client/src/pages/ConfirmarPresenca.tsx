@@ -75,11 +75,20 @@ export default function ConfirmarPresenca() {
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Calendar className="w-4 h-4" />
                 {(() => {
-                  const dataStr = info.data.toString();
+                  // Se for Date object, extrair componentes diretamente
+                  if (info.data instanceof Date) {
+                    const ano = info.data.getFullYear();
+                    const mes = String(info.data.getMonth() + 1).padStart(2, '0');
+                    const dia = String(info.data.getDate()).padStart(2, '0');
+                    return `${dia}/${mes}/${ano}`;
+                  }
+                  // Se for string no formato YYYY-MM-DD
+                  const dataStr = String(info.data);
                   if (dataStr.includes('-')) {
                     const [ano, mes, dia] = dataStr.split('T')[0].split('-');
                     return `${dia}/${mes}/${ano}`;
                   }
+                  // Fallback
                   return new Date(info.data).toLocaleDateString("pt-BR");
                 })()}
               </div>
@@ -135,11 +144,20 @@ export default function ConfirmarPresenca() {
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <Calendar className="w-4 h-4" />
                   {(() => {
-                    const dataStr = info.data.toString();
+                    // Se for Date object, extrair componentes diretamente
+                    if (info.data instanceof Date) {
+                      const ano = info.data.getFullYear();
+                      const mes = String(info.data.getMonth() + 1).padStart(2, '0');
+                      const dia = String(info.data.getDate()).padStart(2, '0');
+                      return `${dia}/${mes}/${ano}`;
+                    }
+                    // Se for string no formato YYYY-MM-DD
+                    const dataStr = String(info.data);
                     if (dataStr.includes('-')) {
                       const [ano, mes, dia] = dataStr.split('T')[0].split('-');
                       return `${dia}/${mes}/${ano}`;
                     }
+                    // Fallback
                     return new Date(info.data).toLocaleDateString("pt-BR");
                   })()}
                 </div>

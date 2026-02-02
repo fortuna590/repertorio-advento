@@ -1934,3 +1934,14 @@
 - [x] Corrigir conversão de data em ConfirmarPresenca.tsx (2 ocorrências)
 - [x] Aplicar solução: split de string direto sem passar por Date object
 - [x] Testar com diferentes datas
+
+
+## Bug Urgente - Data undefined/undefined/ ✅ CORRIGIDO
+
+- [x] Investigar por que a data está aparecendo como "undefined/undefined/" no card de informações
+- [x] Verificar se escala.data está vindo como Date object ao invés de string
+- [x] Ajustar lógica de formatação para suportar ambos os formatos (Date e string)
+- [x] Implementar detecção de Date object com instanceof
+- [x] Usar getFullYear(), getMonth(), getDate() para extrair componentes
+- [x] Aplicar correção em todos os 4 arquivos
+- [x] Testar com escalas existentes no banco

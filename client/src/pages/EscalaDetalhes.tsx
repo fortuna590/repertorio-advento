@@ -666,11 +666,20 @@ export default function EscalaDetalhes() {
               <Calendar className="w-5 h-5 text-purple-400" />
               <span className="font-semibold">Data:</span>
               {(() => {
-                const dataStr = escala.data.toString();
+                // Se for Date object, extrair componentes diretamente
+                if (escala.data instanceof Date) {
+                  const ano = escala.data.getFullYear();
+                  const mes = String(escala.data.getMonth() + 1).padStart(2, '0');
+                  const dia = String(escala.data.getDate()).padStart(2, '0');
+                  return `${dia}/${mes}/${ano}`;
+                }
+                // Se for string no formato YYYY-MM-DD
+                const dataStr = String(escala.data);
                 if (dataStr.includes('-')) {
                   const [ano, mes, dia] = dataStr.split('T')[0].split('-');
                   return `${dia}/${mes}/${ano}`;
                 }
+                // Fallback
                 return new Date(escala.data).toLocaleDateString("pt-BR");
               })()}
             </div>
