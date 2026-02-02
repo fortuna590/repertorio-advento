@@ -163,9 +163,21 @@ export default function EscalaDetalhes() {
       return;
     }
 
+    // Atualizar título se contiver data antiga
+    let tituloAtualizado = editTitulo;
+    if (escala) {
+      const dataAntigaFormatada = new Date(escala.data).toLocaleDateString('pt-BR');
+      const dataNovaFormatada = new Date(editData).toLocaleDateString('pt-BR');
+      
+      // Se o título contém a data antiga, substituir pela nova
+      if (tituloAtualizado.includes(dataAntigaFormatada)) {
+        tituloAtualizado = tituloAtualizado.replace(dataAntigaFormatada, dataNovaFormatada);
+      }
+    }
+
     atualizarEscalaMutation.mutate({
       escalaId,
-      titulo: editTitulo,
+      titulo: tituloAtualizado,
       descricao: editDescricao,
       data: editData,
       hora: editHora,

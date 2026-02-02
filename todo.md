@@ -1821,10 +1821,21 @@
 ## Bugs Críticos
 
 ### Bug 1: Data não atualiza ao editar escala
-- [ ] Investigar por que data editada não é salva (mostra data antiga)
-- [ ] Verificar procedimento tRPC `atualizarEscala`
-- [ ] Verificar se campo `data` está sendo enviado corretamente
-- [ ] Testar atualização de data e verificar persistência
+- [x] Investigar por que data editada não é salva (mostra data antiga)
+- [x] Verificar procedimento tRPC `atualizarEscala` - procedimento correto
+- [x] Verificar se campo `data` está sendo enviado corretamente - campo sendo enviado
+- [x] Adicionar logs de debug no backend
+- [x] Identificar causa raiz: título contém data antiga e não é atualizado
+- [x] Implementar atualização automática do título quando data for alterada
+- [ ] Testar atualização de data e verificar se título é atualizado
+
+### Bug 3: Cores do dashboard de confirmações fora do padrão
+- [x] Ajustar cores para padrão roxo/rosa do LouvaMais
+- [x] Corrigir texto invisível (branco sobre branco)
+- [x] Usar cores do tema: roxo para confirmados, rosa para pendentes, cinza para ausentes
+- [x] Ajustar fundo do card para tema escuro com gradiente roxo
+- [x] Atualizar barra de progresso com cores do tema
+- [ ] Testar visualização no mobile
 
 ### Bug 2: Escalas confirmadas não aparecem em "Minhas Escalas"
 - [x] Investigar por que escalas confirmadas não aparecem em "Minhas Escalas"
