@@ -1738,3 +1738,33 @@
 - [ ] Adicionar ordem recomendada das cenas
 - [ ] Adicionar dicas de transições e efeitos
 - [ ] Exportar guia em formato otimizado para Canva
+
+
+## Melhorias no Gerenciamento de Escalas - Edição e Flexibilidade
+
+### Editar Tipo de Escala Após Criação
+- [x] Adicionar campo de seleção de tipo na tela de edição de escala
+- [x] Permitir alteração entre Músicos, Reunião, Grupo de Oração e Personalizado
+- [x] Atualizar procedimento tRPC `atualizarEscala` para aceitar mudança de tipo
+- [x] Adicionar Select com ícones no modal de edição
+- [ ] Testar mudança de tipo em escalas existentes
+
+### Adicionar Participantes em Escalas Existentes
+- [x] Criar botão "Adicionar Participante" na visualização de detalhes da escala
+- [x] Implementar modal/formulário para adicionar novo participante
+- [x] Criar procedimento tRPC `adicionarParticipante` para escalas existentes
+- [x] Validar dados do novo participante (nome, função, email, observações)
+- [x] Atualizar lista de participantes em tempo real após adição
+- [x] Adicionar toast de confirmação
+- [x] Sistema de autocomplete de usuários cadastrados
+- [x] Verificação de conflitos de agendamento
+
+### Editar Participantes Existentes Sem Excluir
+- [x] Adicionar botão "Editar" (ícone de lápis) em cada participante da lista
+- [x] Implementar modal/formulário de edição de participante
+- [x] Usar procedimento tRPC `atualizarParticipante` existente
+- [x] Permitir alteração de: nome, email, telefone, observações
+- [x] Atualizar lista em tempo real após edição
+- [x] Adicionar toast de confirmação
+- [x] Validar dados antes de salvar (nome obrigatório)
+- [ ] Testar edição de participantes em diferentes escalas

@@ -121,6 +121,7 @@ export const escalasRouter = router({
       data: z.string().optional(),
       hora: z.string().optional(),
       local: z.string().optional(),
+      tipo: z.enum(["musicos", "reuniao", "grupo_oracao", "personalizado"]).optional(),
     }))
     .mutation(async ({ input }: { input: any }) => {
       const db = await getDb();

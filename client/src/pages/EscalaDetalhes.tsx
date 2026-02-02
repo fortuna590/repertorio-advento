@@ -25,7 +25,9 @@ export default function EscalaDetalhes() {
   const [openAddParticipante, setOpenAddParticipante] = useState(false);
   const [openShare, setOpenShare] = useState(false);
   const [openEditEscala, setOpenEditEscala] = useState(false);
+  const [openEditParticipante, setOpenEditParticipante] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [participanteEditando, setParticipanteEditando] = useState<any>(null);
 
   // Form state para edição de escala
   const [editTitulo, setEditTitulo] = useState("");
@@ -33,13 +35,20 @@ export default function EscalaDetalhes() {
   const [editData, setEditData] = useState("");
   const [editHora, setEditHora] = useState("");
   const [editLocal, setEditLocal] = useState("");
+  const [editTipo, setEditTipo] = useState<"musicos" | "reuniao" | "grupo_oracao" | "personalizado">("musicos");
 
-  // Form state
+  // Form state para adicionar participante
   const [funcaoId, setFuncaoId] = useState<number>(0);
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [telefone, setTelefone] = useState("");
   const [observacoes, setObservacoes] = useState("");
+
+  // Form state para editar participante
+  const [editNome, setEditNome] = useState("");
+  const [editEmail, setEditEmail] = useState("");
+  const [editTelefone, setEditTelefone] = useState("");
+  const [editObservacoes, setEditObservacoes] = useState("");
 
   // Queries
   const { data: escala, refetch } = trpc.escalas.buscarPorId.useQuery({ escalaId });
@@ -87,6 +96,18 @@ export default function EscalaDetalhes() {
     },
   });
 
+  const atualizarParticipanteMutation = trpc.escalas.atualizarParticipante.useMutation({
+    onSuccess: () => {
+      toast.success("Participante atualizado com sucesso!");
+      refetch();
+      setOpenEditParticipante(false);
+      setParticipanteEditando(null);
+    },
+    onError: (error) => {
+      toast.error("Erro ao atualizar participante: " + error.message);
+    },
+  });
+
   const enviarLembretesMutation = trpc.escalas.enviarLembretesEmail.useMutation({
     onSuccess: (data) => {
       toast.success(`Lembretes enviados! ${data.enviados} de ${data.total} emails enviados com sucesso.`);
@@ -112,6 +133,7 @@ export default function EscalaDetalhes() {
       setEditData(typeof escala.data === 'string' ? escala.data : new Date(escala.data).toISOString().split('T')[0]);
       setEditHora(escala.hora || "");
       setEditLocal(escala.local || "");
+      setEditTipo(escala.tipo as any);
       setOpenEditEscala(true);
     }
   };
@@ -129,6 +151,31 @@ export default function EscalaDetalhes() {
       data: editData,
       hora: editHora,
       local: editLocal,
+      tipo: editTipo,
+    });
+  };
+
+  const handleAbrirEdicaoParticipante = (participante: any) => {
+    setParticipanteEditando(participante);
+    setEditNome(participante.nome);
+    setEditEmail(participante.email || "");
+    setEditTelefone(participante.telefone || "");
+    setEditObservacoes(participante.observacoes || "");
+    setOpenEditParticipante(true);
+  };
+
+  const handleSalvarEdicaoParticipante = () => {
+    if (!editNome) {
+      toast.error("O nome é obrigatório");
+      return;
+    }
+
+    atualizarParticipanteMutation.mutate({
+      participanteId: participanteEditando.id,
+      nome: editNome,
+      email: editEmail,
+      telefone: editTelefone,
+      observacoes: editObservacoes,
     });
   };
 
@@ -511,6 +558,20 @@ export default function EscalaDetalhes() {
                     placeholder="Ex: Igreja Matriz"
                   />
                 </div>
+                <div>
+                  <Label htmlFor="edit-tipo">Tipo de Escala</Label>
+                  <Select value={editTipo} onValueChange={(value: any) => setEditTipo(value)}>
+                    <SelectTrigger id="edit-tipo">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="musicos">🎵 Músicos</SelectItem>
+                      <SelectItem value="reuniao">💼 Reunião</SelectItem>
+                      <SelectItem value="grupo_oracao">🙏 Grupo de Oração</SelectItem>
+                      <SelectItem value="personalizado">✨ Personalizado</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
                 <Button
                   onClick={handleAtualizarEscala}
                   className="w-full"
@@ -640,6 +701,14 @@ export default function EscalaDetalhes() {
                               <LinkIcon className="w-4 h-4 text-purple-600" />
                             </Button>
                           )}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleAbrirEdicaoParticipante(participante)}
+                            title="Editar participante"
+                          >
+                            <Edit className="w-4 h-4 text-blue-600" />
+                          </Button>
                           <Select
                             value={participante.status}
                             onValueChange={(value) => handleAtualizarStatus(participante.id, value as any)}
@@ -671,6 +740,57 @@ export default function EscalaDetalhes() {
             );
           })}
         </div>
+
+        {/* Modal de Edição de Participante */}
+        <Dialog open={openEditParticipante} onOpenChange={setOpenEditParticipante}>
+          <DialogContent className="animate-in fade-in-0 zoom-in-95 duration-300">
+            <DialogHeader>
+              <DialogTitle>Editar Participante</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 mt-4">
+              <div>
+                <Label>Nome *</Label>
+                <Input 
+                  value={editNome} 
+                  onChange={(e) => setEditNome(e.target.value)} 
+                  placeholder="Nome completo" 
+                />
+              </div>
+              <div>
+                <Label>E-mail</Label>
+                <Input 
+                  type="email" 
+                  value={editEmail} 
+                  onChange={(e) => setEditEmail(e.target.value)} 
+                  placeholder="email@exemplo.com" 
+                />
+              </div>
+              <div>
+                <Label>Telefone</Label>
+                <Input 
+                  value={editTelefone} 
+                  onChange={(e) => setEditTelefone(e.target.value)} 
+                  placeholder="(00) 00000-0000" 
+                />
+              </div>
+              <div>
+                <Label>Observações</Label>
+                <Textarea 
+                  value={editObservacoes} 
+                  onChange={(e) => setEditObservacoes(e.target.value)} 
+                  placeholder="Informações adicionais..." 
+                />
+              </div>
+              <Button 
+                onClick={handleSalvarEdicaoParticipante} 
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700" 
+                disabled={atualizarParticipanteMutation.isPending}
+              >
+                {atualizarParticipanteMutation.isPending ? "Salvando..." : "Salvar Alterações"}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
       </div>
     </div>
