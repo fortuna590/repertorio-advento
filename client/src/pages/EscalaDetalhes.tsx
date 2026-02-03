@@ -9,13 +9,56 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Textarea } from "../components/ui/textarea";
-import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2, FileDown, Link as LinkIcon, CalendarPlus, Edit } from "lucide-react";
+import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2, FileDown, Link as LinkIcon, CalendarPlus, Edit, AlertTriangle, FileSpreadsheet } from "lucide-react";
 import { EscalasNavigation } from "@/components/EscalasNavigation";
 import jsPDF from "jspdf";
 import { toast } from "sonner";
 import { UserAutocomplete } from "@/components/UserAutocomplete";
 import { adicionarAoGoogleCalendar } from "@/lib/googleCalendar";
+import * as XLSX from 'xlsx';
 import { EstatisticasConfirmacao } from "@/components/EstatisticasConfirmacao";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+
+// Componente para exibir badge de conflito
+function ConflitoBadge({ participante, escalaId }: { participante: any; escalaId: number }) {
+  const { data: conflitosData } = trpc.escalas.verificarConflitos.useQuery({
+    email: participante.email || undefined,
+    telefone: participante.telefone || undefined,
+    escalaId,
+  }, {
+    enabled: !!(participante.email || participante.telefone),
+  });
+
+  const conflitos = conflitosData?.conflitos || [];
+
+  if (conflitos.length === 0) return null;
+
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="flex items-center gap-1 px-2 py-1 bg-yellow-900/50 border border-yellow-500/50 rounded text-yellow-300 text-xs cursor-help">
+            <AlertTriangle className="w-3 h-3" />
+            <span>Conflito</span>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent className="max-w-xs">
+          <div className="space-y-2">
+            <p className="font-semibold">Escalado em outro horário no mesmo dia:</p>
+            {conflitos.map((conflito: any, idx: number) => (
+              <div key={idx} className="text-sm">
+                <p className="font-medium">{conflito.titulo}</p>
+                <p className="text-muted-foreground">
+                  {conflito.hora || "Horário não definido"} - {conflito.funcao}
+                </p>
+              </div>
+            ))}
+          </div>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
 
 export default function EscalaDetalhes() {
   const { user } = useAuth();
@@ -441,6 +484,83 @@ export default function EscalaDetalhes() {
     toast.success("PDF exportado com sucesso!");
   };
 
+  const handleExportarExcel = () => {
+    if (!escala) return;
+
+    // Preparar dados para a planilha
+    const dadosExcel: any[] = [];
+
+    // Adicionar informações da escala no topo
+    dadosExcel.push(["LISTA DE PRESENÇA - " + escala.titulo.toUpperCase()]);
+    dadosExcel.push([]);
+    
+    const dataFormatada = (() => {
+      if (escala.data instanceof Date) {
+        const ano = escala.data.getFullYear();
+        const mes = String(escala.data.getMonth() + 1).padStart(2, '0');
+        const dia = String(escala.data.getDate()).padStart(2, '0');
+        return `${dia}/${mes}/${ano}`;
+      }
+      const dataStr = String(escala.data);
+      if (dataStr.includes('-')) {
+        const [ano, mes, dia] = dataStr.split('T')[0].split('-');
+        return `${dia}/${mes}/${ano}`;
+      }
+      return new Date(escala.data).toLocaleDateString("pt-BR");
+    })();
+
+    dadosExcel.push(["Data:", dataFormatada]);
+    if (escala.hora) dadosExcel.push(["Horário:", escala.hora]);
+    if (escala.local) dadosExcel.push(["Local:", escala.local]);
+    if (escala.descricao) dadosExcel.push(["Descrição:", escala.descricao]);
+    dadosExcel.push([]);
+
+    // Adicionar participantes por função
+    escala.funcoes?.forEach((funcao: any) => {
+      const participantes = escala.participantes?.filter((p: any) => p.funcaoId === funcao.id);
+      
+      if (participantes && participantes.length > 0) {
+        dadosExcel.push([funcao.nome.toUpperCase()]);
+        dadosExcel.push(["Nome", "Email", "Telefone", "Status", "Observações"]);
+        
+        participantes.forEach((participante: any) => {
+          const statusTexto = participante.status === "confirmado" ? "Confirmado" : 
+                             participante.status === "ausente" ? "Ausente" : "Pendente";
+          
+          dadosExcel.push([
+            participante.nome,
+            participante.email || "-",
+            participante.telefone || "-",
+            statusTexto,
+            participante.observacoes || "-"
+          ]);
+        });
+        
+        dadosExcel.push([]);
+      }
+    });
+
+    // Criar workbook e worksheet
+    const ws = XLSX.utils.aoa_to_sheet(dadosExcel);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Lista de Presença");
+
+    // Ajustar largura das colunas
+    const colWidths = [
+      { wch: 30 }, // Nome
+      { wch: 30 }, // Email
+      { wch: 15 }, // Telefone
+      { wch: 12 }, // Status
+      { wch: 40 }, // Observações
+    ];
+    ws['!cols'] = colWidths;
+
+    // Salvar arquivo
+    const nomeArquivo = `lista-presenca-${escala.titulo.replace(/\s+/g, '-').toLowerCase()}.xlsx`;
+    XLSX.writeFile(wb, nomeArquivo);
+    toast.success("Planilha Excel exportada com sucesso!");
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "confirmado":
@@ -550,7 +670,11 @@ export default function EscalaDetalhes() {
             )}
             <Button variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={handleExportarPDF}>
               <FileDown className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
-              <span className="hidden sm:inline">Exportar PDF</span>
+              <span className="hidden sm:inline">PDF</span>
+            </Button>
+            <Button variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={handleExportarExcel}>
+              <FileSpreadsheet className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
+              <span className="hidden sm:inline">Excel</span>
             </Button>
             <Dialog open={openShare} onOpenChange={setOpenShare}>
               <DialogTrigger asChild>
@@ -776,7 +900,10 @@ export default function EscalaDetalhes() {
                     {participantes.map((participante: any) => (
                       <div key={participante.id} className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 border border-purple-500/30 rounded-lg bg-slate-900/30">
                         <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-white truncate">{participante.nome}</p>
+                          <div className="flex items-center gap-2">
+                            <p className="font-semibold text-white truncate">{participante.nome}</p>
+                            <ConflitoBadge participante={participante} escalaId={escalaId} />
+                          </div>
                           {participante.email && <p className="text-sm text-purple-300 truncate">{participante.email}</p>}
                           {participante.telefone && <p className="text-sm text-purple-300">{participante.telefone}</p>}
                           {participante.observacoes && <p className="text-sm text-purple-400 mt-1 line-clamp-2">{participante.observacoes}</p>}

@@ -979,4 +979,69 @@ export const escalasRouter = router({
         erros,
       };
     }),
+
+  // Verificar conflitos de horário de um participante
+  verificarConflitos: publicProcedure
+    .input(z.object({
+      email: z.string().optional(),
+      telefone: z.string().optional(),
+      escalaId: z.number(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) return { conflitos: [] };
+
+      // Buscar escala atual
+      const [escalaAtual] = await db.select().from(escalas).where(eq(escalas.id, input.escalaId));
+      if (!escalaAtual) return { conflitos: [] };
+
+      // Buscar participações do mesmo email/telefone
+      const condicoes = [];
+      if (input.email) {
+        condicoes.push(eq(participantesEscala.email, input.email));
+      }
+      if (input.telefone) {
+        condicoes.push(eq(participantesEscala.telefone, input.telefone));
+      }
+
+      if (condicoes.length === 0) return { conflitos: [] };
+
+      // Buscar todas as participações do usuário
+      const participacoes = await db.select()
+        .from(participantesEscala)
+        .where(or(...condicoes));
+
+      const conflitos = [];
+
+      // Para cada participação, verificar se há conflito de horário
+      for (const participacao of participacoes) {
+        if (participacao.escalaId === input.escalaId) continue;
+
+        const [outraEscala] = await db.select().from(escalas)
+          .where(eq(escalas.id, participacao.escalaId));
+
+        if (!outraEscala) continue;
+
+        // Verificar se é no mesmo dia
+        const dataAtual = new Date(escalaAtual.data).toDateString();
+        const dataOutra = new Date(outraEscala.data).toDateString();
+
+        if (dataAtual === dataOutra) {
+          // Buscar função do participante
+          const [funcao] = await db.select().from(funcoesEscala)
+            .where(eq(funcoesEscala.id, participacao.funcaoId));
+
+          conflitos.push({
+            escalaId: outraEscala.id,
+            titulo: outraEscala.titulo,
+            data: outraEscala.data,
+            hora: outraEscala.hora,
+            funcao: funcao?.nome || "Não especificada",
+            status: participacao.status,
+          });
+        }
+      }
+
+      return { conflitos };
+    }),
 });

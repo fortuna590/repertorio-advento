@@ -1945,3 +1945,27 @@
 - [x] Usar getFullYear(), getMonth(), getDate() para extrair componentes
 - [x] Aplicar correção em todos os 4 arquivos
 - [x] Testar com escalas existentes no banco
+
+
+## Novas Funcionalidades - Conflitos e Exportação ✅
+
+### Indicador Visual de Conflitos de Horário ✅
+- [x] Criar endpoint backend para detectar conflitos de horário
+- [x] Verificar se músico está escalado em outro horário no mesmo dia
+- [x] Retornar informações do conflito (escala, horário, função, status)
+- [x] Adicionar badge visual de alerta amarelo no frontend
+- [x] Mostrar tooltip com detalhes do conflito ao passar mouse
+- [x] Implementar componente ConflitoBadge reutilizável
+- [x] Integrar com trpc.escalas.verificarConflitos
+- [x] Testar com múltiplas escalas no mesmo dia
+
+### Exportação de Lista de Presença em Excel ✅
+- [x] Verificar se biblioteca xlsx já está instalada (v0.18.5)
+- [x] Criar função de exportação Excel no frontend (handleExportarExcel)
+- [x] Incluir colunas: Nome, Email, Telefone, Status, Observações
+- [x] Adicionar informações da escala no topo (título, data, hora, local)
+- [x] Organizar participantes por função
+- [x] Ajustar largura automática das colunas
+- [x] Adicionar botão de exportar Excel no painel de detalhes
+- [x] Usar formatação de data consistente (sem problema de timezone)
+- [x] Testar download do arquivo
