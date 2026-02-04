@@ -1034,23 +1034,41 @@ export default function EscalaDetalhes() {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => {
+                                  console.log("[WhatsApp] Participante:", participante);
+                                  console.log("[WhatsApp] Telefone:", participante.telefone);
+                                  console.log("[WhatsApp] Token:", participante.token);
+                                  
                                   if (!participante.telefone) {
+                                    console.error("[WhatsApp] Erro: Participante sem telefone");
                                     toast.error("Participante sem telefone cadastrado");
                                     return;
                                   }
                                   if (!participante.token) {
+                                    console.error("[WhatsApp] Erro: Token não encontrado");
                                     toast.error("Token de confirmação não encontrado");
                                     return;
                                   }
+                                  
                                   const linkConfirmacao = `${window.location.origin}/confirmar/${participante.token}`;
                                   const mensagem = `Olá ${participante.nome}! Você foi convidado(a) para participar da escala *${escala?.titulo}* no dia ${new Date(escala?.data || '').toLocaleDateString('pt-BR')}${escala?.hora ? ` às ${escala.hora}` : ''}. Por favor, confirme sua presença clicando no link: ${linkConfirmacao}`;
                                   const telefone = participante.telefone.replace(/\D/g, '');
                                   const urlWhatsApp = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
-                                  window.open(urlWhatsApp, '_blank');
-                                  toast.success("Abrindo WhatsApp...");
+                                  
+                                  console.log("[WhatsApp] URL gerada:", urlWhatsApp);
+                                  console.log("[WhatsApp] Abrindo janela...");
+                                  
+                                  const janela = window.open(urlWhatsApp, '_blank');
+                                  if (!janela) {
+                                    console.error("[WhatsApp] Pop-up bloqueado pelo navegador");
+                                    toast.error("Pop-up bloqueado! Permita pop-ups para este site.");
+                                  } else {
+                                    console.log("[WhatsApp] Janela aberta com sucesso");
+                                    toast.success("Abrindo WhatsApp...");
+                                  }
                                 }}
-                                title="Compartilhar por WhatsApp"
+                                title={participante.telefone ? "Compartilhar por WhatsApp" : "Adicione um telefone para compartilhar"}
                                 disabled={!participante.telefone}
+                                className={!participante.telefone ? "opacity-50 cursor-not-allowed" : ""}
                               >
                                 <MessageCircle className="w-4 h-4 text-green-600" />
                               </Button>

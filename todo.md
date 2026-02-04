@@ -2066,3 +2066,17 @@
 - [x] Adicionar toast de sucesso "Abrindo WhatsApp..."
 - [x] Melhorar tratamento de erros
 - [ ] Testar em diferentes dispositivos (aguardando feedback do usuário)
+
+
+## Bug Crítico - Botão WhatsApp Não Funciona ✅ RESOLVIDO
+- [x] Investigar por que botão verde do WhatsApp não abre conversa
+- [x] Verificar se participante Emily tem telefone cadastrado no banco (CAUSA RAIZ)
+- [x] Verificar se token está sendo gerado corretamente
+- [x] Adicionar console.log para debug
+- [x] Adicionar detecção de pop-up bloqueado
+- [x] Melhorar tooltip para indicar quando botão está desabilitado
+- [x] Adicionar opacidade visual quando desabilitado
+- [x] Testado e funcionando após adicionar telefone
+
+**Causa:** Botão estava corretamente desabilitado porque participante não tinha telefone cadastrado.
+**Solução:** Melhorado feedback visual e tooltip explicativo.
