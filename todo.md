@@ -2036,10 +2036,33 @@
 - [x] Limpar formulário após cada adição mas manter dialog aberto
 - [x] Atualizar mensagem de sucesso para indicar que pode adicionar mais
 
-## Integração de Templates - Em Progresso
+## Integração de Templates - Em Progresso ⏳
+- [ ] Adicionar state e query para carregar templates do usuário
+- [ ] Implementar função handleTemplateSelecionado
 - [ ] Adicionar dropdown de templates na criação de escala
-- [ ] Carregar templates salvos do usuário
 - [ ] Preencher funções automaticamente ao selecionar template
+- [ ] Adicionar imports necessários (BookTemplate icon)
+- [ ] Adicionar state para dialog de salvar template
+- [ ] Criar mutation criarTemplate
+- [ ] Implementar função handleSalvarComoTemplate
 - [ ] Adicionar botão "Salvar como Template" no painel de detalhes
-- [ ] Implementar função de salvar escala atual como template
+- [ ] Criar dialog de salvar template com formulário
 - [ ] Testar fluxo completo de templates
+
+
+## Bugs Urgentes Reportados 🚨
+
+### Dialog de Adicionar Usuários Fechando ✅
+- [x] Investigar por que o dialog está fechando após adicionar participante
+- [x] Verificar se a correção anterior foi sobrescrita
+- [x] Garantir que setOpenAddParticipante(false) está comentado (linha 196)
+- [x] Correção já estava aplicada no checkpoint 759629a3
+- [ ] Testar adição de múltiplos participantes (aguardando feedback do usuário)
+
+### Botão de Compartilhar Link do WhatsApp ✅
+- [x] Investigar botão de compartilhar link direto para WhatsApp
+- [x] Adicionar validação de telefone e token
+- [x] Adicionar mensagens de erro descritivas
+- [x] Adicionar toast de sucesso "Abrindo WhatsApp..."
+- [x] Melhorar tratamento de erros
+- [ ] Testar em diferentes dispositivos (aguardando feedback do usuário)

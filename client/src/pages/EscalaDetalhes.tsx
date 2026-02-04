@@ -1034,10 +1034,20 @@ export default function EscalaDetalhes() {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => {
+                                  if (!participante.telefone) {
+                                    toast.error("Participante sem telefone cadastrado");
+                                    return;
+                                  }
+                                  if (!participante.token) {
+                                    toast.error("Token de confirmação não encontrado");
+                                    return;
+                                  }
                                   const linkConfirmacao = `${window.location.origin}/confirmar/${participante.token}`;
                                   const mensagem = `Olá ${participante.nome}! Você foi convidado(a) para participar da escala *${escala?.titulo}* no dia ${new Date(escala?.data || '').toLocaleDateString('pt-BR')}${escala?.hora ? ` às ${escala.hora}` : ''}. Por favor, confirme sua presença clicando no link: ${linkConfirmacao}`;
-                                  const urlWhatsApp = `https://wa.me/${participante.telefone?.replace(/\D/g, '')}?text=${encodeURIComponent(mensagem)}`;
+                                  const telefone = participante.telefone.replace(/\D/g, '');
+                                  const urlWhatsApp = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
                                   window.open(urlWhatsApp, '_blank');
+                                  toast.success("Abrindo WhatsApp...");
                                 }}
                                 title="Compartilhar por WhatsApp"
                                 disabled={!participante.telefone}
