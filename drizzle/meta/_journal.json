@@ -148,6 +148,13 @@
       "when": 1769735880951,
       "tag": "0020_pink_harpoon",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "5",
+      "when": 1770170107876,
+      "tag": "0021_salty_black_cat",
+      "breakpoints": true
     }
   ]
 }

@@ -1969,3 +1969,33 @@
 - [x] Adicionar botão de exportar Excel no painel de detalhes
 - [x] Usar formatação de data consistente (sem problema de timezone)
 - [x] Testar download do arquivo
+
+
+## Novas Funcionalidades - Histórico e Templates ✅
+
+### Histórico de Alterações da Escala ✅
+- [x] Criar tabela `historico_escalas` no schema do banco
+- [x] Campos: id, escalaId, userId, userName, tipoAcao, descricao, dadosAnteriores, dadosNovos, createdAt
+- [x] Tipos de ação: criacao, edicao, adicao_participante, remocao_participante, alteracao_status, edicao_participante, duplicacao
+- [x] Criar endpoint backend para registrar alterações (escalas.registrarHistorico)
+- [x] Criar endpoint backend para buscar histórico de uma escala (escalas.buscarHistorico)
+- [x] Criar componente HistoricoTimeline no frontend
+- [x] Adicionar aba "Histórico" no painel de detalhes da escala usando Tabs
+- [x] Exibir timestamp formatado e nome do responsável
+- [x] Ícones coloridos por tipo de ação
+- [x] Layout de timeline com cards
+
+### Templates de Escalas Personalizados ✅
+- [x] Criar tabela `templates_escalas` no schema do banco
+- [x] Campos: id, userId, nome, descricao, tipo, funcoes (JSON), createdAt, updatedAt
+- [x] Criar endpoints backend para CRUD de templates
+- [x] Criar página de gestão de templates (/templates)
+- [x] Permitir criar template com nome, descrição, tipo e funções
+- [x] Permitir editar templates existentes
+- [x] Permitir excluir templates
+- [x] Interface com grid de cards mostrando templates
+- [x] Dialog de criação/edição com formulário completo
+- [x] Adicionar/remover funções dinamicamente
+- [x] Rota /templates adicionada ao App.tsx
+
+**Nota:** Registro automático de histórico e uso de templates na criação de escalas serão implementados em fase futura

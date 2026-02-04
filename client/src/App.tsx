@@ -48,6 +48,7 @@ import Escalas from "./pages/Escalas";
 import EscalaDetalhes from "./pages/EscalaDetalhes";
 import ConfirmarPresenca from "./pages/ConfirmarPresenca";
 import MinhasEscalas from "./pages/MinhasEscalas";
+import Templates from "./pages/Templates";
 import AdminUsuarios from "./pages/AdminUsuarios";
 import AdminLogs from "./pages/AdminLogs";
 import Moderador from "./pages/Moderador";
@@ -101,6 +102,7 @@ function Router() {
       <Route path="/repertorio-admin/:id" component={RepertorioAdminDetalhes} />
       <Route path="/repertorio-base-admin/:id" component={RepertorioBaseAdmin} />
       <Route path="/escalas" component={Escalas} />
+      <Route path="/templates" component={Templates} />
       <Route path="/minhas-escalas" component={MinhasEscalas} />
       <Route path="/estatisticas-escalas" component={EstatisticasEscalas} />
       <Route path="/historico-escalas" component={HistoricoEscalas} />

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { publicProcedure, protectedProcedure, router } from "../_core/trpc";
-import { escalas, funcoesEscala, participantesEscala } from "../../drizzle/schema";
+import { escalas, funcoesEscala, participantesEscala, historicoEscalas, templatesEscalas } from "../../drizzle/schema";
 import { getDb } from "../db";
 import { eq, and, or, desc, gte, lte } from "drizzle-orm";
 import { sendEmail, templateEmailEscala, templateEmailStatusEscala, templateEmailLembreteEscala } from "../_core/email";
@@ -1043,5 +1043,151 @@ export const escalasRouter = router({
       }
 
       return { conflitos };
+    }),
+
+  // Buscar histórico de alterações de uma escala
+  buscarHistorico: publicProcedure
+    .input(z.object({
+      escalaId: z.number(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) return [];
+
+      const historico = await db.select()
+        .from(historicoEscalas)
+        .where(eq(historicoEscalas.escalaId, input.escalaId))
+        .orderBy(desc(historicoEscalas.createdAt));
+
+      return historico;
+    }),
+
+  // Registrar ação no histórico (helper interno)
+  registrarHistorico: publicProcedure
+    .input(z.object({
+      escalaId: z.number(),
+      userId: z.number().optional(),
+      userName: z.string().optional(),
+      tipoAcao: z.enum([
+        "criacao",
+        "edicao",
+        "adicao_participante",
+        "remocao_participante",
+        "alteracao_status",
+        "edicao_participante",
+        "duplicacao"
+      ]),
+      descricao: z.string(),
+      dadosAnteriores: z.any().optional(),
+      dadosNovos: z.any().optional(),
+    }))
+    .mutation(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      await db.insert(historicoEscalas).values({
+        escalaId: input.escalaId,
+        userId: input.userId,
+        userName: input.userName,
+        tipoAcao: input.tipoAcao,
+        descricao: input.descricao,
+        dadosAnteriores: input.dadosAnteriores ? JSON.stringify(input.dadosAnteriores) : null,
+        dadosNovos: input.dadosNovos ? JSON.stringify(input.dadosNovos) : null,
+      });
+
+      return { success: true };
+    }),
+
+  // Listar templates do usuário
+  listarTemplates: publicProcedure
+    .input(z.object({
+      userId: z.string(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) return [];
+
+      const templates = await db.select()
+        .from(templatesEscalas)
+        .where(eq(templatesEscalas.userId, input.userId))
+        .orderBy(desc(templatesEscalas.createdAt));
+
+      // Parsear JSON das funções
+      return templates.map(t => ({
+        ...t,
+        funcoes: JSON.parse(t.funcoes),
+      }));
+    }),
+
+  // Criar template
+  criarTemplate: publicProcedure
+    .input(z.object({
+      userId: z.string(),
+      nome: z.string(),
+      descricao: z.string().optional(),
+      tipo: z.enum(["musicos", "reuniao", "grupo_oracao", "personalizado"]),
+      funcoes: z.array(z.object({
+        nome: z.string(),
+        descricao: z.string().optional(),
+        ordem: z.number(),
+      })),
+    }))
+    .mutation(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const [template] = await db.insert(templatesEscalas).values({
+        userId: input.userId,
+        nome: input.nome,
+        descricao: input.descricao,
+        tipo: input.tipo,
+        funcoes: JSON.stringify(input.funcoes),
+      });
+
+      return { success: true, templateId: template.insertId };
+    }),
+
+  // Atualizar template
+  atualizarTemplate: publicProcedure
+    .input(z.object({
+      id: z.number(),
+      nome: z.string(),
+      descricao: z.string().optional(),
+      tipo: z.enum(["musicos", "reuniao", "grupo_oracao", "personalizado"]),
+      funcoes: z.array(z.object({
+        nome: z.string(),
+        descricao: z.string().optional(),
+        ordem: z.number(),
+      })),
+    }))
+    .mutation(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      await db.update(templatesEscalas)
+        .set({
+          nome: input.nome,
+          descricao: input.descricao,
+          tipo: input.tipo,
+          funcoes: JSON.stringify(input.funcoes),
+        })
+        .where(eq(templatesEscalas.id, input.id));
+
+      return { success: true };
+    }),
+
+  // Deletar template
+  deletarTemplate: publicProcedure
+    .input(z.object({
+      id: z.number(),
+    }))
+    .mutation(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      await db.delete(templatesEscalas)
+        .where(eq(templatesEscalas.id, input.id));
+
+      return { success: true };
     }),
 });

@@ -432,6 +432,49 @@ export type ParticipanteEscala = typeof participantesEscala.$inferSelect;
 export type InsertParticipanteEscala = typeof participantesEscala.$inferInsert;
 
 /**
+ * Tabela para histórico de alterações em escalas
+ */
+export const historicoEscalas = mysqlTable("historicoEscalas", {
+  id: int("id").autoincrement().primaryKey(),
+  escalaId: int("escalaId").notNull().references(() => escalas.id, { onDelete: "cascade" }),
+  userId: int("userId").references(() => users.id), // Quem fez a alteração
+  userName: varchar("userName", { length: 255 }), // Nome do usuário que fez a alteração
+  tipoAcao: mysqlEnum("tipoAcao", [
+    "criacao",
+    "edicao",
+    "adicao_participante",
+    "remocao_participante",
+    "alteracao_status",
+    "edicao_participante",
+    "duplicacao"
+  ]).notNull(),
+  descricao: text("descricao").notNull(), // Descrição legível da ação
+  dadosAnteriores: text("dadosAnteriores"), // JSON com dados antes da alteração
+  dadosNovos: text("dadosNovos"), // JSON com dados após a alteração
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type HistoricoEscala = typeof historicoEscalas.$inferSelect;
+export type InsertHistoricoEscala = typeof historicoEscalas.$inferInsert;
+
+/**
+ * Tabela para templates de escalas personalizados
+ */
+export const templatesEscalas = mysqlTable("templatesEscalas", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: varchar("userId", { length: 255 }).notNull(), // Dono do template
+  nome: varchar("nome", { length: 255 }).notNull(),
+  descricao: text("descricao"),
+  tipo: varchar("tipo", { length: 50 }).notNull(), // "musicos", "reuniao", "grupo_oracao", "personalizado"
+  funcoes: text("funcoes").notNull(), // JSON array com as funções [{nome, descricao, ordem}]
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type TemplateEscala = typeof templatesEscalas.$inferSelect;
+export type InsertTemplateEscala = typeof templatesEscalas.$inferInsert;
+
+/**
  * Tabela para histórico de alterações em músicas dos repertórios base
  */
 export const historicoMusicasBase = mysqlTable("historicoMusicasBase", {

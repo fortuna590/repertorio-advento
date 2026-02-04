@@ -9,7 +9,7 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Textarea } from "../components/ui/textarea";
-import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2, FileDown, Link as LinkIcon, CalendarPlus, Edit, AlertTriangle, FileSpreadsheet } from "lucide-react";
+import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2, FileDown, Link as LinkIcon, CalendarPlus, Edit, AlertTriangle, FileSpreadsheet, History } from "lucide-react";
 import { EscalasNavigation } from "@/components/EscalasNavigation";
 import jsPDF from "jspdf";
 import { toast } from "sonner";
@@ -18,6 +18,91 @@ import { adicionarAoGoogleCalendar } from "@/lib/googleCalendar";
 import * as XLSX from 'xlsx';
 import { EstatisticasConfirmacao } from "@/components/EstatisticasConfirmacao";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+// Componente para exibir timeline de histórico
+function HistoricoTimeline({ escalaId }: { escalaId: number }) {
+  const { data: historico, isLoading } = trpc.escalas.buscarHistorico.useQuery({ escalaId });
+
+  if (isLoading) {
+    return <div className="text-center py-8 text-purple-300">Carregando histórico...</div>;
+  }
+
+  if (!historico || historico.length === 0) {
+    return (
+      <Card className="p-8 bg-slate-800/50 backdrop-blur-sm border-purple-500/30">
+        <p className="text-center text-purple-300">Nenhuma alteração registrada ainda.</p>
+      </Card>
+    );
+  }
+
+  const getTipoAcaoLabel = (tipo: string) => {
+    const labels: Record<string, string> = {
+      criacao: "Escala criada",
+      edicao: "Escala editada",
+      adicao_participante: "Participante adicionado",
+      remocao_participante: "Participante removido",
+      alteracao_status: "Status alterado",
+      edicao_participante: "Participante editado",
+      duplicacao: "Escala duplicada",
+    };
+    return labels[tipo] || tipo;
+  };
+
+  const getTipoAcaoIcon = (tipo: string) => {
+    switch (tipo) {
+      case "criacao":
+        return <Plus className="w-5 h-5 text-green-400" />;
+      case "edicao":
+        return <Edit className="w-5 h-5 text-blue-400" />;
+      case "adicao_participante":
+        return <Plus className="w-5 h-5 text-purple-400" />;
+      case "remocao_participante":
+        return <Trash2 className="w-5 h-5 text-red-400" />;
+      case "alteracao_status":
+        return <Check className="w-5 h-5 text-yellow-400" />;
+      case "edicao_participante":
+        return <Edit className="w-5 h-5 text-blue-400" />;
+      case "duplicacao":
+        return <Copy className="w-5 h-5 text-cyan-400" />;
+      default:
+        return <History className="w-5 h-5 text-gray-400" />;
+    }
+  };
+
+  const formatarData = (data: Date | string) => {
+    const d = new Date(data);
+    return d.toLocaleString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  return (
+    <div className="space-y-4">
+      {historico.map((item: any, index: number) => (
+        <Card key={item.id} className="p-6 bg-slate-800/50 backdrop-blur-sm border-purple-500/30">
+          <div className="flex items-start gap-4">
+            <div className="mt-1">{getTipoAcaoIcon(item.tipoAcao)}</div>
+            <div className="flex-1">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="font-semibold text-white">{getTipoAcaoLabel(item.tipoAcao)}</h4>
+                <span className="text-sm text-purple-300">{formatarData(item.createdAt)}</span>
+              </div>
+              <p className="text-purple-200 mb-2">{item.descricao}</p>
+              {item.userName && (
+                <p className="text-sm text-purple-400">Por: {item.userName}</p>
+              )}
+            </div>
+          </div>
+        </Card>
+      ))}
+    </div>
+  );
+}
 
 // Componente para exibir badge de conflito
 function ConflitoBadge({ participante, escalaId }: { participante: any; escalaId: number }) {
@@ -835,8 +920,17 @@ export default function EscalaDetalhes() {
           <EstatisticasConfirmacao participantes={escala.participantes} />
         )}
 
-        {/* Funções e Participantes */}
-        <div className="space-y-6">
+        {/* Tabs: Participantes e Histórico */}
+        <Tabs defaultValue="participantes" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="participantes">Participantes</TabsTrigger>
+            <TabsTrigger value="historico">
+              <History className="w-4 h-4 mr-2" />
+              Histórico
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="participantes" className="space-y-6">
           {escala.funcoes?.map((funcao: any) => {
             const participantes = escala.participantes?.filter((p: any) => p.funcaoId === funcao.id);
             return (
@@ -977,7 +1071,12 @@ export default function EscalaDetalhes() {
               </Card>
             );
           })}
-        </div>
+          </TabsContent>
+
+          <TabsContent value="historico">
+            <HistoricoTimeline escalaId={escalaId} />
+          </TabsContent>
+        </Tabs>
 
         {/* Modal de Duplicação de Escala */}
         <Dialog open={openDuplicar} onOpenChange={setOpenDuplicar}>
