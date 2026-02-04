@@ -1999,3 +1999,47 @@
 - [x] Rota /templates adicionada ao App.tsx
 
 **Nota:** Registro automático de histórico e uso de templates na criação de escalas serão implementados em fase futura
+
+
+## Novas Funcionalidades - Integração de Templates e Correções
+
+### Usar Template na Criação de Escala
+- [ ] Adicionar dropdown "Selecionar template" no formulário de nova escala
+- [ ] Carregar lista de templates do usuário
+- [ ] Ao selecionar template, preencher funções automaticamente
+- [ ] Manter possibilidade de editar funções após carregar template
+- [ ] Adicionar opção "Nenhum template" para criação manual
+- [ ] Testar fluxo completo de criação com template
+
+### Salvar Escala como Template
+- [ ] Adicionar botão "Salvar como Template" no painel de detalhes da escala
+- [ ] Abrir dialog com formulário pré-preenchido
+- [ ] Copiar funções da escala atual para o novo template
+- [ ] Permitir editar nome e descrição antes de salvar
+- [ ] Validar e criar template no banco
+- [ ] Mostrar toast de confirmação
+- [ ] Testar criação de template a partir de escala existente
+
+### Correção do Botão de Compartilhar Link Individual
+- [ ] Investigar função handleCompartilharLink no código
+- [ ] Verificar se está gerando token corretamente
+- [ ] Verificar se está copiando para clipboard
+- [ ] Testar em diferentes navegadores
+- [ ] Adicionar feedback visual (toast) ao copiar
+- [ ] Corrigir qualquer erro encontrado
+
+
+## Melhorias UX - Dialog de Adicionar Participante ✅
+- [x] Remover fechamento automático do dialog após adicionar participante
+- [x] Permitir adicionar múltiplos participantes em sequência
+- [x] Adicionar botão "Fechar" manual no dialog
+- [x] Limpar formulário após cada adição mas manter dialog aberto
+- [x] Atualizar mensagem de sucesso para indicar que pode adicionar mais
+
+## Integração de Templates - Em Progresso
+- [ ] Adicionar dropdown de templates na criação de escala
+- [ ] Carregar templates salvos do usuário
+- [ ] Preencher funções automaticamente ao selecionar template
+- [ ] Adicionar botão "Salvar como Template" no painel de detalhes
+- [ ] Implementar função de salvar escala atual como template
+- [ ] Testar fluxo completo de templates

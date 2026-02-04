@@ -190,9 +190,10 @@ export default function EscalaDetalhes() {
 
   const adicionarParticipanteMutation = trpc.escalas.adicionarParticipante.useMutation({
     onSuccess: () => {
-      toast.success("Participante adicionado com sucesso!");
+      toast.success("Participante adicionado! Adicione mais ou feche o diálogo.");
       refetch();
-      setOpenAddParticipante(false);
+      // Não fechar automaticamente - permitir adicionar vários participantes
+      // setOpenAddParticipante(false);
       resetForm();
     },
     onError: (error) => {
@@ -855,13 +856,25 @@ export default function EscalaDetalhes() {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button
-                  onClick={handleAtualizarEscala}
-                  className="w-full"
-                  disabled={atualizarEscalaMutation.isPending}
-                >
-                  {atualizarEscalaMutation.isPending ? "Salvando..." : "Salvar Alterações"}
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={handleAdicionarParticipante}
+                    className="flex-1"
+                    disabled={adicionarParticipanteMutation.isPending}
+                  >
+                    {adicionarParticipanteMutation.isPending ? "Adicionando..." : "Adicionar Participante"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setOpenAddParticipante(false);
+                      resetForm();
+                    }}
+                    disabled={adicionarParticipanteMutation.isPending}
+                  >
+                    Fechar
+                  </Button>
+                </div>
               </div>
             </DialogContent>
           </Dialog>
