@@ -9,7 +9,7 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Textarea } from "../components/ui/textarea";
-import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2, FileDown, Link as LinkIcon, CalendarPlus, Edit, AlertTriangle, FileSpreadsheet, History } from "lucide-react";
+import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2, FileDown, Link as LinkIcon, CalendarPlus, Edit, AlertTriangle, FileSpreadsheet, History, BookTemplate } from "lucide-react";
 import { EscalasNavigation } from "@/components/EscalasNavigation";
 import jsPDF from "jspdf";
 import { toast } from "sonner";
@@ -156,6 +156,9 @@ export default function EscalaDetalhes() {
   const [openEditEscala, setOpenEditEscala] = useState(false);
   const [openEditParticipante, setOpenEditParticipante] = useState(false);
   const [openDuplicar, setOpenDuplicar] = useState(false);
+  const [openSalvarTemplate, setOpenSalvarTemplate] = useState(false);
+  const [nomeTemplate, setNomeTemplate] = useState("");
+  const [descricaoTemplate, setDescricaoTemplate] = useState("");
   const [copied, setCopied] = useState(false);
   const [participanteEditando, setParticipanteEditando] = useState<any>(null);
 
@@ -253,6 +256,18 @@ export default function EscalaDetalhes() {
     },
     onError: (error) => {
       toast.error("Erro ao duplicar escala: " + error.message);
+    },
+  });
+
+  const criarTemplateMutation = trpc.escalas.criarTemplate.useMutation({
+    onSuccess: () => {
+      toast.success("Template criado com sucesso!");
+      setOpenSalvarTemplate(false);
+      setNomeTemplate("");
+      setDescricaoTemplate("");
+    },
+    onError: (error) => {
+      toast.error(`Erro ao criar template: ${error.message}`);
     },
   });
 
@@ -355,6 +370,39 @@ export default function EscalaDetalhes() {
       setCopiarParticipantes(false);
       setOpenDuplicar(true);
     }
+  };
+
+  const handleSalvarComoTemplate = () => {
+    if (!nomeTemplate.trim()) {
+      toast.error("Por favor, informe um nome para o template");
+      return;
+    }
+
+    if (!escala) return;
+
+    // Extrair funções únicas dos participantes (buscar nome da função pelo funcaoId)
+    const funcoesMap = new Map<string, { nome: string; ordem: number; descricao?: string }>();
+    
+    escala.participantes?.forEach(p => {
+      const funcao = escala.funcoes?.find(f => f.id === p.funcaoId);
+      if (funcao && !funcoesMap.has(funcao.nome)) {
+        funcoesMap.set(funcao.nome, {
+          nome: funcao.nome,
+          ordem: funcao.ordem,
+          descricao: funcao.descricao || undefined,
+        });
+      }
+    });
+
+    const funcoesArray = Array.from(funcoesMap.values());
+
+    criarTemplateMutation.mutate({
+      userId: user!.id.toString(),
+      nome: nomeTemplate,
+      descricao: descricaoTemplate,
+      tipo: escala.tipo as "musicos" | "reuniao" | "grupo_oracao" | "personalizado",
+      funcoes: funcoesArray,
+    });
   };
 
   const handleDuplicarEscala = () => {
@@ -739,6 +787,15 @@ export default function EscalaDetalhes() {
                 >
                   <Copy className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
                   <span className="hidden sm:inline">Duplicar</span>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="flex-1 sm:flex-none"
+                  onClick={() => setOpenSalvarTemplate(true)}
+                >
+                  <BookTemplate className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
+                  <span className="hidden sm:inline">Salvar como Template</span>
                 </Button>
                 <Button 
                   variant="outline" 
@@ -1142,6 +1199,56 @@ export default function EscalaDetalhes() {
             <HistoricoTimeline escalaId={escalaId} />
           </TabsContent>
         </Tabs>
+
+        {/* Modal de Salvar como Template */}
+        <Dialog open={openSalvarTemplate} onOpenChange={setOpenSalvarTemplate}>
+          <DialogContent className="animate-in fade-in-0 zoom-in-95 duration-300">
+            <DialogHeader>
+              <DialogTitle>Salvar como Template</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 mt-4">
+              <p className="text-sm text-muted-foreground">
+                Crie um template reutilizável com as funções desta escala. Você poderá usá-lo ao criar novas escalas.
+              </p>
+              <div>
+                <Label htmlFor="nome-template">Nome do Template *</Label>
+                <Input 
+                  id="nome-template"
+                  value={nomeTemplate} 
+                  onChange={(e) => setNomeTemplate(e.target.value)} 
+                  placeholder="Ex: Missa Dominical, Grupo de Oração..."
+                />
+              </div>
+              <div>
+                <Label htmlFor="descricao-template">Descrição (opcional)</Label>
+                <Textarea 
+                  id="descricao-template"
+                  value={descricaoTemplate} 
+                  onChange={(e) => setDescricaoTemplate(e.target.value)} 
+                  placeholder="Descreva quando usar este template..."
+                  rows={3}
+                />
+              </div>
+              <div className="p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+                <p className="text-sm font-medium mb-2">Funções que serão incluídas:</p>
+                <div className="flex flex-wrap gap-2">
+                  {escala?.funcoes?.map(funcao => (
+                    <span key={funcao.id} className="px-3 py-1 bg-purple-600/20 text-purple-300 rounded-full text-sm">
+                      {funcao.nome}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <Button 
+                onClick={handleSalvarComoTemplate} 
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700" 
+                disabled={criarTemplateMutation.isPending}
+              >
+                {criarTemplateMutation.isPending ? "Salvando..." : "Salvar Template"}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {/* Modal de Duplicação de Escala */}
         <Dialog open={openDuplicar} onOpenChange={setOpenDuplicar}>

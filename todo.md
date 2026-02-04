@@ -2121,3 +2121,18 @@
 - [x] Testar edição de participantes
 - [x] Testar adição de participantes
 - [x] Todos os 125 testes passando
+
+
+## Nova Funcionalidade - Salvar Escala como Template ✅
+- [x] Adicionar import de ícone BookTemplate
+- [x] Adicionar state para dialog de salvar template (openSalvarTemplate, nomeTemplate, descricaoTemplate)
+- [x] Criar mutation criarTemplate usando trpc.escalas.criarTemplate
+- [x] Implementar função handleSalvarComoTemplate que extrai funções da escala
+- [x] Extrair funções com nome, ordem e descrição
+- [x] Adicionar userId na mutation
+- [x] Adicionar botão "Salvar como Template" no painel de detalhes
+- [x] Criar Dialog com formulário (nome, descrição, tipo)
+- [x] Mostrar prévia das funções que serão incluídas
+- [x] Validar campos obrigatórios antes de salvar
+- [x] Exibir toast de sucesso após salvar
+- [x] Todos os 125 testes passando
