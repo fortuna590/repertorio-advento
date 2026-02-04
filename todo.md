@@ -2080,3 +2080,31 @@
 
 **Causa:** Botão estava corretamente desabilitado porque participante não tinha telefone cadastrado.
 **Solução:** Melhorado feedback visual e tooltip explicativo.
+
+
+## Novas Funcionalidades - UX e Templates ✅
+
+### Validação de Telefone com Máscara ✅
+- [x] Instalar biblioteca de máscara de input (react-input-mask 2.0.4)
+- [x] Adicionar máscara brasileira ((99) 99999-9999) no campo telefone
+- [x] Aplicar em formulário de adicionar participante
+- [x] Aplicar em formulário de editar participante
+- [x] Testar com diferentes formatos de telefone
+
+### Indicadores Visuais de Campos ✅
+- [x] Adicionar asterisco (*) vermelho em campos obrigatórios (nome)
+- [x] Adicionar tooltip em campos opcionais explicando benefícios
+- [x] Tooltip telefone: "Necessário para enviar convite por WhatsApp"
+- [x] Tooltip email: "Necessário para enviar notificações por email"
+- [x] Aplicar em formulário de adicionar participante
+- [x] Testar tooltips
+
+### Dropdown de Templates na Criação ✅
+- [x] Adicionar state para template selecionado
+- [x] Criar query para carregar templates do usuário (trpc.escalas.listarTemplates)
+- [x] Implementar função handleTemplateSelecionado
+- [x] Adicionar Select de templates após campo tipo
+- [x] Preencher funções automaticamente ao selecionar template
+- [x] Limpar template ao mudar tipo de escala
+- [x] Toast de confirmação ao carregar template
+- [x] Texto explicativo sobre templates

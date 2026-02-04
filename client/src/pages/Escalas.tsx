@@ -74,6 +74,13 @@ export default function Escalas() {
   const [local, setLocal] = useState("");
   const [tipo, setTipo] = useState<"musicos" | "reuniao" | "grupo_oracao" | "personalizado">("musicos");
   const [funcoes, setFuncoes] = useState<{ nome: string; ordem: number }[]>([]);
+  const [templateSelecionado, setTemplateSelecionado] = useState<string>("");
+
+  // Query para carregar templates do usuário
+  const { data: templatesUsuario } = trpc.escalas.listarTemplates.useQuery(
+    { userId: user?.openId || "" },
+    { enabled: !!user?.openId }
+  );
 
   // Queries
   const { data: escalas, refetch } = trpc.escalas.listar.useQuery({
@@ -177,6 +184,26 @@ export default function Escalas() {
     setTipo(novoTipo as any);
     const template = TEMPLATES[novoTipo as keyof typeof TEMPLATES];
     setFuncoes(template.funcoes);
+    setTemplateSelecionado(""); // Limpar template ao mudar tipo
+  };
+
+  const handleTemplateSelecionado = (templateId: string) => {
+    setTemplateSelecionado(templateId);
+    if (!templateId) return;
+
+    const template = templatesUsuario?.templates?.find((t: any) => t.id === parseInt(templateId));
+    if (template && template.funcoes) {
+      try {
+        const funcoesTemplate = typeof template.funcoes === 'string' 
+          ? JSON.parse(template.funcoes) 
+          : template.funcoes;
+        setFuncoes(funcoesTemplate);
+        toast.success(`Template "${template.nome}" carregado!`);
+      } catch (error) {
+        console.error("Erro ao carregar template:", error);
+        toast.error("Erro ao carregar template");
+      }
+    }
   };
 
   const handleCriar = () => {
@@ -324,8 +351,32 @@ export default function Escalas() {
                   <div>
                     <Label>Data *</Label>
                     <Input type="date" value={data} onChange={(e) => setData(e.target.value)} />
-                  </div>
+                </div>
+
+                {/* Dropdown de Templates Personalizados */}
+                {templatesUsuario && templatesUsuario.templates && templatesUsuario.templates.length > 0 && (
                   <div>
+                    <Label>Ou use um template salvo</Label>
+                    <Select value={templateSelecionado} onValueChange={handleTemplateSelecionado}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione um template..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">Nenhum template</SelectItem>
+                        {templatesUsuario.templates.map((template: any) => (
+                          <SelectItem key={template.id} value={template.id.toString()}>
+                            {template.nome} ({template.tipo})
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Templates salvos substituem as funções do tipo selecionado
+                    </p>
+                  </div>
+                )}
+
+                <div>
                     <Label>Horário</Label>
                     <Input type="time" value={hora} onChange={(e) => setHora(e.target.value)} />
                   </div>

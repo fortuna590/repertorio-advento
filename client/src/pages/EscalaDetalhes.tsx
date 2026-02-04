@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useRoute, useLocation } from "wouter";
+import { useLocation, useRoute } from "wouter";
+import InputMask from "react-input-mask";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "../lib/trpc";
 import { Button } from "../components/ui/button";
@@ -979,16 +980,36 @@ export default function EscalaDetalhes() {
                           </p>
                         </div>
                         <div>
-                          <Label>Nome *</Label>
-                          <Input value={nome} onChange={(e) => setNome(e.target.value)} placeholder="Nome completo" />
+                          <Label className="flex items-center gap-1">
+                            Nome <span className="text-red-500">*</span>
+                          </Label>
+                          <Input value={nome} onChange={(e) => setNome(e.target.value)} placeholder="Nome completo" required />
                         </div>
                         <div>
-                          <Label>E-mail</Label>
+                          <Label className="flex items-center gap-1">
+                            E-mail
+                            <span className="text-xs text-muted-foreground" title="Necessário para enviar notificações por email">
+                              (opcional - para notificações)
+                            </span>
+                          </Label>
                           <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@exemplo.com" />
                         </div>
                         <div>
-                          <Label>Telefone</Label>
-                          <Input value={telefone} onChange={(e) => setTelefone(e.target.value)} placeholder="(00) 00000-0000" />
+                          <Label className="flex items-center gap-1">
+                            Telefone
+                            <span className="text-xs text-muted-foreground" title="Necessário para enviar convite por WhatsApp">
+                              (opcional - para WhatsApp)
+                            </span>
+                          </Label>
+                          <InputMask
+                            mask="(99) 99999-9999"
+                            value={telefone}
+                            onChange={(e) => setTelefone(e.target.value)}
+                          >
+                            {(inputProps: any) => (
+                              <Input {...inputProps} placeholder="(00) 00000-0000" />
+                            )}
+                          </InputMask>
                         </div>
                         <div>
                           <Label>Observações</Label>
@@ -1196,11 +1217,15 @@ export default function EscalaDetalhes() {
               </div>
               <div>
                 <Label>Telefone</Label>
-                <Input 
-                  value={editTelefone} 
-                  onChange={(e) => setEditTelefone(e.target.value)} 
-                  placeholder="(00) 00000-0000" 
-                />
+                <InputMask
+                  mask="(99) 99999-9999"
+                  value={editTelefone}
+                  onChange={(e) => setEditTelefone(e.target.value)}
+                >
+                  {(inputProps: any) => (
+                    <Input {...inputProps} placeholder="(00) 00000-0000" />
+                  )}
+                </InputMask>
               </div>
               <div>
                 <Label>Observações</Label>
