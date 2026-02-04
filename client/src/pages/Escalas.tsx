@@ -191,7 +191,7 @@ export default function Escalas() {
     setTemplateSelecionado(templateId);
     if (!templateId) return;
 
-    const template = templatesUsuario?.templates?.find((t: any) => t.id === parseInt(templateId));
+    const template = templatesUsuario?.find((t: any) => t.id === parseInt(templateId));
     if (template && template.funcoes) {
       try {
         const funcoesTemplate = typeof template.funcoes === 'string' 
@@ -354,7 +354,7 @@ export default function Escalas() {
                 </div>
 
                 {/* Dropdown de Templates Personalizados */}
-                {templatesUsuario && templatesUsuario.templates && templatesUsuario.templates.length > 0 && (
+                {templatesUsuario && templatesUsuario.length > 0 && (
                   <div>
                     <Label>Ou use um template salvo</Label>
                     <Select value={templateSelecionado} onValueChange={handleTemplateSelecionado}>
@@ -363,7 +363,7 @@ export default function Escalas() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="">Nenhum template</SelectItem>
-                        {templatesUsuario.templates.map((template: any) => (
+                        {templatesUsuario.map((template: any) => (
                           <SelectItem key={template.id} value={template.id.toString()}>
                             {template.nome} ({template.tipo})
                           </SelectItem>

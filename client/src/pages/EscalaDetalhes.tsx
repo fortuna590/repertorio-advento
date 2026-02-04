@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useLocation, useRoute } from "wouter";
-import InputMask from "react-input-mask";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "../lib/trpc";
 import { Button } from "../components/ui/button";
@@ -1001,15 +1000,19 @@ export default function EscalaDetalhes() {
                               (opcional - para WhatsApp)
                             </span>
                           </Label>
-                          <InputMask
-                            mask="(99) 99999-9999"
+                          <Input
                             value={telefone}
-                            onChange={(e) => setTelefone(e.target.value)}
-                          >
-                            {(inputProps: any) => (
-                              <Input {...inputProps} placeholder="(00) 00000-0000" />
-                            )}
-                          </InputMask>
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/\D/g, '');
+                              if (value.length <= 11) {
+                                const formatted = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
+                                  .replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')
+                                  .replace(/(\d{2})(\d{0,5})/, '($1) $2');
+                                setTelefone(formatted);
+                              }
+                            }}
+                            placeholder="(00) 00000-0000"
+                          />
                         </div>
                         <div>
                           <Label>Observações</Label>
@@ -1217,15 +1220,19 @@ export default function EscalaDetalhes() {
               </div>
               <div>
                 <Label>Telefone</Label>
-                <InputMask
-                  mask="(99) 99999-9999"
+                <Input
                   value={editTelefone}
-                  onChange={(e) => setEditTelefone(e.target.value)}
-                >
-                  {(inputProps: any) => (
-                    <Input {...inputProps} placeholder="(00) 00000-0000" />
-                  )}
-                </InputMask>
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, '');
+                    if (value.length <= 11) {
+                      const formatted = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
+                        .replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')
+                        .replace(/(\d{2})(\d{0,5})/, '($1) $2');
+                      setEditTelefone(formatted);
+                    }
+                  }}
+                  placeholder="(00) 00000-0000"
+                />
               </div>
               <div>
                 <Label>Observações</Label>

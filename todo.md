@@ -2108,3 +2108,16 @@
 - [x] Limpar template ao mudar tipo de escala
 - [x] Toast de confirmação ao carregar template
 - [x] Texto explicativo sobre templates
+
+
+## Bug Crítico - Erro ao Editar Participante ✅ CORRIGIDO
+- [x] Erro: TypeError: r.findDOMNode is not a function
+- [x] Causa: react-input-mask incompatível com React 19
+- [x] Solução: Remover react-input-mask (pnpm remove)
+- [x] Implementar máscara de telefone manualmente com regex
+- [x] Aplicar em formulário de adicionar participante
+- [x] Aplicar em formulário de editar participante
+- [x] Corrigir erros de TypeScript em Escalas.tsx (templates)
+- [x] Testar edição de participantes
+- [x] Testar adição de participantes
+- [x] Todos os 125 testes passando
