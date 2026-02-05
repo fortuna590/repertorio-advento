@@ -1190,4 +1190,175 @@ export const escalasRouter = router({
 
       return { success: true };
     }),
+
+  // Estatísticas - Taxa de confirmação média
+  estatisticasTaxaConfirmacao: protectedProcedure
+    .input(z.object({
+      userId: z.string(),
+      periodo: z.enum(["mes", "trimestre", "ano", "tudo"]).optional(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Calcular data de início baseado no período
+      const hoje = new Date();
+      let dataInicio: Date | null = null;
+      
+      if (input.periodo === "mes") {
+        dataInicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+      } else if (input.periodo === "trimestre") {
+        dataInicio = new Date(hoje.getFullYear(), hoje.getMonth() - 3, 1);
+      } else if (input.periodo === "ano") {
+        dataInicio = new Date(hoje.getFullYear(), 0, 1);
+      }
+
+      // Buscar escalas do usuário
+      const condicoes = [eq(escalas.userId, input.userId)];
+      if (dataInicio) {
+        condicoes.push(gte(escalas.data, dataInicio.toISOString().split('T')[0] as any));
+      }
+
+      const escalasUsuario = await db.select().from(escalas)
+        .where(and(...condicoes));
+
+      if (escalasUsuario.length === 0) {
+        return { taxaConfirmacao: 0, totalEscalas: 0, totalParticipantes: 0, confirmados: 0 };
+      }
+
+      // Buscar participantes de todas as escalas
+      const escalasIds = escalasUsuario.map(e => e.id);
+      const participantes = await db.select().from(participantesEscala)
+        .where(or(...escalasIds.map(id => eq(participantesEscala.escalaId, id))));
+
+      const totalParticipantes = participantes.length;
+      const confirmados = participantes.filter(p => p.status === "confirmado").length;
+      const taxaConfirmacao = totalParticipantes > 0 ? (confirmados / totalParticipantes) * 100 : 0;
+
+      return {
+        taxaConfirmacao: Math.round(taxaConfirmacao * 10) / 10,
+        totalEscalas: escalasUsuario.length,
+        totalParticipantes,
+        confirmados,
+      };
+    }),
+
+  // Estatísticas - Participantes mais ativos
+  estatisticasParticipantesAtivos: protectedProcedure
+    .input(z.object({
+      userId: z.string(),
+      limite: z.number().optional(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Buscar escalas do usuário
+      const escalasUsuario = await db.select().from(escalas)
+        .where(eq(escalas.userId, input.userId));
+
+      if (escalasUsuario.length === 0) {
+        return [];
+      }
+
+      // Buscar participantes de todas as escalas
+      const escalasIds = escalasUsuario.map(e => e.id);
+      const participantes = await db.select().from(participantesEscala)
+        .where(or(...escalasIds.map(id => eq(participantesEscala.escalaId, id))));
+
+      // Agrupar por participante e contar
+      const contagemPorParticipante: Record<string, { nome: string; total: number; confirmados: number }> = {};
+      
+      participantes.forEach(p => {
+        if (!contagemPorParticipante[p.nome]) {
+          contagemPorParticipante[p.nome] = { nome: p.nome, total: 0, confirmados: 0 };
+        }
+        contagemPorParticipante[p.nome].total++;
+        if (p.status === "confirmado") {
+          contagemPorParticipante[p.nome].confirmados++;
+        }
+      });
+
+      // Converter para array e ordenar por total
+      const ranking = Object.values(contagemPorParticipante)
+        .map(p => ({
+          ...p,
+          taxaConfirmacao: p.total > 0 ? Math.round((p.confirmados / p.total) * 100) : 0,
+        }))
+        .sort((a, b) => b.total - a.total)
+        .slice(0, input.limite || 10);
+
+      return ranking;
+    }),
+
+  // Estatísticas - Funções mais demandadas
+  estatisticasFuncoesDemandadas: protectedProcedure
+    .input(z.object({
+      userId: z.string(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Buscar escalas do usuário
+      const escalasUsuario = await db.select().from(escalas)
+        .where(eq(escalas.userId, input.userId));
+
+      if (escalasUsuario.length === 0) {
+        return [];
+      }
+
+      // Buscar funções de todas as escalas
+      const escalasIds = escalasUsuario.map(e => e.id);
+      const funcoes = await db.select().from(funcoesEscala)
+        .where(or(...escalasIds.map(id => eq(funcoesEscala.escalaId, id))));
+
+      // Agrupar por nome de função e contar
+      const contagemPorFuncao: Record<string, number> = {};
+      
+      funcoes.forEach(f => {
+        if (!contagemPorFuncao[f.nome]) {
+          contagemPorFuncao[f.nome] = 0;
+        }
+        contagemPorFuncao[f.nome]++;
+      });
+
+      // Converter para array e ordenar por total
+      const ranking = Object.entries(contagemPorFuncao)
+        .map(([nome, total]) => ({ nome, total }))
+        .sort((a, b) => b.total - a.total);
+
+      return ranking;
+    }),
+
+  // Estatísticas - Por tipo de escala
+  estatisticasPorTipo: protectedProcedure
+    .input(z.object({
+      userId: z.string(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Buscar escalas do usuário
+      const escalasUsuario = await db.select().from(escalas)
+        .where(eq(escalas.userId, input.userId));
+
+      // Agrupar por tipo e contar
+      const contagemPorTipo: Record<string, number> = {};
+      
+      escalasUsuario.forEach(e => {
+        if (!contagemPorTipo[e.tipo]) {
+          contagemPorTipo[e.tipo] = 0;
+        }
+        contagemPorTipo[e.tipo]++;
+      });
+
+      // Converter para array
+      const estatisticas = Object.entries(contagemPorTipo)
+        .map(([tipo, total]) => ({ tipo, total }))
+        .sort((a, b) => b.total - a.total);
+
+      return estatisticas;
+    }),
 });

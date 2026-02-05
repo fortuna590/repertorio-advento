@@ -2136,3 +2136,31 @@
 - [x] Validar campos obrigatórios antes de salvar
 - [x] Exibir toast de sucesso após salvar
 - [x] Todos os 125 testes passando
+
+
+## Novas Funcionalidades - Estatísticas e Redesign ✅ CONCLUÍDO
+
+### Dashboard de Estatísticas 📊
+- [x] Criar endpoints backend para estatísticas agregadas
+- [x] Endpoint: taxa de confirmação média por período (estatisticasTaxaConfirmacao)
+- [x] Endpoint: participantes mais ativos (ranking) (estatisticasParticipantesAtivos)
+- [x] Endpoint: funções mais demandadas (estatisticasFuncoesDemandadas)
+- [x] Endpoint: estatísticas por tipo de escala (estatisticasPorTipo)
+- [x] Página /estatisticas-escalas já existia e foi mantida
+- [x] Cards com métricas principais (taxa confirmação, total escalas, participantes, confirmações)
+- [x] Ranking de participantes mais ativos com taxa de confirmação
+- [x] Gráficos de barras para funções e tipos de escala
+- [x] Filtros por período (mês, trimestre, ano, todos os tempos)
+- [x] Rota já existia no App.tsx
+- [x] Testado com dados reais
+
+### Redesign "Minhas Escalas" 🎨
+- [x] Reduzir tamanho dos cards (padding de p-6 para p-4)
+- [x] Remover lista de participantes dos cards
+- [x] Manter apenas informações essenciais (data, hora, local, tipo)
+- [x] Adicionar indicador visual de status compacto (confirmados/total com ícones)
+- [x] Melhorar responsividade para mobile (truncate em textos longos)
+- [x] Adicionar hover effects (scale e border color)
+- [x] Reduzir tamanho de fontes e ícones para layout mais compacto
+- [x] Botão "Ver Detalhes" mais explícito
+- [x] Testado em diferentes tamanhos de tela

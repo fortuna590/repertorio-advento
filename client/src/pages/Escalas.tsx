@@ -507,67 +507,93 @@ export default function Escalas() {
           </div>
         )}
 
-        {/* Listagem de Escalas */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {escalasFiltradas?.map((escala) => (
-            <Card key={escala.id} className="p-6 hover:shadow-lg transition-shadow bg-slate-900/80 backdrop-blur-sm border-purple-500/20 hover:border-purple-500/40">
-              <div className="flex items-start justify-between mb-4">
-                <Checkbox 
-                  checked={escalasSelecionadas.includes(escala.id)}
-                  onCheckedChange={() => handleToggleSelecao(escala.id)}
-                  className="mt-1 mr-3"
-                />
-                <div className="flex items-center gap-3">
-                  {getIconeTipo(escala.tipo)}
-                  <div>
-                    <h3 className="font-semibold text-lg text-white">{escala.titulo}</h3>
-                    <p className="text-sm text-purple-300">{TEMPLATES[escala.tipo as keyof typeof TEMPLATES]?.nome}</p>
+        {/* Listagem de Escalas - Cards Compactos */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {escalasFiltradas?.map((escala) => {
+            const participantes = (escala as any).participantes || [];
+            const totalParticipantes = participantes.length;
+            const confirmados = participantes.filter((p: any) => p.status === "confirmado").length;
+            const pendentes = participantes.filter((p: any) => p.status === "pendente").length;
+            
+            return (
+              <Card key={escala.id} className="p-4 hover:shadow-lg transition-all bg-slate-900/80 backdrop-blur-sm border-purple-500/20 hover:border-purple-500/40 hover:scale-[1.02]">
+                <div className="flex items-start gap-3 mb-3">
+                  <Checkbox 
+                    checked={escalasSelecionadas.includes(escala.id)}
+                    onCheckedChange={() => handleToggleSelecao(escala.id)}
+                    className="mt-1"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      {getIconeTipo(escala.tipo)}
+                      <h3 className="font-semibold text-base text-white truncate">{escala.titulo}</h3>
+                    </div>
+                    <p className="text-xs text-purple-300">{TEMPLATES[escala.tipo as keyof typeof TEMPLATES]?.nome}</p>
                   </div>
                 </div>
-              </div>
 
-              {escala.descricao && <p className="text-sm text-purple-200 mb-4">{escala.descricao}</p>}
-
-              <div className="space-y-2 text-sm text-purple-300">
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  {new Date(escala.data).toLocaleDateString("pt-BR")}
+                <div className="space-y-1.5 text-xs text-purple-300 mb-3">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-3.5 h-3.5" />
+                    {new Date(escala.data).toLocaleDateString("pt-BR")}
+                    {escala.hora && (
+                      <>
+                        <Clock className="w-3.5 h-3.5 ml-2" />
+                        {escala.hora}
+                      </>
+                    )}
+                  </div>
+                  {escala.local && (
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-3.5 h-3.5" />
+                      <span className="truncate">{escala.local}</span>
+                    </div>
+                  )}
                 </div>
-                {escala.hora && (
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4" />
-                    {escala.hora}
-                  </div>
-                )}
-                {escala.local && (
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4" />
-                    {escala.local}
-                  </div>
-                )}
-              </div>
 
-              <div className="flex gap-2 mt-4">
-                <Link href={`/escala/${escala.id}`}>
+                {/* Estatísticas Compactas */}
+                {totalParticipantes > 0 && (
+                  <div className="flex items-center gap-3 text-xs mb-3 p-2 bg-slate-800/50 rounded">
+                    <div className="flex items-center gap-1">
+                      <Users className="w-3.5 h-3.5 text-purple-400" />
+                      <span className="text-purple-200">{totalParticipantes}</span>
+                    </div>
+                    {confirmados > 0 && (
+                      <div className="flex items-center gap-1">
+                        <span className="text-green-400">✓ {confirmados}</span>
+                      </div>
+                    )}
+                    {pendentes > 0 && (
+                      <div className="flex items-center gap-1">
+                        <span className="text-yellow-400">⏳ {pendentes}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <div className="flex gap-2">
+                  <Link href={`/escala/${escala.id}`} className="flex-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full text-xs h-8"
+                    >
+                      <Eye className="w-3.5 h-3.5 mr-1.5" />
+                      Ver Detalhes
+                    </Button>
+                  </Link>
                   <Button
-                    variant="outline"
+                    variant="ghost"
                     size="sm"
-                    className="flex-1 w-full"
+                    onClick={() => handleDeletar(escala.id)}
+                    className="h-8 px-2"
                   >
-                    <Eye className="w-4 h-4 mr-2" />
-                    Ver
+                    <Trash2 className="w-3.5 h-3.5" />
                   </Button>
-                </Link>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleDeletar(escala.id)}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
-            </Card>
-          ))}
+                </div>
+              </Card>
+            );
+          })}
         </div>
 
         {escalasFiltradas?.length === 0 && (
