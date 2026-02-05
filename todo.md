@@ -2273,3 +2273,26 @@ Refatorada lógica da máscara para verificar se o campo está vazio (value.leng
 - [x] Implementar melhor tratamento de erros (retornar lista de participantes sem email)
 - [x] Adicionar logs detalhados de debug
 - [x] Salvar checkpoint
+
+
+## Alteração de Domínio de Envio de Emails ✅ CONCLUÍDO
+
+### Problema
+Erro 403 do Resend: domínio louvamais.com não está verificado, impedindo envio de emails.
+
+### Solução
+Alterado para domínio de teste do Resend (onboarding@resend.dev) que funciona imediatamente sem verificação.
+
+### Tarefas
+- [x] Alterar endereço "from" em server/_core/email.ts
+- [x] Alterar endereço "from" em server/_core/emailReminder.ts
+- [x] Testar envio de lembrete
+- [x] Salvar checkpoint
+
+### Para Produção (Futuro)
+Para usar domínio profissional louvamais.com:
+1. Acessar https://resend.com/domains
+2. Adicionar domínio louvamais.com
+3. Configurar registros DNS (MX, TXT, DKIM)
+4. Aguardar verificação (até 48h)
+5. Alterar de volta para noreply@louvamais.com nos arquivos
