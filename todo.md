@@ -2215,3 +2215,21 @@
 - [x] Botão "Desarquivar" para escalas arquivadas
 - [x] Ícone visual de escala arquivada (Archive icon)
 - [x] Opacidade reduzida para cards arquivados
+
+
+## Reorganização da Interface de Detalhes da Escala ✅ CONCLUÍDO
+
+### Objetivo
+Tornar a página de detalhes da escala mais limpa e profissional, agrupando ações em menu dropdown
+
+### Tarefas
+- [x] Ler arquivo EscalaDetalhes.tsx atual
+- [x] Identificar todas as ações disponíveis (9 botões originalmente)
+- [x] Adicionar import do DropdownMenu com shadcn/ui
+- [x] Agrupar ações secundárias no dropdown (Google Calendar, Exportar Excel, Duplicar, Salvar Template, Enviar Lembretes)
+- [x] Manter ações principais visíveis (Editar, Exportar PDF, Compartilhar, Mais Ações)
+- [x] Adicionar ícones apropriados para cada ação no dropdown
+- [x] Reorganizar layout do header da página (de 9 para 4 botões visíveis)
+- [x] Adicionar separadores no dropdown para organizar ações por categoria
+- [x] Testar todas as ações após reorganização
+- [x] Salvar checkpoint

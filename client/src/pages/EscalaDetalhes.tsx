@@ -9,7 +9,8 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Textarea } from "../components/ui/textarea";
-import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2, FileDown, Link as LinkIcon, CalendarPlus, Edit, AlertTriangle, FileSpreadsheet, History, BookTemplate } from "lucide-react";
+import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2, FileDown, Link as LinkIcon, CalendarPlus, Edit, AlertTriangle, FileSpreadsheet, History, BookTemplate, MoreVertical } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { EscalasNavigation } from "@/components/EscalasNavigation";
 import jsPDF from "jspdf";
 import { toast } from "sonner";
@@ -744,86 +745,29 @@ export default function EscalaDetalhes() {
           </div>
 
           <div className="flex flex-wrap gap-2">
+            {/* Botões principais sempre visíveis */}
             {user && escala.userId === user.openId && (
               <Button 
                 variant="outline"
                 size="sm"
-                className="flex-1 sm:flex-none border-purple-400 text-purple-300 hover:bg-purple-900/50"
+                className="border-purple-400 text-purple-300 hover:bg-purple-900/50"
                 onClick={handleAbrirEdicao}
               >
-                <Edit className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
-                <span className="hidden sm:inline">Editar</span>
+                <Edit className="w-4 h-4 mr-2" />
+                Editar
               </Button>
             )}
-            <Button 
-              variant="outline"
-              size="sm"
-              className="flex-1 sm:flex-none"
-              onClick={() => {
-                if (!escala) return;
-                const dataFormatada = typeof escala.data === 'string' 
-                  ? escala.data 
-                  : new Date(escala.data).toISOString().split('T')[0];
-                adicionarAoGoogleCalendar({
-                  titulo: escala.titulo,
-                  descricao: escala.descricao || undefined,
-                  local: escala.local || undefined,
-                  dataInicio: dataFormatada,
-                  horaInicio: escala.hora || undefined,
-                });
-                toast.success("Abrindo Google Calendar...");
-              }}
-            >
-              <CalendarPlus className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
-              <span className="hidden sm:inline">Google Calendar</span>
+            
+            <Button variant="outline" size="sm" onClick={handleExportarPDF}>
+              <FileDown className="w-4 h-4 mr-2" />
+              Exportar PDF
             </Button>
-            {user && escala && escala.userId === user.openId && (
-              <>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="flex-1 sm:flex-none"
-                  onClick={handleAbrirDuplicacao}
-                >
-                  <Copy className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
-                  <span className="hidden sm:inline">Duplicar</span>
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="flex-1 sm:flex-none"
-                  onClick={() => setOpenSalvarTemplate(true)}
-                >
-                  <BookTemplate className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
-                  <span className="hidden sm:inline">Salvar como Template</span>
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="flex-1 sm:flex-none bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700"
-                  onClick={() => enviarLembretesMutation.mutate({ escalaId })}
-                  disabled={enviarLembretesMutation.isPending}
-                >
-                  <Mail className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
-                  <span className="hidden sm:inline">
-                    {enviarLembretesMutation.isPending ? "Enviando..." : "Enviar Lembretes"}
-                  </span>
-                </Button>
-              </>
-            )}
-            <Button variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={handleExportarPDF}>
-              <FileDown className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
-              <span className="hidden sm:inline">PDF</span>
-            </Button>
-            <Button variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={handleExportarExcel}>
-              <FileSpreadsheet className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
-              <span className="hidden sm:inline">Excel</span>
-            </Button>
+            
             <Dialog open={openShare} onOpenChange={setOpenShare}>
               <DialogTrigger asChild>
-                <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
-                  <Share2 className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
-                  <span className="hidden sm:inline">Compartilhar</span>
+                <Button variant="outline" size="sm">
+                  <Share2 className="w-4 h-4 mr-2" />
+                  Compartilhar
                 </Button>
               </DialogTrigger>
             <DialogContent className="animate-in fade-in-0 zoom-in-95 duration-300">
@@ -847,7 +791,71 @@ export default function EscalaDetalhes() {
             </DialogContent>
           </Dialog>
 
-          {/* Modal de Edição */}
+          {/* Menu Dropdown com ações secundárias */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <MoreVertical className="w-4 h-4 mr-2" />
+                Mais Ações
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuItem
+                onClick={() => {
+                  if (!escala) return;
+                  const dataFormatada = typeof escala.data === 'string' 
+                    ? escala.data 
+                    : new Date(escala.data).toISOString().split('T')[0];
+                  adicionarAoGoogleCalendar({
+                    titulo: escala.titulo,
+                    descricao: escala.descricao || undefined,
+                    local: escala.local || undefined,
+                    dataInicio: dataFormatada,
+                    horaInicio: escala.hora || undefined,
+                  });
+                  toast.success("Abrindo Google Calendar...");
+                }}
+              >
+                <CalendarPlus className="w-4 h-4 mr-2" />
+                Adicionar ao Google Calendar
+              </DropdownMenuItem>
+              
+              <DropdownMenuItem onClick={handleExportarExcel}>
+                <FileSpreadsheet className="w-4 h-4 mr-2" />
+                Exportar Excel
+              </DropdownMenuItem>
+              
+              {user && escala && escala.userId === user.openId && (
+                <>
+                  <DropdownMenuSeparator />
+                  
+                  <DropdownMenuItem onClick={handleAbrirDuplicacao}>
+                    <Copy className="w-4 h-4 mr-2" />
+                    Duplicar Escala
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuItem onClick={() => setOpenSalvarTemplate(true)}>
+                    <BookTemplate className="w-4 h-4 mr-2" />
+                    Salvar como Template
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuSeparator />
+                  
+                  <DropdownMenuItem
+                    onClick={() => enviarLembretesMutation.mutate({ escalaId })}
+                    disabled={enviarLembretesMutation.isPending}
+                    className="text-purple-400"
+                  >
+                    <Mail className="w-4 h-4 mr-2" />
+                    {enviarLembretesMutation.isPending ? "Enviando Lembretes..." : "Enviar Lembretes"}
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        {/* Modal de Edição */}
           <Dialog open={openEditEscala} onOpenChange={setOpenEditEscala}>
             <DialogContent className="animate-in fade-in-0 zoom-in-95 duration-300">
               <DialogHeader>
@@ -935,7 +943,6 @@ export default function EscalaDetalhes() {
               </div>
             </DialogContent>
           </Dialog>
-          </div>
         </div>
 
         {/* Informações da Escala */}
