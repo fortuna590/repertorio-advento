@@ -424,6 +424,7 @@ export const participantesEscala = mysqlTable("participantesEscala", {
   status: varchar("status", { length: 20 }).default("pendente").notNull(), // "confirmado", "pendente", "ausente"
   observacoes: text("observacoes"),
   token: varchar("token", { length: 64 }).unique(), // Token único para confirmação rápida
+  arquivado: int("arquivado").default(0).notNull(), // 0 = não arquivado, 1 = arquivado
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

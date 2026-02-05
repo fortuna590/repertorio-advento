@@ -1361,4 +1361,119 @@ export const escalasRouter = router({
 
       return estatisticas;
     }),
+
+  // Contar escalas pendentes de confirmação
+  contarPendentes: publicProcedure
+    .input(z.object({
+      userId: z.number(),
+    }))
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const hoje = new Date().toISOString().split('T')[0];
+
+      // Buscar participações pendentes não arquivadas em escalas futuras
+      const participacoes = await db.select()
+        .from(participantesEscala)
+        .where(
+          and(
+            eq(participantesEscala.userId, input.userId),
+            eq(participantesEscala.status, "pendente"),
+            eq(participantesEscala.arquivado, 0)
+          )
+        );
+
+      // Filtrar apenas escalas futuras
+      let count = 0;
+      for (const p of participacoes) {
+        const [escala] = await db.select().from(escalas)
+          .where(eq(escalas.id, p.escalaId));
+        if (escala && (escala.data as any) >= hoje) {
+          count++;
+        }
+      }
+
+      return { count };
+    }),
+
+  // Arquivar participação
+  arquivarParticipacao: publicProcedure
+    .input(z.object({
+      participanteId: z.number(),
+      arquivado: z.boolean(),
+    }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      await db.update(participantesEscala)
+        .set({ arquivado: input.arquivado ? 1 : 0 })
+        .where(eq(participantesEscala.id, input.participanteId));
+
+      return { success: true };
+    }),
+
+  // Confirmar múltiplas escalas
+  confirmarMultiplas: publicProcedure
+    .input(z.object({
+      tokens: z.array(z.string()),
+    }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      let confirmados = 0;
+      const erros: string[] = [];
+
+      for (const token of input.tokens) {
+        try {
+          const [participante] = await db.select()
+            .from(participantesEscala)
+            .where(eq(participantesEscala.token, token));
+
+          if (!participante) {
+            erros.push(`Token inválido: ${token}`);
+            continue;
+          }
+
+          if (participante.status === "confirmado") {
+            continue; // Já confirmado, pular
+          }
+
+          await db.update(participantesEscala)
+            .set({ status: "confirmado" })
+            .where(eq(participantesEscala.token, token));
+
+          confirmados++;
+
+          // Enviar email de confirmação
+          if (participante.email) {
+            const [escala] = await db.select().from(escalas)
+              .where(eq(escalas.id, participante.escalaId));
+            
+            if (escala) {
+              const [funcao] = await db.select().from(funcoesEscala)
+                .where(eq(funcoesEscala.id, participante.funcaoId));
+
+              await sendEmail({
+                to: participante.email,
+                subject: `Confirmação de Presença - ${escala.titulo}`,
+                html: templateEmailStatusEscala(
+                  participante.nome,
+                  escala.titulo,
+                  funcao?.nome || "Participante",
+                  "confirmado"
+                ),
+              });
+            }
+          }
+        } catch (error) {
+          console.error(`Erro ao confirmar token ${token}:`, error);
+          erros.push(`Erro ao processar: ${token}`);
+        }
+      }
+
+      return { confirmados, erros };
+    }),
 });

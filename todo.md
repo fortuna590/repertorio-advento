@@ -2179,3 +2179,39 @@
 - [x] Sistema de expansão/colapso com useState e Set
 - [x] Testar visualização
 - [x] Salvar checkpoint
+
+
+## Melhorias na Página "Minhas Escalas" ✅ CONCLUÍDO
+
+### 1. Filtros por Status e Período
+- [x] Adicionar Select para filtro de status (todos/confirmado/pendente/ausente)
+- [x] Adicionar Select para filtro de período (todas/próximas/passadas)
+- [x] Implementar lógica de filtragem no frontend com useMemo
+- [x] Adicionar botão "Limpar filtros"
+- [x] Mostrar contador de escalas filtradas
+
+### 2. Badge de Contador no Menu
+- [x] Criar endpoint backend para contar escalas pendentes (contarPendentes)
+- [x] Adicionar badge no componente EscalasNavigation
+- [x] Atualizar contador em tempo real após confirmações (refetchInterval: 30s)
+- [x] Estilizar badge com cor de destaque (variant="destructive")
+
+### 3. Confirmação em Massa
+- [x] Adicionar checkboxes nos cards de escalas pendentes
+- [x] Criar botão "Confirmar em Massa" no topo com contador
+- [x] Criar modal de confirmação com lista das escalas selecionadas
+- [x] Criar endpoint backend para confirmação em lote (confirmarMultiplas)
+- [x] Implementar mutation para confirmar múltiplas escalas
+- [x] Atualizar UI após confirmação em massa
+- [x] Toast de sucesso com número de confirmações e erros
+- [x] Envio de email automático para cada confirmação
+
+### 4. Sistema de Arquivamento
+- [x] Adicionar coluna "arquivado" na tabela participantesEscala
+- [x] Criar endpoint backend para arquivar/desarquivar participação (arquivarParticipacao)
+- [x] Adicionar botão "Arquivar" nos cards de escalas passadas
+- [x] Adicionar filtro "Mostrar arquivadas" (checkbox)
+- [x] Filtro de arquivamento integrado com outros filtros
+- [x] Botão "Desarquivar" para escalas arquivadas
+- [x] Ícone visual de escala arquivada (Archive icon)
+- [x] Opacidade reduzida para cards arquivados
