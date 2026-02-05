@@ -2164,3 +2164,18 @@
 - [x] Reduzir tamanho de fontes e ícones para layout mais compacto
 - [x] Botão "Ver Detalhes" mais explícito
 - [x] Testado em diferentes tamanhos de tela
+
+
+## Correção - Redesign da Página "Minhas Escalas" (MinhasEscalas.tsx) ✅ CONCLUÍDO
+
+- [x] Ler arquivo MinhasEscalas.tsx atual
+- [x] Reduzir tamanho dos cards (padding de CardHeader/CardContent para p-4 direto)
+- [x] Remover lista completa de participantes dos cards (movida para seção expansível)
+- [x] Manter apenas informações essenciais no card (título, data, hora, local, sua função)
+- [x] Adicionar indicador visual compacto de status (badge com ícone e texto)
+- [x] Adicionar botão "Ver Detalhes" com ícone ChevronDown/ChevronUp para expandir/ocultar
+- [x] Reduzir tamanho de fontes (text-xs, text-sm) e ícones (w-3.5 h-3.5)
+- [x] Melhorar responsividade mobile (grid com md:grid-cols-2 lg:grid-cols-3, truncate em textos)
+- [x] Sistema de expansão/colapso com useState e Set
+- [x] Testar visualização
+- [x] Salvar checkpoint
