@@ -2251,3 +2251,25 @@ Refatorada lógica da máscara para verificar se o campo está vazio (value.leng
 - [x] Testar apagar número completamente
 - [x] Testar digitar novo número
 - [x] Salvar checkpoint
+
+
+## Diagnóstico e Correção - Envio de Emails via Resend ✅ CONCLUÍDO
+
+### Problema Identificado
+1. **Status 429 - Too many requests**: Código excedia limite de 2 requisições/segundo do Resend
+2. **Campo "to" vazio**: Tentativa de enviar emails para participantes sem email cadastrado
+
+### Soluções Implementadas
+1. **Validação de email**: Verificar se email existe e não está vazio antes de enviar
+2. **Rate limiting**: Delay de 600ms entre envios para respeitar limite de 2 req/s
+3. **Logs melhorados**: Identificar participantes sem email e contar erros
+
+### Tarefas
+- [x] Verificar se RESEND_API_KEY está configurada corretamente
+- [x] Verificar logs de erro no servidor (encontrado erro 429 e campo "to" vazio)
+- [x] Analisar código de envio de email (server/_core/email.ts)
+- [x] Adicionar validação de email em todos os endpoints (4 locais)
+- [x] Adicionar delay de 600ms entre envios (3 loops)
+- [x] Implementar melhor tratamento de erros (retornar lista de participantes sem email)
+- [x] Adicionar logs detalhados de debug
+- [x] Salvar checkpoint

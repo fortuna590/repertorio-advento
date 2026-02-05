@@ -241,8 +241,8 @@ export const escalasRouter = router({
       
       console.log("[Escalas] Participante inserido com userId:", userId);
 
-      // Enviar email de notificação se tiver email
-      if (input.email && escala) {
+      // Enviar email de notificação se tiver email válido
+      if (input.email && input.email.trim() !== "" && escala) {
         const [funcao] = await db.select().from(funcoesEscala).where(eq(funcoesEscala.id, input.funcaoId));
         
         if (funcao) {
@@ -353,8 +353,8 @@ export const escalasRouter = router({
         .set({ status: input.status })
         .where(eq(participantesEscala.id, input.participanteId));
 
-      // Enviar email de notificação se tiver email
-      if (participante.email) {
+      // Enviar email de notificação se tiver email válido
+      if (participante.email && participante.email.trim() !== "") {
         const [escala] = await db.select().from(escalas).where(eq(escalas.id, participante.escalaId));
         const [funcao] = await db.select().from(funcoesEscala).where(eq(funcoesEscala.id, participante.funcaoId));
 
@@ -594,6 +594,9 @@ export const escalasRouter = router({
               ),
             });
             emailsEnviados++;
+            
+            // Delay de 600ms entre envios para respeitar limite de 2 req/s do Resend
+            await new Promise(resolve => setTimeout(resolve, 600));
           } catch (error) {
             console.error(`Erro ao enviar lembrete para ${participante.email}:`, error);
             erros++;
@@ -949,15 +952,24 @@ export const escalasRouter = router({
 
       let enviados = 0;
       let erros = 0;
+      const semEmail: string[] = [];
 
       // Enviar email para cada participante
       for (const participante of participantes) {
+        // Validar se participante tem email
+        if (!participante.email || participante.email.trim() === "") {
+          console.warn(`[Lembrete] Participante ${participante.nome} sem email cadastrado`);
+          semEmail.push(participante.nome);
+          erros++;
+          continue;
+        }
+
         // Buscar função
         const [funcao] = await db.select().from(funcoesEscala)
           .where(eq(funcoesEscala.id, participante.funcaoId));
 
         const success = await sendEscalaReminder({
-          to: participante.email || "",
+          to: participante.email,
           escalaTitle: escala.titulo,
           escalaDate: new Date(escala.data).toLocaleDateString("pt-BR"),
           escalaTime: escala.hora || "Não informado",
@@ -971,12 +983,18 @@ export const escalasRouter = router({
         } else {
           erros++;
         }
+
+        // Delay de 600ms entre envios para respeitar limite de 2 req/s do Resend
+        if (participantes.indexOf(participante) < participantes.length - 1) {
+          await new Promise(resolve => setTimeout(resolve, 600));
+        }
       }
 
       return {
         total: participantes.length,
         enviados,
         erros,
+        semEmail: semEmail.length > 0 ? semEmail : undefined,
       };
     }),
 
@@ -1447,8 +1465,8 @@ export const escalasRouter = router({
 
           confirmados++;
 
-          // Enviar email de confirmação
-          if (participante.email) {
+          // Enviar email de confirmação se tiver email válido
+          if (participante.email && participante.email.trim() !== "") {
             const [escala] = await db.select().from(escalas)
               .where(eq(escalas.id, participante.escalaId));
             
@@ -1466,6 +1484,9 @@ export const escalasRouter = router({
                   "confirmado"
                 ),
               });
+              
+              // Delay de 600ms entre envios para respeitar limite de 2 req/s do Resend
+              await new Promise(resolve => setTimeout(resolve, 600));
             }
           }
         } catch (error) {
