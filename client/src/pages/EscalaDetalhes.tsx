@@ -1068,10 +1068,22 @@ export default function EscalaDetalhes() {
                             value={telefone}
                             onChange={(e) => {
                               const value = e.target.value.replace(/\D/g, '');
+                              // Permitir campo vazio
+                              if (value.length === 0) {
+                                setTelefone('');
+                                return;
+                              }
                               if (value.length <= 11) {
-                                const formatted = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
-                                  .replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')
-                                  .replace(/(\d{2})(\d{0,5})/, '($1) $2');
+                                let formatted = value;
+                                if (value.length >= 11) {
+                                  formatted = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+                                } else if (value.length >= 7) {
+                                  formatted = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+                                } else if (value.length >= 3) {
+                                  formatted = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+                                } else {
+                                  formatted = `(${value}`;
+                                }
                                 setTelefone(formatted);
                               }
                             }}
@@ -1338,10 +1350,22 @@ export default function EscalaDetalhes() {
                   value={editTelefone}
                   onChange={(e) => {
                     const value = e.target.value.replace(/\D/g, '');
+                    // Permitir campo vazio
+                    if (value.length === 0) {
+                      setEditTelefone('');
+                      return;
+                    }
                     if (value.length <= 11) {
-                      const formatted = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
-                        .replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')
-                        .replace(/(\d{2})(\d{0,5})/, '($1) $2');
+                      let formatted = value;
+                      if (value.length >= 11) {
+                        formatted = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+                      } else if (value.length >= 7) {
+                        formatted = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+                      } else if (value.length >= 3) {
+                        formatted = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+                      } else {
+                        formatted = `(${value}`;
+                      }
                       setEditTelefone(formatted);
                     }
                   }}

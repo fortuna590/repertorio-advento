@@ -2233,3 +2233,21 @@ Tornar a página de detalhes da escala mais limpa e profissional, agrupando aç�
 - [x] Adicionar separadores no dropdown para organizar ações por categoria
 - [x] Testar todas as ações após reorganização
 - [x] Salvar checkpoint
+
+
+## Correção de Bug - Campo de Telefone no Modal de Edição ✅ CONCLUÍDO
+
+### Problema
+Campo de telefone não permitia apagar completamente o número devido à máscara de formatação. Ficava travado em "((18) ) 9966-" impedindo limpar o campo.
+
+### Solução
+Refatorada lógica da máscara para verificar se o campo está vazio (value.length === 0) antes de aplicar formatação. Agora permite campo completamente vazio e aplica máscara progressiva apenas quando há dígitos.
+
+### Tarefas
+- [x] Localizar componente do modal de edição de participante (EscalaDetalhes.tsx linha 1337)
+- [x] Identificar lógica da máscara de telefone (regex replace encadeado)
+- [x] Corrigir máscara para permitir campo vazio (adicionar verificação value.length === 0)
+- [x] Aplicar mesma correção no modal de adicionar participante (linha 1067)
+- [x] Testar apagar número completamente
+- [x] Testar digitar novo número
+- [x] Salvar checkpoint
