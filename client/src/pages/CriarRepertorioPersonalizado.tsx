@@ -67,6 +67,23 @@ const MOMENTOS_MISSA = [
   "Outro",
 ];
 
+const MOMENTOS_GRUPO_ORACAO = [
+  "Acolhida",
+  "Animação",
+  "Oração/Entrega",
+  "Espírito Santo",
+  "Palavra",
+  "Louvor",
+  "Final",
+  "Outro",
+];
+
+const getMomentosPorTemplate = (template: "missa" | "grupo_oracao" | "livre") => {
+  if (template === "grupo_oracao") return MOMENTOS_GRUPO_ORACAO;
+  if (template === "missa") return MOMENTOS_MISSA;
+  return []; // Template livre não tem momentos
+};
+
 const TAGS_PREDEFINIDAS = [
   "Missa Dominical",
   "Casamento",
@@ -99,6 +116,7 @@ export default function CriarRepertorioPersonalizado() {
   const [descricao, setDescricao] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [novaTag, setNovaTag] = useState("");
+  const [tipoTemplate, setTipoTemplate] = useState<"missa" | "grupo_oracao" | "livre">("missa");
   const [musicas, setMusicas] = useState<Musica[]>([]);
   const [modalImportarAberto, setModalImportarAberto] = useState(false);
   const [repertorioFonteId, setRepertorioFonteId] = useState<number | null>(null);
@@ -114,6 +132,7 @@ export default function CriarRepertorioPersonalizado() {
     if (repertorio) {
       setNome(repertorio.nome);
       setDescricao(repertorio.descricao || "");
+      setTipoTemplate(repertorio.tipoTemplate || "missa");
       // Parse tags
       if (repertorio.tags) {
         try {
@@ -144,6 +163,7 @@ export default function CriarRepertorioPersonalizado() {
   const excluirMusicaMutation = trpc.repertoriosPersonalizados.excluirMusica.useMutation();
 
   const handleAdicionarMusica = () => {
+    const momentos = getMomentosPorTemplate(tipoTemplate);
     setMusicas([
       ...musicas,
       {
@@ -152,7 +172,7 @@ export default function CriarRepertorioPersonalizado() {
         tom: "",
         linkCifra: "",
         linkYoutube: "",
-        momento: "Entrada",
+        momento: momentos.length > 0 ? momentos[0] : "", // Primeiro momento ou vazio para template livre
       },
     ]);
     
@@ -230,6 +250,11 @@ export default function CriarRepertorioPersonalizado() {
         toast.error("Todas as músicas devem ter um título");
         return;
       }
+      // Validar momento apenas para templates que não são livres
+      if (tipoTemplate !== "livre" && !musica.momento) {
+        toast.error("Todas as músicas devem ter um momento definido");
+        return;
+      }
     }
 
     try {
@@ -248,6 +273,7 @@ export default function CriarRepertorioPersonalizado() {
           nome,
           descricao,
           tags,
+          tipoTemplate,
         });
         repertorioId = resultado.repertorioId;
       }
@@ -338,6 +364,44 @@ export default function CriarRepertorioPersonalizado() {
                 onChange={(e) => setNome(e.target.value)}
               />
             </div>
+
+            {/* Seletor de Tipo de Template */}
+            {!isEdicao && (
+              <div>
+                <Label htmlFor="tipoTemplate">Tipo de Repertório *</Label>
+                <Select value={tipoTemplate} onValueChange={(value: any) => setTipoTemplate(value)}>
+                  <SelectTrigger id="tipoTemplate">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="missa">
+                      <div className="flex flex-col items-start">
+                        <span className="font-medium">Missa</span>
+                        <span className="text-xs text-muted-foreground">Entrada, Glória, Aclamação, Ofertório, Santo, Cordeiro, Comunhão, Final</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="grupo_oracao">
+                      <div className="flex flex-col items-start">
+                        <span className="font-medium">Grupo de Oração</span>
+                        <span className="text-xs text-muted-foreground">Acolhida, Animação, Oração/Entrega, Espírito Santo, Palavra, Louvor, Final</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="livre">
+                      <div className="flex flex-col items-start">
+                        <span className="font-medium">Livre (Sem Momentos)</span>
+                        <span className="text-xs text-muted-foreground">Adoração, Momento Mariano, Terço, Novena - adicione músicas livremente</span>
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {tipoTemplate === "missa" && "Estrutura tradicional da Santa Missa"}
+                  {tipoTemplate === "grupo_oracao" && "Estrutura de Grupo de Oração"}
+                  {tipoTemplate === "livre" && "Sem momentos predefinidos - ideal para adoração, terço, novena, etc."}
+                </p>
+              </div>
+            )}
+
             <div>
               <Label htmlFor="descricao">Descrição / Notas (opcional)</Label>
               <Textarea
@@ -494,6 +558,7 @@ export default function CriarRepertorioPersonalizado() {
                         index={index}
                         onUpdate={handleAtualizarMusica}
                         onRemove={handleRemoverMusica}
+                        tipoTemplate={tipoTemplate}
                       />
                     ))}
                   </div>

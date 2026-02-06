@@ -13,6 +13,7 @@ export const repertoriosPersonalizadosRouter = router({
         nome: z.string().min(1, "Nome é obrigatório"),
         descricao: z.string().optional(),
         tags: z.array(z.string()).optional(),
+        tipoTemplate: z.enum(["missa", "grupo_oracao", "livre"]).default("missa"),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -24,6 +25,7 @@ export const repertoriosPersonalizadosRouter = router({
         nome: input.nome,
         descricao: input.descricao || null,
         tags: input.tags && input.tags.length > 0 ? JSON.stringify(input.tags) : null,
+        tipoTemplate: input.tipoTemplate,
         isPublic: 0,
       });
 
@@ -137,6 +139,7 @@ export const repertoriosPersonalizadosRouter = router({
         nome: z.string().min(1, "Nome é obrigatório"),
         descricao: z.string().optional(),
         tags: z.array(z.string()).optional(),
+        tipoTemplate: z.enum(["missa", "grupo_oracao", "livre"]).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -149,6 +152,7 @@ export const repertoriosPersonalizadosRouter = router({
           nome: input.nome,
           descricao: input.descricao || null,
           tags: input.tags && input.tags.length > 0 ? JSON.stringify(input.tags) : null,
+          ...(input.tipoTemplate && { tipoTemplate: input.tipoTemplate }),
         })
         .where(
           and(

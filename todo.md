@@ -2480,3 +2480,14 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Criar funcionalidade de importar músicas de outro repertório
 - [x] Adicionar modal de seleção de repertório fonte
 - [x] Permitir seleção múltipla de músicas para importar
+
+
+## Exibição de Tags e Sistema de Templates
+- [x] Exibir tags como badges coloridos nos cards da listagem de repertórios
+- [x] Adicionar coluna tipoTemplate na tabela repertoriosPersonalizados
+- [x] Criar endpoints para gerenciar templates
+- [x] Implementar seletor de template ao criar repertório (Missa, Grupo de Oração, Livre)
+- [x] Definir momentos específicos para template Grupo de Oração
+- [x] Ajustar formulário para templates livres (sem seleção de momentos)
+- [x] Criar templates predefinidos livres (Adoração, Momento Mariano, Terço, Novena)
+- [x] Validar que templates livres não exigem momento nas músicas

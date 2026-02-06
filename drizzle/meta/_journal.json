@@ -176,6 +176,13 @@
       "when": 1770411627300,
       "tag": "0024_lively_namora",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "5",
+      "when": 1770416342928,
+      "tag": "0025_fixed_rictor",
+      "breakpoints": true
     }
   ]
 }

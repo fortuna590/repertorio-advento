@@ -1,0 +1,1 @@
+ALTER TABLE `repertoriosPersonalizados` ADD `tipoTemplate` enum('missa','grupo_oracao','livre') DEFAULT 'missa' NOT NULL;

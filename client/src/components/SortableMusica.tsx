@@ -35,6 +35,17 @@ const MOMENTOS_MISSA = [
   "Outro",
 ];
 
+const MOMENTOS_GRUPO_ORACAO = [
+  "Acolhida",
+  "Animação",
+  "Oração/Entrega",
+  "Espírito Santo",
+  "Palavra",
+  "Louvor",
+  "Final",
+  "Outro",
+];
+
 const TONS = [
   "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B",
   "Cm", "C#m", "Dm", "D#m", "Em", "Fm", "F#m", "Gm", "G#m", "Am", "A#m", "Bm",
@@ -45,9 +56,12 @@ interface SortableMusicaProps {
   index: number;
   onUpdate: (index: number, campo: keyof Musica, valor: string) => void;
   onRemove: (index: number) => void;
+  tipoTemplate: "missa" | "grupo_oracao" | "livre";
 }
 
-export function SortableMusica({ musica, index, onUpdate, onRemove }: SortableMusicaProps) {
+export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate }: SortableMusicaProps) {
+  const momentos = tipoTemplate === "grupo_oracao" ? MOMENTOS_GRUPO_ORACAO : MOMENTOS_MISSA;
+  const mostrarMomento = tipoTemplate !== "livre"; // Ocultar campo momento para template livre
   const {
     attributes,
     listeners,
@@ -128,24 +142,26 @@ export function SortableMusica({ musica, index, onUpdate, onRemove }: SortableMu
           </Select>
         </div>
 
-        <div>
-          <Label>Momento da Missa *</Label>
-          <Select
-            value={musica.momento}
-            onValueChange={(valor) => onUpdate(index, "momento", valor)}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {MOMENTOS_MISSA.map((momento) => (
-                <SelectItem key={momento} value={momento}>
-                  {momento}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+                    {mostrarMomento && (
+                      <div>
+                        <Label>Momento {tipoTemplate === "grupo_oracao" ? "do Grupo" : "da Missa"} *</Label>
+                        <Select
+                          value={musica.momento}
+                          onValueChange={(valor) => onUpdate(index, "momento", valor)}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {momentos.map((momento) => (
+                              <SelectItem key={momento} value={momento}>
+                                {momento}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
 
         <div>
           <Label>Link da Cifra</Label>

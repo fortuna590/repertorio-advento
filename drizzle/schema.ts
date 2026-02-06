@@ -116,6 +116,7 @@ export const repertoriosPersonalizados = mysqlTable("repertoriosPersonalizados",
   nome: varchar("nome", { length: 255 }).notNull(),
   descricao: text("descricao"),
   tags: text("tags"), // JSON array com tags/categorias (ex: ["Missa Dominical", "Casamento"])
+  tipoTemplate: mysqlEnum("tipoTemplate", ["missa", "grupo_oracao", "livre"]).default("missa").notNull(), // Tipo de template: missa (padrão), grupo_oracao, livre (sem momentos)
   shareId: varchar("shareId", { length: 36 }), // UUID para compartilhamento público
   isPublic: int("isPublic").default(0).notNull(), // 0 = privado, 1 = público
   createdAt: timestamp("createdAt").defaultNow().notNull(),
