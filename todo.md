@@ -2296,3 +2296,24 @@ Para usar domínio profissional louvamais.com:
 3. Configurar registros DNS (MX, TXT, DKIM)
 4. Aguardar verificação (até 48h)
 5. Alterar de volta para noreply@louvamais.com nos arquivos
+
+
+## Correção de Responsividade - Página de Repertórios ✅ CONCLUÍDO
+
+### Problema
+No mobile, o botão "Novo Repertório" estava sobrepondo o título "Meus Repertórios" e o botão "Voltar", causando layout quebrado.
+
+### Solução Implementada
+Reorganizado header com layout flex responsivo:
+- Mobile (< 640px): flex-col (coluna) com botão full-width
+- Tablet (640px-768px): flex-col com botão auto-width
+- Desktop (> 768px): flex-row (linha) com justify-between
+
+### Tarefas
+- [x] Localizar página de repertórios (MeusRepertorios.tsx)
+- [x] Analisar estrutura do header atual (linha 173)
+- [x] Ajustar classes Tailwind para responsividade mobile (flex-col gap-4 md:flex-row)
+- [x] Reorganizar botões em stack vertical no mobile (w-full sm:w-auto)
+- [x] Ajustar tamanhos de fonte (text-2xl sm:text-3xl)
+- [x] Testar em diferentes tamanhos de tela
+- [x] Salvar checkpoint

@@ -170,23 +170,23 @@ export default function MeusRepertorios() {
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800 py-12 px-4">
       <div className="container max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
+        <div className="flex flex-col gap-4 mb-8 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
             <Link href="/">
-              <a className="text-purple-300 hover:text-purple-200 flex items-center gap-2">
+              <a className="text-purple-300 hover:text-purple-200 flex items-center gap-2 w-fit">
                 <ArrowLeft className="w-5 h-5" />
                 Voltar
               </a>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-white">Meus Repertórios</h1>
-              <p className="text-purple-200">
+              <h1 className="text-2xl sm:text-3xl font-bold text-white">Meus Repertórios</h1>
+              <p className="text-purple-200 text-sm sm:text-base">
                 {repertorios?.length || 0} repertório(s) criado(s)
               </p>
             </div>
           </div>
-          <Link href="/montar-repertorio">
-            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+          <Link href="/montar-repertorio" className="w-full sm:w-auto">
+            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 w-full sm:w-auto">
               <Plus className="w-4 h-4 mr-2" />
               Novo Repertório
             </Button>
