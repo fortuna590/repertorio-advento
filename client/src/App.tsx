@@ -54,6 +54,8 @@ import AdminLogs from "./pages/AdminLogs";
 import Moderador from "./pages/Moderador";
 import EstatisticasEscalas from "./pages/EstatisticasEscalas";
 import HistoricoEscalas from "./pages/HistoricoEscalas";
+import CriarRepertorioPersonalizado from "./pages/CriarRepertorioPersonalizado";
+import VisualizarRepertorioPersonalizado from "./pages/VisualizarRepertorioPersonalizado";
 import WhatsAppButton from "./components/WhatsAppButton";
 
 function Router() {
@@ -108,6 +110,9 @@ function Router() {
       <Route path="/historico-escalas" component={HistoricoEscalas} />
       <Route path="/escala/:id" component={EscalaDetalhes} />
       <Route path="/confirmar/:token" component={ConfirmarPresenca} />
+      <Route path="/repertorio-personalizado/novo" component={CriarRepertorioPersonalizado} />
+      <Route path="/repertorio-personalizado/:id" component={VisualizarRepertorioPersonalizado} />
+      <Route path="/repertorio-personalizado/:id/editar" component={CriarRepertorioPersonalizado} />
       <Route path="/404" component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

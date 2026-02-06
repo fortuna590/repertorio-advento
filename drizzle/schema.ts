@@ -108,6 +108,43 @@ export type Repertorio = typeof repertorios.$inferSelect;
 export type InsertRepertorio = typeof repertorios.$inferInsert;
 
 /**
+ * Tabela para repertórios personalizados dos usuários (novo sistema)
+ */
+export const repertoriosPersonalizados = mysqlTable("repertoriosPersonalizados", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().references(() => users.id),
+  nome: varchar("nome", { length: 255 }).notNull(),
+  descricao: text("descricao"),
+  shareId: varchar("shareId", { length: 36 }), // UUID para compartilhamento público
+  isPublic: int("isPublic").default(0).notNull(), // 0 = privado, 1 = público
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type RepertorioPersonalizado = typeof repertoriosPersonalizados.$inferSelect;
+export type InsertRepertorioPersonalizado = typeof repertoriosPersonalizados.$inferInsert;
+
+/**
+ * Tabela para músicas dos repertórios personalizados
+ */
+export const musicasRepertorioPersonalizado = mysqlTable("musicasRepertorioPersonalizado", {
+  id: int("id").autoincrement().primaryKey(),
+  repertorioId: int("repertorioId").notNull().references(() => repertoriosPersonalizados.id, { onDelete: "cascade", onUpdate: "no action" }),
+  titulo: varchar("titulo", { length: 255 }).notNull(),
+  artista: varchar("artista", { length: 255 }),
+  tom: varchar("tom", { length: 10 }), // Ex: C, Dm, F#, etc.
+  linkCifra: varchar("linkCifra", { length: 500 }),
+  linkYoutube: varchar("linkYoutube", { length: 500 }),
+  momento: varchar("momento", { length: 100 }).notNull(), // Entrada, Glória, Aclamação, Ofertório, Santo, Cordeiro, Comunhão, Final, Outro
+  ordem: int("ordem").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MusicaRepertorioPersonalizado = typeof musicasRepertorioPersonalizado.$inferSelect;
+export type InsertMusicaRepertorioPersonalizado = typeof musicasRepertorioPersonalizado.$inferInsert;
+
+/**
  * Tabela para artigos do blog
  */
 export const artigos = mysqlTable("artigos", {

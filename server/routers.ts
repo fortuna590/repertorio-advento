@@ -9,6 +9,7 @@ import { donationsRouter } from "./routers/donations";
 import { newsletterRouter } from "./routers/newsletter";
 import { notificationsRouter } from "./routers/notifications";
 import { repertoriosRouter } from "./routers/repertorios";
+import { repertoriosPersonalizadosRouter } from "./routers/repertoriosPersonalizados";
 import { artigosRouter } from "./routers/artigos";
 import { paymentsRouter } from "./routers/payments";
 import { productsRouter } from "./routers/products";
@@ -31,6 +32,7 @@ export const appRouter = router({
   newsletter: newsletterRouter,
   notifications: notificationsRouter,
   repertorios: repertoriosRouter,
+  repertoriosPersonalizados: repertoriosPersonalizadosRouter,
   artigos: artigosRouter,
   payments: paymentsRouter,
   products: productsRouter,

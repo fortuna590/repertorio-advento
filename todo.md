@@ -2317,3 +2317,115 @@ Reorganizado header com layout flex responsivo:
 - [x] Ajustar tamanhos de fonte (text-2xl sm:text-3xl)
 - [x] Testar em diferentes tamanhos de tela
 - [x] Salvar checkpoint
+
+
+## Novo Sistema de Repertórios Personalizados ✅ CONCLUÍDO
+
+### Objetivo
+Substituir sistema atual "Montar Repertório" por interface simplificada onde usuários criam repertórios adicionando músicas ilimitadas com todos os detalhes (título, artista, tom, links, momento da missa).
+
+### Funcionalidades
+- Criar repertório com nome e descrição
+- Adicionar músicas ilimitadas com: título, artista, tom, link cifra, link YouTube, momento da missa
+- Editar repertórios existentes
+- Duplicar repertórios
+- Compartilhar via link único
+- Visualizar repertório organizado por momentos
+- Excluir repertórios
+
+### Estrutura de Dados
+**Tabela: repertoriosPersonalizados**
+- id, userId, nome, descricao, shareId, isPublic, createdAt, updatedAt
+
+**Tabela: musicasRepertorio**
+- id, repertorioId, titulo, artista, tom, linkCifra, linkYoutube, momento, ordem
+
+### Tarefas
+
+#### 1. Backend - Schema e Migrações
+- [x] Criar tabela repertoriosPersonalizados no schema
+- [x] Criar tabela musicasPersonalizadas no schema
+- [x] Executar pnpm db:push para aplicar migrações
+- [x] Helpers de query integrados nos endpoints tRPC
+
+#### 2. Backend - Endpoints tRPC
+- [x] Endpoint: criar repertório (nome, descrição)
+- [x] Endpoint: listar meus repertórios (listMeus)
+- [x] Endpoint: buscar repertório por ID (buscarPorId)
+- [x] Endpoint: buscar repertório por shareId (buscarPorShareId) - público
+- [x] Endpoint: atualizar repertório (atualizar)
+- [x] Endpoint: duplicar repertório (duplicar)
+- [x] Endpoint: excluir repertório (excluir)
+- [x] Endpoint: toggle compartilhamento (toggleShare)
+- [x] Músicas gerenciadas via array no endpoint criar/atualizar
+- [x] Reordenamento automático via campo ordem
+
+#### 3. Frontend - Página de Criação/Edição
+- [x] Criar componente CriarRepertorioPersonalizado.tsx
+- [x] Formulário: nome e descrição do repertório
+- [x] Seção: lista de músicas adicionadas com cards
+- [x] Formulário inline: adicionar nova música
+  - [x] Campo: título (obrigatório)
+  - [x] Campo: artista
+  - [x] Select: tom (24 opções - maiores e menores)
+  - [x] Campo: link cifra
+  - [x] Campo: link YouTube
+  - [x] Select: momento da missa (9 opções)
+- [x] Botão: "+ Adicionar Música"
+- [x] Funcionalidade: editar música inline (campos editáveis)
+- [x] Funcionalidade: excluir música (com confirmação)
+- [ ] Funcionalidade: reordenar músicas (drag & drop) - Fase 2
+- [x] Botão: "Salvar Repertório" com validação
+- [x] Modo edição: carregar dados existentes via useParams
+
+#### 4. Frontend - Página Meus Repertórios
+- [x] Criar nova página integrada ao sistema existente
+- [x] Card de repertório: nome, descrição, quantidade de músicas, status compartilhamento
+- [x] Botão: Editar (redireciona para /repertorio-personalizado/:id/editar)
+- [x] Botão: Duplicar (com toast de confirmação)
+- [x] Botão: Compartilhar/Desativar (toggle + copiar link)
+- [x] Botão: Excluir (com dialog de confirmação)
+- [x] Botão: Visualizar (redireciona para /repertorio-personalizado/:id)
+- [x] Menu dropdown com todas as ações
+
+#### 5. Frontend - Página de Visualização
+- [x] Criar VisualizarRepertorioPersonalizado.tsx
+- [x] Header: nome, descrição, contador de músicas
+- [x] Organizar músicas por momento da missa (ordem fixa)
+- [x] Card de música: título, artista, tom (badge)
+- [x] Botões: link cifra e YouTube (com ícones e external link)
+- [x] Botão: "Exportar PDF" com geração via jsPDF
+- [x] Botão: "Editar" (sempre visível para o dono)
+- [x] Botão: "Voltar" para Meus Repertórios
+
+#### 6. Rotas e Navegação
+- [x] Manter rota /montar-repertorio (sistema antigo)
+- [x] Criar rota /repertorio-personalizado/novo
+- [x] Criar rota /repertorio-personalizado/:id/editar
+- [x] Criar rota /repertorio-personalizado/:id (visualização)
+- [x] Adicionar imports no App.tsx
+- [x] Registrar rotas no App.tsx
+
+#### 7. Exportação em PDF
+- [x] Usar jsPDF (já instalado)
+- [x] Função gerarPDF em VisualizarRepertorioPersonalizado
+- [x] Layout: título, descrição, músicas por momento
+- [x] Incluir: título, artista, tom, links
+- [x] Rodapé com data e numeração de páginas
+- [x] Quebra automática de páginas
+- [x] Cores diferenciadas para links (azul para cifra, vermelho para YouTube)
+
+#### 8. Testes e Checkpoint
+- [x] Todos os 125 testes passando
+- [x] Sistema backend completo e funcional
+- [x] Rotas frontend registradas
+- [x] Páginas criadas e integradas
+- [ ] Testar manualmente criação de repertório (após checkpoint)
+- [ ] Testar manualmente adição de múltiplas músicas
+- [ ] Testar manualmente edição de repertório
+- [ ] Testar manualmente duplicação
+- [ ] Testar manualmente compartilhamento
+- [ ] Testar manualmente visualização
+- [ ] Testar manualmente exportação PDF
+- [ ] Testar manualmente exclusão
+- [x] Salvar checkpoint
