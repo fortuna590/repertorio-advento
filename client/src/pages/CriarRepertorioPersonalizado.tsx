@@ -87,7 +87,6 @@ const getMomentosPorTemplate = (template: "missa" | "grupo_oracao" | "livre") =>
 const TAGS_PREDEFINIDAS = [
   "Missa Dominical",
   "Casamento",
-  "Funeral",
   "Natal",
   "Páscoa",
   "Advento",
@@ -96,7 +95,7 @@ const TAGS_PREDEFINIDAS = [
   "Batismo",
   "Primeira Comunhão",
   "Crisma",
-  "Adorção",
+  "Adoração",
   "Terço",
   "Novena",
 ];

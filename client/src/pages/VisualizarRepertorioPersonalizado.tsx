@@ -32,9 +32,13 @@ export default function VisualizarRepertorioPersonalizado() {
   const { id } = useParams<{ id: string }>();
   const [, setLocation] = useLocation();
 
-  const { data: repertorio, isLoading } = trpc.repertoriosPersonalizados.buscarPorId.useQuery({
-    id: parseInt(id),
-  });
+  // Detectar se é um shareId (UUID) ou ID numérico
+  const isShareId = id.includes("-"); // UUIDs contêm hífens
+
+  // Usar endpoint apropriado baseado no tipo de ID
+  const { data: repertorio, isLoading } = isShareId
+    ? trpc.repertoriosPersonalizados.buscarPorShareId.useQuery({ shareId: id })
+    : trpc.repertoriosPersonalizados.buscarPorId.useQuery({ id: parseInt(id) });
 
   const gerarPDF = () => {
     if (!repertorio) return;

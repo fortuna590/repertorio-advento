@@ -2491,3 +2491,11 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Ajustar formulário para templates livres (sem seleção de momentos)
 - [x] Criar templates predefinidos livres (Adoração, Momento Mariano, Terço, Novena)
 - [x] Validar que templates livres não exigem momento nas músicas
+
+
+### Correção de Compartilhamento Público
+- [x] Investigar rota /repertorio-personalizado/:shareId
+- [x] Verificar endpoint tRPC de obtenção de repertório público
+- [x] Corrigir página de visualização pública do repertório
+- [x] Testar link de compartilhamento completo
+- [x] Remover tag "Funeral" das tags predefinidas
