@@ -1,4 +1,5 @@
 import { useParams, useLocation } from "wouter";
+import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,11 +14,15 @@ import {
   Link as LinkIcon,
   Youtube,
   ExternalLink,
+  Share,
+  Check,
 } from "lucide-react";
 import jsPDF from "jspdf";
 
 const MOMENTOS_ORDEM = [
+  // Momentos da Missa
   "Entrada",
+  "Ato Penitencial",
   "Glória",
   "Aclamação",
   "Ofertório",
@@ -25,6 +30,13 @@ const MOMENTOS_ORDEM = [
   "Cordeiro",
   "Comunhão",
   "Final",
+  // Momentos do Grupo de Oração
+  "Acolhida",
+  "Animação",
+  "Oração/Entrega",
+  "Espírito Santo",
+  "Palavra",
+  "Louvor",
   "Outro",
 ];
 
@@ -34,11 +46,32 @@ export default function VisualizarRepertorioPersonalizado() {
 
   // Detectar se é um shareId (UUID) ou ID numérico
   const isShareId = id.includes("-"); // UUIDs contêm hífens
+  const isPublicView = isShareId; // Visualização pública via link compartilhado
 
   // Usar endpoint apropriado baseado no tipo de ID
   const { data: repertorio, isLoading } = isShareId
     ? trpc.repertoriosPersonalizados.buscarPorShareId.useQuery({ shareId: id })
     : trpc.repertoriosPersonalizados.buscarPorId.useQuery({ id: parseInt(id) });
+
+  const [linkCopiado, setLinkCopiado] = useState(false);
+
+  const copiarLinkCompartilhamento = async () => {
+    if (!repertorio?.shareId) {
+      toast.error("Repertório não está público");
+      return;
+    }
+    
+    const linkPublico = `${window.location.origin}/repertorio-personalizado/${repertorio.shareId}`;
+    
+    try {
+      await navigator.clipboard.writeText(linkPublico);
+      setLinkCopiado(true);
+      toast.success("Link copiado para área de transferência!");
+      setTimeout(() => setLinkCopiado(false), 2000);
+    } catch (err) {
+      toast.error("Erro ao copiar link");
+    }
+  };
 
   const gerarPDF = () => {
     if (!repertorio) return;
@@ -194,17 +227,34 @@ export default function VisualizarRepertorioPersonalizado() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/10">
+      {/* Cabeçalho público */}
+      {isPublicView && (
+        <div className="border-b border-border/50 bg-card/50 backdrop-blur-sm">
+          <div className="container py-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <img src="/logo.png" alt="LouvaMais" className="h-8 w-8" />
+              <span className="font-semibold text-lg">LouvaMais</span>
+            </div>
+            <Button variant="outline" size="sm" onClick={() => setLocation("/")}>
+              Criar meu repertório
+            </Button>
+          </div>
+        </div>
+      )}
+      
       <div className="container py-8 max-w-4xl">
         {/* Header */}
         <div className="flex items-start justify-between gap-4 mb-8">
           <div className="flex items-center gap-4 flex-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setLocation("/meus-repertorios")}
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
+            {!isPublicView && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setLocation("/meus-repertorios")}
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+            )}
             <div className="flex-1">
               <h1 className="text-3xl font-bold">{repertorio.nome}</h1>
               {repertorio.descricao && (
@@ -216,16 +266,43 @@ export default function VisualizarRepertorioPersonalizado() {
               </div>
             </div>
           </div>
-          <div className="flex gap-2">
+          {!isPublicView && (
+            <div className="flex gap-2">
+              {repertorio.shareId && (
+                <Button 
+                  variant="outline" 
+                  onClick={copiarLinkCompartilhamento}
+                  className={linkCopiado ? "bg-green-500/10 border-green-500 text-green-600" : ""}
+                >
+                  {linkCopiado ? (
+                    <>
+                      <Check className="w-4 h-4 mr-2" />
+                      Copiado!
+                    </>
+                  ) : (
+                    <>
+                      <Share className="w-4 h-4 mr-2" />
+                      Compartilhar
+                    </>
+                  )}
+                </Button>
+              )}
+              <Button variant="outline" onClick={gerarPDF}>
+                <Download className="w-4 h-4 mr-2" />
+                PDF
+              </Button>
+              <Button onClick={() => setLocation(`/repertorio-personalizado/${id}/editar`)}>
+                <Edit className="w-4 h-4 mr-2" />
+                Editar
+              </Button>
+            </div>
+          )}
+          {isPublicView && (
             <Button variant="outline" onClick={gerarPDF}>
               <Download className="w-4 h-4 mr-2" />
               PDF
             </Button>
-            <Button onClick={() => setLocation(`/repertorio-personalizado/${id}/editar`)}>
-              <Edit className="w-4 h-4 mr-2" />
-              Editar
-            </Button>
-          </div>
+          )}
         </div>
 
         {/* Músicas por Momento */}
@@ -328,6 +405,26 @@ export default function VisualizarRepertorioPersonalizado() {
           </Card>
         )}
       </div>
+      
+      {/* Rodapé público */}
+      {isPublicView && (
+        <div className="border-t border-border/50 bg-card/50 backdrop-blur-sm mt-12">
+          <div className="container py-8 text-center">
+            <div className="flex flex-col items-center gap-4">
+              <div className="flex items-center gap-2">
+                <img src="/logo.png" alt="LouvaMais" className="h-6 w-6" />
+                <span className="font-semibold">LouvaMais</span>
+              </div>
+              <p className="text-muted-foreground max-w-md">
+                Organize seus repertórios litúrgicos com facilidade. Crie, edite e compartilhe suas listas de músicas.
+              </p>
+              <Button size="lg" onClick={() => setLocation("/")}>
+                Criar meu próprio repertório
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

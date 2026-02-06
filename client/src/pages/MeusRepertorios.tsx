@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -364,12 +365,13 @@ export default function MeusRepertorios() {
                       <div className="flex-1 min-w-0">
                         <CardTitle className="text-lg text-white flex items-center gap-2 mb-1">
                           <span className="truncate">{rep.nome}</span>
-                          {rep.isPublic ? (
-                            <Globe className="w-4 h-4 text-green-400 shrink-0" />
-                          ) : (
-                            <Lock className="w-4 h-4 text-purple-400 shrink-0" />
-                          )}
                         </CardTitle>
+                        {rep.isPublic && (
+                          <Badge className="bg-green-500/20 text-green-300 border-green-500/30 text-xs mt-1 w-fit">
+                            <Globe className="w-3 h-3 mr-1" />
+                            Público
+                          </Badge>
+                        )}
                         {rep.descricao && (
                           <p className="text-purple-200 text-sm mt-1 line-clamp-2">
                             {rep.descricao}

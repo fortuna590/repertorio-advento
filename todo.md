@@ -2499,3 +2499,12 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Corrigir página de visualização pública do repertório
 - [x] Testar link de compartilhamento completo
 - [x] Remover tag "Funeral" das tags predefinidas
+
+
+## Melhorias na Página Pública e Correção de Bug
+- [x] Investigar por que terceira música não aparece na visualização
+- [x] Corrigir bug de música faltante na visualização
+- [x] Melhorar layout da página pública compartilhada (cabeçalho com logo, remover botões de edição)
+- [x] Adicionar rodapé na página pública com link "Crie seu próprio repertório"
+- [x] Implementar botão "Copiar link de compartilhamento" na visualização
+- [x] Adicionar badge/ícone de "Público" nos cards da listagem Meus Repertórios
