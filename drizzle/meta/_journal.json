@@ -169,6 +169,13 @@
       "when": 1770408506792,
       "tag": "0023_sweet_shiver_man",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "5",
+      "when": 1770411627300,
+      "tag": "0024_lively_namora",
+      "breakpoints": true
     }
   ]
 }

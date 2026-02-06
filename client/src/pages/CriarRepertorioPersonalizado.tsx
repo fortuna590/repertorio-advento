@@ -95,6 +95,17 @@ export default function CriarRepertorioPersonalizado() {
         momento: "Entrada",
       },
     ]);
+    
+    // Scroll suave para a nova música após um pequeno delay
+    setTimeout(() => {
+      const musicasSection = document.getElementById('musicas-section');
+      if (musicasSection) {
+        const lastMusica = musicasSection.lastElementChild;
+        if (lastMusica) {
+          lastMusica.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    }, 100);
   };
 
   const handleRemoverMusica = async (index: number) => {
@@ -260,7 +271,7 @@ export default function CriarRepertorioPersonalizado() {
 
         {/* Músicas */}
         <Card className="mb-6">
-          <CardHeader>
+          <CardHeader className="sticky top-0 z-10 bg-card border-b">
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
                 <Music className="w-5 h-5" />
@@ -272,7 +283,7 @@ export default function CriarRepertorioPersonalizado() {
               </Button>
             </div>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6" id="musicas-section">
             {musicas.length === 0 ? (
               <div className="text-center py-12 text-muted-foreground">
                 <Music className="w-12 h-12 mx-auto mb-4 opacity-50" />
@@ -407,6 +418,20 @@ export default function CriarRepertorioPersonalizado() {
           </Button>
         </div>
       </div>
+
+      {/* Botão Flutuante de Adicionar Música */}
+      {musicas.length > 0 && (
+        <button
+          onClick={handleAdicionarMusica}
+          className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center gap-2 group"
+          aria-label="Adicionar Música"
+        >
+          <Plus className="w-6 h-6" />
+          <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 whitespace-nowrap">
+            Adicionar Música
+          </span>
+        </button>
+      )}
     </div>
   );
 }

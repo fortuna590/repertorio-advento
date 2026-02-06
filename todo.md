@@ -2455,3 +2455,18 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Adicionar funcionalidades nos cards (editar, duplicar, compartilhar, excluir, visualizar)
 - [x] Manter apenas botão "Criar Novo Repertório" que navega para o novo sistema
 - [x] Exibir estado vazio quando não há repertórios criados
+
+
+## Melhorias na Página Meus Repertórios e Sistema de Tags
+- [x] Adicionar coluna tags na tabela repertoriosPersonalizados
+- [x] Criar endpoints tRPC para gerenciar tags
+- [x] Implementar campo de busca por nome na listagem
+- [x] Adicionar filtros por tags/categorias
+- [x] Implementar ordenação customizável (nome, data, músicas)
+- [ ] Criar seletor de tags ao criar/editar repertório
+
+## Melhorias na UX de Criação de Repertórios
+- [x] Tornar botão "Adicionar Música" sticky/fixo no topo
+- [x] Adicionar botão flutuante de adicionar música
+- [x] Melhorar navegação ao adicionar múltiplas músicas
+- [x] Implementar scroll suave ao adicionar nova música
