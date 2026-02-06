@@ -2447,3 +2447,11 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Diferenciar visualmente: "Montar Repertório" (outline) vs "Criar Personalizado" (gradient)
 - [x] Testar navegação
 - [x] Salvar checkpoint
+
+
+## Refatoração da Página Meus Repertórios
+- [x] Remover sistema antigo de repertórios (botões e lógica antiga)
+- [x] Implementar listagem de repertórios personalizados com cards
+- [x] Adicionar funcionalidades nos cards (editar, duplicar, compartilhar, excluir, visualizar)
+- [x] Manter apenas botão "Criar Novo Repertório" que navega para o novo sistema
+- [x] Exibir estado vazio quando não há repertórios criados

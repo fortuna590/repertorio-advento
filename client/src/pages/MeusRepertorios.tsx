@@ -4,20 +4,12 @@ import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import {
@@ -28,32 +20,26 @@ import {
   Copy,
   Trash2,
   Edit,
-  Calendar,
   FileText,
   Link as LinkIcon,
   Lock,
   Globe,
   ArrowLeft,
-  Download,
+  Eye,
 } from "lucide-react";
 import { Link } from "wouter";
-import { generateRepertorioPDF } from "@/lib/pdfGenerator";
-import { repertorio } from "@/data/repertorio";
 
 export default function MeusRepertorios() {
   const { user, loading: authLoading } = useAuth();
   const [, navigate] = useLocation();
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [editNome, setEditNome] = useState("");
-  const [editNotas, setEditNotas] = useState("");
 
-  const { data: repertorios, isLoading, refetch } = trpc.repertorios.listMeus.useQuery();
+  const { data: repertorios, isLoading, refetch } = trpc.repertoriosPersonalizados.listMeus.useQuery();
 
-  const toggleShareMutation = trpc.repertorios.toggleShare.useMutation({
+  const toggleShareMutation = trpc.repertoriosPersonalizados.toggleShare.useMutation({
     onSuccess: (data) => {
       toast.success(data.message);
       if (data.isPublic && data.shareId) {
-        const shareUrl = `${window.location.origin}/repertorio/${data.shareId}`;
+        const shareUrl = `${window.location.origin}/repertorio-personalizado/${data.shareId}`;
         navigator.clipboard.writeText(shareUrl);
         toast.info("Link copiado para a área de transferência!");
       }
@@ -64,7 +50,7 @@ export default function MeusRepertorios() {
     },
   });
 
-  const duplicateMutation = trpc.repertorios.duplicate.useMutation({
+  const duplicateMutation = trpc.repertoriosPersonalizados.duplicar.useMutation({
     onSuccess: (data) => {
       toast.success(data.message);
       refetch();
@@ -74,20 +60,9 @@ export default function MeusRepertorios() {
     },
   });
 
-  const deleteMutation = trpc.repertorios.delete.useMutation({
+  const deleteMutation = trpc.repertoriosPersonalizados.excluir.useMutation({
     onSuccess: () => {
       toast.success("Repertório deletado com sucesso!");
-      refetch();
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
-
-  const updateNotasMutation = trpc.repertorios.updateNotas.useMutation({
-    onSuccess: () => {
-      toast.success("Notas atualizadas!");
-      setEditingId(null);
       refetch();
     },
     onError: (error) => {
@@ -110,59 +85,14 @@ export default function MeusRepertorios() {
   }
 
   const handleCopyLink = (shareId: string) => {
-    const shareUrl = `${window.location.origin}/repertorio/${shareId}`;
+    const shareUrl = `${window.location.origin}/repertorio-personalizado/${shareId}`;
     navigator.clipboard.writeText(shareUrl);
     toast.success("Link copiado!");
-  };
-
-  // Criar mapa de músicas a partir do repertorio.ts importado
-  const musicasMap: Record<string, { titulo: string; artista: string; momento: string }> = {};
-  repertorio.forEach((momento) => {
-    momento.musicas.forEach((musica) => {
-      const musicaId = `${momento.id}-${musica.numero}`;
-      musicasMap[musicaId] = {
-        titulo: musica.titulo,
-        artista: musica.artista,
-        momento: momento.titulo,
-      };
-    });
-  });
-
-  const handleExportPDF = (rep: any) => {
-    const musicasIds = rep.musicas || [];
-    const musicasComDetalhes = musicasIds.map((musicaId: string) => ({
-      id: musicaId,
-      titulo: musicasMap[musicaId]?.titulo || musicaId,
-      artista: musicasMap[musicaId]?.artista || "Desconhecido",
-      momento: musicasMap[musicaId]?.momento || "Outras",
-    }));
-
-    generateRepertorioPDF({
-      nome: rep.nome,
-      descricao: rep.descricao || undefined,
-      notas: rep.notas || undefined,
-      dataCelebracao: rep.dataCelebracao ? String(rep.dataCelebracao) : undefined,
-      musicas: musicasComDetalhes,
-      createdAt: rep.createdAt ? String(rep.createdAt) : undefined,
-    });
-
-    toast.success("PDF gerado com sucesso!");
   };
 
   const handleDelete = (id: number, nome: string) => {
     if (confirm(`Tem certeza que deseja deletar "${nome}"?`)) {
       deleteMutation.mutate({ id });
-    }
-  };
-
-  const handleEditNotas = (id: number, notas: string) => {
-    setEditingId(id);
-    setEditNotas(notas || "");
-  };
-
-  const handleSaveNotas = () => {
-    if (editingId) {
-      updateNotasMutation.mutate({ id: editingId, notas: editNotas });
     }
   };
 
@@ -185,17 +115,11 @@ export default function MeusRepertorios() {
               </p>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-            <Link href="/montar-repertorio" className="w-full sm:w-auto">
-              <Button variant="outline" className="border-purple-500/30 text-purple-200 hover:bg-purple-600/20 w-full sm:w-auto">
-                <Plus className="w-4 h-4 mr-2" />
-                Montar Repertório
-              </Button>
-            </Link>
+          <div className="w-full sm:w-auto">
             <Link href="/repertorio-personalizado/novo" className="w-full sm:w-auto">
               <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 w-full sm:w-auto">
                 <Plus className="w-4 h-4 mr-2" />
-                Criar Personalizado
+                Criar Novo Repertório
               </Button>
             </Link>
           </div>
@@ -212,7 +136,7 @@ export default function MeusRepertorios() {
               <p className="text-purple-200 mb-6">
                 Crie seu primeiro repertório personalizado para celebrações
               </p>
-              <Link href="/montar-repertorio">
+              <Link href="/repertorio-personalizado/novo">
                 <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                   <Plus className="w-4 h-4 mr-2" />
                   Criar Primeiro Repertório
@@ -225,17 +149,17 @@ export default function MeusRepertorios() {
             {repertorios.map((rep) => (
               <Card
                 key={rep.id}
-                className="bg-slate-800/50 border-purple-500/20 hover:border-purple-500/40 transition-all"
+                className="bg-slate-800/50 border-purple-500/20 hover:border-purple-500/40 transition-all hover:shadow-lg hover:shadow-purple-500/10"
               >
-                <CardHeader className="pb-2">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <CardTitle className="text-lg text-white flex items-center gap-2">
-                        {rep.nome}
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <CardTitle className="text-lg text-white flex items-center gap-2 mb-1">
+                        <span className="truncate">{rep.nome}</span>
                         {rep.isPublic ? (
-                          <Globe className="w-4 h-4 text-green-400" />
+                          <Globe className="w-4 h-4 text-green-400 shrink-0" />
                         ) : (
-                          <Lock className="w-4 h-4 text-purple-400" />
+                          <Lock className="w-4 h-4 text-purple-400 shrink-0" />
                         )}
                       </CardTitle>
                       {rep.descricao && (
@@ -246,27 +170,28 @@ export default function MeusRepertorios() {
                     </div>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="text-purple-300">
+                        <Button variant="ghost" size="icon" className="text-purple-300 hover:text-purple-100 shrink-0">
                           <MoreVertical className="w-4 h-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="bg-slate-800 border-purple-500/20">
                         <DropdownMenuItem
-                          className="text-white hover:bg-purple-600/20"
-                          onClick={() => navigate(`/repertorio/${rep.id}/editar`)}
+                          className="text-white hover:bg-purple-600/20 cursor-pointer"
+                          onClick={() => navigate(`/repertorio-personalizado/${rep.id}`)}
+                        >
+                          <Eye className="w-4 h-4 mr-2" />
+                          Visualizar
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-white hover:bg-purple-600/20 cursor-pointer"
+                          onClick={() => navigate(`/repertorio-personalizado/${rep.id}/editar`)}
                         >
                           <Edit className="w-4 h-4 mr-2" />
                           Editar
                         </DropdownMenuItem>
+                        <DropdownMenuSeparator className="bg-purple-500/20" />
                         <DropdownMenuItem
-                          className="text-white hover:bg-purple-600/20"
-                          onClick={() => handleEditNotas(rep.id, rep.notas || "")}
-                        >
-                          <FileText className="w-4 h-4 mr-2" />
-                          Notas
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="text-white hover:bg-purple-600/20"
+                          className="text-white hover:bg-purple-600/20 cursor-pointer"
                           onClick={() => toggleShareMutation.mutate({ id: rep.id })}
                         >
                           {rep.isPublic ? (
@@ -283,7 +208,7 @@ export default function MeusRepertorios() {
                         </DropdownMenuItem>
                         {rep.isPublic && rep.shareId && (
                           <DropdownMenuItem
-                            className="text-white hover:bg-purple-600/20"
+                            className="text-white hover:bg-purple-600/20 cursor-pointer"
                             onClick={() => handleCopyLink(rep.shareId!)}
                           >
                             <LinkIcon className="w-4 h-4 mr-2" />
@@ -291,21 +216,15 @@ export default function MeusRepertorios() {
                           </DropdownMenuItem>
                         )}
                         <DropdownMenuItem
-                          className="text-white hover:bg-purple-600/20"
-                          onClick={() => handleExportPDF(rep)}
-                        >
-                          <Download className="w-4 h-4 mr-2" />
-                          Exportar PDF
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="text-white hover:bg-purple-600/20"
+                          className="text-white hover:bg-purple-600/20 cursor-pointer"
                           onClick={() => duplicateMutation.mutate({ id: rep.id })}
                         >
                           <Copy className="w-4 h-4 mr-2" />
                           Duplicar
                         </DropdownMenuItem>
+                        <DropdownMenuSeparator className="bg-purple-500/20" />
                         <DropdownMenuItem
-                          className="text-red-400 hover:bg-red-600/20"
+                          className="text-red-400 hover:bg-red-600/20 cursor-pointer"
                           onClick={() => handleDelete(rep.id, rep.nome)}
                         >
                           <Trash2 className="w-4 h-4 mr-2" />
@@ -315,84 +234,42 @@ export default function MeusRepertorios() {
                     </DropdownMenu>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {/* Músicas */}
-                    <div className="flex items-center gap-2 text-purple-200 text-sm">
-                      <Music className="w-4 h-4" />
-                      <span>{rep.musicas?.length || 0} música(s)</span>
-                    </div>
-
-                    {/* Data da celebração */}
-                    {rep.dataCelebracao && (
-                      <div className="flex items-center gap-2 text-purple-200 text-sm">
-                        <Calendar className="w-4 h-4" />
-                        <span>
-                          {new Date(rep.dataCelebracao).toLocaleDateString("pt-BR")}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Notas preview */}
-                    {rep.notas && (
-                      <div className="bg-purple-900/30 rounded p-2 text-purple-200 text-sm line-clamp-2">
-                        {rep.notas}
-                      </div>
-                    )}
-
-                    {/* Data de criação */}
-                    <p className="text-purple-400 text-xs">
-                      Criado em {new Date(rep.createdAt).toLocaleDateString("pt-BR")}
-                    </p>
-
-                    {/* Botão de visualizar */}
-                    <Link href={`/repertorio/${rep.id}`}>
-                      <Button
-                        variant="outline"
-                        className="w-full border-purple-500/30 text-purple-200 hover:bg-purple-600/20"
-                      >
-                        Ver Repertório
-                      </Button>
-                    </Link>
+                <CardContent className="space-y-3">
+                  {/* Contador de músicas */}
+                  <div className="flex items-center gap-2 text-purple-200 text-sm">
+                    <Music className="w-4 h-4" />
+                    <span>{rep.quantidadeMusicas || 0} música(s)</span>
                   </div>
+
+                  {/* Descrição preview */}
+                  {rep.descricao && (
+                    <div className="bg-purple-900/30 rounded-lg p-3">
+                      <p className="text-purple-200 text-sm line-clamp-3">
+                        {rep.descricao}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Data de criação */}
+                  <p className="text-purple-400 text-xs">
+                    Criado em {new Date(rep.createdAt).toLocaleDateString("pt-BR")}
+                  </p>
+
+                  {/* Botão de visualizar */}
+                  <Link href={`/repertorio-personalizado/${rep.id}`}>
+                    <Button
+                      variant="outline"
+                      className="w-full border-purple-500/30 text-purple-200 hover:bg-purple-600/20 hover:border-purple-500/50"
+                    >
+                      <Eye className="w-4 h-4 mr-2" />
+                      Ver Detalhes
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             ))}
           </div>
         )}
-
-        {/* Dialog para editar notas */}
-        <Dialog open={editingId !== null} onOpenChange={() => setEditingId(null)}>
-          <DialogContent className="bg-slate-800 border-purple-500/20">
-            <DialogHeader>
-              <DialogTitle className="text-white">Editar Notas</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <Textarea
-                value={editNotas}
-                onChange={(e) => setEditNotas(e.target.value)}
-                placeholder="Adicione observações, lembretes ou instruções para este repertório..."
-                className="bg-slate-700 border-purple-500/30 text-white min-h-[150px]"
-              />
-              <div className="flex gap-2 justify-end">
-                <Button
-                  variant="outline"
-                  onClick={() => setEditingId(null)}
-                  className="border-purple-500/30 text-purple-200"
-                >
-                  Cancelar
-                </Button>
-                <Button
-                  onClick={handleSaveNotas}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600"
-                  disabled={updateNotasMutation.isPending}
-                >
-                  {updateNotasMutation.isPending ? "Salvando..." : "Salvar"}
-                </Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
       </div>
     </div>
   );
