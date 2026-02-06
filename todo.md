@@ -2470,3 +2470,13 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Adicionar botão flutuante de adicionar música
 - [x] Melhorar navegação ao adicionar múltiplas músicas
 - [x] Implementar scroll suave ao adicionar nova música
+
+
+## Novas Funcionalidades de Repertórios Personalizados
+- [x] Adicionar "Ato Penitencial" aos momentos da missa
+- [x] Criar seletor de tags com opções predefinidas no formulário
+- [x] Permitir criação de tags personalizadas
+- [x] Implementar drag & drop para reordenar músicas
+- [x] Criar funcionalidade de importar músicas de outro repertório
+- [x] Adicionar modal de seleção de repertório fonte
+- [x] Permitir seleção múltipla de músicas para importar

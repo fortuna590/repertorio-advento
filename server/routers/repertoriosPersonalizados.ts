@@ -12,6 +12,7 @@ export const repertoriosPersonalizadosRouter = router({
       z.object({
         nome: z.string().min(1, "Nome é obrigatório"),
         descricao: z.string().optional(),
+        tags: z.array(z.string()).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -22,6 +23,7 @@ export const repertoriosPersonalizadosRouter = router({
         userId: ctx.user.id,
         nome: input.nome,
         descricao: input.descricao || null,
+        tags: input.tags && input.tags.length > 0 ? JSON.stringify(input.tags) : null,
         isPublic: 0,
       });
 
@@ -134,6 +136,7 @@ export const repertoriosPersonalizadosRouter = router({
         id: z.number(),
         nome: z.string().min(1, "Nome é obrigatório"),
         descricao: z.string().optional(),
+        tags: z.array(z.string()).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -145,6 +148,7 @@ export const repertoriosPersonalizadosRouter = router({
         .set({
           nome: input.nome,
           descricao: input.descricao || null,
+          tags: input.tags && input.tags.length > 0 ? JSON.stringify(input.tags) : null,
         })
         .where(
           and(

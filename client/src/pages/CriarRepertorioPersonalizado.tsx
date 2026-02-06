@@ -14,7 +14,35 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { ArrowLeft, Plus, Trash2, Save, Music } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Save, Music, GripVertical, Download } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { SortableMusica } from "@/components/SortableMusica";
+import { ImportarMusicasModal } from "@/components/ImportarMusicasModal";
 
 type Musica = {
   id?: number;
@@ -28,6 +56,7 @@ type Musica = {
 
 const MOMENTOS_MISSA = [
   "Entrada",
+  "Ato Penitencial",
   "Glória",
   "Aclamação",
   "Ofertório",
@@ -36,6 +65,23 @@ const MOMENTOS_MISSA = [
   "Comunhão",
   "Final",
   "Outro",
+];
+
+const TAGS_PREDEFINIDAS = [
+  "Missa Dominical",
+  "Casamento",
+  "Funeral",
+  "Natal",
+  "Páscoa",
+  "Advento",
+  "Quaresma",
+  "Pentecostes",
+  "Batismo",
+  "Primeira Comunhão",
+  "Crisma",
+  "Adorção",
+  "Terço",
+  "Novena",
 ];
 
 const TONS = [
@@ -51,7 +97,12 @@ export default function CriarRepertorioPersonalizado() {
 
   const [nome, setNome] = useState("");
   const [descricao, setDescricao] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
+  const [novaTag, setNovaTag] = useState("");
   const [musicas, setMusicas] = useState<Musica[]>([]);
+  const [modalImportarAberto, setModalImportarAberto] = useState(false);
+  const [repertorioFonteId, setRepertorioFonteId] = useState<number | null>(null);
+  const [musicasSelecionadas, setMusicasSelecionadas] = useState<number[]>([]);
 
   // Buscar repertório se for edição
   const { data: repertorio, isLoading } = trpc.repertoriosPersonalizados.buscarPorId.useQuery(
@@ -63,6 +114,15 @@ export default function CriarRepertorioPersonalizado() {
     if (repertorio) {
       setNome(repertorio.nome);
       setDescricao(repertorio.descricao || "");
+      // Parse tags
+      if (repertorio.tags) {
+        try {
+          const parsedTags = JSON.parse(repertorio.tags);
+          setTags(Array.isArray(parsedTags) ? parsedTags : []);
+        } catch (e) {
+          setTags([]);
+        }
+      }
       setMusicas(
         repertorio.musicas.map((m) => ({
           id: m.id,
@@ -133,6 +193,26 @@ export default function CriarRepertorioPersonalizado() {
     setMusicas(novasMusicas);
   };
 
+  // Drag and drop sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setMusicas((items) => {
+        const oldIndex = items.findIndex((_, i) => i === active.id);
+        const newIndex = items.findIndex((_, i) => i === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+  };
+
   const handleSalvar = async () => {
     if (!nome.trim()) {
       toast.error("Nome do repertório é obrigatório");
@@ -161,11 +241,13 @@ export default function CriarRepertorioPersonalizado() {
           id: parseInt(id!),
           nome,
           descricao,
+          tags,
         });
       } else {
         const resultado = await criarRepertorioMutation.mutateAsync({
           nome,
           descricao,
+          tags,
         });
         repertorioId = resultado.repertorioId;
       }
@@ -266,6 +348,84 @@ export default function CriarRepertorioPersonalizado() {
                 rows={3}
               />
             </div>
+
+            {/* Seletor de Tags */}
+            <div>
+              <Label>Tags / Categorias (opcional)</Label>
+              <div className="space-y-3">
+                {/* Tags selecionadas */}
+                {tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {tags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-purple-600/20 text-purple-700 dark:text-purple-300 text-sm border border-purple-600/30"
+                      >
+                        {tag}
+                        <button
+                          type="button"
+                          onClick={() => setTags(tags.filter((_, i) => i !== index))}
+                          className="hover:text-red-500 ml-1"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Seletor de tags predefinidas */}
+                <Select
+                  value=""
+                  onValueChange={(value) => {
+                    if (value && !tags.includes(value)) {
+                      setTags([...tags, value]);
+                    }
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione uma tag predefinida" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {TAGS_PREDEFINIDAS.filter(tag => !tags.includes(tag)).map((tag) => (
+                      <SelectItem key={tag} value={tag}>
+                        {tag}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {/* Input para tag personalizada */}
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Ou crie uma tag personalizada..."
+                    value={novaTag}
+                    onChange={(e) => setNovaTag(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (novaTag.trim() && !tags.includes(novaTag.trim())) {
+                          setTags([...tags, novaTag.trim()]);
+                          setNovaTag("");
+                        }
+                      }
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      if (novaTag.trim() && !tags.includes(novaTag.trim())) {
+                        setTags([...tags, novaTag.trim()]);
+                        setNovaTag("");
+                      }
+                    }}
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
@@ -277,10 +437,36 @@ export default function CriarRepertorioPersonalizado() {
                 <Music className="w-5 h-5" />
                 Músicas ({musicas.length})
               </CardTitle>
-              <Button onClick={handleAdicionarMusica} size="sm">
-                <Plus className="w-4 h-4 mr-2" />
-                Adicionar Música
-              </Button>
+              <div className="flex gap-2">
+                <Dialog open={modalImportarAberto} onOpenChange={setModalImportarAberto}>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <Download className="w-4 h-4 mr-2" />
+                      Importar
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle>Importar Músicas de Outro Repertório</DialogTitle>
+                      <DialogDescription>
+                        Selecione um repertório e escolha as músicas que deseja importar
+                      </DialogDescription>
+                    </DialogHeader>
+                    <ImportarMusicasModal
+                      repertorioAtualId={id ? parseInt(id) : null}
+                      onImportar={(musicasImportadas: Musica[]) => {
+                        setMusicas([...musicas, ...musicasImportadas]);
+                        setModalImportarAberto(false);
+                        toast.success(`${musicasImportadas.length} música(s) importada(s) com sucesso!`);
+                      }}
+                    />
+                  </DialogContent>
+                </Dialog>
+                <Button onClick={handleAdicionarMusica} size="sm">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Adicionar Música
+                </Button>
+              </div>
             </div>
           </CardHeader>
           <CardContent className="space-y-6" id="musicas-section">
@@ -291,114 +477,28 @@ export default function CriarRepertorioPersonalizado() {
                 <p className="text-sm">Clique em "Adicionar Música" para começar</p>
               </div>
             ) : (
-              musicas.map((musica, index) => (
-                <div
-                  key={index}
-                  className="p-4 border rounded-lg space-y-4 relative bg-card/50"
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+              >
+                <SortableContext
+                  items={musicas.map((_, i) => i)}
+                  strategy={verticalListSortingStrategy}
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <h3 className="font-semibold text-lg">Música {index + 1}</h3>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleRemoverMusica(index)}
-                      className="text-destructive hover:text-destructive"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                  <div className="space-y-6">
+                    {musicas.map((musica, index) => (
+                      <SortableMusica
+                        key={index}
+                        musica={musica}
+                        index={index}
+                        onUpdate={handleAtualizarMusica}
+                        onRemove={handleRemoverMusica}
+                      />
+                    ))}
                   </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="md:col-span-2">
-                      <Label>Título da Música *</Label>
-                      <Input
-                        placeholder="Ex: Vem Espírito Santo"
-                        value={musica.titulo}
-                        onChange={(e) =>
-                          handleAtualizarMusica(index, "titulo", e.target.value)
-                        }
-                      />
-                    </div>
-
-                    <div>
-                      <Label>Artista / Compositor</Label>
-                      <Input
-                        placeholder="Ex: Comunidade Católica Shalom"
-                        value={musica.artista}
-                        onChange={(e) =>
-                          handleAtualizarMusica(index, "artista", e.target.value)
-                        }
-                      />
-                    </div>
-
-                    <div>
-                      <Label>Tom</Label>
-                      <Select
-                        value={musica.tom}
-                        onValueChange={(valor) =>
-                          handleAtualizarMusica(index, "tom", valor)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione o tom" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {TONS.map((tom) => (
-                            <SelectItem key={tom} value={tom}>
-                              {tom}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div>
-                      <Label>Momento da Missa *</Label>
-                      <Select
-                        value={musica.momento}
-                        onValueChange={(valor) =>
-                          handleAtualizarMusica(index, "momento", valor)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {MOMENTOS_MISSA.map((momento) => (
-                            <SelectItem key={momento} value={momento}>
-                              {momento}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div>
-                      <Label>Link da Cifra</Label>
-                      <Input
-                        type="url"
-                        placeholder="https://..."
-                        value={musica.linkCifra}
-                        onChange={(e) =>
-                          handleAtualizarMusica(index, "linkCifra", e.target.value)
-                        }
-                      />
-                    </div>
-
-                    <div className="md:col-span-2">
-                      <Label>Link do YouTube</Label>
-                      <Input
-                        type="url"
-                        placeholder="https://youtube.com/..."
-                        value={musica.linkYoutube}
-                        onChange={(e) =>
-                          handleAtualizarMusica(index, "linkYoutube", e.target.value)
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-              ))
+                </SortableContext>
+              </DndContext>
             )}
           </CardContent>
         </Card>
