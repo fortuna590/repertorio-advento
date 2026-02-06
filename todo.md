@@ -2429,3 +2429,21 @@ Substituir sistema atual "Montar Repertório" por interface simplificada onde us
 - [ ] Testar manualmente exportação PDF
 - [ ] Testar manualmente exclusão
 - [x] Salvar checkpoint
+
+
+## Integração do Menu - Botão "Criar Personalizado" ✅ CONCLUÍDO
+
+### Objetivo
+Adicionar botão "Criar Personalizado" na página Meus Repertórios para facilitar acesso ao novo sistema de repertórios personalizados.
+
+### Solução Implementada
+Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Criar Personalizado" ao lado do botão "Montar Repertório" existente na página /meus-repertorios.
+
+### Tarefas
+- [x] Localizar componente ModernHeader (link já existia)
+- [x] Analisar estrutura atual do menu
+- [x] Adicionar botão "Criar Personalizado" na página MeusRepertorios.tsx
+- [x] Usar ícone Plus e estilo gradient (purple-pink)
+- [x] Diferenciar visualmente: "Montar Repertório" (outline) vs "Criar Personalizado" (gradient)
+- [x] Testar navegação
+- [x] Salvar checkpoint

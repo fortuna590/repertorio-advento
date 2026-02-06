@@ -185,12 +185,20 @@ export default function MeusRepertorios() {
               </p>
             </div>
           </div>
-          <Link href="/montar-repertorio" className="w-full sm:w-auto">
-            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 w-full sm:w-auto">
-              <Plus className="w-4 h-4 mr-2" />
-              Novo Repertório
-            </Button>
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+            <Link href="/montar-repertorio" className="w-full sm:w-auto">
+              <Button variant="outline" className="border-purple-500/30 text-purple-200 hover:bg-purple-600/20 w-full sm:w-auto">
+                <Plus className="w-4 h-4 mr-2" />
+                Montar Repertório
+              </Button>
+            </Link>
+            <Link href="/repertorio-personalizado/novo" className="w-full sm:w-auto">
+              <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 w-full sm:w-auto">
+                <Plus className="w-4 h-4 mr-2" />
+                Criar Personalizado
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* Lista de Repertórios */}
