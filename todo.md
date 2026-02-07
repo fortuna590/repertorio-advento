@@ -2564,3 +2564,11 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 ## Ajustes de Interface
 
 - [x] Remover botão "Adicionar Música" duplicado da seção de músicas (manter apenas na barra flutuante)
+
+## Melhorias de UX no Editor de Repertórios
+
+- [x] Implementar auto-scroll para seção de músicas após clicar em "Salvar e Continuar"
+- [x] Adicionar campo "Link da Letra" nas músicas para direcionar ao letras.mus.br
+- [x] Atualizar schema do banco de dados com campo linkLetra
+- [x] Atualizar formulário de adição/edição de músicas com novo campo
+- [ ] Exibir botão de link da letra nos cards de músicas

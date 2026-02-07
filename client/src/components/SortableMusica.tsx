@@ -22,6 +22,7 @@ type Musica = {
   tom: string;
   linkCifra: string;
   linkYoutube: string;
+  linkLetra: string;
   momento: string;
 };
 
@@ -320,6 +321,17 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
             placeholder="https://youtube.com/..."
             value={musica.linkYoutube}
             onChange={(e) => onUpdate(index, "linkYoutube", e.target.value)}
+          />
+        </div>
+
+        {/* Link da Letra */}
+        <div className="md:col-span-2">
+          <Label>Link da Letra</Label>
+          <Input
+            type="url"
+            placeholder="https://www.letras.mus.br/..."
+            value={musica.linkLetra}
+            onChange={(e) => onUpdate(index, "linkLetra", e.target.value)}
           />
         </div>
       </div>

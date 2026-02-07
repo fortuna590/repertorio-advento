@@ -52,6 +52,7 @@ type Musica = {
   tom: string;
   linkCifra: string;
   linkYoutube: string;
+  linkLetra: string;
   momento: string;
 };
 
@@ -180,6 +181,7 @@ export default function CriarRepertorioPersonalizado() {
           tom: m.tom || "",
           linkCifra: m.linkCifra || "",
           linkYoutube: m.linkYoutube || "",
+          linkLetra: m.linkLetra || "",
           momento: m.momento,
         }))
       );
@@ -202,6 +204,7 @@ export default function CriarRepertorioPersonalizado() {
         tom: "",
         linkCifra: "",
         linkYoutube: "",
+        linkLetra: "",
         momento: momentos.length > 0 ? momentos[0] : "", // Primeiro momento ou vazio para template livre
       },
     ]);
@@ -322,6 +325,7 @@ export default function CriarRepertorioPersonalizado() {
             tom: musica.tom,
             linkCifra: musica.linkCifra,
             linkYoutube: musica.linkYoutube,
+            linkLetra: musica.linkLetra,
             momento: musica.momento,
           });
         } else {
@@ -333,6 +337,7 @@ export default function CriarRepertorioPersonalizado() {
             tom: musica.tom,
             linkCifra: musica.linkCifra,
             linkYoutube: musica.linkYoutube,
+            linkLetra: musica.linkLetra,
             momento: musica.momento,
           });
         }
@@ -347,6 +352,14 @@ export default function CriarRepertorioPersonalizado() {
       if (isEdicao) {
         window.location.reload();
       }
+      
+      // Scroll para a seção de músicas após salvar
+      setTimeout(() => {
+        const musicasSection = document.getElementById('musicas-section');
+        if (musicasSection) {
+          musicasSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 500);
     } catch (error) {
       toast.error(`Erro ao salvar repertório`);
     }
@@ -409,6 +422,7 @@ export default function CriarRepertorioPersonalizado() {
             tom: musica.tom,
             linkCifra: musica.linkCifra,
             linkYoutube: musica.linkYoutube,
+            linkLetra: musica.linkLetra,
             momento: musica.momento,
           });
         } else {
@@ -420,6 +434,7 @@ export default function CriarRepertorioPersonalizado() {
             tom: musica.tom,
             linkCifra: musica.linkCifra,
             linkYoutube: musica.linkYoutube,
+            linkLetra: musica.linkLetra,
             momento: musica.momento,
           });
         }

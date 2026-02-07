@@ -137,6 +137,7 @@ export const musicasRepertorioPersonalizado = mysqlTable("musicasRepertorioPerso
   tom: varchar("tom", { length: 10 }), // Ex: C, Dm, F#, etc.
   linkCifra: varchar("linkCifra", { length: 500 }),
   linkYoutube: varchar("linkYoutube", { length: 500 }),
+  linkLetra: varchar("linkLetra", { length: 500 }),
   momento: varchar("momento", { length: 100 }).notNull(), // Entrada, Glória, Aclamação, Ofertório, Santo, Cordeiro, Comunhão, Final, Outro
   ordem: int("ordem").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -157,6 +158,7 @@ export const musicasFavoritas = mysqlTable("musicasFavoritas", {
   tom: varchar("tom", { length: 10 }), // Ex: C, Dm, F#, etc.
   linkCifra: varchar("linkCifra", { length: 500 }),
   linkYoutube: varchar("linkYoutube", { length: 500 }),
+  linkLetra: varchar("linkLetra", { length: 500 }),
   momento: varchar("momento", { length: 100 }), // Momento sugerido (opcional)
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),

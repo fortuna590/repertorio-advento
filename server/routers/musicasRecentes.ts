@@ -18,6 +18,7 @@ export const musicasRecentesRouter = router({
         tom: musicasRepertorioPersonalizado.tom,
         linkCifra: musicasRepertorioPersonalizado.linkCifra,
         linkYoutube: musicasRepertorioPersonalizado.linkYoutube,
+        linkLetra: musicasRepertorioPersonalizado.linkLetra,
         momento: musicasRepertorioPersonalizado.momento,
         ultimoUso: sql<Date>`MAX(${musicasRepertorioPersonalizado.createdAt})`.as('ultimoUso'),
       })
@@ -33,6 +34,7 @@ export const musicasRecentesRouter = router({
         musicasRepertorioPersonalizado.tom,
         musicasRepertorioPersonalizado.linkCifra,
         musicasRepertorioPersonalizado.linkYoutube,
+        musicasRepertorioPersonalizado.linkLetra,
         musicasRepertorioPersonalizado.momento
       )
       .orderBy(desc(sql`MAX(${musicasRepertorioPersonalizado.createdAt})`))

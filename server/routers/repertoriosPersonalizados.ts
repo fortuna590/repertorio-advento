@@ -297,6 +297,7 @@ export const repertoriosPersonalizadosRouter = router({
         tom: z.string().optional(),
         linkCifra: z.string().optional(),
         linkYoutube: z.string().optional(),
+        linkLetra: z.string().optional(),
         momento: z.string().min(1, "Momento é obrigatório"),
       })
     )
@@ -334,6 +335,7 @@ export const repertoriosPersonalizadosRouter = router({
         tom: input.tom || null,
         linkCifra: input.linkCifra || null,
         linkYoutube: input.linkYoutube || null,
+        linkLetra: input.linkLetra || null,
         momento: input.momento,
         ordem: proximaOrdem,
       });
@@ -356,6 +358,7 @@ export const repertoriosPersonalizadosRouter = router({
         tom: z.string().optional(),
         linkCifra: z.string().optional(),
         linkYoutube: z.string().optional(),
+        linkLetra: z.string().optional(),
         momento: z.string().min(1, "Momento é obrigatório"),
       })
     )
@@ -386,6 +389,7 @@ export const repertoriosPersonalizadosRouter = router({
           tom: input.tom || null,
           linkCifra: input.linkCifra || null,
           linkYoutube: input.linkYoutube || null,
+          linkLetra: input.linkLetra || null,
           momento: input.momento,
         })
         .where(eq(musicasRepertorioPersonalizado.id, input.id));

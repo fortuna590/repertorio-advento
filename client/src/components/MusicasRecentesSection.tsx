@@ -11,6 +11,7 @@ type Musica = {
   tom: string;
   linkCifra: string;
   linkYoutube: string;
+  linkLetra: string;
   momento: string;
 };
 
@@ -65,6 +66,7 @@ export function MusicasRecentesSection({ onReutilizar }: MusicasRecentesSectionP
                   tom: musica.tom || "",
                   linkCifra: musica.linkCifra || "",
                   linkYoutube: musica.linkYoutube || "",
+                  linkLetra: musica.linkLetra || "",
                   momento: musica.momento,
                 })}
                 className="shrink-0"
