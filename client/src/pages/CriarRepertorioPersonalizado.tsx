@@ -696,48 +696,64 @@ export default function CriarRepertorioPersonalizado() {
           </CardContent>
         </Card>
 
-        {/* Botões de Ação */}
-        <div className="flex gap-4 justify-end">
-          <Button variant="outline" onClick={() => setLocation("/meus-repertorios")}>
-            Cancelar
-          </Button>
-          <Button 
-            variant="outline"
-            onClick={handleSalvarContinuar} 
-            disabled={criarRepertorioMutation.isPending || atualizarRepertorioMutation.isPending}
-          >
-            <Download className="w-4 h-4 mr-2" />
-            {(criarRepertorioMutation.isPending || atualizarRepertorioMutation.isPending)
-              ? "Salvando..."
-              : "Salvar e Continuar"}
-          </Button>
-          <Button 
-            onClick={handleSalvar} 
-            disabled={criarRepertorioMutation.isPending || atualizarRepertorioMutation.isPending}
-          >
-            <Save className="w-4 h-4 mr-2" />
-            {(criarRepertorioMutation.isPending || atualizarRepertorioMutation.isPending)
-              ? "Salvando..."
-              : isEdicao
-              ? "Salvar e Sair"
-              : "Criar Repertório"}
-          </Button>
-        </div>
+        {/* Botões de Ação - Agora flutuantes */}
       </div>
 
-      {/* Botão Flutuante de Adicionar Música */}
-      {musicas.length > 0 && (
-        <button
-          onClick={handleAdicionarMusica}
-          className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center gap-2 group"
-          aria-label="Adicionar Música"
-        >
-          <Plus className="w-6 h-6" />
-          <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 whitespace-nowrap">
-            Adicionar Música
-          </span>
-        </button>
-      )}
+      {/* Barra Flutuante de Ações */}
+      <div className="fixed top-20 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-b shadow-lg">
+        <div className="container mx-auto px-4 py-3 flex gap-3 justify-between items-center">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => setLocation("/meus-repertorios")}
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Voltar
+          </Button>
+          
+          <div className="flex gap-3">
+            {musicas.length > 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleAdicionarMusica}
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Adicionar Música
+              </Button>
+            )}
+            
+            <Button 
+              variant="outline"
+              size="sm"
+              onClick={handleSalvarContinuar} 
+              disabled={criarRepertorioMutation.isPending || atualizarRepertorioMutation.isPending}
+            >
+              <Download className="w-4 h-4 mr-2" />
+              {(criarRepertorioMutation.isPending || atualizarRepertorioMutation.isPending)
+                ? "Salvando..."
+                : "Salvar e Continuar"}
+            </Button>
+            
+            <Button 
+              size="sm"
+              onClick={handleSalvar} 
+              disabled={criarRepertorioMutation.isPending || atualizarRepertorioMutation.isPending}
+            >
+              <Save className="w-4 h-4 mr-2" />
+              {(criarRepertorioMutation.isPending || atualizarRepertorioMutation.isPending)
+                ? "Salvando..."
+                : isEdicao
+                ? "Salvar e Sair"
+                : "Criar Repertório"}
+            </Button>
+          </div>
+        </div>
+      </div>
+      
+      {/* Espaçamento para compensar barra flutuante */}
+      <div className="h-16"></div>
     </div>
   );
 }

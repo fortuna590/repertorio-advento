@@ -122,71 +122,8 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
         </Button>
       </div>
 
-      {/* Campo de Busca YouTube */}
-      <div className="space-y-2">
-        <Label>Buscar no YouTube</Label>
-        <div className="flex gap-2">
-          <Input
-            placeholder="Digite o nome da música para buscar..."
-            value={buscaYoutube}
-            onChange={(e) => setBuscaYoutube(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                setMostrarResultados(true);
-              }
-            }}
-          />
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => setMostrarResultados(true)}
-            disabled={buscando || !buscaYoutube}
-          >
-            {buscando ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <Search className="w-4 h-4" />
-            )}
-          </Button>
-        </div>
-        
-        {/* Resultados da Busca */}
-        {mostrarResultados && resultadosBusca && resultadosBusca.videos.length > 0 && (
-          <div className="max-h-60 overflow-y-auto border rounded-lg p-2 space-y-2 bg-background">
-            {resultadosBusca.videos.map((video: any) => (
-              <button
-                key={video.videoId}
-                type="button"
-                className="w-full text-left p-2 hover:bg-accent rounded-lg transition-colors flex gap-3"
-                onClick={() => {
-                  onUpdate(index, "titulo", video.titulo);
-                  onUpdate(index, "artista", video.canal);
-                  onUpdate(index, "linkYoutube", video.link);
-                  setMostrarResultados(false);
-                  setBuscaYoutube("");
-                  toast.success("Dados preenchidos automaticamente!");
-                }}
-              >
-                <img 
-                  src={video.thumbnail} 
-                  alt={video.titulo}
-                  className="w-20 h-12 object-cover rounded"
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm truncate">{video.titulo}</p>
-                  <p className="text-xs text-muted-foreground truncate">{video.canal}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {video.duracao} • {video.visualizacoes}
-                  </p>
-                </div>
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Título */}
         <div className="md:col-span-2">
           <Label>Título da Música *</Label>
           <Input
@@ -196,6 +133,7 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
           />
         </div>
 
+        {/* Artista */}
         <div>
           <Label>Artista / Compositor</Label>
           <Input
@@ -205,6 +143,7 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
           />
         </div>
 
+        {/* Tom */}
         <div>
           <Label>Tom</Label>
           <Select
@@ -224,32 +163,34 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
           </Select>
         </div>
 
-                    {mostrarMomento && (
-                      <div>
-                        <Label>Momento {tipoTemplate === "grupo_oracao" ? "do Grupo" : "da Missa"} *</Label>
-                        <Select
-                          value={musica.momento}
-                          onValueChange={(valor) => onUpdate(index, "momento", valor)}
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {momentos.map((momento) => (
-                              <SelectItem key={momento} value={momento}>
-                                {momento}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    )}
+        {/* Momento (apenas se não for template livre) */}
+        {mostrarMomento && (
+          <div className="md:col-span-2">
+            <Label>Momento {tipoTemplate === "grupo_oracao" ? "do Grupo" : "da Missa"} *</Label>
+            <Select
+              value={musica.momento}
+              onValueChange={(valor) => onUpdate(index, "momento", valor)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {momentos.map((momento) => (
+                  <SelectItem key={momento} value={momento}>
+                    {momento}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
 
+        {/* Busca de Cifra */}
         <div className="md:col-span-2">
           <Label>Buscar Cifra no CifraClub</Label>
           <div className="flex gap-2">
             <Input
-              placeholder="Digite o nome da música para buscar cifra..."
+              placeholder="Digite artista - música (ex: Frei Gilson - Vamos Celebrar)"
               value={buscaCifra}
               onChange={(e) => setBuscaCifra(e.target.value)}
               onKeyDown={(e) => {
@@ -296,16 +237,82 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
           )}
         </div>
 
-        <div>
+        {/* Link da Cifra */}
+        <div className="md:col-span-2">
           <Label>Link da Cifra</Label>
           <Input
             type="url"
-            placeholder="https://..."
+            placeholder="https://www.cifraclub.com.br/..."
             value={musica.linkCifra}
             onChange={(e) => onUpdate(index, "linkCifra", e.target.value)}
           />
         </div>
 
+        {/* Busca YouTube */}
+        <div className="md:col-span-2">
+          <Label>Buscar no YouTube</Label>
+          <div className="flex gap-2">
+            <Input
+              placeholder="Digite o nome da música para buscar..."
+              value={buscaYoutube}
+              onChange={(e) => setBuscaYoutube(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  setMostrarResultados(true);
+                }
+              }}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setMostrarResultados(true)}
+              disabled={buscando || !buscaYoutube}
+            >
+              {buscando ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Search className="w-4 h-4" />
+              )}
+            </Button>
+          </div>
+          
+          {/* Resultados da Busca YouTube */}
+          {mostrarResultados && resultadosBusca && resultadosBusca.videos.length > 0 && (
+            <div className="max-h-60 overflow-y-auto border rounded-lg p-2 space-y-2 bg-background mt-2">
+              {resultadosBusca.videos.map((video: any) => (
+                <button
+                  key={video.videoId}
+                  type="button"
+                  className="w-full text-left p-2 hover:bg-accent rounded-lg transition-colors flex gap-3"
+                  onClick={() => {
+                    onUpdate(index, "titulo", video.titulo);
+                    onUpdate(index, "artista", video.canal);
+                    onUpdate(index, "linkYoutube", video.link);
+                    setMostrarResultados(false);
+                    setBuscaYoutube("");
+                    toast.success("Dados preenchidos automaticamente!");
+                  }}
+                >
+                  <img 
+                    src={video.thumbnail} 
+                    alt={video.titulo}
+                    className="w-20 h-12 object-cover rounded"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-sm truncate">{video.titulo}</p>
+                    <p className="text-xs text-muted-foreground truncate">{video.canal}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {video.duracao} • {video.visualizacoes}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Link do YouTube */}
         <div className="md:col-span-2">
           <Label>Link do YouTube</Label>
           <Input

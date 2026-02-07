@@ -2538,3 +2538,12 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Implementar endpoint para listar músicas recentes do usuário
 - [x] Adicionar seção "Músicas Recentes" no formulário
 - [x] Permitir reutilizar música recente com um clique
+
+
+## Ajustes de UX e Correções
+- [x] Investigar e corrigir busca de cifras do CifraClub que não está funcionando
+- [x] Reorganizar campos: busca YouTube acima do campo Link YouTube
+- [x] Reorganizar campos: busca Cifra acima do campo Link Cifra
+- [x] Manter ordem: título, artista, tom, momento, depois buscas e links
+- [x] Tornar botões Salvar e Salvar e Continuar flutuantes
+- [x] Ajustar posicionamento da barra flutuante para descer um pouco do topo
