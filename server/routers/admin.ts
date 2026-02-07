@@ -233,16 +233,23 @@ export const adminRouter = router({
       .orderBy(sql`DATE_FORMAT(${users.createdAt}, '%Y-%m')`);
 
     // Músicas mais favoritadas
-    const topMusicas = await db
+    const topMusicasRaw = await db
       .select({
-        titulo: musicasFavoritas.musicaTitulo,
-        artista: musicasFavoritas.musicaArtista,
+        titulo: musicasFavoritas.titulo,
+        artista: musicasFavoritas.artista,
         count: count(),
       })
       .from(musicasFavoritas)
-      .groupBy(musicasFavoritas.musicaTitulo, musicasFavoritas.musicaArtista)
+      .groupBy(musicasFavoritas.titulo, musicasFavoritas.artista)
       .orderBy(desc(count()))
       .limit(10);
+
+    // Converter artista null para string vazia
+    const topMusicas = topMusicasRaw.map(m => ({
+      titulo: m.titulo,
+      artista: m.artista || "",
+      count: m.count,
+    }));
 
     return {
       totalFavorites,

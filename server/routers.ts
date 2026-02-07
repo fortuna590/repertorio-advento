@@ -28,6 +28,7 @@ import { auditRouter } from "./routers/audit";
 import { youtubeSearchRouter } from "./routers/youtubeSearch";
 import { cifraSearchRouter } from "./routers/cifraSearch";
 import { musicasRecentesRouter } from "./routers/musicasRecentes";
+import { musicasFavoritasRouter } from "./routers/musicasFavoritas";
 
 export const appRouter = router({
   contact: contactRouter,
@@ -54,6 +55,7 @@ export const appRouter = router({
   youtubeSearch: youtubeSearchRouter,
   cifraSearch: cifraSearchRouter,
   musicasRecentes: musicasRecentesRouter,
+  musicasFavoritas: musicasFavoritasRouter,
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   auth: router({

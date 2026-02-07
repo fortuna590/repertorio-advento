@@ -2547,3 +2547,16 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Manter ordem: título, artista, tom, momento, depois buscas e links
 - [x] Tornar botões Salvar e Salvar e Continuar flutuantes
 - [x] Ajustar posicionamento da barra flutuante para descer um pouco do topo
+
+
+## Exportação PDF, Mobile e Favoritos
+- [x] Implementar endpoint para gerar PDF do repertório
+- [x] Adicionar botão de exportar PDF na página de visualização
+- [x] Formatar PDF com cabeçalho, logo, músicas por momento
+- [x] Incluir links de cifra e YouTube no PDF
+- [x] Otimizar barra flutuante para mobile (responsividade)
+- [x] Melhorar layout do formulário de músicas em smartphones
+- [x] Ajustar tamanho de botões e espaçamentos para touch
+- [x] Criar sistema de favoritar músicas individuais
+- [x] Adicionar página/seção de biblioteca de favoritos
+- [x] Permitir adicionar música favorita diretamente ao repertório

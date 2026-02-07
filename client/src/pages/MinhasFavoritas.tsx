@@ -25,8 +25,8 @@ export default function MinhasFavoritas() {
     if (!buscaTexto) return true;
     const busca = buscaTexto.toLowerCase();
     return (
-      fav.musicaTitulo.toLowerCase().includes(busca) ||
-      fav.musicaArtista.toLowerCase().includes(busca)
+      fav.titulo.toLowerCase().includes(busca) ||
+      (fav.artista && fav.artista.toLowerCase().includes(busca))
     );
   });
 
@@ -141,16 +141,16 @@ export default function MinhasFavoritas() {
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
                       <CardTitle className="text-white mb-2 line-clamp-2">
-                        {favorito.musicaTitulo}
+                        {favorito.titulo}
                       </CardTitle>
                       <CardDescription className="text-purple-300">
-                        {favorito.musicaArtista}
+                        {favorito.artista}
                       </CardDescription>
                     </div>
                     <FavoriteButton
-                      musicaId={favorito.musicaId}
-                      musicaTitulo={favorito.musicaTitulo}
-                      musicaArtista={favorito.musicaArtista}
+                      musicaId={favorito.titulo}
+                      musicaTitulo={favorito.titulo}
+                      musicaArtista={favorito.artista || ""}
                     />
                   </div>
                 </CardHeader>

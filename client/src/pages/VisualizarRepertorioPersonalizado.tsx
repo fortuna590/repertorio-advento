@@ -17,7 +17,7 @@ import {
   Share,
   Check,
 } from "lucide-react";
-import jsPDF from "jspdf";
+import { generateRepertorioPDF } from "@/lib/pdfGenerator";
 
 const MOMENTOS_ORDEM = [
   // Momentos da Missa
@@ -73,123 +73,43 @@ export default function VisualizarRepertorioPersonalizado() {
     }
   };
 
-  const gerarPDF = () => {
+  const gerarPDF = (incluirLinks: boolean = true) => {
     if (!repertorio) return;
 
     try {
-      const doc = new jsPDF();
-      let yPos = 20;
-
-      // Título
-      doc.setFontSize(20);
-      doc.setFont("helvetica", "bold");
-      doc.text(repertorio.nome, 20, yPos);
-      yPos += 10;
-
-      // Descrição
-      if (repertorio.descricao) {
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "normal");
-        const descLines = doc.splitTextToSize(repertorio.descricao, 170);
-        doc.text(descLines, 20, yPos);
-        yPos += descLines.length * 5 + 5;
-      }
-
-      // Linha divisória
-      doc.setLineWidth(0.5);
-      doc.line(20, yPos, 190, yPos);
-      yPos += 10;
-
-      // Agrupar músicas por momento
-      const musicasPorMomento: Record<string, typeof repertorio.musicas> = {};
-      repertorio.musicas.forEach((musica) => {
-        if (!musicasPorMomento[musica.momento]) {
-          musicasPorMomento[musica.momento] = [];
-        }
-        musicasPorMomento[musica.momento].push(musica);
-      });
-
-      // Renderizar músicas por momento
-      MOMENTOS_ORDEM.forEach((momento) => {
-        const musicas = musicasPorMomento[momento];
-        if (!musicas || musicas.length === 0) return;
-
-        // Verificar se precisa de nova página
-        if (yPos > 250) {
-          doc.addPage();
-          yPos = 20;
-        }
-
-        // Título do momento
-        doc.setFontSize(14);
-        doc.setFont("helvetica", "bold");
-        doc.text(momento, 20, yPos);
-        yPos += 8;
-
-        // Músicas do momento
-        doc.setFontSize(10);
-        musicas.forEach((musica, index) => {
-          if (yPos > 270) {
-            doc.addPage();
-            yPos = 20;
-          }
-
-          doc.setFont("helvetica", "bold");
-          doc.text(`${index + 1}. ${musica.titulo}`, 25, yPos);
-          yPos += 5;
-
-          doc.setFont("helvetica", "normal");
-          
-          if (musica.artista) {
-            doc.text(`   Artista: ${musica.artista}`, 25, yPos);
-            yPos += 5;
-          }
-
-          if (musica.tom) {
-            doc.text(`   Tom: ${musica.tom}`, 25, yPos);
-            yPos += 5;
-          }
-
-          if (musica.linkCifra) {
-            doc.setTextColor(0, 0, 255);
-            doc.text(`   Cifra: ${musica.linkCifra}`, 25, yPos);
-            doc.setTextColor(0, 0, 0);
-            yPos += 5;
-          }
-
-          if (musica.linkYoutube) {
-            doc.setTextColor(255, 0, 0);
-            doc.text(`   YouTube: ${musica.linkYoutube}`, 25, yPos);
-            doc.setTextColor(0, 0, 0);
-            yPos += 5;
-          }
-
-          yPos += 3; // Espaço entre músicas
-        });
-
-        yPos += 5; // Espaço entre momentos
-      });
-
-      // Rodapé
-      const totalPages = doc.getNumberOfPages();
-      for (let i = 1; i <= totalPages; i++) {
-        doc.setPage(i);
-        doc.setFontSize(8);
-        doc.setFont("helvetica", "normal");
-        doc.text(
-          `Gerado em ${new Date().toLocaleDateString("pt-BR")} - Página ${i} de ${totalPages}`,
-          20,
-          285
-        );
-      }
-
-      // Salvar PDF
-      doc.save(`${repertorio.nome}.pdf`);
+      generateRepertorioPDF(
+        {
+          nome: repertorio.nome,
+          descricao: repertorio.descricao || undefined,
+          notas: (repertorio as any).notas || undefined,
+          dataCelebracao: (repertorio as any).dataCelebracao || undefined,
+          tipoTemplate: repertorio.tipoTemplate || undefined,
+          tags: repertorio.tags ? JSON.parse(repertorio.tags) : [],
+          musicas: repertorio.musicas.map((m: any) => ({
+            id: m.id.toString(),
+            titulo: m.titulo,
+            artista: m.artista || "",
+            tom: m.tom || undefined,
+            momento: m.momento || undefined,
+            linkCifra: m.linkCifra || undefined,
+            linkYoutube: m.linkYoutube || undefined,
+          })),
+        },
+        { incluirLinks }
+      );
       toast.success("PDF gerado com sucesso!");
     } catch (error) {
       console.error("Erro ao gerar PDF:", error);
       toast.error("Erro ao gerar PDF");
     }
+  };
+
+  const gerarPDFSemLinks = () => {
+    gerarPDF(false);
+  };
+
+  const gerarPDFComLinks = () => {
+    gerarPDF(true);
   };
 
   if (isLoading) {
@@ -287,7 +207,7 @@ export default function VisualizarRepertorioPersonalizado() {
                   )}
                 </Button>
               )}
-              <Button variant="outline" onClick={gerarPDF}>
+              <Button variant="outline" onClick={gerarPDFComLinks}>
                 <Download className="w-4 h-4 mr-2" />
                 PDF
               </Button>
@@ -298,7 +218,7 @@ export default function VisualizarRepertorioPersonalizado() {
             </div>
           )}
           {isPublicView && (
-            <Button variant="outline" onClick={gerarPDF}>
+            <Button variant="outline" onClick={gerarPDFComLinks}>
               <Download className="w-4 h-4 mr-2" />
               PDF
             </Button>

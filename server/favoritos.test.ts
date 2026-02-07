@@ -93,8 +93,8 @@ describe("Favoritos Router", () => {
     const favoritos = await caller.favoritos.list();
 
     expect(favoritos).toHaveLength(2);
-    expect(favoritos[0].musicaTitulo).toBeDefined();
-    expect(favoritos[0].musicaArtista).toBeDefined();
+    expect(favoritos[0].titulo).toBeDefined();
+    expect(favoritos[0].artista).toBeDefined();
   });
 
   it("deve retornar lista vazia para usuário não autenticado", async () => {
@@ -116,7 +116,7 @@ describe("Favoritos Router", () => {
     });
 
     const isFavorite = await caller.favoritos.isFavorite({
-      musicaId: "entrada-5",
+      musicaId: "Desperta, Jerusalém", // Usando título como identificador
     });
 
     expect(isFavorite).toBe(true);
@@ -173,7 +173,7 @@ describe("Favoritos Router", () => {
     });
 
     const favoritos = await caller.favoritos.list();
-    const favoritoAdicionado = favoritos.find(f => f.musicaId === "entrada-7");
+    const favoritoAdicionado = favoritos.find(f => f.titulo === "Música com Timestamp");
 
     expect(favoritoAdicionado).toBeDefined();
     expect(favoritoAdicionado?.createdAt).toBeDefined();

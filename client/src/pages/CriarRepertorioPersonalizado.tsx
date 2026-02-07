@@ -699,28 +699,31 @@ export default function CriarRepertorioPersonalizado() {
         {/* Botões de Ação - Agora flutuantes */}
       </div>
 
-      {/* Barra Flutuante de Ações */}
+      {/* Barra Flutuante de Ações - Otimizada para Mobile */}
       <div className="fixed top-20 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-b shadow-lg">
-        <div className="container mx-auto px-4 py-3 flex gap-3 justify-between items-center">
+        <div className="container mx-auto px-2 sm:px-4 py-2 sm:py-3 flex gap-2 sm:gap-3 justify-between items-center flex-wrap sm:flex-nowrap">
           <Button 
             variant="outline" 
             size="sm"
             onClick={() => setLocation("/meus-repertorios")}
+            className="min-w-[80px] text-xs sm:text-sm"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Voltar
+            <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">Voltar</span>
+            <span className="sm:hidden">←</span>
           </Button>
           
-          <div className="flex gap-3">
+          <div className="flex gap-2 sm:gap-3 flex-wrap sm:flex-nowrap">
             {musicas.length > 0 && (
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleAdicionarMusica}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0"
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 text-xs sm:text-sm min-w-[100px] sm:min-w-auto"
               >
-                <Plus className="w-4 h-4 mr-2" />
-                Adicionar Música
+                <Plus className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Adicionar Música</span>
+                <span className="sm:hidden">+ Música</span>
               </Button>
             )}
             
@@ -729,24 +732,41 @@ export default function CriarRepertorioPersonalizado() {
               size="sm"
               onClick={handleSalvarContinuar} 
               disabled={criarRepertorioMutation.isPending || atualizarRepertorioMutation.isPending}
+              className="text-xs sm:text-sm min-w-[100px] sm:min-w-auto"
             >
-              <Download className="w-4 h-4 mr-2" />
+              <Download className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
               {(criarRepertorioMutation.isPending || atualizarRepertorioMutation.isPending)
-                ? "Salvando..."
-                : "Salvar e Continuar"}
+                ? "..."
+                : (
+                  <>
+                    <span className="hidden sm:inline">Salvar e Continuar</span>
+                    <span className="sm:hidden">Continuar</span>
+                  </>
+                )}
             </Button>
             
             <Button 
               size="sm"
               onClick={handleSalvar} 
               disabled={criarRepertorioMutation.isPending || atualizarRepertorioMutation.isPending}
+              className="text-xs sm:text-sm min-w-[80px] sm:min-w-auto"
             >
-              <Save className="w-4 h-4 mr-2" />
+              <Save className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
               {(criarRepertorioMutation.isPending || atualizarRepertorioMutation.isPending)
-                ? "Salvando..."
+                ? "..."
                 : isEdicao
-                ? "Salvar e Sair"
-                : "Criar Repertório"}
+                ? (
+                  <>
+                    <span className="hidden sm:inline">Salvar e Sair</span>
+                    <span className="sm:hidden">Salvar</span>
+                  </>
+                )
+                : (
+                  <>
+                    <span className="hidden sm:inline">Criar Repertório</span>
+                    <span className="sm:hidden">Criar</span>
+                  </>
+                )}
             </Button>
           </div>
         </div>

@@ -1,0 +1,9 @@
+{
+  "query": "\nCREATE TABLE IF NOT EXISTS musicasFavoritas_new (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  userId INT NOT NULL,\n  titulo VARCHAR(255) NOT NULL,\n  artista VARCHAR(255),\n  tom VARCHAR(10),\n  linkCifra VARCHAR(500),\n  linkYoutube VARCHAR(500),\n  momento VARCHAR(100),\n  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,\n  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE\n);\n\nDROP TABLE IF EXISTS musicasFavoritas;\n\nALTER TABLE musicasFavoritas_new RENAME TO musicasFavoritas;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute \nCREATE TABLE IF NOT EXISTS musicasFavoritas_new (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  userId INT NOT NULL,\n  titulo VARCHAR(255) NOT NULL,\n  artista VARCHAR(255),\n  tom VARCHAR(10),\n  linkCifra VARCHAR(500),\n  linkYoutube VARCHAR(500),\n  momento VARCHAR(100),\n  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,\n  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE\n);\n\nDROP TABLE IF EXISTS musicasFavoritas;\n\nALTER TABLE musicasFavoritas_new RENAME TO musicasFavoritas;\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1907
+}

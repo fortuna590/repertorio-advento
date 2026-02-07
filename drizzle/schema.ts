@@ -147,6 +147,25 @@ export type MusicaRepertorioPersonalizado = typeof musicasRepertorioPersonalizad
 export type InsertMusicaRepertorioPersonalizado = typeof musicasRepertorioPersonalizado.$inferInsert;
 
 /**
+ * Tabela para músicas favoritas dos usuários
+ */
+export const musicasFavoritas = mysqlTable("musicasFavoritas", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade", onUpdate: "no action" }),
+  titulo: varchar("titulo", { length: 255 }).notNull(),
+  artista: varchar("artista", { length: 255 }),
+  tom: varchar("tom", { length: 10 }), // Ex: C, Dm, F#, etc.
+  linkCifra: varchar("linkCifra", { length: 500 }),
+  linkYoutube: varchar("linkYoutube", { length: 500 }),
+  momento: varchar("momento", { length: 100 }), // Momento sugerido (opcional)
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MusicaFavorita = typeof musicasFavoritas.$inferSelect;
+export type InsertMusicaFavorita = typeof musicasFavoritas.$inferInsert;
+
+/**
  * Tabela para artigos do blog
  */
 export const artigos = mysqlTable("artigos", {
@@ -264,21 +283,6 @@ export const liturgiaFavoritos = mysqlTable("liturgiaFavoritos", {
 
 export type LiturgiaFavorito = typeof liturgiaFavoritos.$inferSelect;
 export type InsertLiturgiaFavorito = typeof liturgiaFavoritos.$inferInsert;
-
-/**
- * Tabela para músicas favoritas dos usuários
- */
-export const musicasFavoritas = mysqlTable("musicasFavoritas", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
-  musicaId: varchar("musicaId", { length: 100 }).notNull(), // ID da música no JSON
-  musicaTitulo: varchar("musicaTitulo", { length: 255 }).notNull(),
-  musicaArtista: varchar("musicaArtista", { length: 255 }).notNull(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
-
-export type MusicaFavorita = typeof musicasFavoritas.$inferSelect;
-export type InsertMusicaFavorita = typeof musicasFavoritas.$inferInsert;
 
 /**
  * Tabela para músicas favoritas de repertórios admin

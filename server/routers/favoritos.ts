@@ -29,7 +29,7 @@ export const favoritosRouter = router({
         .where(
           and(
             eq(musicasFavoritas.userId, ctx.user.id),
-            eq(musicasFavoritas.musicaId, input.musicaId)
+            eq(musicasFavoritas.titulo, input.musicaTitulo)
           )
         )
         .limit(1);
@@ -40,9 +40,8 @@ export const favoritosRouter = router({
 
       await db.insert(musicasFavoritas).values({
         userId: ctx.user.id,
-        musicaId: input.musicaId,
-        musicaTitulo: input.musicaTitulo,
-        musicaArtista: input.musicaArtista,
+        titulo: input.musicaTitulo,
+        artista: input.musicaArtista,
       });
 
       return { success: true, message: "Música adicionada aos favoritos!" };
@@ -64,7 +63,7 @@ export const favoritosRouter = router({
         .where(
           and(
             eq(musicasFavoritas.userId, ctx.user.id),
-            eq(musicasFavoritas.musicaId, input.musicaId)
+            eq(musicasFavoritas.titulo, input.musicaId) // Usando titulo como identificador temporário
           )
         );
 
@@ -106,7 +105,7 @@ export const favoritosRouter = router({
         .where(
           and(
             eq(musicasFavoritas.userId, ctx.user.id),
-            eq(musicasFavoritas.musicaId, input.musicaId)
+            eq(musicasFavoritas.titulo, input.musicaId) // Usando titulo como identificador temporário
           )
         )
         .limit(1);
