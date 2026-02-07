@@ -68,10 +68,17 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
   
   const [buscaYoutube, setBuscaYoutube] = useState("");
   const [mostrarResultados, setMostrarResultados] = useState(false);
+  const [buscaCifra, setBuscaCifra] = useState("");
+  const [mostrarResultadosCifra, setMostrarResultadosCifra] = useState(false);
   
   const { data: resultadosBusca, isLoading: buscando } = trpc.youtubeSearch.buscarVideos.useQuery(
     { query: buscaYoutube },
     { enabled: buscaYoutube.length > 0 && mostrarResultados }
+  );
+  
+  const { data: resultadosCifra, isLoading: buscandoCifra } = trpc.cifraSearch.buscarCifras.useQuery(
+    { query: buscaCifra },
+    { enabled: buscaCifra.length > 0 && mostrarResultadosCifra }
   );
   const {
     attributes,
@@ -237,6 +244,57 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
                         </Select>
                       </div>
                     )}
+
+        <div className="md:col-span-2">
+          <Label>Buscar Cifra no CifraClub</Label>
+          <div className="flex gap-2">
+            <Input
+              placeholder="Digite o nome da música para buscar cifra..."
+              value={buscaCifra}
+              onChange={(e) => setBuscaCifra(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  setMostrarResultadosCifra(true);
+                }
+              }}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setMostrarResultadosCifra(true)}
+              disabled={buscandoCifra || !buscaCifra}
+            >
+              {buscandoCifra ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Search className="w-4 h-4" />
+              )}
+            </Button>
+          </div>
+          
+          {/* Resultados da Busca de Cifras */}
+          {mostrarResultadosCifra && resultadosCifra && resultadosCifra.cifras.length > 0 && (
+            <div className="max-h-48 overflow-y-auto border rounded-lg p-2 space-y-2 bg-background mt-2">
+              {resultadosCifra.cifras.map((cifra: any, idx: number) => (
+                <button
+                  key={idx}
+                  type="button"
+                  className="w-full text-left p-2 hover:bg-accent rounded-lg transition-colors"
+                  onClick={() => {
+                    onUpdate(index, "linkCifra", cifra.link);
+                    setMostrarResultadosCifra(false);
+                    setBuscaCifra("");
+                    toast.success("Link da cifra preenchido!");
+                  }}
+                >
+                  <p className="font-medium text-sm">{cifra.titulo}</p>
+                  <p className="text-xs text-muted-foreground">{cifra.artista}</p>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
         <div>
           <Label>Link da Cifra</Label>

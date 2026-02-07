@@ -2527,3 +2527,14 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Preencher automaticamente título, artista e link ao selecionar resultado
 - [x] Adicionar loading state durante busca
 - [x] Tratar erros de API e limites de quota
+
+
+## Busca Automática de Cifras e Histórico de Músicas
+- [x] Pesquisar API ou scraping do CifraClub para busca de cifras
+- [x] Implementar endpoint tRPC para buscar cifras
+- [x] Adicionar campo de busca de cifras no formulário de música
+- [x] Preencher automaticamente link da cifra ao selecionar resultado
+- [x] Criar tabela de histórico de músicas usadas recentemente
+- [x] Implementar endpoint para listar músicas recentes do usuário
+- [x] Adicionar seção "Músicas Recentes" no formulário
+- [x] Permitir reutilizar música recente com um clique

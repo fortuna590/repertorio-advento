@@ -43,6 +43,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { SortableMusica } from "@/components/SortableMusica";
 import { ImportarMusicasModal } from "@/components/ImportarMusicasModal";
+import { MusicasRecentesSection } from "@/components/MusicasRecentesSection";
 
 type Musica = {
   id?: number;
@@ -613,6 +614,12 @@ export default function CriarRepertorioPersonalizado() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Músicas Recentes */}
+        <MusicasRecentesSection onReutilizar={(musica: Musica) => {
+          setMusicas([...musicas, musica]);
+          toast.success("Música adicionada!");
+        }} />
 
         {/* Músicas */}
         <Card className="mb-6">
