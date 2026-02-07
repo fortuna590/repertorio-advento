@@ -2517,3 +2517,13 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Adicionar botão "Salvar e Continuar Editando" ao lado do botão "Salvar"
 - [x] Manter usuário na página de edição após salvar e continuar
 - [x] Mostrar toast de confirmação ao salvar e continuar
+
+
+## Busca Integrada de Músicas do YouTube
+- [x] Pesquisar API gratuita do YouTube (YouTube Data API v3)
+- [x] Implementar campo de busca dentro do formulário de música
+- [x] Criar função para buscar vídeos no YouTube
+- [x] Exibir resultados da busca em lista selecionável
+- [x] Preencher automaticamente título, artista e link ao selecionar resultado
+- [x] Adicionar loading state durante busca
+- [x] Tratar erros de API e limites de quota

@@ -25,6 +25,7 @@ import { escalasExportRouter } from "./routers/escalasExport";
 import { musicasBaseRouter } from "./routers/musicasBase";
 import { adminUsersRouter } from "./routers/adminUsers";
 import { auditRouter } from "./routers/audit";
+import { youtubeSearchRouter } from "./routers/youtubeSearch";
 
 export const appRouter = router({
   contact: contactRouter,
@@ -48,6 +49,7 @@ export const appRouter = router({
   musicasBase: musicasBaseRouter,
   adminUsers: adminUsersRouter,
   audit: auditRouter,
+  youtubeSearch: youtubeSearchRouter,
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   auth: router({

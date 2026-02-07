@@ -10,7 +10,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Trash2, GripVertical } from "lucide-react";
+import { Trash2, GripVertical, Search, Loader2 } from "lucide-react";
+import { trpc } from "@/lib/trpc";
+import { useState } from "react";
+import { toast } from "sonner";
 
 type Musica = {
   id?: number;
@@ -62,6 +65,14 @@ interface SortableMusicaProps {
 export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate }: SortableMusicaProps) {
   const momentos = tipoTemplate === "grupo_oracao" ? MOMENTOS_GRUPO_ORACAO : MOMENTOS_MISSA;
   const mostrarMomento = tipoTemplate !== "livre"; // Ocultar campo momento para template livre
+  
+  const [buscaYoutube, setBuscaYoutube] = useState("");
+  const [mostrarResultados, setMostrarResultados] = useState(false);
+  
+  const { data: resultadosBusca, isLoading: buscando } = trpc.youtubeSearch.buscarVideos.useQuery(
+    { query: buscaYoutube },
+    { enabled: buscaYoutube.length > 0 && mostrarResultados }
+  );
   const {
     attributes,
     listeners,
@@ -102,6 +113,70 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
         >
           <Trash2 className="w-4 h-4" />
         </Button>
+      </div>
+
+      {/* Campo de Busca YouTube */}
+      <div className="space-y-2">
+        <Label>Buscar no YouTube</Label>
+        <div className="flex gap-2">
+          <Input
+            placeholder="Digite o nome da música para buscar..."
+            value={buscaYoutube}
+            onChange={(e) => setBuscaYoutube(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                setMostrarResultados(true);
+              }
+            }}
+          />
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setMostrarResultados(true)}
+            disabled={buscando || !buscaYoutube}
+          >
+            {buscando ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Search className="w-4 h-4" />
+            )}
+          </Button>
+        </div>
+        
+        {/* Resultados da Busca */}
+        {mostrarResultados && resultadosBusca && resultadosBusca.videos.length > 0 && (
+          <div className="max-h-60 overflow-y-auto border rounded-lg p-2 space-y-2 bg-background">
+            {resultadosBusca.videos.map((video: any) => (
+              <button
+                key={video.videoId}
+                type="button"
+                className="w-full text-left p-2 hover:bg-accent rounded-lg transition-colors flex gap-3"
+                onClick={() => {
+                  onUpdate(index, "titulo", video.titulo);
+                  onUpdate(index, "artista", video.canal);
+                  onUpdate(index, "linkYoutube", video.link);
+                  setMostrarResultados(false);
+                  setBuscaYoutube("");
+                  toast.success("Dados preenchidos automaticamente!");
+                }}
+              >
+                <img 
+                  src={video.thumbnail} 
+                  alt={video.titulo}
+                  className="w-20 h-12 object-cover rounded"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-sm truncate">{video.titulo}</p>
+                  <p className="text-xs text-muted-foreground truncate">{video.canal}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {video.duracao} • {video.visualizacoes}
+                  </p>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
