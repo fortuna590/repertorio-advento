@@ -2560,3 +2560,7 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Criar sistema de favoritar músicas individuais
 - [x] Adicionar página/seção de biblioteca de favoritos
 - [x] Permitir adicionar música favorita diretamente ao repertório
+
+## Ajustes de Interface
+
+- [x] Remover botão "Adicionar Música" duplicado da seção de músicas (manter apenas na barra flutuante)

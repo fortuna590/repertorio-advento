@@ -629,36 +629,6 @@ export default function CriarRepertorioPersonalizado() {
                 <Music className="w-5 h-5" />
                 Músicas ({musicas.length})
               </CardTitle>
-              <div className="flex gap-2">
-                <Dialog open={modalImportarAberto} onOpenChange={setModalImportarAberto}>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      <Download className="w-4 h-4 mr-2" />
-                      Importar
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-                    <DialogHeader>
-                      <DialogTitle>Importar Músicas de Outro Repertório</DialogTitle>
-                      <DialogDescription>
-                        Selecione um repertório e escolha as músicas que deseja importar
-                      </DialogDescription>
-                    </DialogHeader>
-                    <ImportarMusicasModal
-                      repertorioAtualId={id ? parseInt(id) : null}
-                      onImportar={(musicasImportadas: Musica[]) => {
-                        setMusicas([...musicas, ...musicasImportadas]);
-                        setModalImportarAberto(false);
-                        toast.success(`${musicasImportadas.length} música(s) importada(s) com sucesso!`);
-                      }}
-                    />
-                  </DialogContent>
-                </Dialog>
-                <Button onClick={handleAdicionarMusica} size="sm">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Adicionar Música
-                </Button>
-              </div>
             </div>
           </CardHeader>
           <CardContent className="space-y-6" id="musicas-section">
@@ -666,7 +636,7 @@ export default function CriarRepertorioPersonalizado() {
               <div className="text-center py-12 text-muted-foreground">
                 <Music className="w-12 h-12 mx-auto mb-4 opacity-50" />
                 <p>Nenhuma música adicionada ainda</p>
-                <p className="text-sm">Clique em "Adicionar Música" para começar</p>
+                <p className="text-sm">Use a barra flutuante acima para adicionar músicas</p>
               </div>
             ) : (
               <DndContext
