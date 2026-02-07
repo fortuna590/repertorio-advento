@@ -121,6 +121,36 @@ export default function CriarRepertorioPersonalizado() {
   const [repertorioFonteId, setRepertorioFonteId] = useState<number | null>(null);
   const [musicasSelecionadas, setMusicasSelecionadas] = useState<number[]>([]);
 
+  const LOCAL_STORAGE_KEY = `repertorio_draft_${id || 'novo'}`;
+
+  // Carregar dados do localStorage ao montar componente
+  useEffect(() => {
+    if (!isEdicao) { // Só carrega do localStorage se for criação nova
+      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          setNome(data.nome || "");
+          setDescricao(data.descricao || "");
+          setTags(data.tags || []);
+          setTipoTemplate(data.tipoTemplate || "missa");
+          setMusicas(data.musicas || []);
+          toast.info("Rascunho recuperado!");
+        } catch (e) {
+          console.error("Erro ao carregar rascunho:", e);
+        }
+      }
+    }
+  }, []);
+
+  // Auto-save no localStorage quando dados mudam
+  useEffect(() => {
+    if (!isEdicao && (nome || descricao || tags.length > 0 || musicas.length > 0)) {
+      const data = { nome, descricao, tags, tipoTemplate, musicas };
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+    }
+  }, [nome, descricao, tags, tipoTemplate, musicas, isEdicao, LOCAL_STORAGE_KEY]);
+
   // Buscar repertório se for edição
   const { data: repertorio, isLoading } = trpc.repertoriosPersonalizados.buscarPorId.useQuery(
     { id: parseInt(id || "0") },
@@ -232,6 +262,95 @@ export default function CriarRepertorioPersonalizado() {
     }
   };
 
+  const handleSalvarContinuar = async () => {
+    if (!nome.trim()) {
+      toast.error("Nome do repertório é obrigatório");
+      return;
+    }
+
+    if (musicas.length === 0) {
+      toast.error("Adicione pelo menos uma música ao repertório");
+      return;
+    }
+
+    // Validar músicas
+    for (const musica of musicas) {
+      if (!musica.titulo.trim()) {
+        toast.error("Todas as músicas devem ter um título");
+        return;
+      }
+      // Validar momento apenas para templates que não são livres
+      if (tipoTemplate !== "livre" && !musica.momento) {
+        toast.error("Todas as músicas devem ter um momento definido");
+        return;
+      }
+    }
+
+    try {
+      let repertorioId = id ? parseInt(id) : null;
+
+      // Criar ou atualizar repertório
+      if (isEdicao) {
+        await atualizarRepertorioMutation.mutateAsync({
+          id: parseInt(id!),
+          nome,
+          descricao,
+          tags,
+        });
+      } else {
+        const resultado = await criarRepertorioMutation.mutateAsync({
+          nome,
+          descricao,
+          tags,
+          tipoTemplate,
+        });
+        repertorioId = resultado.repertorioId;
+        // Redirecionar para edição após criar
+        setLocation(`/repertorio-personalizado/${repertorioId}/editar`);
+      }
+
+      // Salvar músicas
+      for (const musica of musicas) {
+        if (musica.id && isEdicao) {
+          // Atualizar música existente
+          await atualizarMusicaMutation.mutateAsync({
+            id: musica.id,
+            repertorioId: parseInt(id!),
+            titulo: musica.titulo,
+            artista: musica.artista,
+            tom: musica.tom,
+            linkCifra: musica.linkCifra,
+            linkYoutube: musica.linkYoutube,
+            momento: musica.momento,
+          });
+        } else {
+          // Adicionar nova música
+          await adicionarMusicaMutation.mutateAsync({
+            repertorioId: repertorioId!,
+            titulo: musica.titulo,
+            artista: musica.artista,
+            tom: musica.tom,
+            linkCifra: musica.linkCifra,
+            linkYoutube: musica.linkYoutube,
+            momento: musica.momento,
+          });
+        }
+      }
+
+      // Limpar localStorage após salvar com sucesso
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
+      
+      toast.success(`Repertório salvo! Continue editando.`);
+      
+      // Recarregar dados se for edição
+      if (isEdicao) {
+        window.location.reload();
+      }
+    } catch (error) {
+      toast.error(`Erro ao salvar repertório`);
+    }
+  };
+
   const handleSalvar = async () => {
     if (!nome.trim()) {
       toast.error("Nome do repertório é obrigatório");
@@ -305,6 +424,9 @@ export default function CriarRepertorioPersonalizado() {
         }
       }
 
+      // Limpar localStorage após salvar com sucesso
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
+      
       toast.success(`Repertório ${isEdicao ? "atualizado" : "criado"} com sucesso!`);
 
       setLocation("/meus-repertorios");
@@ -572,12 +694,25 @@ export default function CriarRepertorioPersonalizado() {
           <Button variant="outline" onClick={() => setLocation("/meus-repertorios")}>
             Cancelar
           </Button>
-          <Button onClick={handleSalvar} disabled={criarRepertorioMutation.isPending}>
+          <Button 
+            variant="outline"
+            onClick={handleSalvarContinuar} 
+            disabled={criarRepertorioMutation.isPending || atualizarRepertorioMutation.isPending}
+          >
+            <Download className="w-4 h-4 mr-2" />
+            {(criarRepertorioMutation.isPending || atualizarRepertorioMutation.isPending)
+              ? "Salvando..."
+              : "Salvar e Continuar"}
+          </Button>
+          <Button 
+            onClick={handleSalvar} 
+            disabled={criarRepertorioMutation.isPending || atualizarRepertorioMutation.isPending}
+          >
             <Save className="w-4 h-4 mr-2" />
-            {criarRepertorioMutation.isPending
+            {(criarRepertorioMutation.isPending || atualizarRepertorioMutation.isPending)
               ? "Salvando..."
               : isEdicao
-              ? "Salvar Alterações"
+              ? "Salvar e Sair"
               : "Criar Repertório"}
           </Button>
         </div>

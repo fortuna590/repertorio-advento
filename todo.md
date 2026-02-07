@@ -2508,3 +2508,12 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Adicionar rodapé na página pública com link "Crie seu próprio repertório"
 - [x] Implementar botão "Copiar link de compartilhamento" na visualização
 - [x] Adicionar badge/ícone de "Público" nos cards da listagem Meus Repertórios
+
+
+## Auto-save e Salvar Continuar Editando
+- [x] Implementar auto-save no localStorage para preservar dados do formulário
+- [x] Recuperar dados do localStorage ao carregar página
+- [x] Limpar localStorage após salvar com sucesso
+- [x] Adicionar botão "Salvar e Continuar Editando" ao lado do botão "Salvar"
+- [x] Manter usuário na página de edição após salvar e continuar
+- [x] Mostrar toast de confirmação ao salvar e continuar
