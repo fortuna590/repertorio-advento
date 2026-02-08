@@ -189,11 +189,12 @@ export default function VisualizarRepertorioPersonalizado() {
             </div>
           </div>
           {!isPublicView && (
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               {repertorio.shareId && (
                 <Button 
                   variant="outline" 
                   onClick={copiarLinkCompartilhamento}
+                  size="sm"
                   className={linkCopiado ? "bg-green-500/10 border-green-500 text-green-600" : ""}
                 >
                   {linkCopiado ? (
@@ -209,11 +210,11 @@ export default function VisualizarRepertorioPersonalizado() {
                   )}
                 </Button>
               )}
-              <Button variant="outline" onClick={gerarPDFComLinks}>
+              <Button variant="outline" size="sm" onClick={gerarPDFComLinks}>
                 <Download className="w-4 h-4 mr-2" />
                 PDF
               </Button>
-              <Button onClick={() => setLocation(`/repertorio-personalizado/${id}/editar`)}>
+              <Button size="sm" onClick={() => setLocation(`/repertorio-personalizado/${id}/editar`)}>
                 <Edit className="w-4 h-4 mr-2" />
                 Editar
               </Button>

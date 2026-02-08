@@ -2592,3 +2592,7 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 ## Correção de Visualização
 
 - [x] Adicionar botão "Ver Letra" na página de visualização do repertório (atualmente só mostra Cifra e YouTube)
+
+## Responsividade Mobile
+
+- [x] Ajustar layout dos botões de ação (Compartilhar, PDF, Editar) no header do preview para não sobrepor em telas pequenas
