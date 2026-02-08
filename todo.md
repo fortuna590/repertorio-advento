@@ -2588,3 +2588,7 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 ## Preview de Links
 
 - [x] Adicionar tooltip nos botões de acesso rápido mostrando domínio do site ao passar o mouse
+
+## Correção de Visualização
+
+- [x] Adicionar botão "Ver Letra" na página de visualização do repertório (atualmente só mostra Cifra e YouTube)

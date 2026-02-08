@@ -16,6 +16,7 @@ import {
   ExternalLink,
   Share,
   Check,
+  FileText,
 } from "lucide-react";
 import { generateRepertorioPDF } from "@/lib/pdfGenerator";
 
@@ -93,6 +94,7 @@ export default function VisualizarRepertorioPersonalizado() {
             momento: m.momento || undefined,
             linkCifra: m.linkCifra || undefined,
             linkYoutube: m.linkYoutube || undefined,
+            linkLetra: m.linkLetra || undefined,
           })),
         },
         { incluirLinks }
@@ -261,7 +263,7 @@ export default function VisualizarRepertorioPersonalizado() {
                         )}
                       </div>
 
-                      {(musica.linkCifra || musica.linkYoutube) && (
+                      {(musica.linkCifra || musica.linkYoutube || musica.linkLetra) && (
                         <div className="flex flex-wrap gap-2">
                           {musica.linkCifra && (
                             <Button
@@ -295,6 +297,24 @@ export default function VisualizarRepertorioPersonalizado() {
                               >
                                 <Youtube className="w-3.5 h-3.5 mr-2" />
                                 Ver no YouTube
+                                <ExternalLink className="w-3 h-3 ml-2" />
+                              </a>
+                            </Button>
+                          )}
+                          {musica.linkLetra && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              asChild
+                              className="text-xs text-blue-600 hover:text-blue-600 border-blue-200 hover:border-blue-300"
+                            >
+                              <a
+                                href={musica.linkLetra}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <FileText className="w-3.5 h-3.5 mr-2" />
+                                Ver Letra
                                 <ExternalLink className="w-3 h-3 ml-2" />
                               </a>
                             </Button>
