@@ -2584,3 +2584,7 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 
 - [x] Corrigir busca do Letras.mus.br que não está funcionando
 - [x] Corrigir exibição do botão "📝 Letra" no preview dos cards após inserir link manualmente
+
+## Preview de Links
+
+- [x] Adicionar tooltip nos botões de acesso rápido mostrando domínio do site ao passar o mouse

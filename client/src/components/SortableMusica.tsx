@@ -129,6 +129,7 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
                     rel="noopener noreferrer"
                     className="text-xs text-primary hover:underline flex items-center gap-1"
                     onClick={(e) => e.stopPropagation()}
+                    title={musica.linkCifra}
                   >
                     🎸 Cifra
                   </a>
@@ -140,6 +141,7 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
                     rel="noopener noreferrer"
                     className="text-xs text-red-500 hover:underline flex items-center gap-1"
                     onClick={(e) => e.stopPropagation()}
+                    title={musica.linkYoutube}
                   >
                     ▶️ YouTube
                   </a>
@@ -151,6 +153,7 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
                     rel="noopener noreferrer"
                     className="text-xs text-blue-500 hover:underline flex items-center gap-1"
                     onClick={(e) => e.stopPropagation()}
+                    title={musica.linkLetra}
                   >
                     📝 Letra
                   </a>
