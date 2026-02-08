@@ -71,6 +71,8 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
   const [mostrarResultados, setMostrarResultados] = useState(false);
   const [buscaCifra, setBuscaCifra] = useState("");
   const [mostrarResultadosCifra, setMostrarResultadosCifra] = useState(false);
+  const [buscaLetra, setBuscaLetra] = useState("");
+  const [mostrarResultadosLetra, setMostrarResultadosLetra] = useState(false);
   
   const { data: resultadosBusca, isLoading: buscando } = trpc.youtubeSearch.buscarVideos.useQuery(
     { query: buscaYoutube },
@@ -80,6 +82,11 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
   const { data: resultadosCifra, isLoading: buscandoCifra } = trpc.cifraSearch.buscarCifras.useQuery(
     { query: buscaCifra },
     { enabled: buscaCifra.length > 0 && mostrarResultadosCifra }
+  );
+  
+  const { data: resultadosLetra, isLoading: buscandoLetra } = trpc.letrasSearch.buscarLetras.useQuery(
+    { query: buscaLetra },
+    { enabled: buscaLetra.length > 0 && mostrarResultadosLetra }
   );
   const {
     attributes,
@@ -111,7 +118,46 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
           >
             <GripVertical className="w-5 h-5" />
           </button>
-          <h3 className="font-semibold text-lg">Música {index + 1}</h3>
+          <div>
+            <h3 className="font-semibold text-lg">Música {index + 1}</h3>
+            {musica.titulo && (
+              <div className="flex items-center gap-2 mt-1">
+                {musica.linkCifra && (
+                  <a
+                    href={musica.linkCifra}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-primary hover:underline flex items-center gap-1"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    🎸 Cifra
+                  </a>
+                )}
+                {musica.linkYoutube && (
+                  <a
+                    href={musica.linkYoutube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-red-500 hover:underline flex items-center gap-1"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    ▶️ YouTube
+                  </a>
+                )}
+                {musica.linkLetra && (
+                  <a
+                    href={musica.linkLetra}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-blue-500 hover:underline flex items-center gap-1"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    📝 Letra
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
         </div>
         <Button
           variant="ghost"
@@ -245,7 +291,13 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
             type="url"
             placeholder="https://www.cifraclub.com.br/..."
             value={musica.linkCifra}
-            onChange={(e) => onUpdate(index, "linkCifra", e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value && !value.includes('cifraclub.com.br') && !value.includes('cifras.com.br')) {
+                toast.error('Link deve ser do CifraClub ou Cifras.com.br');
+              }
+              onUpdate(index, "linkCifra", value);
+            }}
           />
         </div>
 
@@ -320,8 +372,66 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
             type="url"
             placeholder="https://youtube.com/..."
             value={musica.linkYoutube}
-            onChange={(e) => onUpdate(index, "linkYoutube", e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value && !value.includes('youtube.com') && !value.includes('youtu.be')) {
+                toast.error('Link deve ser do YouTube');
+              }
+              onUpdate(index, "linkYoutube", value);
+            }}
           />
+        </div>
+
+        {/* Busca de Letra */}
+        <div className="md:col-span-2">
+          <Label>Buscar Letra no Letras.mus.br</Label>
+          <div className="flex gap-2">
+            <Input
+              placeholder="Digite artista - música (ex: Frei Gilson - Vamos Celebrar)"
+              value={buscaLetra}
+              onChange={(e) => setBuscaLetra(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  setMostrarResultadosLetra(true);
+                }
+              }}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setMostrarResultadosLetra(true)}
+              disabled={buscandoLetra || !buscaLetra}
+            >
+              {buscandoLetra ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Search className="w-4 h-4" />
+              )}
+            </Button>
+          </div>
+          
+          {/* Resultados da Busca de Letras */}
+          {mostrarResultadosLetra && resultadosLetra && resultadosLetra.length > 0 && (
+            <div className="max-h-48 overflow-y-auto border rounded-lg p-2 space-y-2 bg-background mt-2">
+              {resultadosLetra.map((letra: any, idx: number) => (
+                <button
+                  key={idx}
+                  type="button"
+                  className="w-full text-left p-2 hover:bg-accent rounded-lg transition-colors"
+                  onClick={() => {
+                    onUpdate(index, "linkLetra", letra.url);
+                    setMostrarResultadosLetra(false);
+                    setBuscaLetra("");
+                    toast.success("Link da letra preenchido!");
+                  }}
+                >
+                  <p className="font-medium text-sm">{letra.titulo}</p>
+                  <p className="text-xs text-muted-foreground">{letra.artista}</p>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Link da Letra */}
@@ -331,7 +441,13 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
             type="url"
             placeholder="https://www.letras.mus.br/..."
             value={musica.linkLetra}
-            onChange={(e) => onUpdate(index, "linkLetra", e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value && !value.includes('letras.mus.br')) {
+                toast.error('Link deve ser do Letras.mus.br');
+              }
+              onUpdate(index, "linkLetra", value);
+            }}
           />
         </div>
       </div>

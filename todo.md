@@ -2572,3 +2572,10 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Atualizar schema do banco de dados com campo linkLetra
 - [x] Atualizar formulário de adição/edição de músicas com novo campo
 - [ ] Exibir botão de link da letra nos cards de músicas
+
+## Melhorias de Acesso e Validação de Links
+
+- [x] Adicionar botões de acesso rápido (ícones clicáveis) nos cards de músicas para Cifra, YouTube e Letra
+- [x] Implementar validação de URLs para garantir links válidos dos sites esperados
+- [x] Criar router de busca de letras no backend (letras.mus.br)
+- [x] Adicionar funcionalidade de busca automática de letras no formulário
