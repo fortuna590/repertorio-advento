@@ -2579,3 +2579,8 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Implementar validação de URLs para garantir links válidos dos sites esperados
 - [x] Criar router de busca de letras no backend (letras.mus.br)
 - [x] Adicionar funcionalidade de busca automática de letras no formulário
+
+## Correções Urgentes
+
+- [x] Corrigir busca do Letras.mus.br que não está funcionando
+- [x] Corrigir exibição do botão "📝 Letra" no preview dos cards após inserir link manualmente

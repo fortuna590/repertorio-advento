@@ -13,6 +13,7 @@ interface Musica {
   cifraResumo?: string;
   linkYouTube?: string;
   linkCifra?: string;
+  linkLetra?: string;
 }
 
 interface RepertorioData {
@@ -136,8 +137,19 @@ export async function gerarPDFRepertorio(data: RepertorioData): Promise<Buffer> 
               const qrCifra = await QRCode.toDataURL(musica.linkCifra, { width: 60, margin: 1 });
               doc.image(qrCifra, qrX, qrY, { width: 50 });
               doc.fontSize(7).fillColor("#888").text("Cifra", qrX + 10, qrY + 52);
+              qrY += 70;
             } catch (err) {
               console.error("Erro ao gerar QR Code Cifra:", err);
+            }
+          }
+
+          if (musica.linkLetra) {
+            try {
+              const qrLetra = await QRCode.toDataURL(musica.linkLetra, { width: 60, margin: 1 });
+              doc.image(qrLetra, qrX, qrY, { width: 50 });
+              doc.fontSize(7).fillColor("#888").text("Letra", qrX + 10, qrY + 52);
+            } catch (err) {
+              console.error("Erro ao gerar QR Code Letra:", err);
             }
           }
 
