@@ -445,7 +445,8 @@ export default function CriarRepertorioPersonalizado() {
       
       toast.success(`Repertório ${isEdicao ? "atualizado" : "criado"} com sucesso!`);
 
-      setLocation("/meus-repertorios");
+      // Redirecionar para o preview do repertório
+      setLocation(`/repertorio-personalizado/${repertorioId}`);
     } catch (error) {
       toast.error(`Erro ao ${isEdicao ? "atualizar" : "criar"} repertório`);
     }

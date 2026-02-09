@@ -2596,3 +2596,7 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 ## Responsividade Mobile
 
 - [x] Ajustar layout dos botões de ação (Compartilhar, PDF, Editar) no header do preview para não sobrepor em telas pequenas
+
+## Ajuste de Navegação
+
+- [x] Alterar redirecionamento do botão "Salvar e Sair" para ir ao preview do repertório ao invés da lista de repertórios
