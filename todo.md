@@ -2723,3 +2723,54 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Preview de datas que serão geradas
 - [x] Adicionar botão "Gerar Automaticamente" na página de escalas
 - [x] Rota /escalas/gerar-automatica configurada
+
+
+## Melhorias Adicionais
+
+### 1. Sistema de Notificações 48h Antes
+- [x] Criar job/cron que verifica escalas nas próximas 48h
+- [x] Enviar lembretes automáticos por email
+- [x] Enviar lembretes automáticos por WhatsApp
+- [x] Atualizar cron para 48h ao invés de 24h
+
+### 2. Dashboard de Estatísticas
+- [x] Criar query para buscar estatísticas de participação por membro
+- [x] Criar página de dashboard com gráficos
+- [x] Mostrar frequência de participação
+- [x] Mostrar taxa de confirmação/ausência
+- [x] Mostrar histórico de participações por período
+- [x] Adicionar filtros por equipe e período
+- [x] Cards de resumo com totais
+- [x] Tabela detalhada por membro
+- [x] Barra de progresso visual da taxa de confirmação
+
+### 3. Sistema de Substituições Inteligentes
+- [x] Criar mutation para cancelar participação
+- [x] Criar query para sugerir substitutos disponíveis
+- [x] Ordenar substitutos por menor número de participações
+- [x] Verificar disponibilidade dos substitutos (filtrar já escalados)
+- [x] Criar interface para solicitar substituição
+- [x] Notificar substitutos sugeridos via email e WhatsApp
+- [x] Botão de substituição na página de detalhes
+- [x] Modal com lista de substitutos ordenados
+- [x] Mutation para adicionar substituto automaticamente
+
+## Sprint 4 - Notificações Avançadas
+
+### Backend
+- [x] Implementar sistema de notificações 48h antes (automático)
+- [x] Criar mutation para solicitar substituição
+- [x] Criar query para listar substitutos disponíveis
+- [x] Integrar com WhatsApp para notificações (já existente)
+- [x] Criar sistema de substituição automática
+- [x] Mutation cancelarParticipacao
+- [x] Query sugerirSubstitutos
+- [x] Mutation adicionarSubstituto
+
+### Frontend
+- [x] Criar página de dashboard de estatísticas
+- [x] Adicionar botão de solicitar substituição
+- [x] Criar modal de solicitação de substituição
+- [x] Mostrar substitutos sugeridos ordenados
+- [x] Interface completa de substituição
+- [x] Adicionar à navegação (botão Estatísticas)

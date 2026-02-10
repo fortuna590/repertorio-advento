@@ -1778,4 +1778,241 @@ export const escalasRouter = router({
 
       return { success: true, escalasIds };
     }),
+
+  // Buscar estatísticas de participação
+  obterEstatisticas: publicProcedure
+    .input(z.object({
+      userId: z.string(),
+      equipeId: z.number().optional(),
+      dataInicio: z.string().optional(),
+      dataFim: z.string().optional(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) return { membros: [], totalEscalas: 0 };
+
+      // Construir filtros
+      const filtros: any[] = [eq(escalas.userId, input.userId)];
+      
+      if (input.equipeId) {
+        filtros.push(eq(escalas.equipeId, input.equipeId));
+      }
+      
+      if (input.dataInicio) {
+        filtros.push(gte(escalas.data, input.dataInicio));
+      }
+      
+      if (input.dataFim) {
+        filtros.push(lte(escalas.data, input.dataFim));
+      }
+
+      // Buscar todas as escalas do período
+      const escalasResultado = await db.select()
+        .from(escalas)
+        .where(and(...filtros));
+
+      const totalEscalas = escalasResultado.length;
+
+      // Buscar estatísticas de participação por membro
+      const estatisticas = await db.select({
+        membroNome: participantesEscala.nome,
+        totalParticipacoes: sql<number>`COUNT(*)`,
+        confirmadas: sql<number>`SUM(CASE WHEN ${participantesEscala.status} = 'confirmado' THEN 1 ELSE 0 END)`,
+        pendentes: sql<number>`SUM(CASE WHEN ${participantesEscala.status} = 'pendente' THEN 1 ELSE 0 END)`,
+        ausencias: sql<number>`SUM(CASE WHEN ${participantesEscala.status} = 'ausente' THEN 1 ELSE 0 END)`,
+      })
+      .from(participantesEscala)
+      .innerJoin(escalas, eq(participantesEscala.escalaId, escalas.id))
+      .where(and(...filtros))
+      .groupBy(participantesEscala.nome)
+      .orderBy(desc(sql`COUNT(*)`));
+
+      // Calcular taxas de confirmação
+      const membros = estatisticas.map((stat: any) => ({
+        nome: stat.membroNome,
+        totalParticipacoes: stat.totalParticipacoes,
+        confirmadas: stat.confirmadas,
+        pendentes: stat.pendentes,
+        ausencias: stat.ausencias,
+        taxaConfirmacao: stat.totalParticipacoes > 0 
+          ? Math.round((stat.confirmadas / stat.totalParticipacoes) * 100)
+          : 0,
+      }));
+
+      return { membros, totalEscalas };
+    }),
+
+  // Cancelar participação e solicitar substituição
+  cancelarParticipacao: publicProcedure
+    .input(z.object({
+      participanteId: z.number(),
+      motivo: z.string().optional(),
+    }))
+    .mutation(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Atualizar status para ausente
+      await db.update(participantesEscala)
+        .set({ 
+          status: "ausente",
+          observacoes: input.motivo || "Cancelado pelo participante"
+        })
+        .where(eq(participantesEscala.id, input.participanteId));
+
+      return { success: true };
+    }),
+
+  // Sugerir substitutos disponíveis
+  sugerirSubstitutos: publicProcedure
+    .input(z.object({
+      escalaId: z.number(),
+      funcaoId: z.number(),
+      equipeId: z.number(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) return [];
+
+      const { membros } = await import("../../drizzle/schema");
+
+      // Buscar escala para pegar a data
+      const [escala] = await db.select()
+        .from(escalas)
+        .where(eq(escalas.id, input.escalaId));
+
+      if (!escala) return [];
+
+      // Buscar participantes já escalados nesta escala
+      const participantesJaEscalados = await db.select()
+        .from(participantesEscala)
+        .where(eq(participantesEscala.escalaId, input.escalaId));
+
+      const nomesJaEscalados = new Set(
+        participantesJaEscalados.map((p: any) => p.nome)
+      );
+
+      // Buscar todos os membros da equipe
+      const todosMembros = await db.select()
+        .from(membros)
+        .where(eq(membros.equipeId, input.equipeId));
+
+      // Filtrar membros que não estão na escala
+      const membrosDisponiveis = todosMembros.filter(
+        (m: any) => !nomesJaEscalados.has(m.nome)
+      );
+
+      // Buscar histórico de participações para ordenar por menos participações
+      const historicoParticipacoes = await db.select({
+        membroNome: participantesEscala.nome,
+        count: sql<number>`COUNT(*)`
+      })
+      .from(participantesEscala)
+      .innerJoin(escalas, eq(participantesEscala.escalaId, escalas.id))
+      .where(eq(escalas.equipeId, input.equipeId))
+      .groupBy(participantesEscala.nome);
+
+      const participacoesPorMembro = new Map<string, number>();
+      historicoParticipacoes.forEach((h: any) => {
+        participacoesPorMembro.set(h.membroNome, h.count);
+      });
+
+      // Ordenar por menor número de participações
+      const substitutosSugeridos = membrosDisponiveis
+        .map((m: any) => ({
+          id: m.id,
+          nome: m.nome,
+          email: m.email,
+          telefone: m.telefone,
+          funcao: m.funcao,
+          participacoes: participacoesPorMembro.get(m.nome) || 0,
+        }))
+        .sort((a, b) => a.participacoes - b.participacoes)
+        .slice(0, 5); // Retornar top 5 substitutos
+
+      return substitutosSugeridos;
+    }),
+
+  // Adicionar substituto à escala
+  adicionarSubstituto: publicProcedure
+    .input(z.object({
+      escalaId: z.number(),
+      funcaoId: z.number(),
+      membroId: z.number(),
+      membroNome: z.string(),
+      membroEmail: z.string(),
+      membroTelefone: z.string().optional(),
+    }))
+    .mutation(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Gerar token único
+      const token = Math.random().toString(36).substring(2, 15) + 
+                   Math.random().toString(36).substring(2, 15);
+
+      // Adicionar substituto como participante
+      await db.insert(participantesEscala).values({
+        escalaId: input.escalaId,
+        funcaoId: input.funcaoId,
+        nome: input.membroNome,
+        email: input.membroEmail,
+        telefone: input.membroTelefone || "",
+        status: "pendente",
+        token,
+        observacoes: "Adicionado como substituto",
+      });
+
+      // Enviar notificação ao substituto
+      const [escala] = await db.select()
+        .from(escalas)
+        .where(eq(escalas.id, input.escalaId));
+
+      const [funcao] = await db.select()
+        .from(funcoesEscala)
+        .where(eq(funcoesEscala.id, input.funcaoId));
+
+      if (escala && funcao && input.membroEmail) {
+        const dataFormatada = new Date(escala.data).toLocaleDateString('pt-BR');
+        const linkConfirmacao = `${process.env.VITE_OAUTH_PORTAL_URL || 'http://localhost:3000'}/confirmar/${token}`;
+
+        try {
+          await sendEmail({
+            to: input.membroEmail,
+            subject: `🆕 Você foi convocado como substituto: ${escala.titulo}`,
+            html: templateEmailEscala(
+              input.membroNome,
+              escala.titulo,
+              funcao.nome,
+              dataFormatada,
+              escala.hora || null,
+              escala.local || null,
+              linkConfirmacao
+            ),
+          });
+
+          // Enviar WhatsApp se tiver telefone
+          if (input.membroTelefone) {
+            const telefoneFormatado = formatPhoneNumber(input.membroTelefone);
+            const mensagemWhatsApp = templateWhatsAppConvite(
+              input.membroNome,
+              escala.titulo,
+              funcao.nome,
+              dataFormatada,
+              escala.hora || null,
+              escala.local || null,
+              linkConfirmacao
+            );
+            await sendWhatsApp({
+              to: telefoneFormatado,
+              message: mensagemWhatsApp,
+            });
+          }
+        } catch (error) {
+          console.error("Erro ao enviar notificação ao substituto:", error);
+        }
+      }
+
+      return { success: true, token };
+    }),
 });

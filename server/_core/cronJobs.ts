@@ -13,10 +13,10 @@ import { sendWhatsApp, templateWhatsAppLembrete, formatPhoneNumber } from './wha
 let cronJobsInitialized = false;
 
 /**
- * Envia lembretes para escalas que acontecerão nas próximas 24 horas
+ * Envia lembretes para escalas que acontecerão nas próximas 48 horas
  */
 async function enviarLembretesAutomaticos() {
-  console.log('[Cron] Iniciando envio de lembretes automáticos...');
+  console.log('[Cron] Iniciando envio de lembretes automáticos (48h antes)...');
   
   try {
     const db = await getDb();
@@ -25,22 +25,22 @@ async function enviarLembretesAutomaticos() {
       return;
     }
 
-    // Data de amanhã
-    const amanha = new Date();
-    amanha.setDate(amanha.getDate() + 1);
-    const amanhaStr = amanha.toISOString().split('T')[0];
+    // Data de daqui a 2 dias (48h)
+    const doisDias = new Date();
+    doisDias.setDate(doisDias.getDate() + 2);
+    const doisDiasStr = doisDias.toISOString().split('T')[0];
 
-    // Buscar escalas de amanhã
-    const escalasAmanha = await db.select()
+    // Buscar escalas de daqui a 2 dias
+    const escalas48h = await db.select()
       .from(escalas)
-      .where(eq(escalas.data, amanhaStr as any));
+      .where(eq(escalas.data, doisDiasStr as any));
 
-    console.log(`[Cron] Encontradas ${escalasAmanha.length} escalas para ${amanhaStr}`);
+    console.log(`[Cron] Encontradas ${escalas48h.length} escalas para ${doisDiasStr} (48h)`);
 
     let emailsEnviados = 0;
     let erros = 0;
     
-    for (const escala of escalasAmanha) {
+    for (const escala of escalas48h) {
       // Buscar participantes pendentes
       const participantesPendentes = await db.select()
         .from(participantesEscala)
@@ -66,7 +66,7 @@ async function enviarLembretesAutomaticos() {
         try {
           await sendEmail({
             to: participante.email,
-            subject: `⏰ Lembrete: ${escala.titulo} é amanhã!`,
+            subject: `⏰ Lembrete: ${escala.titulo} em 2 dias!`,
             html: templateEmailLembreteEscala(
               participante.nome,
               escala.titulo,

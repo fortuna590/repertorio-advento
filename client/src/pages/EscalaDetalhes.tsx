@@ -9,7 +9,7 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Textarea } from "../components/ui/textarea";
-import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2, FileDown, Link as LinkIcon, CalendarPlus, Edit, AlertTriangle, FileSpreadsheet, History, BookTemplate, MoreVertical } from "lucide-react";
+import { Calendar, Clock, MapPin, Plus, ArrowLeft, Share2, Mail, MessageCircle, Copy, Check, Trash2, FileDown, Link as LinkIcon, CalendarPlus, Edit, AlertTriangle, FileSpreadsheet, History, BookTemplate, MoreVertical, UserPlus } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { EscalasNavigation } from "@/components/EscalasNavigation";
 import jsPDF from "jspdf";
@@ -162,6 +162,8 @@ export default function EscalaDetalhes() {
   const [descricaoTemplate, setDescricaoTemplate] = useState("");
   const [copied, setCopied] = useState(false);
   const [participanteEditando, setParticipanteEditando] = useState<any>(null);
+  const [openSubstituicao, setOpenSubstituicao] = useState(false);
+  const [participanteParaSubstituir, setParticipanteParaSubstituir] = useState<any>(null);
 
   // Form state para duplicação
   const [duplicarData, setDuplicarData] = useState("");
@@ -1195,6 +1197,24 @@ export default function EscalaDetalhes() {
                               <SelectItem value="ausente">❌ Ausente</SelectItem>
                             </SelectContent>
                           </Select>
+                          {user && escala && escala.userId === user.openId && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                if (!escala.equipeId) {
+                                  toast.error("Esta escala não está vinculada a uma equipe");
+                                  return;
+                                }
+                                // Abrir modal de substituição
+                                setParticipanteParaSubstituir(participante);
+                                setOpenSubstituicao(true);
+                              }}
+                              title="Solicitar substituição"
+                            >
+                              <UserPlus className="w-4 h-4 text-orange-600" />
+                            </Button>
+                          )}
                           <Button
                             variant="ghost"
                             size="sm"
@@ -1390,7 +1410,155 @@ export default function EscalaDetalhes() {
             </div>
           </DialogContent>
         </Dialog>
+
+        {/* Modal de Substituição */}
+        <Dialog open={openSubstituicao} onOpenChange={setOpenSubstituicao}>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Solicitar Substituição</DialogTitle>
+            </DialogHeader>
+            {participanteParaSubstituir && escala && (
+              <SubstituicaoForm
+                participante={participanteParaSubstituir}
+                escala={escala}
+                onSuccess={() => {
+                  setOpenSubstituicao(false);
+                  setParticipanteParaSubstituir(null);
+                  refetch();
+                }}
+              />
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
+      </div>
+    </div>
+  );
+}
+
+// Componente de formulário de substituição
+function SubstituicaoForm({ participante, escala, onSuccess }: { participante: any; escala: any; onSuccess: () => void }) {
+  const [motivo, setMotivo] = useState("");
+  const [substitutoSelecionado, setSubstitutoSelecionado] = useState<any>(null);
+
+  const cancelarMutation = trpc.escalas.cancelarParticipacao.useMutation();
+  const adicionarSubstitutoMutation = trpc.escalas.adicionarSubstituto.useMutation();
+
+  const { data: substitutos = [], isLoading } = trpc.escalas.sugerirSubstitutos.useQuery(
+    {
+      escalaId: escala.id,
+      funcaoId: participante.funcaoId,
+      equipeId: escala.equipeId,
+    },
+    { enabled: !!escala.equipeId }
+  );
+
+  const handleConfirmarSubstituicao = async () => {
+    if (!substitutoSelecionado) {
+      toast.error("Selecione um substituto");
+      return;
+    }
+
+    try {
+      // Cancelar participação original
+      await cancelarMutation.mutateAsync({
+        participanteId: participante.id,
+        motivo,
+      });
+
+      // Adicionar substituto
+      await adicionarSubstitutoMutation.mutateAsync({
+        escalaId: escala.id,
+        funcaoId: participante.funcaoId,
+        membroId: substitutoSelecionado.id,
+        membroNome: substitutoSelecionado.nome,
+        membroEmail: substitutoSelecionado.email,
+        membroTelefone: substitutoSelecionado.telefone,
+      });
+
+      toast.success("Substituição realizada com sucesso!");
+      onSuccess();
+    } catch (error) {
+      console.error("Erro ao realizar substituição:", error);
+      toast.error("Erro ao realizar substituição");
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="p-4 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
+        <p className="text-sm text-yellow-300">
+          <strong>{participante.nome}</strong> será marcado como ausente e um substituto será convocado.
+        </p>
+      </div>
+
+      <div>
+        <Label>Motivo da substituição (opcional)</Label>
+        <Textarea
+          value={motivo}
+          onChange={(e) => setMotivo(e.target.value)}
+          placeholder="Ex: Imprevisto pessoal, viagem, etc."
+        />
+      </div>
+
+      <div>
+        <Label>Substitutos Sugeridos</Label>
+        <p className="text-sm text-muted-foreground mb-3">
+          Ordenados por menor número de participações recentes
+        </p>
+
+        {isLoading ? (
+          <p className="text-center py-4">Buscando substitutos...</p>
+        ) : substitutos.length === 0 ? (
+          <p className="text-center py-4 text-muted-foreground">
+            Nenhum substituto disponível no momento
+          </p>
+        ) : (
+          <div className="space-y-2">
+            {substitutos.map((sub: any) => (
+              <div
+                key={sub.id}
+                className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                  substitutoSelecionado?.id === sub.id
+                    ? "border-primary bg-primary/10"
+                    : "border-border hover:border-primary/50"
+                }`}
+                onClick={() => setSubstitutoSelecionado(sub)}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium">{sub.nome}</p>
+                    {sub.email && <p className="text-sm text-muted-foreground">{sub.email}</p>}
+                    {sub.funcao && <p className="text-sm text-muted-foreground">Função: {sub.funcao}</p>}
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-medium">{sub.participacoes} participações</p>
+                    <p className="text-xs text-muted-foreground">no histórico</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="flex gap-2">
+        <Button
+          variant="outline"
+          onClick={() => onSuccess()}
+          className="flex-1"
+        >
+          Cancelar
+        </Button>
+        <Button
+          onClick={handleConfirmarSubstituicao}
+          disabled={!substitutoSelecionado || cancelarMutation.isPending || adicionarSubstitutoMutation.isPending}
+          className="flex-1 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
+        >
+          {cancelarMutation.isPending || adicionarSubstitutoMutation.isPending
+            ? "Processando..."
+            : "Confirmar Substituição"}
+        </Button>
       </div>
     </div>
   );
