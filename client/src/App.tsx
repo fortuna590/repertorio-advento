@@ -60,6 +60,7 @@ import BibliotecaFavoritos from "./pages/BibliotecaFavoritos";
 import Equipes from "./pages/Equipes";
 import NovaEquipe from "./pages/NovaEquipe";
 import DetalhesEquipe from "./pages/DetalhesEquipe";
+import EscalaDeEquipeForm from "./pages/EscalaDeEquipeForm";
 import WhatsAppButton from "./components/WhatsAppButton";
 
 function Router() {
@@ -122,6 +123,7 @@ function Router() {
       <Route path="/equipes/nova" component={NovaEquipe} />
       <Route path="/equipes/:equipeId" component={DetalhesEquipe} />
       <Route path="/equipes/:equipeId/editar" component={NovaEquipe} />
+      <Route path="/escalas/nova-de-equipe" component={EscalaDeEquipeForm} />
       <Route path="/404" component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

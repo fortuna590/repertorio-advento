@@ -301,6 +301,12 @@ export default function Escalas() {
               <Bell className="w-5 h-5 mr-2" />
               {enviarLembretesMutation.isPending ? "Enviando..." : "Enviar Lembretes"}
             </Button>
+            <Link href="/escalas/nova-de-equipe">
+              <Button variant="outline" className="border-purple-400 text-purple-300 hover:bg-purple-50 hover:text-purple-700">
+                <Users className="w-5 h-5 mr-2" />
+                Criar de Equipe
+              </Button>
+            </Link>
             <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">

@@ -18,6 +18,7 @@ export const escalasRouter = router({
       local: z.string().optional(),
       tipo: z.enum(["musicos", "reuniao", "grupo_oracao", "personalizado"]),
       template: z.string().optional(),
+      equipeId: z.number().optional(), // Vincular escala a uma equipe
       funcoes: z.array(z.object({
         nome: z.string(),
         descricao: z.string().optional(),
@@ -38,6 +39,7 @@ export const escalasRouter = router({
         local: input.local,
         tipo: input.tipo,
         template: input.template,
+        equipeId: input.equipeId,
       });
 
       // Criar funções
@@ -1496,5 +1498,122 @@ export const escalasRouter = router({
       }
 
       return { confirmados, erros };
+    }),
+
+  // Criar escala a partir de uma equipe
+  criarEscalaDeEquipe: publicProcedure
+    .input(z.object({
+      userId: z.string(),
+      equipeId: z.number(),
+      titulo: z.string(),
+      descricao: z.string().optional(),
+      data: z.string(),
+      hora: z.string().optional(),
+      local: z.string().optional(),
+      tipo: z.enum(["musicos", "reuniao", "grupo_oracao", "personalizado"]),
+      template: z.string().optional(),
+      funcoes: z.array(z.object({
+        nome: z.string(),
+        descricao: z.string().optional(),
+        ordem: z.number(),
+        membrosIds: z.array(z.number()).optional(), // IDs dos membros da equipe para esta função
+      })),
+    }))
+    .mutation(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Importar tabelas de equipes e membros
+      const { equipes, membros } = await import("../../drizzle/schema");
+
+      // Verificar se a equipe existe e pertence ao usuário
+      const [equipe] = await db.select().from(equipes)
+        .where(and(
+          eq(equipes.id, input.equipeId),
+          eq(equipes.userId, parseInt(input.userId))
+        ));
+
+      if (!equipe) {
+        throw new Error("Equipe não encontrada ou sem permissão");
+      }
+
+      // Criar escala vinculada à equipe
+      const [escala] = await db.insert(escalas).values({
+        userId: input.userId,
+        titulo: input.titulo,
+        descricao: input.descricao,
+        data: input.data,
+        hora: input.hora,
+        local: input.local,
+        tipo: input.tipo,
+        template: input.template,
+        equipeId: input.equipeId,
+      });
+
+      const escalaId = escala.insertId;
+
+      // Criar funções e adicionar participantes
+      for (const funcao of input.funcoes) {
+        // Criar função
+        const [funcaoCriada] = await db.insert(funcoesEscala).values({
+          escalaId,
+          nome: funcao.nome,
+          descricao: funcao.descricao,
+          ordem: funcao.ordem,
+        });
+
+        const funcaoId = funcaoCriada.insertId;
+
+        // Adicionar membros à função (se especificados)
+        if (funcao.membrosIds && funcao.membrosIds.length > 0) {
+          for (const membroId of funcao.membrosIds) {
+            // Buscar dados do membro
+            const [membro] = await db.select().from(membros)
+              .where(and(
+                eq(membros.id, membroId),
+                eq(membros.equipeId, input.equipeId)
+              ));
+
+            if (membro) {
+              // Gerar token único
+              const token = Math.random().toString(36).substring(2, 15) + 
+                           Math.random().toString(36).substring(2, 15);
+
+              // Adicionar participante
+              await db.insert(participantesEscala).values({
+                escalaId,
+                funcaoId,
+                nome: membro.nome,
+                email: membro.email || "",
+                telefone: membro.telefone || "",
+                status: "pendente",
+                token,
+              });
+            }
+          }
+        }
+      }
+
+      return { success: true, escalaId };
+    }),
+
+  // Listar escalas por equipe
+  listarPorEquipe: publicProcedure
+    .input(z.object({
+      equipeId: z.number(),
+      userId: z.string(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) return [];
+
+      const result = await db.select().from(escalas)
+        .where(and(
+          eq(escalas.equipeId, input.equipeId),
+          eq(escalas.userId, input.userId)
+        ))
+        .orderBy(desc(escalas.data));
+
+      return result;
     }),
 });

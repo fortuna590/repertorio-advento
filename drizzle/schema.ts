@@ -433,6 +433,7 @@ export const escalas = mysqlTable("escalas", {
   local: varchar("local", { length: 255 }),
   tipo: varchar("tipo", { length: 50 }).notNull(), // "musicos", "reuniao", "grupo_oracao", "personalizado"
   template: varchar("template", { length: 50 }), // Nome do template usado
+  equipeId: int("equipeId").references(() => equipes.id, { onDelete: "set null" }), // Vincular escala a uma equipe (opcional)
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

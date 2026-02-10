@@ -2666,3 +2666,32 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [ ] Escrever testes para routers de escalas
 - [ ] Escrever testes para sistema de confirmação
 - [ ] Executar todos os testes
+
+## Integração de Sistemas - Escalas + Equipes
+
+### Análise
+- [x] Analisar estrutura do sistema antigo de escalas
+- [x] Analisar estrutura do sistema novo de equipes
+- [x] Definir estratégia de integração
+
+### Schema do Banco
+- [x] Adicionar campo `equipeId` na tabela `escalas` (opcional, para vincular escala a uma equipe)
+- [x] Manter compatibilidade com escalas antigas (sem equipe)
+
+### Backend
+- [x] Modificar mutation `criarEscala` para aceitar `equipeId` opcional
+- [x] Criar mutation `criarEscalaDeEquipe` que pré-popula participantes da equipe
+- [x] Criar query `listarPorEquipe` para buscar escalas de uma equipe específicade participantes para buscar de membros da equipe
+
+### Frontend
+- [x] Adicionar seleção de equipe no formulário de criar escala
+- [x] Mostrar membros da equipe selecionada para adicionar rapidamente
+- [x] Criar página EscalaDeEquipeForm com interface completa
+- [x] Adicionar botão "Criar de Equipe" na página de escalas
+- [ ] Adicionar filtro por equipe na listagem de escalas
+- [ ] Criar botão "Criar Escala" na página de detalhes da equipe
+
+### Testes
+- [ ] Testar criação de escala sem equipe (modo antigo)
+- [ ] Testar criação de escala com equipe
+- [ ] Testar adição de membros da equipe
