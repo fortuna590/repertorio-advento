@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { trpc } from "@/lib/trpc";
-import { useLocation } from "wouter";
+import { useLocation, useParams } from "wouter";
 import { useState, useEffect } from "react";
 import { ArrowLeft, Loader2, Save } from "lucide-react";
 import { getLoginUrl } from "@/const";
@@ -25,11 +25,8 @@ const TIPO_OPTIONS = [
   { value: "outro", label: "Outro" },
 ];
 
-interface NovaEquipeProps {
-  equipeId?: string;
-}
-
-export default function NovaEquipe({ equipeId }: NovaEquipeProps) {
+export default function NovaEquipe() {
+  const { equipeId } = useParams<{ equipeId?: string }>();
   const { user, loading: authLoading } = useAuth();
   const [, setLocation] = useLocation();
 

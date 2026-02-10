@@ -2618,8 +2618,8 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 ### Frontend - Equipes
 - [x] Criar página `/equipes` - listar todas as equipes do usuário
 - [x] Criar página `/equipes/nova` - formulário de criação de equipe
-- [ ] Criar página `/equipes/:id` - detalhes da equipe + lista de membros
-- [ ] Criar página `/equipes/:id/editar` - editar equipe
+- [x] Criar página `/equipes/:id` - detalhes da equipe + lista de membros
+- [x] Criar página `/equipes/:id/editar` - editar equipe (usa NovaEquipe com parâmetro)
 
 ### Frontend - Membros
 - [ ] Criar componente de formulário de membro (com disponibilidades)
@@ -2632,3 +2632,37 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [ ] Adicionar rotas no App.tsx
 - [ ] Adicionar item "Escalas" no menu principal
 - [ ] Adicionar submenu: Equipes, Calendário (placeholder para Sprint 2)
+
+## Sistema de Escalas - Sprint 2 (Escalas Manuais)
+
+### Completar Sprint 1 Pendente
+- [x] Criar página `/equipes/:id` - detalhes da equipe com lista de membros
+- [x] Adicionar rotas de equipes no App.tsx
+- [ ] Adicionar link "Equipes" no menu de navegação (visível apenas para usuários logados)
+
+### Schema do Banco de Dados - Escalas
+- [ ] Criar tabela `escalas_eventos` (id, equipeId, titulo, descricao, data, hora, local, tipo, createdAt)
+- [ ] Criar tabela `escalas_participantes` (id, escalaId, membroId, status: pendente/confirmado/recusado, observacoes)
+- [ ] Executar SQL para criar tabelas
+
+### Backend - Routers de Escalas
+- [ ] Criar router de escalas (listar por equipe, criar, buscarPorId, atualizar, deletar)
+- [ ] Criar router de participantes (adicionar, remover, atualizar status de confirmação)
+- [ ] Adicionar routers ao appRouter
+
+### Frontend - Escalas
+- [ ] Criar página `/equipes/:equipeId/escalas` - listar escalas da equipe
+- [ ] Criar página `/equipes/:equipeId/escalas/nova` - formulário de criação de escala manual
+- [ ] Criar página `/escalas/:id` - detalhes da escala com lista de participantes
+- [ ] Implementar seleção de membros para a escala
+- [ ] Implementar visualização em calendário das escalas
+
+### Sistema de Confirmação
+- [ ] Criar página pública `/confirmar-presenca/:token` - confirmação de presença
+- [ ] Implementar painel de confirmações na página de detalhes da escala
+- [ ] Adicionar indicadores visuais de status (pendente/confirmado/recusado)
+
+### Testes
+- [ ] Escrever testes para routers de escalas
+- [ ] Escrever testes para sistema de confirmação
+- [ ] Executar todos os testes
