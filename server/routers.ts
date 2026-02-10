@@ -30,6 +30,8 @@ import { cifraSearchRouter } from "./routers/cifraSearch";
 import { musicasRecentesRouter } from "./routers/musicasRecentes";
 import { musicasFavoritasRouter } from "./routers/musicasFavoritas";
 import { letrasSearchRouter } from "./routers/letrasSearch";
+import { equipesRouter } from "./routers/equipes";
+import { membrosRouter } from "./routers/membros";
 
 export const appRouter = router({
   contact: contactRouter,
@@ -58,6 +60,8 @@ export const appRouter = router({
   letrasSearch: letrasSearchRouter,
   musicasRecentes: musicasRecentesRouter,
   musicasFavoritas: musicasFavoritasRouter,
+  equipes: equipesRouter,
+  membros: membrosRouter,
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   auth: router({

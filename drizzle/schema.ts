@@ -538,3 +538,73 @@ export const historicoMusicasBase = mysqlTable("historicoMusicasBase", {
 
 export type HistoricoMusicaBase = typeof historicoMusicasBase.$inferSelect;
 export type InsertHistoricoMusicaBase = typeof historicoMusicasBase.$inferInsert;
+
+/**
+ * Sistema de Escalas - Equipes e Membros
+ */
+
+/**
+ * Tabela de equipes (ministérios, grupos)
+ */
+export const equipes = mysqlTable("equipes", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").references(() => users.id).notNull(), // Dono da equipe
+  nome: varchar("nome", { length: 255 }).notNull(),
+  tipo: mysqlEnum("tipo", ["musica", "grupo_oracao", "leitura", "acolhida", "outro"]).notNull(),
+  descricao: text("descricao"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Equipe = typeof equipes.$inferSelect;
+export type InsertEquipe = typeof equipes.$inferInsert;
+
+/**
+ * Tabela de membros das equipes
+ */
+export const membros = mysqlTable("membros", {
+  id: int("id").autoincrement().primaryKey(),
+  equipeId: int("equipeId").references(() => equipes.id, { onDelete: "cascade" }).notNull(),
+  nome: varchar("nome", { length: 255 }).notNull(),
+  email: varchar("email", { length: 320 }),
+  telefone: varchar("telefone", { length: 20 }),
+  funcao: varchar("funcao", { length: 100 }), // Ex: "Vocal", "Instrumentista", "Leitor"
+  instrumento: varchar("instrumento", { length: 100 }), // Ex: "Violão", "Teclado", "Bateria"
+  status: mysqlEnum("status", ["ativo", "inativo"]).default("ativo").notNull(),
+  fotoUrl: varchar("fotoUrl", { length: 500 }),
+  observacoes: text("observacoes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Membro = typeof membros.$inferSelect;
+export type InsertMembro = typeof membros.$inferInsert;
+
+/**
+ * Tabela de disponibilidades semanais dos membros
+ */
+export const disponibilidades = mysqlTable("disponibilidades", {
+  id: int("id").autoincrement().primaryKey(),
+  membroId: int("membroId").references(() => membros.id, { onDelete: "cascade" }).notNull(),
+  diaSemana: int("diaSemana").notNull(), // 0=Domingo, 1=Segunda, ..., 6=Sábado
+  periodo: mysqlEnum("periodo", ["manha", "tarde", "noite", "dia_todo"]).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Disponibilidade = typeof disponibilidades.$inferSelect;
+export type InsertDisponibilidade = typeof disponibilidades.$inferInsert;
+
+/**
+ * Tabela de indisponibilidades (férias, viagens, etc)
+ */
+export const indisponibilidades = mysqlTable("indisponibilidades", {
+  id: int("id").autoincrement().primaryKey(),
+  membroId: int("membroId").references(() => membros.id, { onDelete: "cascade" }).notNull(),
+  dataInicio: date("dataInicio").notNull(),
+  dataFim: date("dataFim").notNull(),
+  motivo: varchar("motivo", { length: 255 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Indisponibilidade = typeof indisponibilidades.$inferSelect;
+export type InsertIndisponibilidade = typeof indisponibilidades.$inferInsert;

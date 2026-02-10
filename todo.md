@@ -2600,3 +2600,35 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 ## Ajuste de Navegação
 
 - [x] Alterar redirecionamento do botão "Salvar e Sair" para ir ao preview do repertório ao invés da lista de repertórios
+
+## Sistema de Escalas - Sprint 1 (Base)
+
+### Schema do Banco de Dados
+- [x] Criar tabela `equipes` (id, nome, tipo, descricao, userId, createdAt)
+- [x] Criar tabela `membros` (id, equipeId, nome, email, telefone, funcao, instrumento, status, fotoUrl, createdAt)
+- [x] Criar tabela `disponibilidades` (id, membroId, diaSemana, periodo)
+- [x] Criar tabela `indisponibilidades` (id, membroId, dataInicio, dataFim, motivo)
+- [x] Executar db:push para aplicar mudanças
+
+### Backend - Routers
+- [x] Criar router de equipes (listar, criar, buscarPorId, atualizar, deletar)
+- [x] Criar router de membros (listar por equipe, criar, buscarPorId, atualizar, deletar, atualizar disponibilidade)
+- [x] Adicionar routers ao appRouter
+
+### Frontend - Equipes
+- [x] Criar página `/equipes` - listar todas as equipes do usuário
+- [x] Criar página `/equipes/nova` - formulário de criação de equipe
+- [ ] Criar página `/equipes/:id` - detalhes da equipe + lista de membros
+- [ ] Criar página `/equipes/:id/editar` - editar equipe
+
+### Frontend - Membros
+- [ ] Criar componente de formulário de membro (com disponibilidades)
+- [ ] Criar página `/equipes/:id/membro/novo` - adicionar membro
+- [ ] Criar página `/equipes/:id/membro/:membroId/editar` - editar membro
+- [ ] Implementar cadastro de disponibilidades semanais
+- [ ] Implementar cadastro de indisponibilidades (datas específicas)
+
+### Navegação
+- [ ] Adicionar rotas no App.tsx
+- [ ] Adicionar item "Escalas" no menu principal
+- [ ] Adicionar submenu: Equipes, Calendário (placeholder para Sprint 2)
