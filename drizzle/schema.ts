@@ -608,3 +608,41 @@ export const indisponibilidades = mysqlTable("indisponibilidades", {
 
 export type Indisponibilidade = typeof indisponibilidades.$inferSelect;
 export type InsertIndisponibilidade = typeof indisponibilidades.$inferInsert;
+
+/**
+ * Tabela de eventos/escalas
+ */
+export const escalasEventos = mysqlTable("escalas_eventos", {
+  id: int("id").autoincrement().primaryKey(),
+  equipeId: int("equipeId").references(() => equipes.id, { onDelete: "cascade" }).notNull(),
+  userId: varchar("userId", { length: 255 }).notNull(), // Criador da escala
+  titulo: varchar("titulo", { length: 255 }).notNull(),
+  descricao: text("descricao"),
+  data: date("data").notNull(),
+  hora: varchar("hora", { length: 10 }), // Ex: "19:00"
+  local: varchar("local", { length: 255 }),
+  tipo: varchar("tipo", { length: 50 }).notNull(), // Ex: "Missa", "Ensaio", "Grupo de Oração"
+  status: mysqlEnum("status", ["ativo", "cancelado", "concluido", "arquivado"]).default("ativo").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type EscalaEvento = typeof escalasEventos.$inferSelect;
+export type InsertEscalaEvento = typeof escalasEventos.$inferInsert;
+
+/**
+ * Tabela de participantes das escalas
+ */
+export const escalasParticipantes = mysqlTable("escalas_participantes", {
+  id: int("id").autoincrement().primaryKey(),
+  escalaId: int("escalaId").references(() => escalasEventos.id, { onDelete: "cascade" }).notNull(),
+  membroId: int("membroId").references(() => membros.id, { onDelete: "cascade" }).notNull(),
+  funcao: varchar("funcao", { length: 100 }), // Função específica nesta escala
+  status: mysqlEnum("status", ["pendente", "confirmado", "recusado"]).default("pendente").notNull(),
+  observacoes: text("observacoes"),
+  confirmedAt: timestamp("confirmedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type EscalaParticipante = typeof escalasParticipantes.$inferSelect;
+export type InsertEscalaParticipante = typeof escalasParticipantes.$inferInsert;
