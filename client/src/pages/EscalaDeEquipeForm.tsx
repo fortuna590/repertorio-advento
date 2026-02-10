@@ -15,7 +15,8 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 
-import { useLocation } from "wouter";
+import { useLocation, useSearch } from "wouter";
+import { useEffect } from "react";
 import { ArrowLeft, Calendar, Users, Plus, Trash2 } from "lucide-react";
 
 interface Funcao {
@@ -27,10 +28,18 @@ interface Funcao {
 
 export default function EscalaDeEquipeForm() {
   const { user } = useAuth();
-
+  const searchParams = new URLSearchParams(useSearch());
   const [, setLocation] = useLocation();
 
   const [equipeId, setEquipeId] = useState<number | null>(null);
+  
+  // Pré-selecionar equipe se vier da URL
+  useEffect(() => {
+    const equipeIdParam = searchParams.get("equipeId");
+    if (equipeIdParam) {
+      setEquipeId(parseInt(equipeIdParam));
+    }
+  }, []);
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
   const [data, setData] = useState("");

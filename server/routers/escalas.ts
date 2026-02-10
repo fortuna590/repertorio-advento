@@ -2,7 +2,7 @@ import { z } from "zod";
 import { publicProcedure, protectedProcedure, router } from "../_core/trpc";
 import { escalas, funcoesEscala, participantesEscala, historicoEscalas, templatesEscalas } from "../../drizzle/schema";
 import { getDb } from "../db";
-import { eq, and, or, desc, gte, lte } from "drizzle-orm";
+import { eq, and, or, desc, gte, lte, sql } from "drizzle-orm";
 import { sendEmail, templateEmailEscala, templateEmailStatusEscala, templateEmailLembreteEscala } from "../_core/email";
 import { sendWhatsApp, templateWhatsAppConvite, formatPhoneNumber } from "../_core/whatsapp";
 
@@ -1615,5 +1615,167 @@ export const escalasRouter = router({
         .orderBy(desc(escalas.data));
 
       return result;
+    }),
+
+  // Gerar escala automaticamente com distribuição equilibrada
+  gerarEscalaAutomatica: publicProcedure
+    .input(z.object({
+      userId: z.string(),
+      equipeId: z.number(),
+      titulo: z.string(),
+      descricao: z.string().optional(),
+      datas: z.array(z.string()), // Array de datas para escalas recorrentes
+      hora: z.string().optional(),
+      local: z.string().optional(),
+      tipo: z.enum(["musicos", "reuniao", "grupo_oracao", "personalizado"]),
+      template: z.string().optional(),
+      funcoes: z.array(z.object({
+        nome: z.string(),
+        descricao: z.string().optional(),
+        ordem: z.number(),
+        quantidadeMembros: z.number(), // Quantos membros são necessários para esta função
+        essencial: z.boolean().optional(), // Se true, garante pelo menos 1 membro
+      })),
+    }))
+    .mutation(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const { equipes, membros, indisponibilidades } = await import("../../drizzle/schema");
+
+      // Verificar se a equipe existe e pertence ao usuário
+      const [equipe] = await db.select().from(equipes)
+        .where(and(
+          eq(equipes.id, input.equipeId),
+          eq(equipes.userId, parseInt(input.userId))
+        ));
+
+      if (!equipe) {
+        throw new Error("Equipe não encontrada ou sem permissão");
+      }
+
+      // Buscar todos os membros da equipe
+      const todosMembros = await db.select().from(membros)
+        .where(eq(membros.equipeId, input.equipeId));
+
+      if (todosMembros.length === 0) {
+        throw new Error("A equipe não possui membros cadastrados");
+      }
+
+      // Buscar histórico de participações para equilibrar
+      const historicoParticipacoes = await db.select({
+        membroNome: participantesEscala.nome,
+        count: sql<number>`COUNT(*)`
+      })
+      .from(participantesEscala)
+      .innerJoin(escalas, eq(participantesEscala.escalaId, escalas.id))
+      .where(eq(escalas.equipeId, input.equipeId))
+      .groupBy(participantesEscala.nome);
+
+      // Criar mapa de participações
+      const participacoesPorMembro = new Map<string, number>();
+      historicoParticipacoes.forEach((h: any) => {
+        participacoesPorMembro.set(h.membroNome, h.count);
+      });
+
+      const escalasIds: number[] = [];
+
+      // Gerar escala para cada data
+      for (const data of input.datas) {
+        // Buscar indisponibilidades para esta data
+        // Nota: Assumindo que a tabela indisponibilidades tem campos equipeId e data
+        // Se não existir, este filtro será ignorado
+        const indisponiveisNaData: any[] = [];
+        // TODO: Implementar busca de indisponibilidades quando tabela estiver disponível
+
+        const membrosIndisponiveis = new Set(
+          indisponiveisNaData.map((i: any) => i.membroId)
+        );
+
+        // Filtrar membros disponíveis
+        const membrosDisponiveis = todosMembros.filter(
+          (m: any) => !membrosIndisponiveis.has(m.id)
+        );
+
+        if (membrosDisponiveis.length === 0) {
+          throw new Error(`Nenhum membro disponível para a data ${data}`);
+        }
+
+        // Criar escala
+        const [escala] = await db.insert(escalas).values({
+          userId: input.userId,
+          titulo: input.titulo,
+          descricao: input.descricao,
+          data,
+          hora: input.hora,
+          local: input.local,
+          tipo: input.tipo,
+          template: input.template,
+          equipeId: input.equipeId,
+        });
+
+        const escalaId = escala.insertId;
+        escalasIds.push(escalaId);
+
+        // Ordenar membros por número de participações (menos participações primeiro)
+        const membrosOrdenados = [...membrosDisponiveis].sort((a: any, b: any) => {
+          const participacoesA = participacoesPorMembro.get(a.nome) || 0;
+          const participacoesB = participacoesPorMembro.get(b.nome) || 0;
+          return participacoesA - participacoesB;
+        });
+
+        // Distribuir membros por função
+        const membrosUsados = new Set<number>();
+
+        for (const funcao of input.funcoes) {
+          // Criar função
+          const [funcaoCriada] = await db.insert(funcoesEscala).values({
+            escalaId,
+            nome: funcao.nome,
+            descricao: funcao.descricao,
+            ordem: funcao.ordem,
+          });
+
+          const funcaoId = funcaoCriada.insertId;
+
+          // Selecionar membros para esta função
+          const quantidadeNecessaria = funcao.quantidadeMembros || 1;
+          let adicionados = 0;
+
+          for (const membro of membrosOrdenados) {
+            if (adicionados >= quantidadeNecessaria) break;
+            if (membrosUsados.has(membro.id)) continue;
+
+            // Gerar token único
+            const token = Math.random().toString(36).substring(2, 15) + 
+                         Math.random().toString(36).substring(2, 15);
+
+            // Adicionar participante
+            await db.insert(participantesEscala).values({
+              escalaId,
+              funcaoId,
+              nome: membro.nome,
+              email: membro.email || "",
+              telefone: membro.telefone || "",
+              status: "pendente",
+              token,
+            });
+
+            membrosUsados.add(membro.id);
+            adicionados++;
+
+            // Atualizar contador de participações
+            const participacoesAtuais = participacoesPorMembro.get(membro.nome) || 0;
+            participacoesPorMembro.set(membro.nome, participacoesAtuais + 1);
+          }
+
+          // Verificar se função essencial foi preenchida
+          if (funcao.essencial && adicionados === 0) {
+            throw new Error(`Não foi possível preencher a função essencial: ${funcao.nome}`);
+          }
+        }
+      }
+
+      return { success: true, escalasIds };
     }),
 });

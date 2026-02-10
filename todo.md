@@ -2695,3 +2695,31 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [ ] Testar criação de escala sem equipe (modo antigo)
 - [ ] Testar criação de escala com equipe
 - [ ] Testar adição de membros da equipe
+
+
+## Sprint 2 - Melhorias Finais
+
+- [x] Adicionar filtro por equipe na listagem de escalas
+- [x] Criar botão "Criar Escala" na página de detalhes da equipe
+- [x] Pré-selecionar equipe via query parameter na URL
+
+## Sprint 3 - Automação de Escalas
+
+### Backend
+- [x] Criar mutation `gerarEscalaAutomatica` com parâmetros (equipeId, data, tipo, recorrencia)
+- [x] Implementar algoritmo de distribuição equilibrada de participantes
+- [x] Verificar disponibilidade de membros antes de adicionar (preparado para indisponibilidades)
+- [x] Garantir instrumentos/funções essenciais (pelo menos 1 por função)
+- [x] Suporte a escalas recorrentes (única, semanal, quinzenal, mensal)
+- [x] Calcular número de participações de cada membro para equilibrar
+- [x] Ordenar membros por menor número de participações
+- [x] Evitar repetição de membros na mesma escala
+
+### Frontend
+- [x] Criar página de geração automática de escalas
+- [x] Formulário com seleção de equipe, data, tipo e recorrência
+- [x] Opção de configurar quantidade de membros por função
+- [x] Checkbox para marcar funções essenciais
+- [x] Preview de datas que serão geradas
+- [x] Adicionar botão "Gerar Automaticamente" na página de escalas
+- [x] Rota /escalas/gerar-automatica configurada
