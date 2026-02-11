@@ -2015,4 +2015,342 @@ export const escalasRouter = router({
 
       return { success: true, token };
     }),
+
+  // Obter dados para gráfico de evolução temporal
+  obterDadosGraficoEvolucao: publicProcedure
+    .input(z.object({
+      equipeId: z.number().optional(),
+      dataInicio: z.string().optional(),
+      dataFim: z.string().optional(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      let query = db.select({
+        data: escalas.data,
+        total: sql<number>`COUNT(DISTINCT ${escalas.id})`,
+        confirmados: sql<number>`SUM(CASE WHEN ${participantesEscala.status} = 'confirmado' THEN 1 ELSE 0 END)`,
+        pendentes: sql<number>`SUM(CASE WHEN ${participantesEscala.status} = 'pendente' THEN 1 ELSE 0 END)`,
+        ausentes: sql<number>`SUM(CASE WHEN ${participantesEscala.status} = 'ausente' THEN 1 ELSE 0 END)`,
+      })
+      .from(escalas)
+      .leftJoin(participantesEscala, eq(escalas.id, participantesEscala.escalaId))
+      .groupBy(escalas.data)
+      .orderBy(escalas.data);
+
+      if (input.equipeId) {
+        query = query.where(eq(escalas.equipeId, input.equipeId)) as any;
+      }
+
+      if (input.dataInicio) {
+        query = query.where(sql`${escalas.data} >= ${input.dataInicio}`) as any;
+      }
+
+      if (input.dataFim) {
+        query = query.where(sql`${escalas.data} <= ${input.dataFim}`) as any;
+      }
+
+      const resultados = await query;
+
+      return resultados.map((r: any) => ({
+        data: new Date(r.data).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+        total: Number(r.total),
+        confirmados: Number(r.confirmados),
+        pendentes: Number(r.pendentes),
+        ausentes: Number(r.ausentes),
+      }));
+    }),
+
+  // Obter dados para gráfico de comparação entre membros
+  obterDadosGraficoComparacao: publicProcedure
+    .input(z.object({
+      equipeId: z.number().optional(),
+      dataInicio: z.string().optional(),
+      dataFim: z.string().optional(),
+      limite: z.number().default(10),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      let query = db.select({
+        nome: participantesEscala.nome,
+        total: sql<number>`COUNT(*)`,
+        confirmados: sql<number>`SUM(CASE WHEN ${participantesEscala.status} = 'confirmado' THEN 1 ELSE 0 END)`,
+        pendentes: sql<number>`SUM(CASE WHEN ${participantesEscala.status} = 'pendente' THEN 1 ELSE 0 END)`,
+        ausentes: sql<number>`SUM(CASE WHEN ${participantesEscala.status} = 'ausente' THEN 1 ELSE 0 END)`,
+      })
+      .from(participantesEscala)
+      .leftJoin(escalas, eq(participantesEscala.escalaId, escalas.id))
+      .groupBy(participantesEscala.nome)
+      .orderBy(sql`COUNT(*) DESC`)
+      .limit(input.limite);
+
+      if (input.equipeId) {
+        query = query.where(eq(escalas.equipeId, input.equipeId)) as any;
+      }
+
+      if (input.dataInicio) {
+        query = query.where(sql`${escalas.data} >= ${input.dataInicio}`) as any;
+      }
+
+      if (input.dataFim) {
+        query = query.where(sql`${escalas.data} <= ${input.dataFim}`) as any;
+      }
+
+      const resultados = await query;
+
+      return resultados.map((r: any) => ({
+        nome: r.nome,
+        total: Number(r.total),
+        confirmados: Number(r.confirmados),
+        pendentes: Number(r.pendentes),
+        ausentes: Number(r.ausentes),
+      }));
+    }),
+
+  // Obter dados para gráfico de distribuição por função
+  obterDadosGraficoDistribuicao: publicProcedure
+    .input(z.object({
+      equipeId: z.number().optional(),
+      dataInicio: z.string().optional(),
+      dataFim: z.string().optional(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      let query = db.select({
+        funcao: funcoesEscala.nome,
+        total: sql<number>`COUNT(*)`,
+      })
+      .from(participantesEscala)
+      .leftJoin(funcoesEscala, eq(participantesEscala.funcaoId, funcoesEscala.id))
+      .leftJoin(escalas, eq(participantesEscala.escalaId, escalas.id))
+      .groupBy(funcoesEscala.nome)
+      .orderBy(sql`COUNT(*) DESC`);
+
+      if (input.equipeId) {
+        query = query.where(eq(escalas.equipeId, input.equipeId)) as any;
+      }
+
+      if (input.dataInicio) {
+        query = query.where(sql`${escalas.data} >= ${input.dataInicio}`) as any;
+      }
+
+      if (input.dataFim) {
+        query = query.where(sql`${escalas.data} <= ${input.dataFim}`) as any;
+      }
+
+      const resultados = await query;
+
+      return resultados.map((r: any) => ({
+        funcao: r.funcao || 'Sem função',
+        total: Number(r.total),
+      }));
+    }),
+
+  // Obter dados para heatmap de frequência
+  obterDadosHeatmap: publicProcedure
+    .input(z.object({
+      equipeId: z.number().optional(),
+      dataInicio: z.string().optional(),
+      dataFim: z.string().optional(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      let query = db.select({
+        data: escalas.data,
+      })
+      .from(escalas);
+
+      if (input.equipeId) {
+        query = query.where(eq(escalas.equipeId, input.equipeId)) as any;
+      }
+
+      if (input.dataInicio) {
+        query = query.where(sql`${escalas.data} >= ${input.dataInicio}`) as any;
+      }
+
+      if (input.dataFim) {
+        query = query.where(sql`${escalas.data} <= ${input.dataFim}`) as any;
+      }
+
+      const resultados = await query;
+
+      // Processar para contar por dia da semana
+      const frequenciaPorDia = new Map<number, number>();
+      resultados.forEach((r: any) => {
+        const data = new Date(r.data);
+        const diaSemana = data.getDay(); // 0 = Domingo, 6 = Sábado
+        frequenciaPorDia.set(diaSemana, (frequenciaPorDia.get(diaSemana) || 0) + 1);
+      });
+
+      const diasSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+      return diasSemana.map((dia, index) => ({
+        dia,
+        total: frequenciaPorDia.get(index) || 0,
+      }));
+    }),
+
+  // Exportar escalas em lote (retorna dados para o frontend gerar PDF/Excel)
+  exportarEscalasEmLote: publicProcedure
+    .input(z.object({
+      escalaIds: z.array(z.number()),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const escalasExportadas = [];
+
+      for (const escalaId of input.escalaIds) {
+        const [escala] = await db.select()
+          .from(escalas)
+          .where(eq(escalas.id, escalaId));
+
+        if (!escala) continue;
+
+        const funcoes = await db.select()
+          .from(funcoesEscala)
+          .where(eq(funcoesEscala.escalaId, escalaId))
+          .orderBy(funcoesEscala.ordem);
+
+        const participantes = await db.select()
+          .from(participantesEscala)
+          .where(eq(participantesEscala.escalaId, escalaId));
+
+        escalasExportadas.push({
+          ...escala,
+          funcoes,
+          participantes,
+        });
+      }
+
+      return escalasExportadas;
+    }),
+
+  // Gerar relatório mensal consolidado
+  gerarRelatorioMensal: publicProcedure
+    .input(z.object({
+      mes: z.number().min(1).max(12),
+      ano: z.number(),
+      equipeId: z.number().optional(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Calcular primeiro e último dia do mês
+      const primeiroDia = new Date(input.ano, input.mes - 1, 1);
+      const ultimoDia = new Date(input.ano, input.mes, 0);
+
+      let escalasDoMes;
+      
+      if (input.equipeId) {
+        escalasDoMes = await db.select()
+          .from(escalas)
+          .where(
+            sql`${escalas.data} >= ${primeiroDia.toISOString().split('T')[0]} AND ${escalas.data} <= ${ultimoDia.toISOString().split('T')[0]} AND ${escalas.equipeId} = ${input.equipeId}`
+          )
+          .orderBy(escalas.data);
+      } else {
+        escalasDoMes = await db.select()
+          .from(escalas)
+          .where(
+            sql`${escalas.data} >= ${primeiroDia.toISOString().split('T')[0]} AND ${escalas.data} <= ${ultimoDia.toISOString().split('T')[0]}`
+          )
+          .orderBy(escalas.data);
+      }
+
+      // Buscar participantes de cada escala
+      const escalasCompletas = [];
+      for (const escala of escalasDoMes) {
+        const funcoes = await db.select()
+          .from(funcoesEscala)
+          .where(eq(funcoesEscala.escalaId, escala.id))
+          .orderBy(funcoesEscala.ordem);
+
+        const participantes = await db.select()
+          .from(participantesEscala)
+          .where(eq(participantesEscala.escalaId, escala.id));
+
+        escalasCompletas.push({
+          ...escala,
+          funcoes,
+          participantes,
+        });
+      }
+
+      // Estatísticas do mês
+      const totalEscalas = escalasDoMes.length;
+      const totalParticipacoes = await db.select({
+        total: sql<number>`COUNT(*)`,
+        confirmados: sql<number>`SUM(CASE WHEN ${participantesEscala.status} = 'confirmado' THEN 1 ELSE 0 END)`,
+        pendentes: sql<number>`SUM(CASE WHEN ${participantesEscala.status} = 'pendente' THEN 1 ELSE 0 END)`,
+        ausentes: sql<number>`SUM(CASE WHEN ${participantesEscala.status} = 'ausente' THEN 1 ELSE 0 END)`,
+      })
+      .from(participantesEscala)
+      .leftJoin(escalas, eq(participantesEscala.escalaId, escalas.id))
+      .where(
+        sql`${escalas.data} >= ${primeiroDia.toISOString().split('T')[0]} AND ${escalas.data} <= ${ultimoDia.toISOString().split('T')[0]}`
+      );
+
+      return {
+        mes: input.mes,
+        ano: input.ano,
+        totalEscalas,
+        estatisticas: totalParticipacoes[0] || { total: 0, confirmados: 0, pendentes: 0, ausentes: 0 },
+        escalas: escalasCompletas,
+      };
+    }),
+
+  // Verificar indisponibilidades de membros para uma data específica
+  verificarIndisponibilidades: publicProcedure
+    .input(z.object({
+      equipeId: z.number(),
+      data: z.string(), // formato YYYY-MM-DD
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Buscar membros da equipe
+      const { membros: membrosDaEquipe } = await import("../../drizzle/schema");
+      const membros = await db.select()
+        .from(membrosDaEquipe)
+        .where(eq(membrosDaEquipe.equipeId, input.equipeId));
+
+      // Buscar indisponibilidades que cobrem a data
+      const { indisponibilidades } = await import("../../drizzle/schema");
+      const indisponibilidadesNaData = await db.select()
+        .from(indisponibilidades)
+        .where(
+          sql`${indisponibilidades.dataInicio} <= ${input.data} AND ${indisponibilidades.dataFim} >= ${input.data}`
+        );
+
+      // Mapear membros indisponíveis
+      const membrosIndisponiveis = membros.filter((m: any) =>
+        indisponibilidadesNaData.some((i: any) => i.membroId === m.id)
+      ).map((m: any) => {
+        const indisponibilidade = indisponibilidadesNaData.find((i: any) => i.membroId === m.id);
+        return {
+          id: m.id,
+          nome: m.nome,
+          funcao: m.funcao,
+          motivo: indisponibilidade?.motivo || "Sem motivo informado",
+          dataInicio: indisponibilidade?.dataInicio,
+          dataFim: indisponibilidade?.dataFim,
+        };
+      });
+
+      return {
+        totalMembros: membros.length,
+        membrosIndisponiveis: membrosIndisponiveis.length,
+        conflitos: membrosIndisponiveis,
+      };
+    }),
 });

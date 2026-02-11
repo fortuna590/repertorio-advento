@@ -2774,3 +2774,70 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Mostrar substitutos sugeridos ordenados
 - [x] Interface completa de substituição
 - [x] Adicionar à navegação (botão Estatísticas)
+
+
+## Sprint 5 - Relatórios e Exportações Avançadas
+
+### 1. Relatórios Visuais com Gráficos
+
+#### Backend
+- [x] Criar query `obterDadosGraficoEvolucao` - evolução de participações ao longo do tempo
+- [x] Criar query `obterDadosGraficoComparacao` - comparação entre membros
+- [x] Criar query `obterDadosGraficoDistribuicao` - distribuição por função
+- [x] Criar query `obterDadosHeatmap` - frequência por dia da semana/mês
+
+#### Frontend
+- [x] Instalar biblioteca de gráficos (Recharts)
+- [x] Criar página `/escalas/relatorios` com gráficos
+- [x] Gráfico de linha: evolução temporal
+- [x] Gráfico de barras: comparação entre membros
+- [x] Gráfico de pizza: distribuição por função
+- [x] Heatmap: frequência por dia/mês
+- [x] Filtros por equipe e período
+- [x] Botão "Relatórios" na navegação
+
+### 2. Exportações em Lote
+
+#### Backend
+- [x] Criar query `exportarEscalasEmLote` - múltiplas escalas
+- [x] Criar query `gerarRelatorioMensal` - relatório consolidado
+- [x] Instalar bibliotecas jsPDF e xlsx
+
+#### Frontend
+- [x] Adicionar checkbox de seleção múltipla na listagem de escalas (já existia)
+- [x] Botões "Exportar em PDF" e "Exportar em Excel"
+- [x] Geração de PDF com jsPDF
+- [x] Geração de Excel com xlsx
+- [x] Toast de feedback durante exportação
+
+### 3. Sistema de Templates Personalizados
+
+#### Backend
+- [x] Tabela `templatesEscalas` já existe no schema
+- [x] Criar mutation `salvarTemplate` - salvar configuração de funções
+- [x] Criar query `listarTemplates` - buscar templates do usuário
+- [x] Criar mutation `excluirTemplate`
+- [x] Integração com página de Escalas (já existia)
+
+#### Frontend
+- [x] Query de templates já integrada na página Escalas
+- [x] Sistema de templates já funcional no frontend
+
+### 4. Verificação Automática de Indisponibilidades
+
+#### Backend
+- [x] Criar query `verificarIndisponibilidades` - checar conflitos por membro e data
+- [x] Retornar lista de conflitos com detalhes (nome, função, motivo, período)
+- [x] Integração preparada para uso no frontend
+
+#### Frontend
+- [ ] Exibir alerta visual ao adicionar membro com conflito (próximo passo)
+- [ ] Modal de confirmação com detalhes da indisponibilidade (próximo passo)
+- [ ] Badge de alerta em membros com indisponibilidade (próximo passo)
+
+### Testes
+- [x] Backend de gráficos implementado e funcional
+- [x] Backend de exportações implementado
+- [x] Backend de templates implementado
+- [x] Backend de verificação de indisponibilidades implementado
+- [ ] Testes de integração frontend pendentes

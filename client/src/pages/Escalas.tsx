@@ -9,7 +9,7 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Textarea } from "../components/ui/textarea";
-import { Calendar, Clock, MapPin, Plus, Music, Users, Heart, Sparkles, Trash2, Edit, Eye, Bell, Download, BarChart3 } from "lucide-react";
+import { Calendar, Clock, MapPin, Plus, Music, Users, Heart, Sparkles, Trash2, Edit, Eye, Bell, Download, BarChart3, TrendingUp } from "lucide-react";
 import { Checkbox } from "../components/ui/checkbox";
 import { EscalasNavigation } from "../components/EscalasNavigation";
 import { toast } from "sonner";
@@ -107,34 +107,119 @@ export default function Escalas() {
     },
   });
 
-  const exportarEmLoteMutation = trpc.escalasExport.exportarEmLote.useQuery(
+  // Query para exportação (controlada manualmente)
+  const exportQuery = trpc.escalas.exportarEscalasEmLote.useQuery(
     { escalaIds: escalasSelecionadas },
     { enabled: false }
   );
 
-  const handleExportarEmLote = async () => {
+  const handleExportarEmLote = async (formato: 'pdf' | 'excel') => {
     if (escalasSelecionadas.length === 0) {
       toast.error("Selecione pelo menos uma escala para exportar");
       return;
     }
 
     try {
-      const result = await exportarEmLoteMutation.refetch();
-      if (result.data) {
-        const blob = new Blob([result.data.icsContent], { type: 'text/calendar' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = result.data.filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-        
-        toast.success(`${result.data.totalEscalas} escalas exportadas para Google Calendar!`);
-        setEscalasSelecionadas([]);
+      toast.info(`Exportando ${escalasSelecionadas.length} escalas...`);
+      
+      // Buscar dados das escalas selecionadas
+      const result = await exportQuery.refetch();
+      const escalasExportadas = result.data;
+
+      if (!escalasExportadas) {
+        toast.error("Erro ao buscar dados das escalas");
+        return;
       }
+
+      if (formato === 'pdf') {
+        // Gerar PDF com jsPDF
+        const { default: jsPDF } = await import('jspdf');
+        const doc = new jsPDF();
+        let yPosition = 20;
+
+        escalasExportadas.forEach((escala: any, index: number) => {
+          if (index > 0) {
+            doc.addPage();
+            yPosition = 20;
+          }
+
+          // Título da escala
+          doc.setFontSize(16);
+          doc.setFont("helvetica", "bold");
+          doc.text(escala.titulo, 20, yPosition);
+          yPosition += 10;
+
+          // Informações
+          doc.setFontSize(11);
+          doc.setFont("helvetica", "normal");
+          doc.text(`Data: ${new Date(escala.data).toLocaleDateString('pt-BR')}`, 20, yPosition);
+          yPosition += 7;
+          if (escala.hora) {
+            doc.text(`Horário: ${escala.hora}`, 20, yPosition);
+            yPosition += 7;
+          }
+          if (escala.local) {
+            doc.text(`Local: ${escala.local}`, 20, yPosition);
+            yPosition += 7;
+          }
+          yPosition += 5;
+
+          // Funções e participantes
+          escala.funcoes?.forEach((funcao: any) => {
+            doc.setFontSize(13);
+            doc.setFont("helvetica", "bold");
+            doc.text(funcao.nome, 20, yPosition);
+            yPosition += 7;
+
+            const participantes = escala.participantes?.filter((p: any) => p.funcaoId === funcao.id);
+            if (participantes && participantes.length > 0) {
+              doc.setFontSize(10);
+              doc.setFont("helvetica", "normal");
+              participantes.forEach((p: any) => {
+                doc.text(`  • ${p.nome}`, 25, yPosition);
+                yPosition += 6;
+              });
+            }
+            yPosition += 3;
+          });
+        });
+
+        doc.save(`escalas_${new Date().toISOString().split('T')[0]}.pdf`);
+        toast.success(`${escalasExportadas.length} escalas exportadas em PDF!`);
+      } else {
+        // Gerar Excel com xlsx
+        const XLSX = await import('xlsx');
+        const wb = XLSX.utils.book_new();
+
+        escalasExportadas.forEach((escala: any) => {
+          const rows: any[] = [];
+          rows.push([escala.titulo]);
+          rows.push([`Data: ${new Date(escala.data).toLocaleDateString('pt-BR')}`]);
+          if (escala.hora) rows.push([`Horário: ${escala.hora}`]);
+          if (escala.local) rows.push([`Local: ${escala.local}`]);
+          rows.push([]);
+
+          escala.funcoes?.forEach((funcao: any) => {
+            rows.push([funcao.nome]);
+            const participantes = escala.participantes?.filter((p: any) => p.funcaoId === funcao.id);
+            participantes?.forEach((p: any) => {
+              rows.push([`  ${p.nome}`, p.email || '', p.telefone || '', p.status]);
+            });
+            rows.push([]);
+          });
+
+          const ws = XLSX.utils.aoa_to_sheet(rows);
+          const nomeAba = escala.titulo.substring(0, 30);
+          XLSX.utils.book_append_sheet(wb, ws, nomeAba);
+        });
+
+        XLSX.writeFile(wb, `escalas_${new Date().toISOString().split('T')[0]}.xlsx`);
+        toast.success(`${escalasExportadas.length} escalas exportadas em Excel!`);
+      }
+
+      setEscalasSelecionadas([]);
     } catch (error: any) {
+      console.error("Erro ao exportar:", error);
       toast.error("Erro ao exportar escalas: " + error.message);
     }
   };
@@ -297,14 +382,24 @@ export default function Escalas() {
 
           <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
             {escalasSelecionadas.length > 0 && (
-              <Button 
-                variant="outline"
-                onClick={handleExportarEmLote}
-                className="border-purple-400 text-purple-300 hover:bg-purple-50 hover:text-purple-700"
-              >
-                <Download className="w-5 h-5 mr-2" />
-                Exportar {escalasSelecionadas.length} para Google Calendar
-              </Button>
+              <>
+                <Button 
+                  variant="outline"
+                  onClick={() => handleExportarEmLote('pdf')}
+                  className="border-purple-400 text-purple-300 hover:bg-purple-50 hover:text-purple-700"
+                >
+                  <Download className="w-5 h-5 mr-2" />
+                  Exportar {escalasSelecionadas.length} em PDF
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => handleExportarEmLote('excel')}
+                  className="border-purple-400 text-purple-300 hover:bg-purple-50 hover:text-purple-700"
+                >
+                  <Download className="w-5 h-5 mr-2" />
+                  Exportar {escalasSelecionadas.length} em Excel
+                </Button>
+              </>
             )}
             <Button 
               variant="outline"
@@ -318,6 +413,12 @@ export default function Escalas() {
               <Button variant="outline" className="border-purple-400 text-purple-300 hover:bg-purple-50 hover:text-purple-700">
                 <BarChart3 className="w-5 h-5 mr-2" />
                 Estatísticas
+              </Button>
+            </Link>
+            <Link href="/escalas/relatorios">
+              <Button variant="outline" className="border-purple-400 text-purple-300 hover:bg-purple-50 hover:text-purple-700">
+                <TrendingUp className="w-5 h-5 mr-2" />
+                Relatórios
               </Button>
             </Link>
             <Link href="/escalas/gerar-automatica">
