@@ -2841,3 +2841,57 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Backend de templates implementado
 - [x] Backend de verificação de indisponibilidades implementado
 - [ ] Testes de integração frontend pendentes
+
+
+## Melhorias Finais do Sprint 5
+
+### 1. Alertas de Indisponibilidade no Frontend
+- [x] Adicionar badge visual de alerta em membros indisponíveis
+- [x] Modal de confirmação ao adicionar membro com conflito
+- [x] Exibir detalhes da indisponibilidade (motivo, período)
+- [x] Integrar na página de criação de escalas (EscalaDeEquipeForm)
+- [x] Query verificarIndisponibilidades integrada
+- [x] Badge "Indisponível" com AlertTriangle icon
+- [x] Background vermelho claro para membros com conflito
+
+### 2. Página de Biblioteca de Templates
+- [x] Página /templates já existe e funcional
+- [x] Cards visuais com preview de cada template
+- [x] Botão "Usar Template" implementado
+- [x] Botão "Editar Template" implementado
+- [x] Botão "Excluir Template" implementado
+- [x] Rota /templates já configurada no App.tsx
+- [x] Integração completa com backend
+
+### 3. Sistema de Notificações Push (Simplificado)
+- [ ] Criar hook useNotifications para gerenciar permissões
+- [ ] Solicitar permissão do navegador ao fazer login
+- [ ] Integrar Notifications API nativa do navegador
+- [ ] Notificar sobre novas escalas criadas
+- [ ] Notificar sobre substituições solicitadas
+- [ ] Botão no header para ativar/desativar notificações
+
+## Sprint 6 - Gamificação e Engajamento (Preparado)
+
+### Backend
+- [x] Criar tabela `pontuacoes` no schema
+- [x] Criar tabela `badges` no schema
+- [x] Criar tabela `membros_badges` no schema
+- [x] Criar tabela `metas_equipe` no schema
+- [x] Popular badges iniciais (8 conquistas)
+- [ ] Criar mutation para calcular pontos por participação
+- [ ] Criar query para ranking de membros
+- [ ] Criar mutation para conceder badges automaticamente
+- [ ] Criar query para listar badges do membro
+- [ ] Criar mutation para definir metas de equipe
+- [ ] Criar query para listar metas da equipe
+
+### Frontend
+- [ ] Criar página /escalas/ranking
+- [ ] Exibir ranking de participação
+- [ ] Exibir badges conquistados por membro
+- [ ] Sistema de pontos visível no perfil
+- [ ] Página de badges com descrições
+- [ ] Barra de progresso de metas da equipe
+- [ ] Notificações ao conquistar badge
+- [ ] Adicionar à navegação

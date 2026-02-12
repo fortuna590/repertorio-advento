@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
@@ -16,8 +16,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { useLocation, useSearch } from "wouter";
-import { useEffect } from "react";
-import { ArrowLeft, Calendar, Users, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Calendar, Users, Plus, Trash2, AlertTriangle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Funcao {
   nome: string;
@@ -47,6 +55,9 @@ export default function EscalaDeEquipeForm() {
   const [local, setLocal] = useState("");
   const [tipo, setTipo] = useState<"musicos" | "reuniao" | "grupo_oracao" | "personalizado">("musicos");
   const [funcoes, setFuncoes] = useState<Funcao[]>([]);
+  const [membroComConflito, setMembroComConflito] = useState<any>(null);
+  const [funcaoIndexConflito, setFuncaoIndexConflito] = useState<number | null>(null);
+  const [membroIdConflito, setMembroIdConflito] = useState<number | null>(null);
 
   // Buscar equipes do usuário
   const { data: equipes = [] } = trpc.equipes.listar.useQuery(
@@ -58,6 +69,15 @@ export default function EscalaDeEquipeForm() {
   const { data: membros = [] } = trpc.membros.listarPorEquipe.useQuery(
     { equipeId: equipeId || 0 },
     { enabled: !!equipeId }
+  );
+
+  // Buscar indisponibilidades quando data for selecionada
+  const { data: indisponibilidades = [] } = trpc.escalas.verificarIndisponibilidades.useQuery(
+    {
+      equipeId: equipeId!,
+      data: data,
+    },
+    { enabled: !!equipeId && !!data }
   );
 
   const criarEscalaMutation = trpc.escalas.criarEscalaDeEquipe.useMutation({
@@ -94,10 +114,35 @@ export default function EscalaDeEquipeForm() {
 
   const toggleMembro = (funcaoIndex: number, membroId: number) => {
     const funcao = funcoes[funcaoIndex];
+    
+    // Verificar se o membro tem indisponibilidade
+    const conflitos = Array.isArray(indisponibilidades) ? indisponibilidades : indisponibilidades?.conflitos || [];
+    const conflito = conflitos.find((ind: any) => ind.id === membroId);
+    
+    if (conflito && !funcao.membrosIds.includes(membroId)) {
+      // Se está tentando adicionar e há conflito, mostrar modal
+      setMembroComConflito(conflito);
+      setFuncaoIndexConflito(funcaoIndex);
+      setMembroIdConflito(membroId);
+      return;
+    }
+
+    // Se não há conflito ou está removendo, proceder normalmente
     const membrosIds = funcao.membrosIds.includes(membroId)
       ? funcao.membrosIds.filter((id) => id !== membroId)
       : [...funcao.membrosIds, membroId];
     atualizarFuncao(funcaoIndex, "membrosIds", membrosIds);
+  };
+
+  const confirmarAdicaoComConflito = () => {
+    if (funcaoIndexConflito !== null && membroIdConflito !== null) {
+      const funcao = funcoes[funcaoIndexConflito];
+      const membrosIds = [...funcao.membrosIds, membroIdConflito];
+      atualizarFuncao(funcaoIndexConflito, "membrosIds", membrosIds);
+    }
+    setMembroComConflito(null);
+    setFuncaoIndexConflito(null);
+    setMembroIdConflito(null);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -315,31 +360,45 @@ export default function EscalaDeEquipeForm() {
                           <div className="space-y-2">
                             <Label>Membros</Label>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                              {membros.map((membro) => (
-                                <div
-                                  key={membro.id}
-                                  className="flex items-center space-x-2 p-2 rounded border border-border hover:bg-accent/50"
-                                >
-                                  <Checkbox
-                                    id={`membro-${index}-${membro.id}`}
-                                    checked={funcao.membrosIds.includes(membro.id)}
-                                    onCheckedChange={() =>
-                                      toggleMembro(index, membro.id)
-                                    }
-                                  />
-                                  <label
-                                    htmlFor={`membro-${index}-${membro.id}`}
-                                    className="flex-1 text-sm cursor-pointer"
+                              {membros.map((membro) => {
+                                const conflitos = Array.isArray(indisponibilidades) ? indisponibilidades : indisponibilidades?.conflitos || [];
+                                const temConflito = conflitos.some((ind: any) => ind.id === membro.id);
+                                return (
+                                  <div
+                                    key={membro.id}
+                                    className={`flex items-center space-x-2 p-2 rounded border hover:bg-accent/50 ${
+                                      temConflito ? 'border-destructive/50 bg-destructive/5' : 'border-border'
+                                    }`}
                                   >
-                                    {membro.nome}
-                                    {membro.funcao && (
-                                      <span className="text-muted-foreground ml-2">
-                                        ({membro.funcao})
+                                    <Checkbox
+                                      id={`membro-${index}-${membro.id}`}
+                                      checked={funcao.membrosIds.includes(membro.id)}
+                                      onCheckedChange={() =>
+                                        toggleMembro(index, membro.id)
+                                      }
+                                    />
+                                    <label
+                                      htmlFor={`membro-${index}-${membro.id}`}
+                                      className="flex-1 text-sm cursor-pointer flex items-center gap-2"
+                                    >
+                                      <span>
+                                        {membro.nome}
+                                        {membro.funcao && (
+                                          <span className="text-muted-foreground ml-2">
+                                            ({membro.funcao})
+                                          </span>
+                                        )}
                                       </span>
-                                    )}
-                                  </label>
-                                </div>
-                              ))}
+                                      {temConflito && (
+                                        <Badge variant="destructive" className="text-xs">
+                                          <AlertTriangle className="w-3 h-3 mr-1" />
+                                          Indisponível
+                                        </Badge>
+                                      )}
+                                    </label>
+                                  </div>
+                                );
+                              })}
                             </div>
                           </div>
                         </div>
@@ -378,6 +437,62 @@ export default function EscalaDeEquipeForm() {
             </Button>
           </div>
         </form>
+
+        {/* Modal de Conflito de Indisponibilidade */}
+        <Dialog open={!!membroComConflito} onOpenChange={() => setMembroComConflito(null)}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2 text-destructive">
+                <AlertTriangle className="w-5 h-5" />
+                Membro Indisponível
+              </DialogTitle>
+              <DialogDescription>
+                O membro selecionado possui uma indisponibilidade registrada para esta data.
+              </DialogDescription>
+            </DialogHeader>
+            {membroComConflito && (
+              <div className="space-y-3 py-4">
+                <div>
+                  <p className="text-sm font-medium">{membroComConflito.nome}</p>
+                  {membroComConflito.funcao && (
+                    <p className="text-sm text-muted-foreground">{membroComConflito.funcao}</p>
+                  )}
+                </div>
+                <div className="bg-muted p-3 rounded-lg space-y-2">
+                  <p className="text-sm">
+                    <span className="font-medium">Motivo:</span> {membroComConflito.motivo}
+                  </p>
+                  {membroComConflito.dataInicio && (
+                    <p className="text-sm">
+                      <span className="font-medium">Período:</span>{" "}
+                      {new Date(membroComConflito.dataInicio).toLocaleDateString("pt-BR")}
+                      {membroComConflito.dataFim && (
+                        <> até {new Date(membroComConflito.dataFim).toLocaleDateString("pt-BR")}</>
+                      )}
+                    </p>
+                  )}
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Deseja adicionar este membro mesmo assim?
+                </p>
+              </div>
+            )}
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setMembroComConflito(null)}
+              >
+                Cancelar
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={confirmarAdicaoComConflito}
+              >
+                Adicionar Mesmo Assim
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

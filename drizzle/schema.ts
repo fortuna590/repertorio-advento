@@ -647,3 +647,69 @@ export const escalasParticipantes = mysqlTable("escalas_participantes", {
 
 export type EscalaParticipante = typeof escalasParticipantes.$inferSelect;
 export type InsertEscalaParticipante = typeof escalasParticipantes.$inferInsert;
+
+/**
+ * Tabela de pontuações dos membros
+ */
+export const pontuacoes = mysqlTable("pontuacoes", {
+  id: int("id").autoincrement().primaryKey(),
+  membroId: int("membroId").references(() => membros.id, { onDelete: "cascade" }).notNull(),
+  pontos: int("pontos").default(0).notNull(),
+  participacoesTotal: int("participacoesTotal").default(0).notNull(),
+  participacoesConfirmadas: int("participacoesConfirmadas").default(0).notNull(),
+  participacoesRecusadas: int("participacoesRecusadas").default(0).notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Pontuacao = typeof pontuacoes.$inferSelect;
+export type InsertPontuacao = typeof pontuacoes.$inferInsert;
+
+/**
+ * Tabela de badges/conquistas
+ */
+export const badges = mysqlTable("badges", {
+  id: int("id").autoincrement().primaryKey(),
+  nome: varchar("nome", { length: 100 }).notNull(),
+  descricao: text("descricao").notNull(),
+  icone: varchar("icone", { length: 50 }).notNull(), // Nome do ícone lucide-react
+  cor: varchar("cor", { length: 50 }).notNull(), // Classe Tailwind de cor
+  requisito: int("requisito").notNull(), // Número necessário para conquistar
+  tipo: mysqlEnum("tipo", ["participacoes", "confirmacoes", "sequencia"]).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Badge = typeof badges.$inferSelect;
+export type InsertBadge = typeof badges.$inferInsert;
+
+/**
+ * Tabela de badges conquistados pelos membros
+ */
+export const membrosBadges = mysqlTable("membros_badges", {
+  id: int("id").autoincrement().primaryKey(),
+  membroId: int("membroId").references(() => membros.id, { onDelete: "cascade" }).notNull(),
+  badgeId: int("badgeId").references(() => badges.id, { onDelete: "cascade" }).notNull(),
+  conquistadoEm: timestamp("conquistadoEm").defaultNow().notNull(),
+});
+
+export type MembroBadge = typeof membrosBadges.$inferSelect;
+export type InsertMembroBadge = typeof membrosBadges.$inferInsert;
+
+/**
+ * Tabela de metas de equipe
+ */
+export const metasEquipe = mysqlTable("metas_equipe", {
+  id: int("id").autoincrement().primaryKey(),
+  equipeId: int("equipeId").references(() => equipes.id, { onDelete: "cascade" }).notNull(),
+  titulo: varchar("titulo", { length: 255 }).notNull(),
+  descricao: text("descricao"),
+  objetivo: int("objetivo").notNull(), // Número alvo
+  progresso: int("progresso").default(0).notNull(),
+  tipo: mysqlEnum("tipo", ["participacoes", "escalas", "confirmacoes"]).notNull(),
+  dataInicio: date("dataInicio").notNull(),
+  dataFim: date("dataFim").notNull(),
+  status: mysqlEnum("status", ["ativa", "concluida", "cancelada"]).default("ativa").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type MetaEquipe = typeof metasEquipe.$inferSelect;
+export type InsertMetaEquipe = typeof metasEquipe.$inferInsert;
