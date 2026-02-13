@@ -2353,4 +2353,364 @@ export const escalasRouter = router({
         conflitos: membrosIndisponiveis,
       };
     }),
+
+  // Gamificação: Calcular e atualizar pontuação de um membro
+  calcularPontuacao: publicProcedure
+    .input(z.object({
+      userId: z.number(),
+    }))
+    .mutation(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Buscar todas as participações do membro
+      const participacoes = await db.select()
+        .from(participantesEscala)
+        .where(eq(participantesEscala.userId, input.userId));
+
+      const participacoesTotal = participacoes.length;
+      const participacoesConfirmadas = participacoes.filter((p: any) => p.status === 'confirmado').length;
+      const participacoesRecusadas = participacoes.filter((p: any) => p.status === 'ausente').length;
+
+      // Calcular pontos: 10 pontos por confirmação, -5 por recusa
+      const pontos = (participacoesConfirmadas * 10) - (participacoesRecusadas * 5);
+
+      // Atualizar ou criar registro de pontuação
+      const { pontuacoes } = await import("../../drizzle/schema");
+      const pontuacaoExistente = await db.select()
+        .from(pontuacoes)
+        .where(eq(pontuacoes.userId, input.userId))
+        .limit(1);
+
+      if (pontuacaoExistente.length > 0) {
+        await db.update(pontuacoes)
+          .set({
+            pontos,
+            participacoesTotal,
+            participacoesConfirmadas,
+            participacoesRecusadas,
+            updatedAt: new Date(),
+          })
+          .where(eq(pontuacoes.userId, input.userId));
+      } else {
+        await db.insert(pontuacoes).values({
+          userId: input.userId,
+          pontos,
+          participacoesTotal,
+          participacoesConfirmadas,
+          participacoesRecusadas,
+        });
+      }
+
+      // Verificar e conceder badges
+      const { badges, usersBadges } = await import("../../drizzle/schema");
+      const todasBadges = await db.select().from(badges);
+      const badgesDoMembro = await db.select()
+        .from(usersBadges)
+        .where(eq(usersBadges.userId, input.userId));
+
+      for (const badge of todasBadges) {
+        const jaConquistou = badgesDoMembro.some((mb: any) => mb.badgeId === badge.id);
+        if (jaConquistou) continue;
+
+        let conquistou = false;
+        if (badge.tipo === 'participacoes' && participacoesTotal >= badge.requisito) {
+          conquistou = true;
+        } else if (badge.tipo === 'confirmacoes' && participacoesConfirmadas >= badge.requisito) {
+          conquistou = true;
+        }
+
+        if (conquistou) {
+          await db.insert(usersBadges).values({
+            userId: input.userId,
+            badgeId: badge.id,
+            conquistadoEm: new Date(),
+          });
+        }
+      }
+
+      return { pontos, participacoesTotal, participacoesConfirmadas, participacoesRecusadas };
+    }),
+
+  // Gamificação: Obter ranking de membros por pontos
+  obterRanking: publicProcedure
+    .input(z.object({
+      equipeId: z.number().optional(),
+      limite: z.number().optional().default(10),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const { pontuacoes } = await import("../../drizzle/schema");
+      const { membros: membrosDaEquipe } = await import("../../drizzle/schema");
+
+      let query = db.select({
+        membroId: pontuacoes.membroId,
+        pontos: pontuacoes.pontos,
+        participacoesTotal: pontuacoes.participacoesTotal,
+        participacoesConfirmadas: pontuacoes.participacoesConfirmadas,
+        participacoesRecusadas: pontuacoes.participacoesRecusadas,
+        nome: membrosDaEquipe.nome,
+        funcao: membrosDaEquipe.funcao,
+      })
+      .from(pontuacoes)
+      .leftJoin(membrosDaEquipe, eq(pontuacoes.membroId, membrosDaEquipe.id))
+      .orderBy(sql`${pontuacoes.pontos} DESC`)
+      .limit(input.limite);
+
+      if (input.equipeId) {
+        query = query.where(eq(membrosDaEquipe.equipeId, input.equipeId)) as any;
+      }
+
+      const ranking = await query;
+
+      return ranking.map((r: any, index: number) => ({
+        posicao: index + 1,
+        ...r,
+      }));
+    }),
+
+  // Gamificação: Listar badges conquistados por um membro
+  listarBadgesMembro: publicProcedure
+    .input(z.object({
+      membroId: z.number(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const { membrosBadges, badges } = await import("../../drizzle/schema");
+
+      const badgesConquistados = await db.select({
+        badgeId: badges.id,
+        nome: badges.nome,
+        descricao: badges.descricao,
+        icone: badges.icone,
+        cor: badges.cor,
+        conquistadoEm: membrosBadges.conquistadoEm,
+      })
+      .from(membrosBadges)
+      .leftJoin(badges, eq(membrosBadges.badgeId, badges.id))
+      .where(eq(membrosBadges.membroId, input.membroId))
+      .orderBy(sql`${membrosBadges.conquistadoEm} DESC`);
+
+      return badgesConquistados;
+    }),
+
+  // Gamificação: Criar meta para equipe
+  criarMetaEquipe: publicProcedure
+    .input(z.object({
+      equipeId: z.number(),
+      titulo: z.string(),
+      descricao: z.string().optional(),
+      objetivo: z.number(),
+      tipo: z.enum(['participacoes', 'escalas', 'confirmacoes']),
+      dataInicio: z.string(),
+      dataFim: z.string(),
+    }))
+    .mutation(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const { metasEquipe } = await import("../../drizzle/schema");
+
+      const [novaMeta] = await db.insert(metasEquipe).values({
+        equipeId: input.equipeId,
+        titulo: input.titulo,
+        descricao: input.descricao,
+        objetivo: input.objetivo,
+        progresso: 0,
+        tipo: input.tipo,
+        dataInicio: input.dataInicio,
+        dataFim: input.dataFim,
+        status: 'ativa',
+      });
+
+      return novaMeta;
+    }),
+
+  // Gamificação: Listar metas da equipe
+  listarMetasEquipe: publicProcedure
+    .input(z.object({
+      equipeId: z.number(),
+      status: z.enum(['ativa', 'concluida', 'cancelada']).optional(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const { metasEquipe } = await import("../../drizzle/schema");
+
+      let query = db.select()
+        .from(metasEquipe)
+        .where(eq(metasEquipe.equipeId, input.equipeId))
+        .orderBy(sql`${metasEquipe.createdAt} DESC`);
+
+      if (input.status) {
+        query = query.where(eq(metasEquipe.status, input.status)) as any;
+      }
+
+      const metas = await query;
+
+      return metas.map((m: any) => ({
+        ...m,
+        percentual: Math.round((m.progresso / m.objetivo) * 100),
+      }));
+    }),
+
+  // Gamificação: Atualizar progresso de meta
+  atualizarProgressoMeta: publicProcedure
+    .input(z.object({
+      metaId: z.number(),
+    }))
+    .mutation(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const { metasEquipe } = await import("../../drizzle/schema");
+
+      // Buscar meta
+      const [meta] = await db.select()
+        .from(metasEquipe)
+        .where(eq(metasEquipe.id, input.metaId))
+        .limit(1);
+
+      if (!meta) throw new Error("Meta não encontrada");
+
+      // Calcular progresso baseado no tipo
+      let progresso = 0;
+      if (meta.tipo === 'participacoes') {
+        const participacoes = await db.select({ total: sql<number>`COUNT(*)` })
+          .from(participantesEscala)
+          .leftJoin(escalas, eq(participantesEscala.escalaId, escalas.id))
+          .where(
+            sql`${escalas.data} >= ${meta.dataInicio} AND ${escalas.data} <= ${meta.dataFim}`
+          );
+        progresso = participacoes[0]?.total || 0;
+      } else if (meta.tipo === 'escalas') {
+        const escalasCount = await db.select({ total: sql<number>`COUNT(*)` })
+          .from(escalas)
+          .where(
+            sql`${escalas.equipeId} = ${meta.equipeId} AND ${escalas.data} >= ${meta.dataInicio} AND ${escalas.data} <= ${meta.dataFim}`
+          );
+        progresso = escalasCount[0]?.total || 0;
+      } else if (meta.tipo === 'confirmacoes') {
+        const confirmacoes = await db.select({ total: sql<number>`COUNT(*)` })
+          .from(participantesEscala)
+          .leftJoin(escalas, eq(participantesEscala.escalaId, escalas.id))
+          .where(
+            sql`${participantesEscala.status} = 'confirmado' AND ${escalas.data} >= ${meta.dataInicio} AND ${escalas.data} <= ${meta.dataFim}`
+          );
+        progresso = confirmacoes[0]?.total || 0;
+      }
+
+      // Atualizar progresso e status
+      const novoStatus = progresso >= meta.objetivo ? 'concluida' : 'ativa';
+      await db.update(metasEquipe)
+        .set({ progresso, status: novoStatus })
+        .where(eq(metasEquipe.id, input.metaId));
+
+      return { progresso, objetivo: meta.objetivo, percentual: Math.round((progresso / meta.objetivo) * 100), status: novoStatus };
+    }),
+
+  // Arquivamento: Arquivar escala manualmente
+  arquivarEscala: publicProcedure
+    .input(z.object({
+      escalaId: z.number(),
+    }))
+    .mutation(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      await db.update(escalas)
+        .set({ arquivada: 1 })
+        .where(eq(escalas.id, input.escalaId));
+
+      return { success: true, message: "Escala arquivada com sucesso" };
+    }),
+
+  // Arquivamento: Desarquivar escala
+  desarquivarEscala: publicProcedure
+    .input(z.object({
+      escalaId: z.number(),
+    }))
+    .mutation(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      await db.update(escalas)
+        .set({ arquivada: 0 })
+        .where(eq(escalas.id, input.escalaId));
+
+      return { success: true, message: "Escala desarquivada com sucesso" };
+    }),
+
+  // Google Calendar: Gerar link para adicionar ao calendário
+  gerarLinkGoogleCalendar: publicProcedure
+    .input(z.object({
+      escalaId: z.number(),
+    }))
+    .query(async ({ input }: { input: any }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Buscar escala
+      const [escala] = await db.select()
+        .from(escalas)
+        .where(eq(escalas.id, input.escalaId))
+        .limit(1);
+
+      if (!escala) throw new Error("Escala não encontrada");
+
+      // Buscar participantes
+      const participantes = await db.select()
+        .from(participantesEscala)
+        .where(eq(participantesEscala.escalaId, input.escalaId));
+
+      // Montar descrição com participantes
+      let descricao = escala.descricao || "";
+      if (participantes.length > 0) {
+        descricao += "\n\nParticipantes:\n";
+        participantes.forEach((p: any) => {
+          descricao += `- ${p.nome}\n`;
+        });
+      }
+
+      // Formatar data e hora para o Google Calendar
+      const dataEscala = new Date(escala.data);
+      const horaInicio = escala.hora || "09:00";
+      const [horas, minutos] = horaInicio.split(":");
+      dataEscala.setHours(parseInt(horas), parseInt(minutos));
+
+      // Data fim (1 hora depois)
+      const dataFim = new Date(dataEscala);
+      dataFim.setHours(dataFim.getHours() + 1);
+
+      // Formatar datas no formato Google Calendar (YYYYMMDDTHHmmss)
+      const formatarData = (data: Date) => {
+        const ano = data.getFullYear();
+        const mes = String(data.getMonth() + 1).padStart(2, "0");
+        const dia = String(data.getDate()).padStart(2, "0");
+        const hora = String(data.getHours()).padStart(2, "0");
+        const min = String(data.getMinutes()).padStart(2, "0");
+        return `${ano}${mes}${dia}T${hora}${min}00`;
+      };
+
+      const dataInicioFormatada = formatarData(dataEscala);
+      const dataFimFormatada = formatarData(dataFim);
+
+      // Montar URL do Google Calendar
+      const params = new URLSearchParams({
+        action: "TEMPLATE",
+        text: escala.titulo,
+        dates: `${dataInicioFormatada}/${dataFimFormatada}`,
+        details: descricao,
+        location: escala.local || "",
+      });
+
+      const linkGoogleCalendar = `https://calendar.google.com/calendar/render?${params.toString()}`;
+
+      return { link: linkGoogleCalendar };
+    }),
 });

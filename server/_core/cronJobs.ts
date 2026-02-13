@@ -1,7 +1,7 @@
 import cron from 'node-cron';
 import { getDb } from '../db';
 import { escalas, participantesEscala, funcoesEscala } from '../../drizzle/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, sql, lt } from 'drizzle-orm';
 import { sendEmail, templateEmailLembreteEscala } from './email';
 import { sendWhatsApp, templateWhatsAppLembrete, formatPhoneNumber } from './whatsapp';
 
@@ -112,6 +112,40 @@ async function enviarLembretesAutomaticos() {
 }
 
 /**
+ * Arquiva automaticamente escalas com mais de 30 dias
+ */
+async function arquivarEscalasAntigas() {
+  console.log('[Cron] Iniciando arquivamento automático de escalas antigas...');
+  
+  try {
+    const db = await getDb();
+    if (!db) {
+      console.error('[Cron] Database not available');
+      return;
+    }
+
+    // Data de 30 dias atrás
+    const trintaDiasAtras = new Date();
+    trintaDiasAtras.setDate(trintaDiasAtras.getDate() - 30);
+    const dataLimite = trintaDiasAtras.toISOString().split('T')[0];
+
+    // Atualizar escalas antigas para arquivadas
+    const resultado = await db.update(escalas)
+      .set({ arquivada: 1 })
+      .where(
+        and(
+          sql`${escalas.data} < ${dataLimite}`,
+          eq(escalas.arquivada, 0)
+        )
+      );
+
+    console.log(`[Cron] ✅ Escalas arquivadas automaticamente (mais de 30 dias)`);
+  } catch (error) {
+    console.error('[Cron] Erro ao arquivar escalas:', error);
+  }
+}
+
+/**
  * Inicializa os cron jobs
  */
 export function initCronJobs() {
@@ -130,6 +164,14 @@ export function initCronJobs() {
     timezone: 'America/Sao_Paulo'
   });
 
-  console.log('[Cron] ✅ Configurado para 9h diariamente');
+  // Executar arquivamento todos os dias à meia-noite
+  cron.schedule('0 0 0 * * *', async () => {
+    console.log('[Cron] Executando arquivamento automático (meia-noite)');
+    await arquivarEscalasAntigas();
+  }, {
+    timezone: 'America/Sao_Paulo'
+  });
+
+  console.log('[Cron] ✅ Configurado para 9h diariamente (lembretes) e meia-noite (arquivamento)');
   cronJobsInitialized = true;
 }

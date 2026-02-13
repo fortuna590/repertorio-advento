@@ -2895,3 +2895,54 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [ ] Barra de progresso de metas da equipe
 - [ ] Notificações ao conquistar badge
 - [ ] Adicionar à navegação
+
+
+## Sprint 6 - Completar Gamificação
+
+### Backend
+- [ ] Criar mutation `calcularPontuacao` - atualizar pontos após participação
+- [ ] Criar query `obterRanking` - ranking de membros por pontos
+- [ ] Criar mutation `concederBadge` - conceder badge automaticamente
+- [ ] Criar query `listarBadgesMembro` - badges conquistados por membro
+- [ ] Criar mutation `criarMetaEquipe` - definir meta para equipe
+- [ ] Criar query `listarMetasEquipe` - metas ativas da equipe
+- [ ] Criar mutation `atualizarProgressoMeta` - atualizar progresso da meta
+- [ ] Integrar cálculo de pontos ao confirmar participação
+- [ ] Integrar verificação de badges ao calcular pontos
+
+### Frontend
+- [ ] Criar página `/ranking` com tabela de classificação
+- [ ] Exibir badges conquistados por cada membro
+- [ ] Criar seção de badges no perfil do membro
+- [ ] Criar página `/metas` para visualizar metas da equipe
+- [ ] Progress bar visual para cada meta
+- [ ] Adicionar links na navegação
+
+## Sistema de Arquivamento Automático
+
+### Backend
+- [ ] Adicionar campo `arquivada` (boolean) na tabela escalas
+- [ ] Criar job/cron que arquiva escalas com data < 30 dias atrás
+- [ ] Criar mutation `arquivarEscala` manual
+- [ ] Criar mutation `desarquivarEscala`
+- [ ] Atualizar query `listar` para filtrar arquivadas por padrão
+
+### Frontend
+- [ ] Adicionar filtro "Mostrar arquivadas" na listagem
+- [ ] Badge visual "Arquivada" em escalas arquivadas
+- [ ] Botão "Arquivar" e "Desarquivar" em detalhes da escala
+
+## Integração com Google Calendar
+
+### Backend
+- [ ] Configurar OAuth2 do Google Calendar
+- [ ] Criar mutation `sincronizarComGoogleCalendar` - criar evento
+- [ ] Criar mutation `removerEventoGoogleCalendar` - deletar evento
+- [ ] Salvar `googleEventId` na tabela escalas
+- [ ] Integrar sincronização ao criar escala
+- [ ] Integrar remoção ao deletar escala
+
+### Frontend
+- [ ] Botão "Sincronizar com Google Calendar" em detalhes da escala
+- [ ] Badge visual "Sincronizado" quando tiver googleEventId
+- [ ] Modal de autorização OAuth do Google
