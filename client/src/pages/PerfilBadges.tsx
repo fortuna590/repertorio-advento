@@ -73,7 +73,6 @@ export default function PerfilBadges() {
   const todasBadgesDisponiveis = [
     { id: 1, nome: "Primeira Participação", icone: "🎵", cor: "#10b981", requisito: 1, tipo: "participacoes" },
     { id: 2, nome: "Músico Fiel", icone: "🎵", cor: "#10b981", requisito: 5, tipo: "participacoes" },
-    { id: 3, nome: "Cantor de Advento", icone: "🕯️", cor: "#8b5cf6", requisito: 3, tipo: "participacoes" },
     { id: 4, nome: "Dedicação Total", icone: "⭐", cor: "#3b82f6", requisito: 10, tipo: "confirmacoes" },
     { id: 5, nome: "Servo Dedicado", icone: "⛪", cor: "#3b82f6", requisito: 50, tipo: "confirmacoes" },
     { id: 6, nome: "Guardião da Liturgia", icone: "✝️", cor: "#f59e0b", requisito: 100, tipo: "confirmacoes" },
@@ -142,7 +141,7 @@ export default function PerfilBadges() {
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-bold text-amber-500">
-              {badgesConquistadas.length}/{todasBadgesDisponiveis.length}
+              {badgesConquistadas.length}/6
             </p>
           </CardContent>
         </Card>

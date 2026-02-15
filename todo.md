@@ -2997,3 +2997,9 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Badges não conquistadas em cinza
 - [x] Progresso para próximas badges
 - [x] Adicionar link no menu de navegação
+
+## Ajuste de Badges - Sprint 8
+
+- [x] Remover badge "Cantor de Advento" do banco de dados
+- [x] Atualizar lista de badges no frontend (PerfilBadges.tsx)
+- [x] Verificar se remoção não quebra queries existentes
