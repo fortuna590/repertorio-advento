@@ -65,6 +65,7 @@ export default function Escalas() {
   const [filtroMes, setFiltroMes] = useState<string>("");
   const [filtroStatus, setFiltroStatus] = useState<string>("todos");
   const [filtroEquipe, setFiltroEquipe] = useState<string>("todas");
+  const [filtroArquivadas, setFiltroArquivadas] = useState<string>("ativas"); // "ativas", "arquivadas", "todas"
   const [escalasSelecionadas, setEscalasSelecionadas] = useState<number[]>([]);
 
   // Buscar equipes do usuário para filtro
@@ -262,6 +263,26 @@ export default function Escalas() {
     },
   });
 
+  const arquivarMutation = trpc.escalas.arquivarEscala.useMutation({
+    onSuccess: () => {
+      toast.success("Escala arquivada com sucesso!");
+      refetch();
+    },
+    onError: (error) => {
+      toast.error("Erro ao arquivar escala: " + error.message);
+    },
+  });
+
+  const desarquivarMutation = trpc.escalas.desarquivarEscala.useMutation({
+    onSuccess: () => {
+      toast.success("Escala desarquivada com sucesso!");
+      refetch();
+    },
+    onError: (error) => {
+      toast.error("Erro ao desarquivar escala: " + error.message);
+    },
+  });
+
   const resetForm = () => {
     setTitulo("");
     setDescricao("");
@@ -329,6 +350,12 @@ export default function Escalas() {
   };
 
   const escalasFiltradas = escalas?.filter((escala) => {
+    // Filtro por arquivadas
+    const arquivada = (escala as any).arquivada || 0;
+    if (filtroArquivadas === "ativas" && arquivada === 1) return false;
+    if (filtroArquivadas === "arquivadas" && arquivada === 0) return false;
+    // "todas" mostra ambas
+
     // Filtro por equipe
     if (filtroEquipe !== "todas") {
       const equipeId = parseInt(filtroEquipe);
@@ -602,6 +629,17 @@ export default function Escalas() {
             </SelectContent>
           </Select>
 
+          <Select value={filtroArquivadas} onValueChange={setFiltroArquivadas}>
+            <SelectTrigger className="w-full sm:w-[200px]">
+              <SelectValue placeholder="Filtrar arquivadas" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ativas">🟢 Ativas</SelectItem>
+              <SelectItem value="arquivadas">🟡 Arquivadas</SelectItem>
+              <SelectItem value="todas">Todas</SelectItem>
+            </SelectContent>
+          </Select>
+
           <Select value={filtroEquipe} onValueChange={setFiltroEquipe}>
             <SelectTrigger className="w-full sm:w-[200px]">
               <SelectValue placeholder="Filtrar por equipe" />
@@ -729,6 +767,27 @@ export default function Escalas() {
                       Ver Detalhes
                     </Button>
                   </Link>
+                  {(escala as any).arquivada === 1 ? (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => desarquivarMutation.mutate({ escalaId: escala.id })}
+                      className="h-8 px-2 text-green-400 hover:text-green-300"
+                      title="Desarquivar"
+                    >
+                      🟢
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => arquivarMutation.mutate({ escalaId: escala.id })}
+                      className="h-8 px-2 text-yellow-400 hover:text-yellow-300"
+                      title="Arquivar"
+                    >
+                      🟡
+                    </Button>
+                  )}
                   <Button
                     variant="ghost"
                     size="sm"

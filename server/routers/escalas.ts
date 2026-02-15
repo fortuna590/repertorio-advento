@@ -2354,8 +2354,8 @@ export const escalasRouter = router({
       };
     }),
 
-  // Gamificação: Calcular e atualizar pontuação de um membro
-  calcularPontuacao: publicProcedure
+  //  // Gamificação: Calcular pontuação de um membro (DESABILITADO - aguardando ajuste do schema)
+  /* calcularPontuacao: publicProcedurerocedure
     .input(z.object({
       userId: z.number(),
     }))
@@ -2430,10 +2430,10 @@ export const escalasRouter = router({
       }
 
       return { pontos, participacoesTotal, participacoesConfirmadas, participacoesRecusadas };
-    }),
+    }), */
 
-  // Gamificação: Obter ranking de membros por pontos
-  obterRanking: publicProcedure
+  // Gamificação: Obter ranking de membros por pontos (DESABILITADO - aguardando ajuste do schema)
+  /* obterRanking: publicProcedure
     .input(z.object({
       equipeId: z.number().optional(),
       limite: z.number().optional().default(10),
@@ -2471,8 +2471,8 @@ export const escalasRouter = router({
       }));
     }),
 
-  // Gamificação: Listar badges conquistados por um membro
-  listarBadgesMembro: publicProcedure
+  // Gamificação: Listar badges conquistados por um membro (DESABILITADO - aguardando ajuste do schema)
+  /* listarBadgesMembro: publicProcedure
     .input(z.object({
       membroId: z.number(),
     }))
@@ -2612,7 +2612,7 @@ export const escalasRouter = router({
         .where(eq(metasEquipe.id, input.metaId));
 
       return { progresso, objetivo: meta.objetivo, percentual: Math.round((progresso / meta.objetivo) * 100), status: novoStatus };
-    }),
+    }), */
 
   // Arquivamento: Arquivar escala manualmente
   arquivarEscala: publicProcedure
