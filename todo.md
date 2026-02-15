@@ -2958,9 +2958,20 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 
 ## Melhorias Finais
 
-- [ ] Corrigir schema de gamificação (usar userId ao invés de membroId)
-- [ ] Habilitar mutations de gamificação comentadas
-- [ ] Reativar página de Ranking funcional
+### Teste de Fluxo de Equipes
+- [ ] Testar criação de nova equipe via /equipes/nova
+- [ ] Verificar redirecionamento de /escalas/nova-de-equipe para /equipes/nova
+- [ ] Testar adição de membros à equipe
+- [ ] Testar criação de escala a partir da equipe via /escalas/criar-de-equipe
+
+### Gamificação
+- [x] Corrigir schema de gamificação (usar userId ao invés de membroId)
+- [x] Recriar tabelas pontuacoes e membros_badges com userId
+- [x] Habilitar mutations de gamificação comentadas
+- [x] Recriar página de Ranking funcional
+- [x] Testar sistema de pontuação e badges
+
+### Outras Melhorias
 - [ ] Implementar filtro "Arquivadas" funcional na página de Escalas
 - [ ] Testar botões de arquivar/desarquivar
 - [ ] Criar testes automatizados vitest para mutations críticas

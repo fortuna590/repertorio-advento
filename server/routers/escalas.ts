@@ -2354,8 +2354,8 @@ export const escalasRouter = router({
       };
     }),
 
-  //  // Gamificação: Calcular pontuação de um membro (DESABILITADO - aguardando ajuste do schema)
-  /* calcularPontuacao: publicProcedurerocedure
+  // Gamificação: Calcular pontuação de um membro
+  calcularPontuacao: publicProcedure
     .input(z.object({
       userId: z.number(),
     }))
@@ -2403,11 +2403,11 @@ export const escalasRouter = router({
       }
 
       // Verificar e conceder badges
-      const { badges, usersBadges } = await import("../../drizzle/schema");
+      const { badges, membrosBadges } = await import("../../drizzle/schema");
       const todasBadges = await db.select().from(badges);
       const badgesDoMembro = await db.select()
-        .from(usersBadges)
-        .where(eq(usersBadges.userId, input.userId));
+        .from(membrosBadges)
+        .where(eq(membrosBadges.userId, input.userId));
 
       for (const badge of todasBadges) {
         const jaConquistou = badgesDoMembro.some((mb: any) => mb.badgeId === badge.id);
@@ -2421,7 +2421,7 @@ export const escalasRouter = router({
         }
 
         if (conquistou) {
-          await db.insert(usersBadges).values({
+          await db.insert(membrosBadges).values({
             userId: input.userId,
             badgeId: badge.id,
             conquistadoEm: new Date(),
@@ -2430,10 +2430,10 @@ export const escalasRouter = router({
       }
 
       return { pontos, participacoesTotal, participacoesConfirmadas, participacoesRecusadas };
-    }), */
+    }),
 
-  // Gamificação: Obter ranking de membros por pontos (DESABILITADO - aguardando ajuste do schema)
-  /* obterRanking: publicProcedure
+  // Gamificação: Obter ranking de membros por pontos
+  obterRanking: publicProcedure
     .input(z.object({
       equipeId: z.number().optional(),
       limite: z.number().optional().default(10),
@@ -2442,26 +2442,21 @@ export const escalasRouter = router({
       const db = await getDb();
       if (!db) throw new Error("Database not available");
 
-      const { pontuacoes } = await import("../../drizzle/schema");
-      const { membros: membrosDaEquipe } = await import("../../drizzle/schema");
+      const { pontuacoes, users } = await import("../../drizzle/schema");
 
       let query = db.select({
-        membroId: pontuacoes.membroId,
+        userId: pontuacoes.userId,
         pontos: pontuacoes.pontos,
         participacoesTotal: pontuacoes.participacoesTotal,
         participacoesConfirmadas: pontuacoes.participacoesConfirmadas,
         participacoesRecusadas: pontuacoes.participacoesRecusadas,
-        nome: membrosDaEquipe.nome,
-        funcao: membrosDaEquipe.funcao,
+        nome: users.name,
+        email: users.email,
       })
       .from(pontuacoes)
-      .leftJoin(membrosDaEquipe, eq(pontuacoes.membroId, membrosDaEquipe.id))
+      .leftJoin(users, eq(pontuacoes.userId, users.id))
       .orderBy(sql`${pontuacoes.pontos} DESC`)
       .limit(input.limite);
-
-      if (input.equipeId) {
-        query = query.where(eq(membrosDaEquipe.equipeId, input.equipeId)) as any;
-      }
 
       const ranking = await query;
 
@@ -2469,12 +2464,12 @@ export const escalasRouter = router({
         posicao: index + 1,
         ...r,
       }));
-    }), */
+    }),
 
-  // Gamificação: Listar badges conquistados por um membro (DESABILITADO - aguardando ajuste do schema)
-  /* listarBadgesMembro: publicProcedure
+  // Gamificação: Listar badges conquistados por um usuário
+  listarBadgesUsuario: publicProcedure
     .input(z.object({
-      membroId: z.number(),
+      userId: z.number(),
     }))
     .query(async ({ input }: { input: any }) => {
       const db = await getDb();
@@ -2492,14 +2487,14 @@ export const escalasRouter = router({
       })
       .from(membrosBadges)
       .leftJoin(badges, eq(membrosBadges.badgeId, badges.id))
-      .where(eq(membrosBadges.membroId, input.membroId))
+      .where(eq(membrosBadges.userId, input.userId))
       .orderBy(sql`${membrosBadges.conquistadoEm} DESC`);
 
       return badgesConquistados;
-    }), */
+    }),
 
-  // Gamificação: Criar meta para equipe (DESABILITADO - aguardando ajuste do schema)
-  /* criarMetaEquipe: publicProcedure
+  // Gamificação: Criar meta para equipe
+  criarMetaEquipe: publicProcedure
     .input(z.object({
       equipeId: z.number(),
       titulo: z.string(),
@@ -2542,16 +2537,18 @@ export const escalasRouter = router({
 
       const { metasEquipe } = await import("../../drizzle/schema");
 
-      let query = db.select()
-        .from(metasEquipe)
-        .where(eq(metasEquipe.equipeId, input.equipeId))
-        .orderBy(sql`${metasEquipe.createdAt} DESC`);
-
+      let metas;
       if (input.status) {
-        query = query.where(eq(metasEquipe.status, input.status)) as any;
+        metas = await db.select()
+          .from(metasEquipe)
+          .where(sql`${metasEquipe.equipeId} = ${input.equipeId} AND ${metasEquipe.status} = ${input.status}`)
+          .orderBy(sql`${metasEquipe.createdAt} DESC`);
+      } else {
+        metas = await db.select()
+          .from(metasEquipe)
+          .where(eq(metasEquipe.equipeId, input.equipeId))
+          .orderBy(sql`${metasEquipe.createdAt} DESC`);
       }
-
-      const metas = await query;
 
       return metas.map((m: any) => ({
         ...m,
@@ -2612,7 +2609,7 @@ export const escalasRouter = router({
         .where(eq(metasEquipe.id, input.metaId));
 
       return { progresso, objetivo: meta.objetivo, percentual: Math.round((progresso / meta.objetivo) * 100), status: novoStatus };
-    }), */
+    }),
 
   // Arquivamento: Arquivar escala manualmente
   arquivarEscala: publicProcedure

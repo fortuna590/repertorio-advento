@@ -654,7 +654,7 @@ export type InsertEscalaParticipante = typeof escalasParticipantes.$inferInsert;
  */
 export const pontuacoes = mysqlTable("pontuacoes", {
   id: int("id").autoincrement().primaryKey(),
-  membroId: int("membroId").references(() => membros.id, { onDelete: "cascade" }).notNull(),
+  userId: int("userId").references(() => users.id, { onDelete: "cascade" }).notNull(),
   pontos: int("pontos").default(0).notNull(),
   participacoesTotal: int("participacoesTotal").default(0).notNull(),
   participacoesConfirmadas: int("participacoesConfirmadas").default(0).notNull(),
@@ -687,7 +687,7 @@ export type InsertBadge = typeof badges.$inferInsert;
  */
 export const membrosBadges = mysqlTable("membros_badges", {
   id: int("id").autoincrement().primaryKey(),
-  membroId: int("membroId").references(() => membros.id, { onDelete: "cascade" }).notNull(),
+  userId: int("userId").references(() => users.id, { onDelete: "cascade" }).notNull(),
   badgeId: int("badgeId").references(() => badges.id, { onDelete: "cascade" }).notNull(),
   conquistadoEm: timestamp("conquistadoEm").defaultNow().notNull(),
 });

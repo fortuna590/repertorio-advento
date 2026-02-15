@@ -9,7 +9,7 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Textarea } from "../components/ui/textarea";
-import { Calendar, Clock, MapPin, Plus, Music, Users, Heart, Sparkles, Trash2, Edit, Eye, Bell, Download, BarChart3, TrendingUp } from "lucide-react";
+import { Calendar, Clock, MapPin, Plus, Music, Users, Heart, Sparkles, Trash2, Edit, Eye, Bell, Download, BarChart3, TrendingUp, Trophy } from "lucide-react";
 import { Checkbox } from "../components/ui/checkbox";
 import { EscalasNavigation } from "../components/EscalasNavigation";
 import { toast } from "sonner";
@@ -446,6 +446,12 @@ export default function Escalas() {
               <Button variant="outline" className="border-purple-400 text-purple-300 hover:bg-purple-50 hover:text-purple-700">
                 <TrendingUp className="w-5 h-5 mr-2" />
                 Relatórios
+              </Button>
+            </Link>
+            <Link href="/escalas/ranking">
+              <Button variant="outline" className="border-purple-400 text-purple-300 hover:bg-purple-50 hover:text-purple-700">
+                <Trophy className="w-5 h-5 mr-2" />
+                Ranking
               </Button>
             </Link>
             <Link href="/escalas/gerar-automatica">

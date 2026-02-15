@@ -64,6 +64,7 @@ import EscalaDeEquipeForm from "./pages/EscalaDeEquipeForm";
 import GerarEscalaAutomatica from "./pages/GerarEscalaAutomatica";
 import DashboardEstatisticas from "./pages/DashboardEstatisticas";
 import Relatorios from "./pages/Relatorios";
+import Ranking from "./pages/Ranking";
 import WhatsAppButton from "./components/WhatsAppButton";
 
 function Router() {
@@ -134,7 +135,9 @@ function Router() {
       </Route>
       <Route path="/escalas/criar-de-equipe" component={EscalaDeEquipeForm} />
       <Route path="/escalas/gerar-automatica" component={GerarEscalaAutomatica} />      <Route path={"/escalas/estatisticas"} component={DashboardEstatisticas} />
-      <Route path={"/escalas/relatorios"} component={Relatorios} />      <Route path="/404" component={NotFound} />
+      <Route path={"/escalas/relatorios"} component={Relatorios} />
+      <Route path={"/escalas/ranking"} component={Ranking} />
+      <Route path="/404" component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
     </Switch>
