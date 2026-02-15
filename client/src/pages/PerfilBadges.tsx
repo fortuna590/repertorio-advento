@@ -4,10 +4,11 @@ import { trpc } from "@/lib/trpc";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Trophy, Award, TrendingUp, Target, Lock } from "lucide-react";
+import { Trophy, Award, TrendingUp, Target, Lock, ArrowLeft } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
+import { Button } from "@/components/ui/button";
 
 export default function PerfilBadges() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
@@ -85,9 +86,19 @@ export default function PerfilBadges() {
     <div className="container py-8">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <Trophy className="w-8 h-8 text-primary" />
-          <h1 className="text-3xl font-bold text-foreground">Meu Perfil</h1>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-3">
+            <Trophy className="w-8 h-8 text-primary" />
+            <h1 className="text-3xl font-bold text-foreground">Meu Perfil</h1>
+          </div>
+          <Button
+            variant="outline"
+            onClick={() => setLocation("/escalas/ranking")}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Voltar
+          </Button>
         </div>
         <p className="text-muted-foreground">
           Acompanhe suas estatísticas e conquistas no LouvaMais

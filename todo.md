@@ -3003,3 +3003,8 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Remover badge "Cantor de Advento" do banco de dados
 - [x] Atualizar lista de badges no frontend (PerfilBadges.tsx)
 - [x] Verificar se remoção não quebra queries existentes
+
+## Melhoria de Navegação - Sprint 9
+
+- [x] Adicionar botão "Voltar" na página de perfil/badges
+- [x] Testar navegação de volta ao Ranking
