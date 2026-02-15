@@ -126,7 +126,13 @@ function Router() {
       <Route path="/equipes/nova" component={NovaEquipe} />
       <Route path="/equipes/:equipeId" component={DetalhesEquipe} />
       <Route path="/equipes/:equipeId/editar" component={NovaEquipe} />
-      <Route path="/escalas/nova-de-equipe" component={EscalaDeEquipeForm} />
+      <Route path="/escalas/nova-de-equipe">
+        {() => {
+          window.location.href = "/equipes/nova";
+          return null;
+        }}
+      </Route>
+      <Route path="/escalas/criar-de-equipe" component={EscalaDeEquipeForm} />
       <Route path="/escalas/gerar-automatica" component={GerarEscalaAutomatica} />      <Route path={"/escalas/estatisticas"} component={DashboardEstatisticas} />
       <Route path={"/escalas/relatorios"} component={Relatorios} />      <Route path="/404" component={NotFound} />
       {/* Final fallback route */}

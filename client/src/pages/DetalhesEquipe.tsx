@@ -122,7 +122,7 @@ export default function DetalhesEquipe() {
             <div className="flex gap-2">
               <Button
                 size="sm"
-                onClick={() => setLocation(`/escalas/nova-de-equipe?equipeId=${equipeId}`)}
+                onClick={() => setLocation(`/escalas/criar-de-equipe?equipeId=${equipeId}`)}
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Criar Escala

@@ -2946,3 +2946,21 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [ ] Botão "Sincronizar com Google Calendar" em detalhes da escala
 - [ ] Badge visual "Sincronizado" quando tiver googleEventId
 - [ ] Modal de autorização OAuth do Google
+
+
+## Correções Urgentes
+
+- [x] Corrigir bug de criação de equipes - URL `/escalas/nova-de-equipe` abrindo página errada
+- [x] Criar redirecionamento automático de `/escalas/nova-de-equipe` para `/equipes/nova`
+- [x] Criar nova rota `/escalas/criar-de-equipe` para criar escala a partir de equipe
+- [x] Atualizar todos os links para usar nova rota
+- [x] Corrigir erro de comentário não fechado no arquivo escalas.ts
+
+## Melhorias Finais
+
+- [ ] Corrigir schema de gamificação (usar userId ao invés de membroId)
+- [ ] Habilitar mutations de gamificação comentadas
+- [ ] Reativar página de Ranking funcional
+- [ ] Implementar filtro "Arquivadas" funcional na página de Escalas
+- [ ] Testar botões de arquivar/desarquivar
+- [ ] Criar testes automatizados vitest para mutations críticas

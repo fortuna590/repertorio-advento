@@ -2469,7 +2469,7 @@ export const escalasRouter = router({
         posicao: index + 1,
         ...r,
       }));
-    }),
+    }), */
 
   // Gamificação: Listar badges conquistados por um membro (DESABILITADO - aguardando ajuste do schema)
   /* listarBadgesMembro: publicProcedure
@@ -2496,10 +2496,10 @@ export const escalasRouter = router({
       .orderBy(sql`${membrosBadges.conquistadoEm} DESC`);
 
       return badgesConquistados;
-    }),
+    }), */
 
-  // Gamificação: Criar meta para equipe
-  criarMetaEquipe: publicProcedure
+  // Gamificação: Criar meta para equipe (DESABILITADO - aguardando ajuste do schema)
+  /* criarMetaEquipe: publicProcedure
     .input(z.object({
       equipeId: z.number(),
       titulo: z.string(),
