@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO badges (nome, descricao, icone, cor, tipo, requisito) VALUES\n('Músico Fiel', 'Participou de 5 escalas consecutivas sem faltas', '🎵', '#10b981', 'participacoes', 5),\n('Cantor de Advento', 'Participou de escalas durante o tempo do Advento', '🕯️', '#8b5cf6', 'participacoes', 3),\n('Servo Dedicado', 'Alcançou 50 participações confirmadas', '⛪', '#3b82f6', 'confirmacoes', 50),\n('Guardião da Liturgia', 'Alcançou 100 participações confirmadas', '✝️', '#f59e0b', 'confirmacoes', 100),\n('Ministro Exemplar', 'Manteve 100% de presença em 20 escalas', '👑', '#ef4444', 'confirmacoes', 20);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute INSERT INTO badges (nome, descricao, icone, cor, tipo, requisito) VALUES\n('Músico Fiel', 'Participou de 5 escalas consecutivas sem faltas', '🎵', '#10b981', 'participacoes', 5),\n('Cantor de Advento', 'Participou de escalas durante o tempo do Advento', '🕯️', '#8b5cf6', 'participacoes', 3),\n('Servo Dedicado', 'Alcançou 50 participações confirmadas', '⛪', '#3b82f6', 'confirmacoes', 50),\n('Guardião da Liturgia', 'Alcançou 100 participações confirmadas', '✝️', '#f59e0b', 'confirmacoes', 100),\n('Ministro Exemplar', 'Manteve 100% de presença em 20 escalas', '👑', '#ef4444', 'confirmacoes', 20);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 371
+}

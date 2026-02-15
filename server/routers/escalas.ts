@@ -2409,6 +2409,8 @@ export const escalasRouter = router({
         .from(membrosBadges)
         .where(eq(membrosBadges.userId, input.userId));
 
+      const novasBadges: any[] = [];
+
       for (const badge of todasBadges) {
         const jaConquistou = badgesDoMembro.some((mb: any) => mb.badgeId === badge.id);
         if (jaConquistou) continue;
@@ -2426,10 +2428,17 @@ export const escalasRouter = router({
             badgeId: badge.id,
             conquistadoEm: new Date(),
           });
+          novasBadges.push(badge);
         }
       }
 
-      return { pontos, participacoesTotal, participacoesConfirmadas, participacoesRecusadas };
+      return { 
+        pontos, 
+        participacoesTotal, 
+        participacoesConfirmadas, 
+        participacoesRecusadas,
+        novasBadges 
+      };
     }),
 
   // Gamificação: Obter ranking de membros por pontos

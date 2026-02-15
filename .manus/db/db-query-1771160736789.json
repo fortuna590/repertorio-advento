@@ -1,0 +1,90 @@
+{
+  "query": "SELECT * FROM badges ORDER BY requisito ASC;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT * FROM badges ORDER BY requisito ASC;",
+  "rows": [
+    {
+      "id": "1",
+      "nome": "Iniciante",
+      "descricao": "Participou da primeira escala",
+      "icone": "Star",
+      "cor": "text-yellow-500",
+      "requisito": "1",
+      "tipo": "participacoes",
+      "createdAt": "2026-02-12 04:05:20"
+    },
+    {
+      "id": "2",
+      "nome": "Comprometido",
+      "descricao": "Participou de 5 escalas",
+      "icone": "Award",
+      "cor": "text-blue-500",
+      "requisito": "5",
+      "tipo": "participacoes",
+      "createdAt": "2026-02-12 04:05:20"
+    },
+    {
+      "id": "8",
+      "nome": "Sequência de Ouro",
+      "descricao": "Participou de 5 escalas seguidas",
+      "icone": "Zap",
+      "cor": "text-amber-500",
+      "requisito": "5",
+      "tipo": "sequencia",
+      "createdAt": "2026-02-12 04:05:20"
+    },
+    {
+      "id": "3",
+      "nome": "Dedicado",
+      "descricao": "Participou de 10 escalas",
+      "icone": "Trophy",
+      "cor": "text-purple-500",
+      "requisito": "10",
+      "tipo": "participacoes",
+      "createdAt": "2026-02-12 04:05:20"
+    },
+    {
+      "id": "6",
+      "nome": "Pontual",
+      "descricao": "Confirmou presença em 10 escalas",
+      "icone": "CheckCircle",
+      "cor": "text-green-500",
+      "requisito": "10",
+      "tipo": "confirmacoes",
+      "createdAt": "2026-02-12 04:05:20"
+    },
+    {
+      "id": "4",
+      "nome": "Veterano",
+      "descricao": "Participou de 25 escalas",
+      "icone": "Crown",
+      "cor": "text-orange-500",
+      "requisito": "25",
+      "tipo": "participacoes",
+      "createdAt": "2026-02-12 04:05:20"
+    },
+    {
+      "id": "7",
+      "nome": "Confiável",
+      "descricao": "Confirmou presença em 25 escalas",
+      "icone": "Shield",
+      "cor": "text-teal-500",
+      "requisito": "25",
+      "tipo": "confirmacoes",
+      "createdAt": "2026-02-12 04:05:20"
+    },
+    {
+      "id": "5",
+      "nome": "Lenda",
+      "descricao": "Participou de 50 escalas",
+      "icone": "Flame",
+      "cor": "text-red-500",
+      "requisito": "50",
+      "tipo": "participacoes",
+      "createdAt": "2026-02-12 04:05:20"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tnome\tdescricao\ticone\tcor\trequisito\ttipo\tcreatedAt\n1\tIniciante\tParticipou da primeira escala\tStar\ttext-yellow-500\t1\tparticipacoes\t2026-02-12 04:05:20\n2\tComprometido\tParticipou de 5 escalas\tAward\ttext-blue-500\t5\tparticipacoes\t2026-02-12 04:05:20\n8\tSequência de Ouro\tParticipou de 5 escalas seguidas\tZap\ttext-amber-500\t5\tsequencia\t2026-02-12 04:05:20\n3\tDedicado\tParticipou de 10 escalas\tTrophy\ttext-purple-500\t10\tparticipacoes\t2026-02-12 04:05:20\n6\tPontual\tConfirmou presença em 10 escalas\tCheckCircle\ttext-green-500\t10\tconfirmacoes\t2026-02-12 04:05:20\n4\tVeterano\tParticipou de 25 escalas\tCrown\ttext-orange-500\t25\tparticipacoes\t2026-02-12 04:05:20\n7\tConfiável\tConfirmou presença em 25 escalas\tShield\ttext-teal-500\t25\tconfirmacoes\t2026-02-12 04:05:20\n5\tLenda\tParticipou de 50 escalas\tFlame\ttext-red-500\t50\tparticipacoes\t2026-02-12 04:05:20\n",
+  "stderr": "",
+  "execution_time_ms": 1120
+}

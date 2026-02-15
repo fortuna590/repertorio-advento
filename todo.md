@@ -2975,3 +2975,25 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [ ] Implementar filtro "Arquivadas" funcional na página de Escalas
 - [ ] Testar botões de arquivar/desarquivar
 - [ ] Criar testes automatizados vitest para mutations críticas
+
+## Melhorias de Gamificação - Sprint 7
+
+### Badges Personalizados Litúrgicos
+- [x] Criar badges específicas para contexto litúrgico (Músico Fiel, Cantor de Advento, etc)
+- [x] Popular banco de dados com novas badges
+- [x] Atualizar lógica de concessão de badges no backend
+- [x] Adicionar ícones temáticos para cada badge
+
+### Sistema de Notificações de Badges
+- [x] Implementar toast notification ao conquistar badge
+- [x] Integrar notificação no mutation calcularPontuacao
+- [x] Adicionar animação de conquista
+- [x] Testar fluxo completo de notificação
+
+### Página de Perfil com Badges
+- [x] Criar página /perfil/badges
+- [x] Exibir estatísticas do usuário (pontos, participações)
+- [x] Galeria de badges conquistadas
+- [x] Badges não conquistadas em cinza
+- [x] Progresso para próximas badges
+- [x] Adicionar link no menu de navegação

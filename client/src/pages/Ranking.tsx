@@ -1,9 +1,12 @@
 import { useEffect } from "react";
+import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, Medal, Award, TrendingUp, CheckCircle2, XCircle } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 
 export default function Ranking() {
   const { data: ranking, isLoading, refetch } = trpc.escalas.obterRanking.useQuery({
@@ -13,8 +16,17 @@ export default function Ranking() {
   const { data: user } = trpc.auth.me.useQuery();
 
   const calcularPontuacaoMutation = trpc.escalas.calcularPontuacao.useMutation({
-    onSuccess: () => {
+    onSuccess: (data) => {
       refetch();
+      // Exibir toast para cada badge conquistada
+      if (data.novasBadges && data.novasBadges.length > 0) {
+        data.novasBadges.forEach((badge: any) => {
+          toast.success(`🎉 Badge Conquistada: ${badge.icone} ${badge.nome}`, {
+            description: badge.descricao,
+            duration: 5000,
+          });
+        });
+      }
     },
   });
 
@@ -59,9 +71,17 @@ export default function Ranking() {
     <div className="container py-8">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <Trophy className="w-8 h-8 text-primary" />
-          <h1 className="text-3xl font-bold text-foreground">Ranking de Participação</h1>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-3">
+            <Trophy className="w-8 h-8 text-primary" />
+            <h1 className="text-3xl font-bold text-foreground">Ranking de Participação</h1>
+          </div>
+          <Link href="/perfil/badges">
+            <Button variant="outline" className="flex items-center gap-2">
+              <Award className="w-5 h-5" />
+              Minhas Badges
+            </Button>
+          </Link>
         </div>
         <p className="text-muted-foreground">
           Acompanhe o desempenho dos membros nas escalas. Ganhe pontos confirmando participações!
