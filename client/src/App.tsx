@@ -60,7 +60,7 @@ import BibliotecaFavoritos from "./pages/BibliotecaFavoritos";
 import Equipes from "./pages/Equipes";
 import NovaEquipe from "./pages/NovaEquipe";
 import DetalhesEquipe from "./pages/DetalhesEquipe";
-import EscalaDeEquipeForm from "./pages/EscalaDeEquipeForm";
+
 import GerarEscalaAutomatica from "./pages/GerarEscalaAutomatica";
 import DashboardEstatisticas from "./pages/DashboardEstatisticas";
 import Relatorios from "./pages/Relatorios";
@@ -134,7 +134,6 @@ function Router() {
           return null;
         }}
       </Route>
-      <Route path="/escalas/criar-de-equipe" component={EscalaDeEquipeForm} />
       <Route path="/escalas/gerar-automatica" component={GerarEscalaAutomatica} />      <Route path={"/escalas/estatisticas"} component={DashboardEstatisticas} />
       <Route path={"/escalas/relatorios"} component={Relatorios} />
       <Route path={"/escalas/ranking"} component={Ranking} />

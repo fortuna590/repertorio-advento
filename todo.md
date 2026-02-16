@@ -3008,3 +3008,9 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 
 - [x] Adicionar botão "Voltar" na página de perfil/badges
 - [x] Testar navegação de volta ao Ranking
+
+## Correção de Navegação - Sprint 10
+
+- [x] Corrigir botão "Criar de Equipe" que está abrindo página de Criar Escala
+- [x] Garantir que botão redirecione para /equipes/nova
+- [x] Testar fluxo completo de criação de equipe
