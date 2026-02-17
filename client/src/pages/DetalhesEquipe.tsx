@@ -119,26 +119,31 @@ export default function DetalhesEquipe() {
               )}
             </div>
             
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Button
                 size="sm"
                 onClick={() => setLocation(`/escalas/criar-de-equipe?equipeId=${equipeId}`)}
+                className="w-full sm:w-auto"
               >
                 <Plus className="w-4 h-4 mr-2" />
-                Criar Escala
+                <span className="hidden sm:inline">Criar Escala</span>
+                <span className="sm:hidden">Escala</span>
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setLocation(`/equipes/${equipeId}/escalas`)}
+                className="w-full sm:w-auto"
               >
                 <Calendar className="w-4 h-4 mr-2" />
-                Ver Escalas
+                <span className="hidden sm:inline">Ver Escalas</span>
+                <span className="sm:hidden">Escalas</span>
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setLocation(`/equipes/${equipeId}/editar`)}
+                className="w-full sm:w-auto"
               >
                 <Edit className="w-4 h-4 mr-2" />
                 Editar
@@ -148,6 +153,7 @@ export default function DetalhesEquipe() {
                 size="sm"
                 onClick={handleDeletarEquipe}
                 disabled={deletarEquipeMutation.isPending}
+                className="w-full sm:w-auto"
               >
                 {deletarEquipeMutation.isPending ? (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />

@@ -181,16 +181,17 @@ export default function NovaEquipe() {
               </div>
 
               {/* Botões */}
-              <div className="flex gap-3 justify-end">
+              <div className="flex flex-col sm:flex-row gap-3 sm:justify-end">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => setLocation("/equipes")}
                   disabled={isSubmitting}
+                  className="w-full sm:w-auto"
                 >
                   Cancelar
                 </Button>
-                <Button type="submit" disabled={isSubmitting}>
+                <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />

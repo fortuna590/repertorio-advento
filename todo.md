@@ -3014,3 +3014,26 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Corrigir botão "Criar de Equipe" que está abrindo página de Criar Escala
 - [x] Garantir que botão redirecione para /equipes/nova
 - [x] Testar fluxo completo de criação de equipe
+
+## Correções Sistema de Equipes - Sprint 11
+
+### Conhecimentos
+- [x] Criar conhecimento sobre verificação obrigatória de layout mobile
+- [x] Criar conhecimento sobre botões de navegação (voltar) em todas as páginas
+
+### Página de Gerenciamento
+- [x] Criar página /equipes para listar equipes do usuário (já existe)
+- [x] Adicionar botões de editar/excluir equipes (já existem)
+- [ ] Adicionar link no menu de navegação
+
+### Correção de Bugs
+- [x] Investigar erro ao adicionar membros na página de detalhes
+- [x] Corrigir backend/frontend para adicionar membros corretamente (criada página NovoMembro.tsx)
+- [x] Testar fluxo completo de adicionar membros
+
+### Layout Mobile e Navegação
+- [x] Corrigir posicionamento de botões em mobile (NovaEquipe.tsx)
+- [x] Corrigir posicionamento de botões em mobile (DetalhesEquipe.tsx)
+- [x] Adicionar botão "Voltar" em NovaEquipe.tsx (já existe)
+- [x] Adicionar botão "Voltar" em DetalhesEquipe.tsx (já existe)
+- [x] Testar navegação em dispositivos móveis
