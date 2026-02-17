@@ -3037,3 +3037,54 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Adicionar botão "Voltar" em NovaEquipe.tsx (já existe)
 - [x] Adicionar botão "Voltar" em DetalhesEquipe.tsx (já existe)
 - [x] Testar navegação em dispositivos móveis
+
+## Melhorias Sistema de Repertórios - Sprint 11
+
+### Menu e Edição de Membros
+- [x] Adicionar link "Equipes" no menu principal (header)
+- [x] Criar página de edição de membros (/equipes/:equipeId/membros/:membroId/editar)
+- [x] Implementar formulário de edição com mesmos campos de NovoMembro
+- [x] Adicionar rota no App.tsx
+- [ ] Testar fluxo completo de edição
+
+### Expansão de Edição de Repertórios Padrões
+- [x] Adicionar campo "linkCifra" na tabela musicasRepertorio (já existia)
+- [x] Adicionar campo "linkLetra" na tabela musicasRepertorio (adicionado no schema)
+- [x] Adicionar campo "linkYoutube" na tabela musicasRepertorio (já existia)
+- [x] Adicionar campo "tom" na tabela musicasRepertorio (adicionado no schema)
+- [x] Adicionar campo "tags" na tabela musicasRepertorio (adicionado no schema)
+- [x] Adicionar campo "comentario" na tabela musicasRepertorio (adicionado no schema)
+- [x] Adicionar campos na tabela musicasRepertorioBase (adicionados no schema)
+- [ ] Criar/atualizar página de edição de repertório padrão (admin)
+- [ ] Implementar formulário com todos os campos novos
+- [ ] Permitir múltiplas músicas por momento
+- [ ] Testar edição completa de repertório padrão
+
+### Sistema de Favoritos
+- [ ] Criar tabela "musicasFavoritas" (userId, musicaId, createdAt)
+- [ ] Criar mutation "marcarFavorito" no backend
+- [ ] Criar mutation "desmarcarFavorito" no backend
+- [ ] Criar query "listarFavoritos" no backend
+- [ ] Adicionar botão de favoritar nas músicas dos repertórios padrões
+- [ ] Criar página "Minhas Músicas Favoritas" (/favoritos)
+- [ ] Testar sistema completo de favoritos
+
+### Copiar Repertório como Base
+- [ ] Criar mutation "copiarRepertorioPadrao" no backend
+- [ ] Implementar lógica de cópia (repertório + músicas)
+- [ ] Adicionar botão "Usar como Base" nos repertórios padrões
+- [ ] Redirecionar para edição do repertório copiado
+- [ ] Testar fluxo completo de cópia
+
+### Histórico de Uso
+- [ ] Criar tabela "historicoUsoMusicas" (musicaId, tipo, data, userId)
+- [ ] Implementar tracking automático ao usar música em escala/repertório
+- [ ] Criar query "obterEstatisticasMusica" (contador de usos)
+- [ ] Adicionar badge de "mais usadas" nas músicas
+- [ ] Criar página de estatísticas de músicas
+- [ ] Testar tracking e visualização
+
+### Responsividade e Navegação
+- [ ] Verificar layout mobile em todas as páginas modificadas
+- [ ] Garantir botões "Voltar" em todas as novas páginas
+- [ ] Testar navegação completa no celular

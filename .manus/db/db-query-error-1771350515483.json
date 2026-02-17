@@ -1,0 +1,8 @@
+{
+  "query": "ALTER TABLE musicasRepertorio \nADD COLUMN linkLetra VARCHAR(500) AFTER linkCifra,\nADD COLUMN tom VARCHAR(10) AFTER linkLetra,\nADD COLUMN tags VARCHAR(500) AFTER tom,\nADD COLUMN comentario TEXT AFTER tags;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute ALTER TABLE musicasRepertorio \nADD COLUMN linkLetra VARCHAR(500) AFTER linkCifra,\nADD COLUMN tom VARCHAR(10) AFTER linkLetra,\nADD COLUMN tags VARCHAR(500) AFTER tom,\nADD COLUMN comentario TEXT AFTER tags;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'linkletra' in 'musicasRepertorio'"
+  ]
+}

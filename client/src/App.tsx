@@ -61,6 +61,7 @@ import Equipes from "./pages/Equipes";
 import NovaEquipe from "./pages/NovaEquipe";
 import DetalhesEquipe from "./pages/DetalhesEquipe";
 import NovoMembro from "./pages/NovoMembro";
+import EditarMembro from "./pages/EditarMembro";
 
 import GerarEscalaAutomatica from "./pages/GerarEscalaAutomatica";
 import DashboardEstatisticas from "./pages/DashboardEstatisticas";
@@ -130,6 +131,7 @@ function Router() {
       <Route path="/equipes/:equipeId" component={DetalhesEquipe} />
       <Route path="/equipes/:equipeId/editar" component={NovaEquipe} />
       <Route path="/equipes/:equipeId/membros/novo" component={NovoMembro} />
+      <Route path="/equipes/:equipeId/membros/:membroId/editar" component={EditarMembro} />
       <Route path="/escalas/nova-de-equipe">
         {() => {
           window.location.href = "/equipes/nova";

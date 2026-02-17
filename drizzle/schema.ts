@@ -390,6 +390,10 @@ export const musicasRepertorio = mysqlTable("musicasRepertorio", {
   descricao: text("descricao"),
   linkYoutube: varchar("linkYoutube", { length: 500 }),
   linkCifra: varchar("linkCifra", { length: 500 }),
+  linkLetra: varchar("linkLetra", { length: 500 }),
+  tom: varchar("tom", { length: 10 }), // Ex: C, Dm, F#, etc.
+  tags: varchar("tags", { length: 500 }), // Tags separadas por vírgula
+  comentario: text("comentario"),
   ordem: int("ordem").notNull(),
   cliquesYoutube: int("cliquesYoutube").default(0).notNull(),
   cliquesCifra: int("cliquesCifra").default(0).notNull(),
@@ -411,6 +415,9 @@ export const musicasRepertorioBase = mysqlTable("musicasRepertorioBase", {
   artista: varchar("artista", { length: 255 }),
   youtube: varchar("youtube", { length: 500 }),
   cifra: varchar("cifra", { length: 500 }),
+  letra: varchar("letra", { length: 500 }),
+  tom: varchar("tom", { length: 10 }), // Ex: C, Dm, F#, etc.
+  tags: varchar("tags", { length: 500 }), // Tags separadas por vírgula
   observacao: text("observacao"),
   ordem: int("ordem").default(999), // Ordem de exibição
   createdAt: timestamp("createdAt").defaultNow().notNull(),
