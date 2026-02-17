@@ -3088,3 +3088,28 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [ ] Verificar layout mobile em todas as páginas modificadas
 - [ ] Garantir botões "Voltar" em todas as novas páginas
 - [ ] Testar navegação completa no celular
+
+## Implementação Final Repertórios - Sprint 12
+
+### Atualização Páginas Admin
+- [x] Atualizar RepertorioAdmin.tsx com campos linkLetra, tom, tags, comentario
+- [x] Atualizar backend musicasBase.ts com novos campos
+- [x] Atualizar AdicionarMusicaModal.tsx com novos campos
+- [ ] Atualizar EditarMusicaModal.tsx com novos campos
+- [ ] Permitir múltiplas músicas por momento (já permite)
+- [ ] Verificar responsividade mobile dos formulários
+- [ ] Testar edição completa
+
+### Sistema de Favoritos
+- [ ] Criar mutation para adicionar/remover favorito
+- [ ] Adicionar botão de coração nas músicas dos repertórios padrões
+- [ ] Criar página BibliotecaFavoritos para listar músicas favoritas
+- [ ] Adicionar contador de favoritos
+- [ ] Testar fluxo completo de favoritar
+
+### Copiar Repertório como Base
+- [ ] Criar mutation para copiar repertório padrão
+- [ ] Adicionar botão "Usar como base" nos repertórios padrões
+- [ ] Implementar lógica de cópia para repertório personalizado
+- [ ] Redirecionar para edição do novo repertório
+- [ ] Testar fluxo completo de cópia

@@ -34,6 +34,10 @@ interface MusicaForm {
   descricao: string;
   linkYoutube: string;
   linkCifra: string;
+  linkLetra: string;
+  tom: string;
+  tags: string;
+  comentario: string;
   ordem: number;
 }
 
@@ -68,6 +72,10 @@ export function RepertorioAdmin() {
     descricao: "",
     linkYoutube: "",
     linkCifra: "",
+    linkLetra: "",
+    tom: "",
+    tags: "",
+    comentario: "",
     ordem: 1,
   });
 
@@ -196,6 +204,10 @@ export function RepertorioAdmin() {
         descricao: "",
         linkYoutube: "",
         linkCifra: "",
+        linkLetra: "",
+        tom: "",
+        tags: "",
+        comentario: "",
         ordem: 1,
       });
       await musicasQuery.refetch();
@@ -222,6 +234,10 @@ export function RepertorioAdmin() {
       descricao: musica.descricao || "",
       linkYoutube: musica.linkYoutube || "",
       linkCifra: musica.linkCifra || "",
+      linkLetra: musica.linkLetra || "",
+      tom: musica.tom || "",
+      tags: musica.tags || "",
+      comentario: musica.comentario || "",
       ordem: musica.ordem,
     });
     setEditingMusicaId(musica.id);
@@ -574,6 +590,27 @@ export function RepertorioAdmin() {
                     placeholder="Link Cifra"
                     value={musicaForm.linkCifra}
                     onChange={(e) => setMusicaForm({ ...musicaForm, linkCifra: e.target.value })}
+                  />
+                  <Input
+                    placeholder="Link Letra (letras.mus.br)"
+                    value={musicaForm.linkLetra}
+                    onChange={(e) => setMusicaForm({ ...musicaForm, linkLetra: e.target.value })}
+                  />
+                  <Input
+                    placeholder="Tom (ex: C, Dm, F#)"
+                    value={musicaForm.tom}
+                    onChange={(e) => setMusicaForm({ ...musicaForm, tom: e.target.value })}
+                  />
+                  <Input
+                    placeholder="Tags (separadas por vírgula)"
+                    value={musicaForm.tags}
+                    onChange={(e) => setMusicaForm({ ...musicaForm, tags: e.target.value })}
+                  />
+                  <Textarea
+                    placeholder="Comentário ou observação"
+                    value={musicaForm.comentario}
+                    onChange={(e) => setMusicaForm({ ...musicaForm, comentario: e.target.value })}
+                    className="col-span-2"
                   />
                 </div>
                 <Button onClick={handleAddMusica} className="gap-2 w-full">

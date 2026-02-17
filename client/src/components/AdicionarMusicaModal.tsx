@@ -30,6 +30,9 @@ export function AdicionarMusicaModal({
   const [artista, setArtista] = useState("");
   const [youtube, setYoutube] = useState("");
   const [cifra, setCifra] = useState("");
+  const [letra, setLetra] = useState("");
+  const [tom, setTom] = useState("");
+  const [tags, setTags] = useState("");
   const [observacao, setObservacao] = useState("");
 
   const adicionarMutation = trpc.musicasBase.adicionar.useMutation({
@@ -49,6 +52,9 @@ export function AdicionarMusicaModal({
     setArtista("");
     setYoutube("");
     setCifra("");
+    setLetra("");
+    setTom("");
+    setTags("");
     setObservacao("");
   };
 
@@ -67,6 +73,9 @@ export function AdicionarMusicaModal({
       artista: artista.trim() || undefined,
       youtube: youtube.trim() || undefined,
       cifra: cifra.trim() || undefined,
+      letra: letra.trim() || undefined,
+      tom: tom.trim() || undefined,
+      tags: tags.trim() || undefined,
       observacao: observacao.trim() || undefined,
     });
   };
@@ -122,6 +131,37 @@ export function AdicionarMusicaModal({
               value={cifra}
               onChange={(e) => setCifra(e.target.value)}
               placeholder="https://cifraclub.com.br/..."
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="letra">Link da Letra</Label>
+            <Input
+              id="letra"
+              type="url"
+              value={letra}
+              onChange={(e) => setLetra(e.target.value)}
+              placeholder="https://letras.mus.br/..."
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="tom">Tom</Label>
+            <Input
+              id="tom"
+              value={tom}
+              onChange={(e) => setTom(e.target.value)}
+              placeholder="Ex: C, Dm, F#"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="tags">Tags</Label>
+            <Input
+              id="tags"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+              placeholder="Separadas por vírgula"
             />
           </div>
 
