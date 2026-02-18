@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { router, publicProcedure, protectedProcedure } from "../_core/trpc";
 import { getDb } from "../db";
-import { repertoriosAdmin, momentosMissa, musicasRepertorio } from "../../drizzle/schema";
+import { repertoriosAdmin, momentosMissa, musicasRepertorio, repertoriosPersonalizados, musicasRepertorioPersonalizado } from "../../drizzle/schema";
 import { eq, sql } from "drizzle-orm";
 
 export const repertorioRouter = router({
@@ -525,6 +525,79 @@ export const repertorioRouter = router({
       } catch (e) {
         console.error("Error toggling visibilidade:", e);
         throw e;
+      }
+    }),
+
+  // Copiar repertório padrão como base para repertório personalizado
+  copiarComoBase: protectedProcedure
+    .input(
+      z.object({
+        repertorioId: z.number(),
+        novoNome: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      try {
+        // Buscar repertório padrão
+        const repertorioPadrao = await db
+          .select()
+          .from(repertoriosAdmin)
+          .where(eq(repertoriosAdmin.id, input.repertorioId))
+          .limit(1);
+
+        if (!repertorioPadrao[0]) {
+          throw new Error("Repertório não encontrado");
+        }
+
+        // Buscar músicas do repertório padrão
+        const musicasPadrao = await db
+          .select()
+          .from(musicasRepertorio)
+          .where(eq(musicasRepertorio.repertorioId, input.repertorioId));
+
+        // Criar repertório personalizado
+        await db.insert(repertoriosPersonalizados).values({
+          userId: ctx.user.id,
+          nome: input.novoNome || `${repertorioPadrao[0].nome} (Cópia)`,
+          descricao: repertorioPadrao[0].descricao || undefined,
+        });
+
+        // Buscar o ID do repertório recém-criado
+        const novoRepertorioResult = await db
+          .select()
+          .from(repertoriosPersonalizados)
+          .where(eq(repertoriosPersonalizados.userId, ctx.user.id))
+          .orderBy(sql`id DESC`)
+          .limit(1);
+
+        const novoRepertorioId = novoRepertorioResult[0].id;
+
+        // Copiar músicas
+        if (musicasPadrao.length > 0) {
+          await db.insert(musicasRepertorioPersonalizado).values(
+            musicasPadrao.map((musica: any, index: number) => ({
+              repertorioId: novoRepertorioId,
+              ordem: index + 1,
+              titulo: musica.titulo,
+              artista: musica.artista || undefined,
+              linkYoutube: musica.linkYoutube || undefined,
+              linkCifra: musica.linkCifra || undefined,
+              linkLetra: musica.linkLetra || undefined,
+              tom: musica.tom || undefined,
+              tags: musica.tags || undefined,
+              comentario: musica.comentario || undefined,
+              momento: musica.momentoId?.toString() || "entrada",
+            }))
+          );
+        }
+
+        return { success: true, repertorioId: novoRepertorioId };
+      } catch (e) {
+        console.error("Error copying repertorio:", e);
+        throw new Error("Erro ao copiar repertório");
       }
     }),
 });

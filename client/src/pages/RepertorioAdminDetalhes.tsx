@@ -33,6 +33,15 @@ export default function RepertorioAdminDetalhes() {
   const incrementarCliqueMutation = (trpc as any).repertorio.incrementarCliqueMusica.useMutation();
   const addFavoritaMutation = (trpc as any).musicasAdminFavoritas.add.useMutation();
   const removeFavoritaMutation = (trpc as any).musicasAdminFavoritas.remove.useMutation();
+  const copiarComoBaseMutation = (trpc as any).repertorio.copiarComoBase.useMutation({
+    onSuccess: (data: any) => {
+      toast.success("Repertório copiado com sucesso!");
+      window.location.href = `/repertorio-personalizado/${data.repertorioId}`;
+    },
+    onError: () => {
+      toast.error("Erro ao copiar repertório");
+    },
+  });
 
   const handleClickLink = (musicaId: number, tipo: "youtube" | "cifra", url: string) => {
     incrementarCliqueMutation.mutate({ musicaId, tipo });
@@ -242,6 +251,19 @@ export default function RepertorioAdminDetalhes() {
           <Button onClick={handleExportarPDF} variant="outline" className="gap-2">
             <Download className="w-4 h-4" />
             Exportar PDF
+          </Button>
+          <Button 
+            onClick={() => copiarComoBaseMutation.mutate({ repertorioId })}
+            variant="default" 
+            className="gap-2"
+            disabled={copiarComoBaseMutation.isPending}
+          >
+            {copiarComoBaseMutation.isPending ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Music className="w-4 h-4" />
+            )}
+            Usar como Base
           </Button>
           <ShareArticle
             titulo={repertorio.nome}

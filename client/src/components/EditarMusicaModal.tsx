@@ -16,6 +16,9 @@ interface EditarMusicaModalProps {
     artista?: string | null;
     youtube?: string | null;
     cifra?: string | null;
+    letra?: string | null;
+    tom?: string | null;
+    tags?: string | null;
     observacao?: string | null;
     ordem?: number;
   };
@@ -28,6 +31,9 @@ export function EditarMusicaModal({ open, onClose, musica, onSuccess }: EditarMu
     artista: "",
     youtube: "",
     cifra: "",
+    letra: "",
+    tom: "",
+    tags: "",
     observacao: "",
     ordem: 1,
   });
@@ -50,6 +56,9 @@ export function EditarMusicaModal({ open, onClose, musica, onSuccess }: EditarMu
         artista: musica.artista || "",
         youtube: musica.youtube || "",
         cifra: musica.cifra || "",
+        letra: musica.letra || "",
+        tom: musica.tom || "",
+        tags: musica.tags || "",
         observacao: musica.observacao || "",
         ordem: musica.ordem || 1,
       });
@@ -109,6 +118,37 @@ export function EditarMusicaModal({ open, onClose, musica, onSuccess }: EditarMu
               value={form.cifra}
               onChange={(e) => setForm({ ...form, cifra: e.target.value })}
               placeholder="https://..."
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="letra">Link da Letra</Label>
+            <Input
+              id="letra"
+              type="url"
+              value={form.letra}
+              onChange={(e) => setForm({ ...form, letra: e.target.value })}
+              placeholder="https://letras.mus.br/..."
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="tom">Tom</Label>
+            <Input
+              id="tom"
+              value={form.tom}
+              onChange={(e) => setForm({ ...form, tom: e.target.value })}
+              placeholder="Ex: C, Dm, F#"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="tags">Tags</Label>
+            <Input
+              id="tags"
+              value={form.tags}
+              onChange={(e) => setForm({ ...form, tags: e.target.value })}
+              placeholder="Separadas por vírgula"
             />
           </div>
 

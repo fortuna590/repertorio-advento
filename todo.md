@@ -3095,21 +3095,20 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Atualizar RepertorioAdmin.tsx com campos linkLetra, tom, tags, comentario
 - [x] Atualizar backend musicasBase.ts com novos campos
 - [x] Atualizar AdicionarMusicaModal.tsx com novos campos
-- [ ] Atualizar EditarMusicaModal.tsx com novos campos
+- [x] Atualizar EditarMusicaModal.tsx com novos campos
 - [ ] Permitir múltiplas músicas por momento (já permite)
 - [ ] Verificar responsividade mobile dos formulários
-- [ ] Testar edição completa
-
-### Sistema de Favoritos
-- [ ] Criar mutation para adicionar/remover favorito
-- [ ] Adicionar botão de coração nas músicas dos repertórios padrões
-- [ ] Criar página BibliotecaFavoritos para listar músicas favoritas
-- [ ] Adicionar contador de favoritos
+- [ ] Testar edição completa### Sistema de Favoritos
+- [x] Criar mutation para adicionar/remover favorito (já existe musicasAdminFavoritas)
+- [x] Adicionar botão de coração nas músicas dos repertórios padrões (já existe)
+- [ ] Melhorar botão de favorito para mostrar estado real (isFavorite)
+- [ ] Criar página de biblioteca pessoal de favoritos
+- [ ] Testar sistema completonar contador de favoritos
 - [ ] Testar fluxo completo de favoritar
 
 ### Copiar Repertório como Base
-- [ ] Criar mutation para copiar repertório padrão
-- [ ] Adicionar botão "Usar como base" nos repertórios padrões
-- [ ] Implementar lógica de cópia para repertório personalizado
-- [ ] Redirecionar para edição do novo repertório
+- [x] Criar mutation para copiar repertório padrão (copiarComoBase)
+- [x] Adicionar botão "Usar como Base" nos repertórios padrões
+- [x] Implementar criação de repertório personalizado a partir do padrão
+- [ ] Testar fluxo completo de cópiaório
 - [ ] Testar fluxo completo de cópia
