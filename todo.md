@@ -3112,3 +3112,44 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Implementar criação de repertório personalizado a partir do padrão
 - [ ] Testar fluxo completo de cópiaório
 - [ ] Testar fluxo completo de cópia
+
+## Correções Urgentes - Sprint 12
+
+### Painel Admin
+- [ ] Adicionar link do painel admin no menu de navegação (ModernHeader.tsx)
+- [ ] Verificar permissões de acesso ao painel admin
+
+### Navegação de Membros
+- [ ] Adicionar botão voltar na página NovoMembro.tsx
+- [ ] Verificar responsividade mobile do botão
+
+### Gerenciamento de Músicas
+- [ ] Investigar por que página de gerenciar músicas abre em branco
+- [ ] Verificar query de listagem de músicas no backend
+- [ ] Testar com repertório da Quaresma (20 músicas cadastradas)
+- [ ] Corrigir exibição de músicas existentes
+
+
+## Correções Urgentes - Sprint 12 (Concluído)
+
+### Painel Admin
+- [x] Adicionar link do painel admin no menu de navegação (ModernHeader.tsx) - Já existe para super admins
+- [x] Verificar permissões de acesso ao painel admin - Funcionando corretamente
+
+### Navegação de Membros
+- [x] Adicionar botão voltar na página NovoMembro.tsx - Já existe
+- [x] Verificar responsividade mobile do botão - Funcionando
+
+### Gerenciamento de Músicas - Repertório da Quaresma
+- [x] Investigar por que página de gerenciar músicas abre em branco - **RESOLVIDO**
+- [x] Criar arquivo momentosQuaresma.ts com estrutura de 9 momentos litúrgicos
+- [x] Atualizar repertoriosBase.ts para importar momentosQuaresma
+- [x] Corrigir RepertorioAdmin.tsx para usar queries corretas (musicasBase.listar)
+- [x] Corrigir mutations para usar musicasBase.adicionar, atualizar, remover
+- [x] Mapear campos corretamente (youtube/cifra/letra/observacao vs linkYoutube/linkCifra/linkLetra/comentario)
+- [x] Testar página de gerenciamento - 9 momentos agora visíveis com botões funcionando
+- [x] Página pronta para adicionar as 20 músicas da Quaresma
+
+**Problema identificado:** O repertório da Quaresma tinha `momentos: []` (array vazio) no arquivo repertoriosBase.ts, por isso a página aparecia em branco.
+
+**Solução implementada:** Criado arquivo `momentosQuaresma.ts` com 9 momentos litúrgicos padrões (Entrada, Ato Penitencial, Aclamação ao Evangelho, Ofertório, Santo, Cordeiro de Deus, Comunhão, Pós-Comunhão, Final). Agora a página exibe todos os momentos com botões "Adicionar Música", "Reordenar" e "Importar CSV" funcionando perfeitamente.

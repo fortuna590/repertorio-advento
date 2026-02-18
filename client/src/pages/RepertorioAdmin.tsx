@@ -88,7 +88,7 @@ export function RepertorioAdmin() {
     { repertorioId: editingId || 0 },
     { enabled: !!editingId }
   );
-  const musicasQuery = (trpc as any).repertorio.listMusicasRepertorio.useQuery(
+  const musicasQuery = (trpc as any).musicasBase.listar.useQuery(
     { repertorioId: editingId || 0 },
     { enabled: !!editingId }
   );
@@ -104,9 +104,9 @@ export function RepertorioAdmin() {
   const createMomentoMutation = (trpc as any).repertorio.createMomento.useMutation();
   const updateMomentoMutation = (trpc as any).repertorio.updateMomento.useMutation();
   const deleteMomentoMutation = (trpc as any).repertorio.deleteMomento.useMutation();
-  const createMusicaMutation = (trpc as any).repertorio.createMusica.useMutation();
-  const updateMusicaMutation = (trpc as any).repertorio.updateMusica.useMutation();
-  const deleteMusicaMutation = (trpc as any).repertorio.deleteMusica.useMutation();
+  const createMusicaMutation = (trpc as any).musicasBase.adicionar.useMutation();
+  const updateMusicaMutation = (trpc as any).musicasBase.atualizar.useMutation();
+  const deleteMusicaMutation = (trpc as any).musicasBase.remover.useMutation();
   const toggleVisibilidadeMutation = (trpc as any).repertorio.toggleVisibilidade.useMutation();
 
   const handleSaveRepertorio = async () => {
@@ -187,15 +187,31 @@ export function RepertorioAdmin() {
       const momento = momentos[0];
       if (editingMusicaId) {
         await updateMusicaMutation.mutateAsync({
-          id: editingMusicaId,
-          ...musicaForm,
+          id: editingMusicaId.toString(),
+          titulo: musicaForm.titulo,
+          artista: musicaForm.artista,
+          youtube: musicaForm.linkYoutube,
+          cifra: musicaForm.linkCifra,
+          letra: musicaForm.linkLetra,
+          tom: musicaForm.tom,
+          tags: musicaForm.tags,
+          observacao: musicaForm.comentario,
+          ordem: musicaForm.ordem,
         });
         setEditingMusicaId(null);
       } else {
         await createMusicaMutation.mutateAsync({
-          repertorioId: editingId,
-          momentoId: momento?.id || 1,
-          ...musicaForm,
+          repertorioId: editingId.toString(),
+          momentoId: (momento?.id || 1).toString(),
+          titulo: musicaForm.titulo,
+          artista: musicaForm.artista,
+          youtube: musicaForm.linkYoutube,
+          cifra: musicaForm.linkCifra,
+          letra: musicaForm.linkLetra,
+          tom: musicaForm.tom,
+          tags: musicaForm.tags,
+          observacao: musicaForm.comentario,
+          ordem: musicaForm.ordem,
         });
       }
       setMusicaForm({
@@ -219,7 +235,7 @@ export function RepertorioAdmin() {
   const handleDeleteMusica = async (id: number) => {
     if (confirm("Tem certeza que deseja deletar esta música?")) {
       try {
-        await deleteMusicaMutation.mutateAsync({ id });
+        await deleteMusicaMutation.mutateAsync({ id: id.toString() });
         await musicasQuery.refetch();
       } catch (error) {
         console.error("Erro ao deletar música:", error);
@@ -231,13 +247,13 @@ export function RepertorioAdmin() {
     setMusicaForm({
       titulo: musica.titulo,
       artista: musica.artista || "",
-      descricao: musica.descricao || "",
-      linkYoutube: musica.linkYoutube || "",
-      linkCifra: musica.linkCifra || "",
-      linkLetra: musica.linkLetra || "",
+      descricao: "",
+      linkYoutube: musica.youtube || "",
+      linkCifra: musica.cifra || "",
+      linkLetra: musica.letra || "",
       tom: musica.tom || "",
       tags: musica.tags || "",
-      comentario: musica.comentario || "",
+      comentario: musica.observacao || "",
       ordem: musica.ordem,
     });
     setEditingMusicaId(musica.id);

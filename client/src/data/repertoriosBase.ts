@@ -1,4 +1,5 @@
 import { repertorio as momentosAdvento } from "./repertorio";
+import { momentosQuaresma } from "./momentosQuaresma";
 
 export interface RepertorioBase {
   id: string;
@@ -18,7 +19,7 @@ export const repertoriosBase: RepertorioBase[] = [
     id: "quaresma",
     titulo: "Quaresma",
     descricao: "Repertório litúrgico para o tempo da Quaresma",
-    momentos: [], // Será preenchido futuramente
+    momentos: momentosQuaresma,
   },
   {
     id: "pascoa",
