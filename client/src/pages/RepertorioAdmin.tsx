@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ColorPicker } from "@/components/ColorPicker";
 import { trpc } from "@/lib/trpc";
 import { Music, Plus, Edit2, Trash2, Eye, Save, Settings } from "lucide-react";
@@ -32,6 +33,7 @@ interface MusicaForm {
   titulo: string;
   artista: string;
   descricao: string;
+  momentoId: string; // ID do momento litúrgico
   linkYoutube: string;
   linkCifra: string;
   linkLetra: string;
@@ -70,6 +72,7 @@ export function RepertorioAdmin() {
     titulo: "",
     artista: "",
     descricao: "",
+    momentoId: "", // Momento selecionado
     linkYoutube: "",
     linkCifra: "",
     linkLetra: "",
@@ -182,7 +185,14 @@ export function RepertorioAdmin() {
   };
 
   const handleAddMusica = async () => {
-    if (!editingId || !musicaForm.titulo) return;
+    if (!editingId || !musicaForm.titulo) {
+      alert("Preencha o título da música");
+      return;
+    }
+    if (!musicaForm.momentoId) {
+      alert("Selecione o momento litúrgico");
+      return;
+    }
     try {
       const momento = momentos[0];
       if (editingMusicaId) {
@@ -202,7 +212,7 @@ export function RepertorioAdmin() {
       } else {
         await createMusicaMutation.mutateAsync({
           repertorioId: editingId.toString(),
-          momentoId: (momento?.id || 1).toString(),
+          momentoId: musicaForm.momentoId,
           titulo: musicaForm.titulo,
           artista: musicaForm.artista,
           youtube: musicaForm.linkYoutube,
@@ -218,6 +228,7 @@ export function RepertorioAdmin() {
         titulo: "",
         artista: "",
         descricao: "",
+        momentoId: "",
         linkYoutube: "",
         linkCifra: "",
         linkLetra: "",
@@ -248,6 +259,7 @@ export function RepertorioAdmin() {
       titulo: musica.titulo,
       artista: musica.artista || "",
       descricao: "",
+      momentoId: musica.momentoId || "",
       linkYoutube: musica.youtube || "",
       linkCifra: musica.cifra || "",
       linkLetra: musica.letra || "",
@@ -597,6 +609,21 @@ export function RepertorioAdmin() {
                     value={musicaForm.artista}
                     onChange={(e) => setMusicaForm({ ...musicaForm, artista: e.target.value })}
                   />
+                  <Select
+                    value={musicaForm.momentoId}
+                    onValueChange={(value) => setMusicaForm({ ...musicaForm, momentoId: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione o momento" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {momentos.map((momento: any) => (
+                        <SelectItem key={momento.id} value={momento.id.toString()}>
+                          {momento.nome}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <Input
                     placeholder="Link YouTube"
                     value={musicaForm.linkYoutube}

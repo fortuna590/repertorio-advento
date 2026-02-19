@@ -3153,3 +3153,12 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 **Problema identificado:** O repertório da Quaresma tinha `momentos: []` (array vazio) no arquivo repertoriosBase.ts, por isso a página aparecia em branco.
 
 **Solução implementada:** Criado arquivo `momentosQuaresma.ts` com 9 momentos litúrgicos padrões (Entrada, Ato Penitencial, Aclamação ao Evangelho, Ofertório, Santo, Cordeiro de Deus, Comunhão, Pós-Comunhão, Final). Agora a página exibe todos os momentos com botões "Adicionar Música", "Reordenar" e "Importar CSV" funcionando perfeitamente.
+
+
+## Melhorias no Formulário de Criação de Músicas - Sprint 13
+
+- [x] Adicionar campo de seleção de momento litúrgico no formulário de criação de músicas
+- [x] Criar dropdown com lista de momentos disponíveis (Entrada, Ato Penitencial, etc.)
+- [x] Validar que momento é obrigatório ao criar música
+- [x] Testar criação de música com momento selecionado
+- [ ] Corrigir incompatibilidade entre RepertorioAdmin.tsx e mutations de musicasBase
