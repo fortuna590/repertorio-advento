@@ -1,0 +1,25 @@
+{
+  "query": "SELECT DISTINCT momentoId FROM musicasRepertorioBase WHERE repertorioId = 'quaresma' ORDER BY momentoId;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT DISTINCT momentoId FROM musicasRepertorioBase WHERE repertorioId = 'quaresma' ORDER BY momentoId;",
+  "rows": [
+    {
+      "momentoId": "aclamacao-evangelho"
+    },
+    {
+      "momentoId": "ato-penitencial"
+    },
+    {
+      "momentoId": "comunhao"
+    },
+    {
+      "momentoId": "entrada"
+    },
+    {
+      "momentoId": "ofertorio"
+    }
+  ],
+  "messages": [],
+  "stdout": "momentoId\naclamacao-evangelho\nato-penitencial\ncomunhao\nentrada\nofertorio\n",
+  "stderr": "",
+  "execution_time_ms": 52
+}

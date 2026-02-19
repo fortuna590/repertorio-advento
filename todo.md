@@ -3162,3 +3162,29 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Validar que momento é obrigatório ao criar música
 - [x] Testar criação de música com momento selecionado
 - [ ] Corrigir incompatibilidade entre RepertorioAdmin.tsx e mutations de musicasBase
+
+
+## Importação de Músicas da Quaresma - Sprint 14
+
+- [ ] Ler documento RepertórioMusicalparaaQuaresma.docx
+- [ ] Extrair informações de todas as músicas (título, artista, momento)
+- [ ] Mapear músicas para momentos litúrgicos corretos
+- [ ] Inserir músicas no banco de dados (tabela musicasRepertorioBase)
+- [ ] Verificar que todas as músicas foram inseridas corretamente
+
+
+## Importação de Músicas da Quaresma - Sprint 14 (Concluído Parcialmente)
+
+- [x] Ler documento do usuário com músicas da Quaresma  
+- [x] Mapear músicas para momentos litúrgicos corretos
+- [x] Inserir 21 músicas no banco de dados (tabela musicasRepertorioBase)
+- [ ] Investigar e corrigir problema de exibição na interface (músicas estão no banco mas não aparecem na página)
+
+**Status**: 21 músicas inseridas com sucesso no banco de dados, distribuídas em:
+- Entrada: 8 músicas
+- Ato Penitencial: 2 músicas
+- Aclamação ao Evangelho: 1 música
+- Ofertório: 1 música
+- Comunhão: 8 músicas
+
+**Problema Identificado**: As músicas foram inseridas corretamente no banco de dados mas não estão sendo exibidas na interface do RepertorioBaseAdmin.tsx. Requer investigação adicional da query tRPC e do fluxo de dados.

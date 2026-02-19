@@ -1,0 +1,80 @@
+{
+  "query": "SELECT id, repertorioId, momentoId, titulo, artista FROM musicasRepertorioBase WHERE repertorioId = 'quaresma' LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT id, repertorioId, momentoId, titulo, artista FROM musicasRepertorioBase WHERE repertorioId = 'quaresma' LIMIT 10;",
+  "rows": [
+    {
+      "id": "1",
+      "repertorioId": "quaresma",
+      "momentoId": "aclamacao-evangelho",
+      "titulo": "Louvor e glória a ti, Senhor",
+      "artista": "CNBB"
+    },
+    {
+      "id": "2",
+      "repertorioId": "quaresma",
+      "momentoId": "ato-penitencial",
+      "titulo": "Piedade, Ó Senhor",
+      "artista": "CNBB"
+    },
+    {
+      "id": "3",
+      "repertorioId": "quaresma",
+      "momentoId": "entrada",
+      "titulo": "Pecador, Agora É Tempo",
+      "artista": "CNBB"
+    },
+    {
+      "id": "4",
+      "repertorioId": "quaresma",
+      "momentoId": "entrada",
+      "titulo": "Reconciliai-vos com Deus",
+      "artista": "CNBB"
+    },
+    {
+      "id": "5",
+      "repertorioId": "quaresma",
+      "momentoId": "entrada",
+      "titulo": "Quando invocar, eu atenderei",
+      "artista": "CNBB"
+    },
+    {
+      "id": "6",
+      "repertorioId": "quaresma",
+      "momentoId": "entrada",
+      "titulo": "Alegres vamos à casa do Pai",
+      "artista": "CNBB"
+    },
+    {
+      "id": "7",
+      "repertorioId": "quaresma",
+      "momentoId": "entrada",
+      "titulo": "Dizei aos cativos: Sai!",
+      "artista": "CNBB"
+    },
+    {
+      "id": "8",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao",
+      "titulo": "O vosso coração de pedra",
+      "artista": "CNBB"
+    },
+    {
+      "id": "9",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao",
+      "titulo": "Então da nuvem luminosa",
+      "artista": "CNBB"
+    },
+    {
+      "id": "10",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao",
+      "titulo": "Se conhecesses o dom de Deus",
+      "artista": "CNBB"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\trepertorioId\tmomentoId\ttitulo\tartista\n1\tquaresma\taclamacao-evangelho\tLouvor e glória a ti, Senhor\tCNBB\n2\tquaresma\tato-penitencial\tPiedade, Ó Senhor\tCNBB\n3\tquaresma\tentrada\tPecador, Agora É Tempo\tCNBB\n4\tquaresma\tentrada\tReconciliai-vos com Deus\tCNBB\n5\tquaresma\tentrada\tQuando invocar, eu atenderei\tCNBB\n6\tquaresma\tentrada\tAlegres vamos à casa do Pai\tCNBB\n7\tquaresma\tentrada\tDizei aos cativos: Sai!\tCNBB\n8\tquaresma\tcomunhao\tO vosso coração de pedra\tCNBB\n9\tquaresma\tcomunhao\tEntão da nuvem luminosa\tCNBB\n10\tquaresma\tcomunhao\tSe conhecesses o dom de Deus\tCNBB\n",
+  "stderr": "",
+  "execution_time_ms": 52
+}

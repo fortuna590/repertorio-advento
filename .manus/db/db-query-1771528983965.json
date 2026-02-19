@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO musicasRepertorioBase (repertorioId, momentoId, titulo, artista, youtube, cifra, observacao, ordem) VALUES\n('quaresma', 'ofertorio', 'Ó morte, estás vencida', 'CNBB', '', '', 'Oferendas (Quaresma)', 1),\n('quaresma', 'ato-penitencial', 'Senhor, que Vieste Salvar', 'Coral Canção Nova', '', '', 'Ato Penitencial', 2),\n('quaresma', 'entrada', 'Hosana ao Filho de Davi', 'CNBB', '', '', 'Procissão de Ramos', 6),\n('quaresma', 'entrada', 'Hosana, hosana e viva!', 'CNBB', '', '', 'Procissão de Ramos', 7),\n('quaresma', 'entrada', 'Os filhos dos hebreus', 'CNBB', '', '', 'Procissão de Ramos', 8);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute INSERT INTO musicasRepertorioBase (repertorioId, momentoId, titulo, artista, youtube, cifra, observacao, ordem) VALUES\n('quaresma', 'ofertorio', 'Ó morte, estás vencida', 'CNBB', '', '', 'Oferendas (Quaresma)', 1),\n('quaresma', 'ato-penitencial', 'Senhor, que Vieste Salvar', 'Coral Canção Nova', '', '', 'Ato Penitencial', 2),\n('quaresma', 'entrada', 'Hosana ao Filho de Davi', 'CNBB', '', '', 'Procissão de Ramos', 6),\n('quaresma', 'entrada', 'Hosana, hosana e viva!', 'CNBB', '', '', 'Procissão de Ramos', 7),\n('quaresma', 'entrada', 'Os filhos dos hebreus', 'CNBB', '', '', 'Procissão de Ramos', 8);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 63
+}

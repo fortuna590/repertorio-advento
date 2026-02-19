@@ -1,0 +1,30 @@
+{
+  "query": "SELECT momentoId, COUNT(*) as total FROM musicasRepertorioBase WHERE repertorioId = 'quaresma' GROUP BY momentoId ORDER BY momentoId;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT momentoId, COUNT(*) as total FROM musicasRepertorioBase WHERE repertorioId = 'quaresma' GROUP BY momentoId ORDER BY momentoId;",
+  "rows": [
+    {
+      "momentoId": "aclamacao-evangelho",
+      "total": "1"
+    },
+    {
+      "momentoId": "ato-penitencial",
+      "total": "2"
+    },
+    {
+      "momentoId": "comunhao",
+      "total": "8"
+    },
+    {
+      "momentoId": "entrada",
+      "total": "8"
+    },
+    {
+      "momentoId": "ofertorio",
+      "total": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "momentoId\ttotal\naclamacao-evangelho\t1\nato-penitencial\t2\ncomunhao\t8\nentrada\t8\nofertorio\t1\n",
+  "stderr": "",
+  "execution_time_ms": 51
+}
