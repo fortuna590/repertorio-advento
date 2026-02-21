@@ -3188,3 +3188,32 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - Comunhão: 8 músicas
 
 **Problema Identificado**: As músicas foram inseridas corretamente no banco de dados mas não estão sendo exibidas na interface do RepertorioBaseAdmin.tsx. Requer investigação adicional da query tRPC e do fluxo de dados.
+
+
+## Correção de Exibição de Músicas - Sprint 15 (BLOQUEADO)
+
+### Status Atual
+- ✅ 20 músicas inseridas no banco de dados (`musicasRepertorioBase`)
+- ✅ Distribuição correta por momentos (entrada: 8, ato-penitencial: 2, aclamacao-evangelho: 1, ofertorio: 1, comunhao: 8)
+- ❌ Músicas NÃO aparecem na interface `/repertorio-base-admin/quaresma`
+- ❌ Query tRPC `musicasBase.listar` NÃO está sendo executada (log não aparece no servidor)
+- ❌ Console.log do frontend NÃO aparece (componente pode não renderizar corretamente)
+
+### Investigação Realizada
+- [x] Verificar dados no banco de dados - ✅ 20 músicas confirmadas
+- [x] Verificar router tRPC - ✅ Exportado corretamente
+- [x] Verificar query `listar` - ✅ Implementada corretamente
+- [x] Adicionar `refetchOnMount: 'always'` e `staleTime: 0` - ❌ Não resolveu
+- [x] Testar com logs no backend - ❌ Log não aparece (query não executada)
+- [x] Testar com logs no frontend - ❌ Log não aparece (componente pode não renderizar)
+
+### Próximos Passos (Requer Investigação Profunda)
+- [ ] Testar query tRPC diretamente via curl/Postman
+- [ ] Adicionar React Query DevTools para ver estado da query
+- [ ] Adicionar Error Boundary no componente para capturar erros silenciosos
+- [ ] Testar com query SQL simples (sem Drizzle ORM)
+- [ ] Verificar se há middleware bloqueando requisição
+- [ ] Investigar problema de serialização/deserialização do Superjson
+
+### Documentação
+- 📄 Status completo da investigação em `/home/ubuntu/status_investigacao_musicas.md`

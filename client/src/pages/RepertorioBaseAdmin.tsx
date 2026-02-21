@@ -31,9 +31,17 @@ export default function RepertorioBaseAdmin() {
   const repertorioBase = repertoriosBase.find((r: any) => r.id === repertorioId);
 
   // Buscar músicas adicionais do banco
-  const { data: musicasAdicionais = [], refetch } = trpc.musicasBase.listar.useQuery({
-    repertorioId: repertorioId || "",
-  });
+  const { data: musicasAdicionais = [], refetch, isLoading, error } = trpc.musicasBase.listar.useQuery(
+    {
+      repertorioId: repertorioId || "",
+    },
+    {
+      refetchOnMount: 'always',
+      staleTime: 0,
+    }
+  );
+
+
 
   // Mutation de remoção
   const removerMutation = trpc.musicasBase.remover.useMutation({
