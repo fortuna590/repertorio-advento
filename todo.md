@@ -3217,3 +3217,13 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 
 ### Documentação
 - 📄 Status completo da investigação em `/home/ubuntu/status_investigacao_musicas.md`
+
+
+## Correção do Modal de Edição de Escalas - Sprint 16
+
+- [ ] Adicionar botão "Salvar Alterações" no modal de edição de escalas
+- [ ] Corrigir botão "Fechar" que não funciona
+- [ ] Corrigir botão "Adicionar Participante" que não funciona
+- [ ] Permitir editar tipos de músicos quando tipo de escala é "Músicos"
+- [ ] Testar edição completa de escalas
+- [ ] Testar em mobile (responsividade)

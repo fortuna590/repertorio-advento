@@ -923,23 +923,44 @@ export default function EscalaDetalhes() {
                     </SelectContent>
                   </Select>
                 </div>
+                
+                {/* Seção de Edição de Funções de Músicos */}
+                {editTipo === "musicos" && escala?.funcoes && escala.funcoes.length > 0 && (
+                  <div className="border-t border-purple-500/30 pt-4">
+                    <Label className="text-base font-semibold mb-3 block">Tipos de Músicos</Label>
+                    <div className="space-y-3 max-h-48 overflow-y-auto">
+                      {escala.funcoes.map((funcao: any) => (
+                        <div key={funcao.id} className="p-3 bg-slate-700/50 rounded-lg border border-purple-500/20">
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1">
+                              <p className="font-medium text-purple-200">{funcao.nome}</p>
+                              {funcao.descricao && (
+                                <p className="text-sm text-purple-300 mt-1">{funcao.descricao}</p>
+                              )}
+                            </div>
+                            <span className="text-sm text-purple-400 ml-2">Ordem: {funcao.ordem}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-xs text-purple-400 mt-3">💡 Para editar tipos de músicos, use a seção de participantes abaixo</p>
+                  </div>
+                )}
+                
                 <div className="flex gap-2">
                   <Button
-                    onClick={handleAdicionarParticipante}
+                    onClick={handleAtualizarEscala}
                     className="flex-1"
-                    disabled={adicionarParticipanteMutation.isPending}
+                    disabled={atualizarEscalaMutation.isPending}
                   >
-                    {adicionarParticipanteMutation.isPending ? "Adicionando..." : "Adicionar Participante"}
+                    {atualizarEscalaMutation.isPending ? "Salvando..." : "Salvar Alterações"}
                   </Button>
                   <Button
                     variant="outline"
-                    onClick={() => {
-                      setOpenAddParticipante(false);
-                      resetForm();
-                    }}
-                    disabled={adicionarParticipanteMutation.isPending}
+                    onClick={() => setOpenEditEscala(false)}
+                    disabled={atualizarEscalaMutation.isPending}
                   >
-                    Fechar
+                    Cancelar
                   </Button>
                 </div>
               </div>
