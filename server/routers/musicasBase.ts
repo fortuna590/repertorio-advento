@@ -43,6 +43,7 @@ export const musicasBaseRouter = router({
         artista: z.string().optional(),
         youtube: z.string().url().optional().or(z.literal("")),
         cifra: z.string().url().optional().or(z.literal("")),
+        letra: z.string().url().optional().or(z.literal("")),
         ordem: z.number().optional(),
       })
     )
@@ -70,6 +71,7 @@ export const musicasBaseRouter = router({
         artista: input.artista || null,
         youtube: input.youtube || null,
         cifra: input.cifra || null,
+        letra: input.letra || null,
         ordem: input.ordem || 999,
       });
 
@@ -86,6 +88,7 @@ export const musicasBaseRouter = router({
           artista: input.artista,
           youtube: input.youtube,
           cifra: input.cifra,
+          letra: input.letra,
           ordem: input.ordem || 999,
         }),
       });
@@ -102,6 +105,7 @@ export const musicasBaseRouter = router({
         artista: z.string().optional(),
         youtube: z.string().url().optional().or(z.literal("")),
         cifra: z.string().url().optional().or(z.literal("")),
+        letra: z.string().url().optional().or(z.literal("")),
         ordem: z.number().optional(),
       })
     )

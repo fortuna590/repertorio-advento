@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { validateMusicaUrls } from "@/lib/urlValidation";
 
 interface AdicionarMusicaModalProps {
   open: boolean;
@@ -66,6 +67,19 @@ export function AdicionarMusicaModal({
       return;
     }
 
+    // Validar URLs
+    const urlValidation = validateMusicaUrls(
+      youtube.trim(),
+      cifra.trim(),
+      letra.trim()
+    );
+
+    if (!urlValidation.isValid) {
+      const errors = Object.values(urlValidation.errors).join(", ");
+      toast.error(`Erro na validação: ${errors}`);
+      return;
+    }
+
     adicionarMutation.mutate({
       repertorioId,
       momentoId,
@@ -73,6 +87,7 @@ export function AdicionarMusicaModal({
       artista: artista.trim() || undefined,
       youtube: youtube.trim() || undefined,
       cifra: cifra.trim() || undefined,
+      letra: letra.trim() || undefined,
     });
   };
 

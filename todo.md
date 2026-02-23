@@ -3236,3 +3236,10 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [ ] Testar criação de equipe e verificar resposta da API
 - [ ] Corrigir problema de salvamento
 - [ ] Validar que equipes são salvas e recuperadas corretamente
+
+
+## Melhorias Implementadas (Checkpoint 8af31a20)
+
+- [x] Adicionar coluna letra ao schema e executar migração pnpm db:push
+- [x] Implementar validação de URLs no frontend (YouTube e Cifra)
+- [x] Criar página pública de visualização de repertórios (Advento, Quaresma, etc.)

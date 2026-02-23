@@ -415,6 +415,7 @@ export const musicasRepertorioBase = mysqlTable("musicasRepertorioBase", {
   artista: varchar("artista", { length: 255 }),
   youtube: varchar("youtube", { length: 500 }),
   cifra: varchar("cifra", { length: 500 }),
+  letra: varchar("letra", { length: 500 }), // Link para letra em letras.mus.br
   ordem: int("ordem").default(999), // Ordem de exibição
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),

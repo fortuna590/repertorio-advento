@@ -48,6 +48,7 @@ import Escalas from "./pages/Escalas";
 import EscalaDetalhes from "./pages/EscalaDetalhes";
 import ConfirmarPresenca from "./pages/ConfirmarPresenca";
 import MinhasEscalas from "./pages/MinhasEscalas";
+import RepertoriosPublicos from "./pages/RepertoriosPublicos";
 import Templates from "./pages/Templates";
 import AdminUsuarios from "./pages/AdminUsuarios";
 import AdminLogs from "./pages/AdminLogs";
@@ -76,6 +77,7 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/repertorios"} component={Repertorios} />
+      <Route path={"/repertorios-publicos"} component={RepertoriosPublicos} />
       <Route path={"/repertorio"} component={Repertorio} />
       <Route path={"/repertorio/missa-do-galo"} component={RepertorioMissaDoGalo} />
       <Route path={"/repertorio/tempo-do-natal"} component={RepertorioTempoDoNatal} />
