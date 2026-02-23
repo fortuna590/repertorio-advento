@@ -1,0 +1,64 @@
+{
+  "query": "SELECT id, nome, userId, createdAt FROM equipes LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT id, nome, userId, createdAt FROM equipes LIMIT 10;",
+  "rows": [
+    {
+      "id": "1",
+      "nome": "Coral Sagrado",
+      "userId": "8820001",
+      "createdAt": "2026-02-16 07:42:23"
+    },
+    {
+      "id": "2",
+      "nome": "Coral Sagrado",
+      "userId": "8820001",
+      "createdAt": "2026-02-16 07:46:02"
+    },
+    {
+      "id": "30001",
+      "nome": "Equipe Teste Mobile",
+      "userId": "8820001",
+      "createdAt": "2026-02-17 03:09:58"
+    },
+    {
+      "id": "60001",
+      "nome": "CORAL SAGRADO",
+      "userId": "12540026",
+      "createdAt": "2026-02-17 18:14:26"
+    },
+    {
+      "id": "90001",
+      "nome": "Coral Sagrado",
+      "userId": "8820001",
+      "createdAt": "2026-02-18 02:22:05"
+    },
+    {
+      "id": "120001",
+      "nome": "Coral Sagrado",
+      "userId": "8820001",
+      "createdAt": "2026-02-18 16:20:39"
+    },
+    {
+      "id": "150001",
+      "nome": "Coral Sagrado",
+      "userId": "8820001",
+      "createdAt": "2026-02-19 23:36:28"
+    },
+    {
+      "id": "180001",
+      "nome": "coral SAGRADO",
+      "userId": "8820001",
+      "createdAt": "2026-02-22 03:49:21"
+    },
+    {
+      "id": "210001",
+      "nome": "Equipe de Teste",
+      "userId": "8820001",
+      "createdAt": "2026-02-23 03:26:46"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tnome\tuserId\tcreatedAt\n1\tCoral Sagrado\t8820001\t2026-02-16 07:42:23\n2\tCoral Sagrado\t8820001\t2026-02-16 07:46:02\n30001\tEquipe Teste Mobile\t8820001\t2026-02-17 03:09:58\n60001\tCORAL SAGRADO\t12540026\t2026-02-17 18:14:26\n90001\tCoral Sagrado\t8820001\t2026-02-18 02:22:05\n120001\tCoral Sagrado\t8820001\t2026-02-18 16:20:39\n150001\tCoral Sagrado\t8820001\t2026-02-19 23:36:28\n180001\tcoral SAGRADO\t8820001\t2026-02-22 03:49:21\n210001\tEquipe de Teste\t8820001\t2026-02-23 03:26:46\n",
+  "stderr": "",
+  "execution_time_ms": 48
+}

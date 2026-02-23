@@ -27,6 +27,7 @@ export default function Equipes() {
   const { user, loading: authLoading } = useAuth();
   const { data: equipes, isLoading } = trpc.equipes.listar.useQuery(undefined, {
     enabled: !!user,
+    refetchOnMount: 'always',
   });
 
   if (authLoading || isLoading) {

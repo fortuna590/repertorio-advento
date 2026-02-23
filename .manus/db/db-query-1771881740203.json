@@ -1,0 +1,35 @@
+{
+  "query": "SELECT COUNT(*) as total, repertorioId, momentoId FROM musicasRepertorioBase WHERE repertorioId = 'quaresma' GROUP BY repertorioId, momentoId;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT COUNT(*) as total, repertorioId, momentoId FROM musicasRepertorioBase WHERE repertorioId = 'quaresma' GROUP BY repertorioId, momentoId;",
+  "rows": [
+    {
+      "total": "16",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao"
+    },
+    {
+      "total": "4",
+      "repertorioId": "quaresma",
+      "momentoId": "ato-penitencial"
+    },
+    {
+      "total": "16",
+      "repertorioId": "quaresma",
+      "momentoId": "entrada"
+    },
+    {
+      "total": "2",
+      "repertorioId": "quaresma",
+      "momentoId": "aclamacao-evangelho"
+    },
+    {
+      "total": "2",
+      "repertorioId": "quaresma",
+      "momentoId": "ofertorio"
+    }
+  ],
+  "messages": [],
+  "stdout": "total\trepertorioId\tmomentoId\n16\tquaresma\tcomunhao\n4\tquaresma\tato-penitencial\n16\tquaresma\tentrada\n2\tquaresma\taclamacao-evangelho\n2\tquaresma\tofertorio\n",
+  "stderr": "",
+  "execution_time_ms": 1412
+}

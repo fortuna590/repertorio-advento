@@ -3227,3 +3227,12 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [ ] Permitir editar tipos de músicos quando tipo de escala é "Músicos"
 - [ ] Testar edição completa de escalas
 - [ ] Testar em mobile (responsividade)
+
+
+## Correção de Salvamento de Equipes - Sprint 17
+
+- [ ] Investigar por que equipes não estão sendo salvas no banco de dados
+- [ ] Analisar mutation de criação de equipes no backend
+- [ ] Testar criação de equipe e verificar resposta da API
+- [ ] Corrigir problema de salvamento
+- [ ] Validar que equipes são salvas e recuperadas corretamente

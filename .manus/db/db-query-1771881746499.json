@@ -1,0 +1,220 @@
+{
+  "query": "SELECT id, titulo, artista, repertorioId, momentoId FROM musicasRepertorioBase WHERE repertorioId = 'quaresma' ORDER BY momentoId, ordem LIMIT 30;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT id, titulo, artista, repertorioId, momentoId FROM musicasRepertorioBase WHERE repertorioId = 'quaresma' ORDER BY momentoId, ordem LIMIT 30;",
+  "rows": [
+    {
+      "id": "1",
+      "titulo": "Louvor e glória a ti, Senhor",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "aclamacao-evangelho"
+    },
+    {
+      "id": "30001",
+      "titulo": "Louvor e glória a ti, Senhor",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "aclamacao-evangelho"
+    },
+    {
+      "id": "2",
+      "titulo": "Piedade, Ó Senhor",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "ato-penitencial"
+    },
+    {
+      "id": "30002",
+      "titulo": "Piedade, Ó Senhor",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "ato-penitencial"
+    },
+    {
+      "id": "17",
+      "titulo": "Senhor, que Vieste Salvar",
+      "artista": "Coral Canção Nova",
+      "repertorioId": "quaresma",
+      "momentoId": "ato-penitencial"
+    },
+    {
+      "id": "30020",
+      "titulo": "Senhor, que Vieste Salvar",
+      "artista": "Coral Canção Nova",
+      "repertorioId": "quaresma",
+      "momentoId": "ato-penitencial"
+    },
+    {
+      "id": "8",
+      "titulo": "O vosso coração de pedra",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao"
+    },
+    {
+      "id": "30004",
+      "titulo": "O vosso coração de pedra",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao"
+    },
+    {
+      "id": "30007",
+      "titulo": "Então da nuvem luminosa",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao"
+    },
+    {
+      "id": "9",
+      "titulo": "Então da nuvem luminosa",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao"
+    },
+    {
+      "id": "10",
+      "titulo": "Se conhecesses o dom de Deus",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao"
+    },
+    {
+      "id": "30008",
+      "titulo": "Se conhecesses o dom de Deus",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao"
+    },
+    {
+      "id": "11",
+      "titulo": "Eu vim para que todos tenham vida",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao"
+    },
+    {
+      "id": "30011",
+      "titulo": "No Senhor é que se encontra o perdão",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao"
+    },
+    {
+      "id": "30012",
+      "titulo": "Eu vim para que todos tenham vida",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao"
+    },
+    {
+      "id": "12",
+      "titulo": "No Senhor é que se encontra o perdão",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao"
+    },
+    {
+      "id": "13",
+      "titulo": "Salve, ó Cristo obediente",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao"
+    },
+    {
+      "id": "30016",
+      "titulo": "Salve, ó Cristo obediente",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao"
+    },
+    {
+      "id": "14",
+      "titulo": "Pai, se este cálice",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao"
+    },
+    {
+      "id": "30018",
+      "titulo": "Pai, se este cálice",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao"
+    },
+    {
+      "id": "30019",
+      "titulo": "No deserto da vida",
+      "artista": "Marcus Vinícius Lima",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao"
+    },
+    {
+      "id": "15",
+      "titulo": "No deserto da vida",
+      "artista": "Marcus Vinícius Lima",
+      "repertorioId": "quaresma",
+      "momentoId": "comunhao"
+    },
+    {
+      "id": "3",
+      "titulo": "Pecador, Agora É Tempo",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "entrada"
+    },
+    {
+      "id": "30003",
+      "titulo": "Pecador, Agora É Tempo",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "entrada"
+    },
+    {
+      "id": "4",
+      "titulo": "Reconciliai-vos com Deus",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "entrada"
+    },
+    {
+      "id": "30005",
+      "titulo": "Reconciliai-vos com Deus",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "entrada"
+    },
+    {
+      "id": "30006",
+      "titulo": "Quando invocar, eu atenderei",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "entrada"
+    },
+    {
+      "id": "5",
+      "titulo": "Quando invocar, eu atenderei",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "entrada"
+    },
+    {
+      "id": "6",
+      "titulo": "Alegres vamos à casa do Pai",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "entrada"
+    },
+    {
+      "id": "30009",
+      "titulo": "Alegres vamos à casa do Pai",
+      "artista": "CNBB",
+      "repertorioId": "quaresma",
+      "momentoId": "entrada"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\ttitulo\tartista\trepertorioId\tmomentoId\n1\tLouvor e glória a ti, Senhor\tCNBB\tquaresma\taclamacao-evangelho\n30001\tLouvor e glória a ti, Senhor\tCNBB\tquaresma\taclamacao-evangelho\n2\tPiedade, Ó Senhor\tCNBB\tquaresma\tato-penitencial\n30002\tPiedade, Ó Senhor\tCNBB\tquaresma\tato-penitencial\n17\tSenhor, que Vieste Salvar\tCoral Canção Nova\tquaresma\tato-penitencial\n30020\tSenhor, que Vieste Salvar\tCoral Canção Nova\tquaresma\tato-penitencial\n8\tO vosso coração de pedra\tCNBB\tquaresma\tcomunhao\n30004\tO vosso coração de pedra\tCNBB\tquaresma\tcomunhao\n30007\tEntão da nuvem luminosa\tCNBB\tquaresma\tcomunhao\n9\tEntão da nuvem luminosa\tCNBB\tquaresma\tcomunhao\n10\tSe conhecesses o dom de Deus\tCNBB\tquaresma\tcomunhao\n30008\tSe conhecesses o dom de Deus\tCNBB\tquaresma\tcomunhao\n11\tEu vim para que todos tenham vida\tCNBB\tquaresma\tcomunhao\n30011\tNo Senhor é que se encontra o perdão\tCNBB\tquaresma\tcomunhao\n30012\tEu vim para que todos tenham vida\tCNBB\tquaresma\tcomunhao\n12\tNo Senhor é que se encontra o perdão\tCNBB\tquaresma\tcomunhao\n13\tSalve, ó Cristo obediente\tCNBB\tquaresma\tcomunhao\n30016\tSalve, ó Cristo obediente\tCNBB\tquaresma\tcomunhao\n14\tPai, se este cálice\tCNBB\tquaresma\tcomunhao\n30018\tPai, se este cálice\tCNBB\tquaresma\tcomunhao\n30019\tNo deserto da vida\tMarcus Vinícius Lima\tquaresma\tcomunhao\n15\tNo deserto da vida\tMarcus Vinícius Lima\tquaresma\tcomunhao\n3\tPecador, Agora É Tempo\tCNBB\tquaresma\tentrada\n30003\tPecador, Agora É Tempo\tCNBB\tquaresma\tentrada\n4\tReconciliai-vos com Deus\tCNBB\tquaresma\tentrada\n30005\tReconciliai-vos com Deus\tCNBB\tquaresma\tentrada\n30006\tQuando invocar, eu atenderei\tCNBB\tquaresma\tentrada\n5\tQuando invocar, eu atenderei\tCNBB\tquaresma\tentrada\n6\tAlegres vamos à casa do Pai\tCNBB\tquaresma\tentrada\n30009\tAlegres vamos à casa do Pai\tCNBB\tquaresma\tentrada\n",
+  "stderr": "",
+  "execution_time_ms": 57
+}

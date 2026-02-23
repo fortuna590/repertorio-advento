@@ -1,0 +1,19 @@
+{
+  "query": "SELECT * FROM equipes WHERE nome = 'Equipe de Teste';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT * FROM equipes WHERE nome = 'Equipe de Teste';",
+  "rows": [
+    {
+      "id": "210001",
+      "userId": "8820001",
+      "nome": "Equipe de Teste",
+      "tipo": "musica",
+      "descricao": "NULL",
+      "createdAt": "2026-02-23 03:26:46",
+      "updatedAt": "2026-02-23 03:26:46"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tuserId\tnome\ttipo\tdescricao\tcreatedAt\tupdatedAt\n210001\t8820001\tEquipe de Teste\tmusica\tNULL\t2026-02-23 03:26:46\t2026-02-23 03:26:46\n",
+  "stderr": "",
+  "execution_time_ms": 89
+}

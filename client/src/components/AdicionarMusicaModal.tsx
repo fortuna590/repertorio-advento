@@ -73,10 +73,6 @@ export function AdicionarMusicaModal({
       artista: artista.trim() || undefined,
       youtube: youtube.trim() || undefined,
       cifra: cifra.trim() || undefined,
-      letra: letra.trim() || undefined,
-      tom: tom.trim() || undefined,
-      tags: tags.trim() || undefined,
-      observacao: observacao.trim() || undefined,
     });
   };
 

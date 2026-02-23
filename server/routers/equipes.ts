@@ -2,7 +2,7 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
 import { equipes, membros } from "../../drizzle/schema";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, sql, count } from "drizzle-orm";
 
 export const equipesRouter = router({
   /**
@@ -11,7 +11,7 @@ export const equipesRouter = router({
   listar: protectedProcedure.query(async ({ ctx }) => {
     const db = await getDb();
     if (!db) throw new Error("Database not available");
-    
+
     const resultado = await db
       .select({
         id: equipes.id,
@@ -28,14 +28,14 @@ export const equipesRouter = router({
     // Contar membros de cada equipe
     const equipesComMembros = await Promise.all(
       resultado.map(async (equipe) => {
-        const [{ count }] = await db
-          .select({ count: membros.id })
+        const [{ totalMembros }] = await db
+          .select({ totalMembros: count() })
           .from(membros)
           .where(eq(membros.equipeId, equipe.id));
         
         return {
           ...equipe,
-          totalMembros: Number(count) || 0,
+          totalMembros: Number(totalMembros) || 0,
         };
       })
     );

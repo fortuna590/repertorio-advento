@@ -127,7 +127,6 @@ export function BulkImportMusicasModal({
           artista: musica.artista,
           youtube: musica.youtube,
           cifra: musica.cifra,
-          observacao: musica.observacao,
           ordem: musica.ordem,
         });
         sucessos++;

@@ -415,10 +415,6 @@ export const musicasRepertorioBase = mysqlTable("musicasRepertorioBase", {
   artista: varchar("artista", { length: 255 }),
   youtube: varchar("youtube", { length: 500 }),
   cifra: varchar("cifra", { length: 500 }),
-  letra: varchar("letra", { length: 500 }),
-  tom: varchar("tom", { length: 10 }), // Ex: C, Dm, F#, etc.
-  tags: varchar("tags", { length: 500 }), // Tags separadas por vírgula
-  observacao: text("observacao"),
   ordem: int("ordem").default(999), // Ordem de exibição
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),

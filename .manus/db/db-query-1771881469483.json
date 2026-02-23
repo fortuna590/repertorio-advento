@@ -1,0 +1,55 @@
+{
+  "query": "SELECT id, nome, userId FROM equipes;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT id, nome, userId FROM equipes;",
+  "rows": [
+    {
+      "id": "1",
+      "nome": "Coral Sagrado",
+      "userId": "8820001"
+    },
+    {
+      "id": "2",
+      "nome": "Coral Sagrado",
+      "userId": "8820001"
+    },
+    {
+      "id": "30001",
+      "nome": "Equipe Teste Mobile",
+      "userId": "8820001"
+    },
+    {
+      "id": "60001",
+      "nome": "CORAL SAGRADO",
+      "userId": "12540026"
+    },
+    {
+      "id": "90001",
+      "nome": "Coral Sagrado",
+      "userId": "8820001"
+    },
+    {
+      "id": "120001",
+      "nome": "Coral Sagrado",
+      "userId": "8820001"
+    },
+    {
+      "id": "150001",
+      "nome": "Coral Sagrado",
+      "userId": "8820001"
+    },
+    {
+      "id": "180001",
+      "nome": "coral SAGRADO",
+      "userId": "8820001"
+    },
+    {
+      "id": "210001",
+      "nome": "Equipe de Teste",
+      "userId": "8820001"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tnome\tuserId\n1\tCoral Sagrado\t8820001\n2\tCoral Sagrado\t8820001\n30001\tEquipe Teste Mobile\t8820001\n60001\tCORAL SAGRADO\t12540026\n90001\tCoral Sagrado\t8820001\n120001\tCoral Sagrado\t8820001\n150001\tCoral Sagrado\t8820001\n180001\tcoral SAGRADO\t8820001\n210001\tEquipe de Teste\t8820001\n",
+  "stderr": "",
+  "execution_time_ms": 3564
+}
