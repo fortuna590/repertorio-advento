@@ -3243,3 +3243,11 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Adicionar coluna letra ao schema e executar migração pnpm db:push
 - [x] Implementar validação de URLs no frontend (YouTube e Cifra)
 - [x] Criar página pública de visualização de repertórios (Advento, Quaresma, etc.)
+
+
+## Investigação de Conflito entre Repertórios (Checkpoint 355a5683)
+
+- [x] Investigar repertórios personalizados no banco por data de criação
+- [x] Identificar conflito entre estrutura antiga (admin) e nova (usuário) - Não há conflito, tabela vazia
+- [x] Excluir repertórios personalizados antigos que causam conflito - Não necessário, tabela vazia
+- [x] Validar que músicas aparecem corretamente após limpeza - Músicas aparecem corretamente
