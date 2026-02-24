@@ -1,0 +1,40 @@
+{
+  "query": "SELECT id, titulo, artista, momentoId FROM musicasRepertorioBase WHERE repertorioId = 'quaresma' LIMIT 5",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT id, titulo, artista, momentoId FROM musicasRepertorioBase WHERE repertorioId = 'quaresma' LIMIT 5",
+  "rows": [
+    {
+      "id": "1",
+      "titulo": "Louvor e glória a ti, Senhor",
+      "artista": "CNBB",
+      "momentoId": "aclamacao-evangelho"
+    },
+    {
+      "id": "2",
+      "titulo": "Piedade, Ó Senhor",
+      "artista": "CNBB",
+      "momentoId": "ato-penitencial"
+    },
+    {
+      "id": "3",
+      "titulo": "Pecador, Agora É Tempo",
+      "artista": "CNBB",
+      "momentoId": "entrada"
+    },
+    {
+      "id": "4",
+      "titulo": "Reconciliai-vos com Deus",
+      "artista": "CNBB",
+      "momentoId": "entrada"
+    },
+    {
+      "id": "5",
+      "titulo": "Quando invocar, eu atenderei",
+      "artista": "CNBB",
+      "momentoId": "entrada"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\ttitulo\tartista\tmomentoId\n1\tLouvor e glória a ti, Senhor\tCNBB\taclamacao-evangelho\n2\tPiedade, Ó Senhor\tCNBB\tato-penitencial\n3\tPecador, Agora É Tempo\tCNBB\tentrada\n4\tReconciliai-vos com Deus\tCNBB\tentrada\n5\tQuando invocar, eu atenderei\tCNBB\tentrada\n",
+  "stderr": "",
+  "execution_time_ms": 57
+}
