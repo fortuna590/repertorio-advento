@@ -20,26 +20,7 @@ import {
 } from "lucide-react";
 import { generateRepertorioPDF } from "@/lib/pdfGenerator";
 
-const MOMENTOS_ORDEM = [
-  // Momentos da Missa
-  "Entrada",
-  "Ato Penitencial",
-  "Glória",
-  "Aclamação",
-  "Ofertório",
-  "Santo",
-  "Cordeiro",
-  "Comunhão",
-  "Final",
-  // Momentos do Grupo de Oração
-  "Acolhida",
-  "Animação",
-  "Oração/Entrega",
-  "Espírito Santo",
-  "Palavra",
-  "Louvor",
-  "Outro",
-];
+// MOMENTOS_ORDEM removido — frontend agora usa repertorio.momentos retornado pela API
 
 export default function VisualizarRepertorioPersonalizado() {
   const { id } = useParams<{ id: string }>();
@@ -138,14 +119,8 @@ export default function VisualizarRepertorioPersonalizado() {
     );
   }
 
-  // Agrupar músicas por momento
-  const musicasPorMomento: Record<string, typeof repertorio.musicas> = {};
-  repertorio.musicas.forEach((musica) => {
-    if (!musicasPorMomento[musica.momento]) {
-      musicasPorMomento[musica.momento] = [];
-    }
-    musicasPorMomento[musica.momento].push(musica);
-  });
+  // Usar repertorio.momentos retornado pela API (agrupamento feito no backend)
+  const momentos = (repertorio as any).momentos ?? [];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/10">
@@ -228,19 +203,19 @@ export default function VisualizarRepertorioPersonalizado() {
           )}
         </div>
 
-        {/* Músicas por Momento */}
+        {/* Músicas por Momento — usando repertorio.momentos da API */}
         <div className="space-y-6">
-          {MOMENTOS_ORDEM.map((momento) => {
-            const musicas = musicasPorMomento[momento];
-            if (!musicas || musicas.length === 0) return null;
+          {momentos.map((momento: any) => {
+            const musicas = momento.musicas ?? [];
+            if (musicas.length === 0) return null;
 
             return (
-              <Card key={momento}>
+              <Card key={momento.id}>
                 <CardHeader>
-                  <CardTitle className="text-xl">{momento}</CardTitle>
+                  <CardTitle className="text-xl">{momento.label}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {musicas.map((musica, index) => (
+                  {musicas.map((musica: any, index: number) => (
                     <div
                       key={musica.id}
                       className="p-4 border rounded-lg bg-card/50 space-y-3"

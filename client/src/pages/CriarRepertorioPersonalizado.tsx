@@ -44,6 +44,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { SortableMusica } from "@/components/SortableMusica";
 import { ImportarMusicasModal } from "@/components/ImportarMusicasModal";
 import { MusicasRecentesSection } from "@/components/MusicasRecentesSection";
+import { MOMENTOS_FIXOS } from "@shared/const";
 
 type Musica = {
   id?: number;
@@ -56,35 +57,7 @@ type Musica = {
   momento: string;
 };
 
-const MOMENTOS_MISSA = [
-  "Entrada",
-  "Ato Penitencial",
-  "Glória",
-  "Aclamação",
-  "Ofertório",
-  "Santo",
-  "Cordeiro",
-  "Comunhão",
-  "Final",
-  "Outro",
-];
-
-const MOMENTOS_GRUPO_ORACAO = [
-  "Acolhida",
-  "Animação",
-  "Oração/Entrega",
-  "Espírito Santo",
-  "Palavra",
-  "Louvor",
-  "Final",
-  "Outro",
-];
-
-const getMomentosPorTemplate = (template: "missa" | "grupo_oracao" | "livre") => {
-  if (template === "grupo_oracao") return MOMENTOS_GRUPO_ORACAO;
-  if (template === "missa") return MOMENTOS_MISSA;
-  return []; // Template livre não tem momentos
-};
+// Momentos canônicos importados de shared/const — não duplicar aqui
 
 const TAGS_PREDEFINIDAS = [
   "Missa Dominical",
@@ -195,7 +168,6 @@ export default function CriarRepertorioPersonalizado() {
   const excluirMusicaMutation = trpc.repertoriosPersonalizados.excluirMusica.useMutation();
 
   const handleAdicionarMusica = () => {
-    const momentos = getMomentosPorTemplate(tipoTemplate);
     setMusicas([
       ...musicas,
       {
@@ -205,7 +177,7 @@ export default function CriarRepertorioPersonalizado() {
         linkCifra: "",
         linkYoutube: "",
         linkLetra: "",
-        momento: momentos.length > 0 ? momentos[0] : "", // Primeiro momento ou vazio para template livre
+        momento: MOMENTOS_FIXOS[0].id, // Primeiro momento canônico (ENTRADA)
       },
     ]);
     
@@ -515,7 +487,7 @@ export default function CriarRepertorioPersonalizado() {
                     <SelectItem value="missa">
                       <div className="flex flex-col items-start">
                         <span className="font-medium">Missa</span>
-                        <span className="text-xs text-muted-foreground">Entrada, Glória, Aclamação, Ofertório, Santo, Cordeiro, Comunhão, Final</span>
+                        <span className="text-xs text-muted-foreground">{MOMENTOS_FIXOS.map(m => m.label).join(', ')}</span>
                       </div>
                     </SelectItem>
                     <SelectItem value="grupo_oracao">

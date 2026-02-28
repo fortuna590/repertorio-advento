@@ -14,6 +14,7 @@ import { Trash2, GripVertical, Search, Loader2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { useState } from "react";
 import { toast } from "sonner";
+import { MOMENTOS_FIXOS } from "@shared/const";
 
 type Musica = {
   id?: number;
@@ -26,29 +27,7 @@ type Musica = {
   momento: string;
 };
 
-const MOMENTOS_MISSA = [
-  "Entrada",
-  "Ato Penitencial",
-  "Glória",
-  "Aclamação",
-  "Ofertório",
-  "Santo",
-  "Cordeiro",
-  "Comunhão",
-  "Final",
-  "Outro",
-];
-
-const MOMENTOS_GRUPO_ORACAO = [
-  "Acolhida",
-  "Animação",
-  "Oração/Entrega",
-  "Espírito Santo",
-  "Palavra",
-  "Louvor",
-  "Final",
-  "Outro",
-];
+// Momentos canônicos importados de shared/const — não duplicar aqui
 
 const TONS = [
   "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B",
@@ -64,7 +43,6 @@ interface SortableMusicaProps {
 }
 
 export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate }: SortableMusicaProps) {
-  const momentos = tipoTemplate === "grupo_oracao" ? MOMENTOS_GRUPO_ORACAO : MOMENTOS_MISSA;
   const mostrarMomento = tipoTemplate !== "livre"; // Ocultar campo momento para template livre
   
   const [buscaYoutube, setBuscaYoutube] = useState("");
@@ -225,9 +203,9 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {momentos.map((momento) => (
-                  <SelectItem key={momento} value={momento}>
-                    {momento}
+                {MOMENTOS_FIXOS.map((momento) => (
+                  <SelectItem key={momento.id} value={momento.id}>
+                    {momento.label}
                   </SelectItem>
                 ))}
               </SelectContent>
