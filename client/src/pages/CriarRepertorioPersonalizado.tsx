@@ -90,7 +90,6 @@ export default function CriarRepertorioPersonalizado() {
   const [descricao, setDescricao] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [novaTag, setNovaTag] = useState("");
-  const [tipoTemplate, setTipoTemplate] = useState<"missa" | "grupo_oracao" | "livre">("missa");
   const [musicas, setMusicas] = useState<Musica[]>([]);
   const [modalImportarAberto, setModalImportarAberto] = useState(false);
   const [repertorioFonteId, setRepertorioFonteId] = useState<number | null>(null);
@@ -108,7 +107,6 @@ export default function CriarRepertorioPersonalizado() {
           setNome(data.nome || "");
           setDescricao(data.descricao || "");
           setTags(data.tags || []);
-          setTipoTemplate(data.tipoTemplate || "missa");
           setMusicas(data.musicas || []);
           toast.info("Rascunho recuperado!");
         } catch (e) {
@@ -121,10 +119,10 @@ export default function CriarRepertorioPersonalizado() {
   // Auto-save no localStorage quando dados mudam
   useEffect(() => {
     if (!isEdicao && (nome || descricao || tags.length > 0 || musicas.length > 0)) {
-      const data = { nome, descricao, tags, tipoTemplate, musicas };
+      const data = { nome, descricao, tags, musicas };
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
     }
-  }, [nome, descricao, tags, tipoTemplate, musicas, isEdicao, LOCAL_STORAGE_KEY]);
+  }, [nome, descricao, tags, musicas, isEdicao, LOCAL_STORAGE_KEY]);
 
   // Buscar repertório se for edição
   const { data: repertorio, isLoading } = trpc.repertoriosPersonalizados.buscarPorId.useQuery(
@@ -136,7 +134,6 @@ export default function CriarRepertorioPersonalizado() {
     if (repertorio) {
       setNome(repertorio.nome);
       setDescricao(repertorio.descricao || "");
-      setTipoTemplate(repertorio.tipoTemplate || "missa");
       // Parse tags
       if (repertorio.tags) {
         try {
@@ -255,8 +252,7 @@ export default function CriarRepertorioPersonalizado() {
         toast.error("Todas as músicas devem ter um título");
         return;
       }
-      // Validar momento apenas para templates que não são livres
-      if (tipoTemplate !== "livre" && !musica.momento) {
+      if (!musica.momento) {
         toast.error("Todas as músicas devem ter um momento definido");
         return;
       }
@@ -278,7 +274,6 @@ export default function CriarRepertorioPersonalizado() {
           nome,
           descricao,
           tags,
-          tipoTemplate,
         });
         repertorioId = resultado.repertorioId;
         // Redirecionar para edição após criar
@@ -354,8 +349,7 @@ export default function CriarRepertorioPersonalizado() {
         toast.error("Todas as músicas devem ter um título");
         return;
       }
-      // Validar momento apenas para templates que não são livres
-      if (tipoTemplate !== "livre" && !musica.momento) {
+      if (!musica.momento) {
         toast.error("Todas as músicas devem ter um momento definido");
         return;
       }
@@ -377,7 +371,6 @@ export default function CriarRepertorioPersonalizado() {
           nome,
           descricao,
           tags,
-          tipoTemplate,
         });
         repertorioId = resultado.repertorioId;
       }
@@ -474,43 +467,6 @@ export default function CriarRepertorioPersonalizado() {
                 onChange={(e) => setNome(e.target.value)}
               />
             </div>
-
-            {/* Seletor de Tipo de Template */}
-            {!isEdicao && (
-              <div>
-                <Label htmlFor="tipoTemplate">Tipo de Repertório *</Label>
-                <Select value={tipoTemplate} onValueChange={(value: any) => setTipoTemplate(value)}>
-                  <SelectTrigger id="tipoTemplate">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="missa">
-                      <div className="flex flex-col items-start">
-                        <span className="font-medium">Missa</span>
-                        <span className="text-xs text-muted-foreground">{MOMENTOS_FIXOS.map(m => m.label).join(', ')}</span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="grupo_oracao">
-                      <div className="flex flex-col items-start">
-                        <span className="font-medium">Grupo de Oração</span>
-                        <span className="text-xs text-muted-foreground">Acolhida, Animação, Oração/Entrega, Espírito Santo, Palavra, Louvor, Final</span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="livre">
-                      <div className="flex flex-col items-start">
-                        <span className="font-medium">Livre (Sem Momentos)</span>
-                        <span className="text-xs text-muted-foreground">Adoração, Momento Mariano, Terço, Novena - adicione músicas livremente</span>
-                      </div>
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {tipoTemplate === "missa" && "Estrutura tradicional da Santa Missa"}
-                  {tipoTemplate === "grupo_oracao" && "Estrutura de Grupo de Oração"}
-                  {tipoTemplate === "livre" && "Sem momentos predefinidos - ideal para adoração, terço, novena, etc."}
-                </p>
-              </div>
-            )}
 
             <div>
               <Label htmlFor="descricao">Descrição / Notas (opcional)</Label>
@@ -644,7 +600,6 @@ export default function CriarRepertorioPersonalizado() {
                         index={index}
                         onUpdate={handleAtualizarMusica}
                         onRemove={handleRemoverMusica}
-                        tipoTemplate={tipoTemplate}
                       />
                     ))}
                   </div>

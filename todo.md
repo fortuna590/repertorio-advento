@@ -3261,3 +3261,14 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Atualizar router repertoriosPersonalizados.buscarPorId para agrupar músicas por momento
 - [x] Atualizar router repertoriosPersonalizados.buscarPorShareId para agrupar músicas por momento
 - [x] Criar testes vitest para MOMENTOS_FIXOS (5 testes, todos passando)
+
+## MVP — Alinhamento Frontend ao Contrato Canônico
+
+- [x] Remover MOMENTOS_ORDEM local de VisualizarRepertorioPersonalizado.tsx
+- [x] Remover MOMENTOS_MISSA local de SortableMusica.tsx
+- [x] VisualizarRepertorioPersonalizado.tsx usa repertorio.momentos da API
+- [x] Remover tipoTemplate state, UI e lógica condicional de CriarRepertorioPersonalizado.tsx
+- [x] Remover tipoTemplate prop e mostrarMomento de SortableMusica.tsx
+- [x] SortableMusica.tsx exibe sempre o campo "Momento da Missa" usando MOMENTOS_FIXOS
+- [x] criarRepertorioMutation não envia mais tipoTemplate
+- [x] 125 testes passando após limpeza

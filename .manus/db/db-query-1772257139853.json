@@ -1,0 +1,42 @@
+{
+  "query": "\nSELECT \n  momento,\n  COUNT(*) as total\nFROM musicasRepertorioPersonalizado\nWHERE momento IN (\n  'Entrada', 'Ato Penitencial', 'Glória', 'Salmo',\n  'Aclamação ao Evangelho', 'Ofertório', 'Santo', 'Comunhão', 'Final',\n  'Aclamação', 'Ofertorio', 'Gloria', 'Comunhao'\n)\nGROUP BY momento\nORDER BY total DESC;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute \nSELECT \n  momento,\n  COUNT(*) as total\nFROM musicasRepertorioPersonalizado\nWHERE momento IN (\n  'Entrada', 'Ato Penitencial', 'Glória', 'Salmo',\n  'Aclamação ao Evangelho', 'Ofertório', 'Santo', 'Comunhão', 'Final',\n  'Aclamação', 'Ofertorio', 'Gloria', 'Comunhao'\n)\nGROUP BY momento\nORDER BY total DESC;\n",
+  "rows": [
+    {
+      "momento": "Ato Penitencial",
+      "total": "2"
+    },
+    {
+      "momento": "Entrada",
+      "total": "2"
+    },
+    {
+      "momento": "Glória",
+      "total": "2"
+    },
+    {
+      "momento": "Comunhão",
+      "total": "1"
+    },
+    {
+      "momento": "Final",
+      "total": "1"
+    },
+    {
+      "momento": "Aclamação",
+      "total": "1"
+    },
+    {
+      "momento": "Ofertório",
+      "total": "1"
+    },
+    {
+      "momento": "Santo",
+      "total": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "momento\ttotal\nAto Penitencial\t2\nEntrada\t2\nGlória\t2\nComunhão\t1\nFinal\t1\nAclamação\t1\nOfertório\t1\nSanto\t1\n",
+  "stderr": "",
+  "execution_time_ms": 409
+}

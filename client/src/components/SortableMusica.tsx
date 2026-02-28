@@ -39,11 +39,9 @@ interface SortableMusicaProps {
   index: number;
   onUpdate: (index: number, campo: keyof Musica, valor: string) => void;
   onRemove: (index: number) => void;
-  tipoTemplate: "missa" | "grupo_oracao" | "livre";
 }
 
-export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate }: SortableMusicaProps) {
-  const mostrarMomento = tipoTemplate !== "livre"; // Ocultar campo momento para template livre
+export function SortableMusica({ musica, index, onUpdate, onRemove }: SortableMusicaProps) {
   
   const [buscaYoutube, setBuscaYoutube] = useState("");
   const [mostrarResultados, setMostrarResultados] = useState(false);
@@ -191,27 +189,25 @@ export function SortableMusica({ musica, index, onUpdate, onRemove, tipoTemplate
           </Select>
         </div>
 
-        {/* Momento (apenas se não for template livre) */}
-        {mostrarMomento && (
-          <div className="md:col-span-2">
-            <Label>Momento {tipoTemplate === "grupo_oracao" ? "do Grupo" : "da Missa"} *</Label>
-            <Select
-              value={musica.momento}
-              onValueChange={(valor) => onUpdate(index, "momento", valor)}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {MOMENTOS_FIXOS.map((momento) => (
-                  <SelectItem key={momento.id} value={momento.id}>
-                    {momento.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        )}
+        {/* Momento da Missa */}
+        <div className="md:col-span-2">
+          <Label>Momento da Missa *</Label>
+          <Select
+            value={musica.momento}
+            onValueChange={(valor) => onUpdate(index, "momento", valor)}
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {MOMENTOS_FIXOS.map((momento) => (
+                <SelectItem key={momento.id} value={momento.id}>
+                  {momento.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
         {/* Busca de Cifra */}
         <div className="md:col-span-2">
