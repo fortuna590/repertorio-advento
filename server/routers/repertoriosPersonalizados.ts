@@ -4,6 +4,7 @@ import { getDb } from "../db";
 import { repertoriosPersonalizados, musicasRepertorioPersonalizado, RepertorioPersonalizado, MusicaRepertorioPersonalizado } from "../../drizzle/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { randomUUID } from "crypto";
+import { MOMENTOS_FIXOS } from "../../shared/const";
 
 export const repertoriosPersonalizadosRouter = router({
   // Criar novo repertório
@@ -29,10 +30,23 @@ export const repertoriosPersonalizadosRouter = router({
         isPublic: 0,
       });
 
+      // Montar resposta estruturada com momentos fixos
+      const momentosEstruturados = MOMENTOS_FIXOS.map((momento) => ({
+        id: momento.id,
+        label: momento.label,
+        musica: null,
+      }));
+
       return {
         success: true,
         message: "Repertório criado com sucesso!",
         repertorioId: repertorio.insertId,
+        repertorio: {
+          id: repertorio.insertId,
+          nome: input.nome,
+          descricao: input.descricao || null,
+          momentos: momentosEstruturados,
+        },
       };
     }),
 
@@ -92,9 +106,17 @@ export const repertoriosPersonalizadosRouter = router({
         .where(eq(musicasRepertorioPersonalizado.repertorioId, input.id))
         .orderBy(musicasRepertorioPersonalizado.ordem);
 
+      // Estruturar momentos fixos com músicas agrupadas
+      const momentos = MOMENTOS_FIXOS.map((momento) => ({
+        id: momento.id,
+        label: momento.label,
+        musicas: musicas.filter((m: MusicaRepertorioPersonalizado) => m.momento === momento.id),
+      }));
+
       return {
         ...repertorio,
         musicas,
+        momentos,
       };
     }),
 
@@ -125,9 +147,17 @@ export const repertoriosPersonalizadosRouter = router({
         .where(eq(musicasRepertorioPersonalizado.repertorioId, repertorio.id))
         .orderBy(musicasRepertorioPersonalizado.ordem);
 
+      // Estruturar momentos fixos com músicas agrupadas
+      const momentos = MOMENTOS_FIXOS.map((momento) => ({
+        id: momento.id,
+        label: momento.label,
+        musicas: musicas.filter((m: MusicaRepertorioPersonalizado) => m.momento === momento.id),
+      }));
+
       return {
         ...repertorio,
         musicas,
+        momentos,
       };
     }),
 

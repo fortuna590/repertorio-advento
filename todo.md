@@ -3251,3 +3251,13 @@ Link "Meus Repertórios" já existia no menu do usuário. Adicionado botão "Cri
 - [x] Identificar conflito entre estrutura antiga (admin) e nova (usuário) - Não há conflito, tabela vazia
 - [x] Excluir repertórios personalizados antigos que causam conflito - Não necessário, tabela vazia
 - [x] Validar que músicas aparecem corretamente após limpeza - Músicas aparecem corretamente
+
+
+## MVP — Momentos Fixos da Missa
+
+- [x] Criar constante MOMENTOS_FIXOS em shared/const.ts com os 9 momentos fixos
+- [x] Criar tipo MomentoFixoId em shared/const.ts (via TypeScript as const)
+- [x] Atualizar router repertoriosPersonalizados.criar para retornar momentos fixos na resposta
+- [x] Atualizar router repertoriosPersonalizados.buscarPorId para agrupar músicas por momento
+- [x] Atualizar router repertoriosPersonalizados.buscarPorShareId para agrupar músicas por momento
+- [x] Criar testes vitest para MOMENTOS_FIXOS (5 testes, todos passando)
