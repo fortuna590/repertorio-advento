@@ -37,3 +37,7 @@
 - [x] Verificar CRUD completo de artigos de blog no painel admin — funcionando
 - [x] Verificar CRUD completo de músicas nos repertórios no painel admin — funcionando
 - [x] Testar acesso ao painel admin com o usuário promovido — OK
+
+## Bug Fixes
+
+- [x] Corrigir bug de tela preta na edição de artigos no mobile (Android Chrome) — parsing de tags normalizado + card-glass substituído por bg-slate-900 nos modais

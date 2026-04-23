@@ -141,7 +141,7 @@ function RepertorioForm({ inicial, onClose, onSaved }: { inicial?: any; onClose:
   };
 
   return (
-    <div className="card-glass rounded-2xl p-6 mb-6 border border-purple-500/30">
+    <div className="bg-slate-900 rounded-2xl p-6 mb-6 border border-purple-500/30 shadow-2xl">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-bold text-white">{inicial ? "Editar Repertório" : "Novo Repertório"}</h3>
         <button onClick={onClose} className="p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition-colors"><X className="w-4 h-4" /></button>
@@ -306,16 +306,30 @@ function ArtigoForm({ inicial, onClose, onSaved }: { inicial?: any; onClose: () 
   const criar = trpc.admin.criarArtigo.useMutation({ onSuccess: onSaved });
   const editar = trpc.admin.editarArtigo.useMutation({ onSuccess: onSaved });
 
+  // Normaliza tags independente de vir como array, string JSON ou string CSV do banco
+  const parseTags = (raw: any): string => {
+    if (!raw) return "";
+    if (Array.isArray(raw)) return raw.join(", ");
+    if (typeof raw === "string") {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed.join(", ");
+      } catch {}
+      return raw; // já é string CSV ou texto simples
+    }
+    return String(raw);
+  };
+
   const [form, setForm] = useState({
-    titulo: inicial?.titulo || "",
-    resumo: inicial?.resumo || "",
-    conteudo: inicial?.conteudo || "",
-    categoria: inicial?.categoria || "",
-    imagemCapa: inicial?.imagemCapa || "",
-    tags: inicial?.tags?.join(", ") || "",
-    metaTitle: inicial?.metaTitle || "",
-    metaDescription: inicial?.metaDescription || "",
-    palavrasChave: inicial?.palavrasChave || "",
+    titulo: inicial?.titulo ?? "",
+    resumo: inicial?.resumo ?? "",
+    conteudo: inicial?.conteudo ?? "",
+    categoria: inicial?.categoria ?? "",
+    imagemCapa: inicial?.imagemCapa ?? "",
+    tags: parseTags(inicial?.tags),
+    metaTitle: inicial?.metaTitle ?? "",
+    metaDescription: inicial?.metaDescription ?? "",
+    palavrasChave: inicial?.palavrasChave ?? "",
   });
 
   const [uploadando, setUploadando] = useState(false);
@@ -359,7 +373,7 @@ function ArtigoForm({ inicial, onClose, onSaved }: { inicial?: any; onClose: () 
   };
 
   return (
-    <div className="card-glass rounded-2xl p-6 mb-6 border border-purple-500/30">
+    <div className="bg-slate-900 rounded-2xl p-6 mb-6 border border-purple-500/30 shadow-2xl">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-bold text-white">{inicial ? "Editar Artigo" : "Novo Artigo"}</h3>
         <button onClick={onClose} className="p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition-colors"><X className="w-4 h-4" /></button>
