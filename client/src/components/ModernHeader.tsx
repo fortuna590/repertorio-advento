@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Music2, User, LogIn } from "lucide-react";
+import { Menu, X, Music2, User, LogIn, Shield } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 
@@ -15,6 +15,8 @@ export default function ModernHeader() {
   const [location] = useLocation();
   const [open, setOpen] = useState(false);
   const { user, isAuthenticated, loading } = useAuth();
+
+  const isAdmin = user?.role === "admin";
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/5" style={{ background: "rgba(10,10,15,0.85)", backdropFilter: "blur(20px)" }}>
@@ -37,6 +39,16 @@ export default function ModernHeader() {
               {n.label}
             </Link>
           ))}
+          {/* Link admin visível apenas para admins/moderadores */}
+          {isAdmin && (
+            <Link href="/admin"
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
+                location === "/admin" ? "bg-purple-600/30 text-purple-300" : "text-purple-400/80 hover:text-purple-300 hover:bg-purple-600/10"
+              }`}>
+              <Shield className="w-3.5 h-3.5" />
+              Admin
+            </Link>
+          )}
         </nav>
 
         {/* Auth button (desktop) */}
@@ -79,6 +91,16 @@ export default function ModernHeader() {
               {n.label}
             </Link>
           ))}
+          {/* Admin link mobile */}
+          {isAdmin && (
+            <Link href="/admin" onClick={() => setOpen(false)}
+              className={`flex items-center gap-3 px-6 py-3 text-sm font-medium transition-colors ${
+                location === "/admin" ? "text-purple-300 bg-purple-600/10" : "text-purple-400/80 hover:text-purple-300"
+              }`}>
+              <Shield className="w-4 h-4" />
+              Painel Admin
+            </Link>
+          )}
           {/* Auth mobile */}
           {!loading && (
             isAuthenticated ? (

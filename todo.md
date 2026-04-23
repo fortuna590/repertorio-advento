@@ -30,3 +30,10 @@
 - [ ] SEO: structured data JSON-LD para artigos e repertórios
 - [ ] Blog: paginação quando houver muitos artigos
 - [ ] Importar os 7 repertórios gerados na extração anterior
+
+## Admin — Promoção de Usuário e Painel
+
+- [x] Promover fortuna590@gmail.com a admin — já estava como admin (role: admin)
+- [x] Verificar CRUD completo de artigos de blog no painel admin — funcionando
+- [x] Verificar CRUD completo de músicas nos repertórios no painel admin — funcionando
+- [x] Testar acesso ao painel admin com o usuário promovido — OK

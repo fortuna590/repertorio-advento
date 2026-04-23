@@ -37,7 +37,14 @@ export async function upsertUser(data: {
   if (!db) return;
   const existing = await getUserByOpenId(data.openId);
   if (existing) {
-    await db.update(users).set({ ...data, updatedAt: new Date() }).where(eq(users.openId, data.openId));
+    // Nunca sobrescrever role, status ou campos sensíveis ao atualizar sessão
+    // Extrair apenas os campos seguros para update automático
+    const safeUpdate: Record<string, unknown> = { updatedAt: new Date() };
+    if (data.name !== undefined) safeUpdate.name = data.name;
+    if (data.email !== undefined) safeUpdate.email = data.email;
+    if (data.loginMethod !== undefined) safeUpdate.loginMethod = data.loginMethod;
+    if (data.lastSignedIn !== undefined) safeUpdate.lastSignedIn = data.lastSignedIn;
+    await db.update(users).set(safeUpdate).where(eq(users.openId, data.openId));
   } else {
     await db.insert(users).values({
       openId: data.openId,
