@@ -77,11 +77,15 @@ function RepertoriosAdmin() {
       </div>
 
       {(criando || editando) && (
-        <RepertorioForm
-          inicial={editando}
-          onClose={() => { setCriando(false); setEditando(null); }}
-          onSaved={() => { setCriando(false); setEditando(null); utils.admin.listarRepertorios.invalidate(); }}
-        />
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/80 backdrop-blur-sm overflow-y-auto py-6 px-4">
+          <div className="w-full max-w-2xl">
+            <RepertorioForm
+              inicial={editando}
+              onClose={() => { setCriando(false); setEditando(null); }}
+              onSaved={() => { setCriando(false); setEditando(null); utils.admin.listarRepertorios.invalidate(); }}
+            />
+          </div>
+        </div>
       )}
 
       <div className="space-y-3">
@@ -258,11 +262,15 @@ function BlogAdmin() {
       </div>
 
       {(criando || editando) && (
-        <ArtigoForm
-          inicial={editando}
-          onClose={() => { setCriando(false); setEditando(null); }}
-          onSaved={() => { setCriando(false); setEditando(null); utils.admin.listarArtigos.invalidate(); }}
-        />
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/80 backdrop-blur-sm overflow-y-auto py-6 px-4">
+          <div className="w-full max-w-2xl">
+            <ArtigoForm
+              inicial={editando}
+              onClose={() => { setCriando(false); setEditando(null); }}
+              onSaved={() => { setCriando(false); setEditando(null); utils.admin.listarArtigos.invalidate(); }}
+            />
+          </div>
+        </div>
       )}
 
       <div className="space-y-3">
