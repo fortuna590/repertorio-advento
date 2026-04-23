@@ -90,3 +90,44 @@ export const artigos = mysqlTable("lm_artigos", {
 });
 export type Artigo = typeof artigos.$inferSelect;
 export type InsertArtigo = typeof artigos.$inferInsert;
+// ─── Favoritos (usuário ♥ repertório) ────────────────────────────────────────
+export const favoritos = mysqlTable("lm_favoritos", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  repertorioId: int("repertorioId").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type Favorito = typeof favoritos.$inferSelect;
+export type InsertFavorito = typeof favoritos.$inferInsert;
+// ─── Repertórios de Usuário (privados) ───────────────────────────────────────
+export const repertoriosUsuario = mysqlTable("lm_repertorios_usuario", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  titulo: varchar("titulo", { length: 255 }).notNull(),
+  descricao: text("descricao"),
+  compartilhado: boolean("compartilhado").notNull().default(false),
+  shareToken: varchar("shareToken", { length: 64 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type RepertorioUsuario = typeof repertoriosUsuario.$inferSelect;
+export type InsertRepertorioUsuario = typeof repertoriosUsuario.$inferInsert;
+// ─── Músicas dos Repertórios de Usuário ──────────────────────────────────────
+export const musicasUsuario = mysqlTable("lm_musicas_usuario", {
+  id: int("id").autoincrement().primaryKey(),
+  repertorioId: int("repertorioId").notNull(),
+  titulo: varchar("titulo", { length: 255 }).notNull(),
+  artista: varchar("artista", { length: 255 }),
+  tom: varchar("tom", { length: 10 }),
+  momento: mysqlEnum("momento_u", [
+    "ENTRADA", "ATO_PENITENCIAL", "GLORIA", "SALMO", "ACLAMACAO",
+    "OFERTORIO", "SANTO", "COMUNHAO", "FINAL", "OUTROS",
+  ]).notNull().default("OUTROS"),
+  youtube: varchar("youtube", { length: 512 }),
+  cifra: varchar("cifra", { length: 512 }),
+  letra: varchar("letra", { length: 512 }),
+  ordem: int("ordem").notNull().default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type MusicaUsuario = typeof musicasUsuario.$inferSelect;
+export type InsertMusicaUsuario = typeof musicasUsuario.$inferInsert;

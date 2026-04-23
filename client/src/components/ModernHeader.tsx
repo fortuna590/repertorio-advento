@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Music2 } from "lucide-react";
+import { Menu, X, Music2, User, LogIn } from "lucide-react";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { getLoginUrl } from "@/const";
 
 const NAV = [
   { href: "/", label: "Início" },
@@ -12,6 +14,7 @@ const NAV = [
 export default function ModernHeader() {
   const [location] = useLocation();
   const [open, setOpen] = useState(false);
+  const { user, isAuthenticated, loading } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/5" style={{ background: "rgba(10,10,15,0.85)", backdropFilter: "blur(20px)" }}>
@@ -36,6 +39,29 @@ export default function ModernHeader() {
           ))}
         </nav>
 
+        {/* Auth button (desktop) */}
+        <div className="hidden md:flex items-center gap-2">
+          {!loading && (
+            isAuthenticated ? (
+              <Link href="/minha-area"
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  location === "/minha-area" ? "bg-white/10 text-white" : "text-white/60 hover:text-white hover:bg-white/5"
+                }`}>
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center text-white text-xs font-bold">
+                  {user?.name?.charAt(0)?.toUpperCase() || "U"}
+                </div>
+                <span>Minha Área</span>
+              </Link>
+            ) : (
+              <a href={getLoginUrl()}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-purple-600/20 border border-purple-500/30 text-purple-300 hover:bg-purple-600/30 transition-all">
+                <LogIn className="w-4 h-4" />
+                Entrar
+              </a>
+            )
+          )}
+        </div>
+
         {/* Mobile toggle */}
         <button onClick={() => setOpen(!open)} className="md:hidden p-2 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-colors">
           {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -53,6 +79,24 @@ export default function ModernHeader() {
               {n.label}
             </Link>
           ))}
+          {/* Auth mobile */}
+          {!loading && (
+            isAuthenticated ? (
+              <Link href="/minha-area" onClick={() => setOpen(false)}
+                className={`flex items-center gap-3 px-6 py-3 text-sm font-medium transition-colors border-t border-white/5 mt-2 pt-4 ${
+                  location === "/minha-area" ? "text-white" : "text-purple-300 hover:text-white"
+                }`}>
+                <User className="w-4 h-4" />
+                Minha Área
+              </Link>
+            ) : (
+              <a href={getLoginUrl()} onClick={() => setOpen(false)}
+                className="flex items-center gap-3 px-6 py-3 text-sm font-medium text-purple-300 hover:text-white transition-colors border-t border-white/5 mt-2 pt-4">
+                <LogIn className="w-4 h-4" />
+                Entrar
+              </a>
+            )
+          )}
         </div>
       )}
     </header>

@@ -12,6 +12,7 @@ const BlogArtigo = lazy(() => import("@/pages/BlogArtigo"));
 const Sobre = lazy(() => import("@/pages/Sobre"));
 const Admin = lazy(() => import("@/pages/Admin"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
+const MinhaArea = lazy(() => import("@/pages/MinhaArea"));
 
 function PageLoader() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
             <Route path="/blog" component={Blog} />
             <Route path="/blog/:slug" component={BlogArtigo} />
             <Route path="/sobre" component={Sobre} />
+            <Route path="/minha-area" component={MinhaArea} />
             <Route path="/admin" component={Admin} />
             <Route component={NotFound} />
           </Switch>

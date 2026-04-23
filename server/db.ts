@@ -188,3 +188,90 @@ export async function incrementarVisualizacoesArtigo(id: number) {
     await db.update(artigos).set({ visualizacoes: artigo.visualizacoes + 1 }).where(eq(artigos.id, id));
   }
 }
+
+// ─── Favoritos ────────────────────────────────────────────────────────────────
+import { favoritos, repertoriosUsuario, musicasUsuario } from "../drizzle/schema";
+import { and } from "drizzle-orm";
+
+export async function listarFavoritosUsuario(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(favoritos).where(eq(favoritos.userId, userId)).orderBy(desc(favoritos.createdAt));
+}
+
+export async function adicionarFavorito(userId: number, repertorioId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  try {
+    await db.insert(favoritos).values({ userId, repertorioId });
+  } catch { /* já existe */ }
+  return { userId, repertorioId };
+}
+
+export async function removerFavorito(userId: number, repertorioId: number) {
+  const db = await getDb();
+  if (!db) return;
+  await db.delete(favoritos).where(and(eq(favoritos.userId, userId), eq(favoritos.repertorioId, repertorioId)));
+}
+
+export async function verificarFavorito(userId: number, repertorioId: number) {
+  const db = await getDb();
+  if (!db) return false;
+  const rows = await db.select().from(favoritos).where(and(eq(favoritos.userId, userId), eq(favoritos.repertorioId, repertorioId))).limit(1);
+  return rows.length > 0;
+}
+
+// ─── Repertórios de Usuário ───────────────────────────────────────────────────
+export async function listarRepertoriosUsuario(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(repertoriosUsuario).where(eq(repertoriosUsuario.userId, userId)).orderBy(desc(repertoriosUsuario.createdAt));
+}
+
+export async function buscarRepertorioUsuarioPorId(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const rows = await db.select().from(repertoriosUsuario).where(eq(repertoriosUsuario.id, id)).limit(1);
+  return rows[0] ?? null;
+}
+
+export async function criarRepertorioUsuario(data: typeof repertoriosUsuario.$inferInsert) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.insert(repertoriosUsuario).values(data);
+  return buscarRepertorioUsuarioPorId((result as any)[0].insertId);
+}
+
+export async function atualizarRepertorioUsuario(id: number, data: Partial<typeof repertoriosUsuario.$inferInsert>) {
+  const db = await getDb();
+  if (!db) return null;
+  await db.update(repertoriosUsuario).set({ ...data, updatedAt: new Date() }).where(eq(repertoriosUsuario.id, id));
+  return buscarRepertorioUsuarioPorId(id);
+}
+
+export async function excluirRepertorioUsuario(id: number) {
+  const db = await getDb();
+  if (!db) return;
+  await db.delete(musicasUsuario).where(eq(musicasUsuario.repertorioId, id));
+  await db.delete(repertoriosUsuario).where(eq(repertoriosUsuario.id, id));
+}
+
+export async function listarMusicasUsuario(repertorioId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(musicasUsuario).where(eq(musicasUsuario.repertorioId, repertorioId)).orderBy(musicasUsuario.ordem);
+}
+
+export async function criarMusicaUsuario(data: typeof musicasUsuario.$inferInsert) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.insert(musicasUsuario).values(data);
+  const rows = await db.select().from(musicasUsuario).where(eq(musicasUsuario.id, (result as any)[0].insertId)).limit(1);
+  return rows[0] ?? null;
+}
+
+export async function excluirMusicaUsuario(id: number) {
+  const db = await getDb();
+  if (!db) return;
+  await db.delete(musicasUsuario).where(eq(musicasUsuario.id, id));
+}

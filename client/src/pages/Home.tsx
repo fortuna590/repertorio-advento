@@ -35,17 +35,17 @@ export default function Home() {
         <div className="container relative text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 text-sm font-medium mb-8 animate-fadeInDown">
             <Star className="w-4 h-4 fill-purple-400 text-purple-400" />
-            Repertórios para a Santa Missa
+            Sugestões práticas para sua celebração
           </div>
           <h1 className="text-5xl md:text-7xl font-black text-white mb-6 animate-fadeInUp leading-tight">
-            Músicas que <span className="gradient-text">elevam a alma</span>
+            Repertórios prontos para cada <span className="gradient-text">tempo litúrgico</span>
           </h1>
           <p className="text-xl text-white/60 max-w-2xl mx-auto mb-10 animate-fadeInUp leading-relaxed">
-            Repertórios litúrgicos cuidadosamente organizados por tempo litúrgico, prontos para enriquecer a celebração da Santa Missa.
+            Monte sua missa em minutos com sugestões completas de músicas para cada momento — Entrada, Ofertório, Comunhão e muito mais. Repertórios baseados na liturgia da Igreja.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fadeInUp">
             <Link href="/repertorios" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-white transition-all duration-300 hover:opacity-90 hover:scale-105" style={{ background: "linear-gradient(to right, #9333ea, #ec4899)" }}>
-              <Music2 className="w-5 h-5" />Ver Repertórios<ArrowRight className="w-4 h-4" />
+              <Music2 className="w-5 h-5" />Ver repertórios para minha missa<ArrowRight className="w-4 h-4" />
             </Link>
             <Link href="/blog" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-white/80 border border-white/20 bg-white/5 transition-all duration-300 hover:bg-white/10 hover:text-white">
               <BookOpen className="w-5 h-5" />Ler Blog
@@ -59,7 +59,7 @@ export default function Home() {
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Tempos <span className="gradient-text">Litúrgicos</span></h2>
-            <p className="text-white/50 max-w-xl mx-auto">Cada tempo do ano litúrgico tem sua identidade musical própria.</p>
+            <p className="text-white/50 max-w-xl mx-auto">Repertórios baseados na liturgia da Igreja, organizados por tempo litúrgico para facilitar o planejamento da sua missa.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {TEMPOS.map((tempo, i) => (
@@ -134,9 +134,9 @@ export default function Home() {
         <div className="container text-center">
           <div className="max-w-2xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Pronto para enriquecer <span className="gradient-text">sua celebração?</span></h2>
-            <p className="text-white/50 mb-8">Explore nossa biblioteca de repertórios litúrgicos e encontre as músicas perfeitas para cada momento da Missa.</p>
+            <p className="text-white/50 mb-8">Acesse repertórios completos, organizados por momento da Missa, prontos para usar na sua próxima celebração.</p>
             <Link href="/repertorios" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-white transition-all duration-300 hover:opacity-90 hover:scale-105" style={{ background: "linear-gradient(to right, #9333ea, #ec4899)" }}>
-              Explorar Repertórios<ArrowRight className="w-5 h-5" />
+              Ver repertórios para minha missa<ArrowRight className="w-5 h-5" />
             </Link>
           </div>
         </div>

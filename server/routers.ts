@@ -385,6 +385,101 @@ const blogRouter = router({
     }),
 });
 
+// ─── Usuário Router ───────────────────────────────────────────────────────────
+const usuarioRouter = router({
+  // Favoritos
+  listarFavoritos: protectedProcedure.query(async ({ ctx }) => {
+    const favs = await db.listarFavoritosUsuario(ctx.user.id);
+    if (!favs.length) return [];
+    const repertorioIds = favs.map(f => f.repertorioId);
+    const todos = await db.listarRepertorios(false);
+    return todos.filter(r => repertorioIds.includes(r.id));
+  }),
+  toggleFavorito: protectedProcedure
+    .input(z.object({ repertorioId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const existe = await db.verificarFavorito(ctx.user.id, input.repertorioId);
+      if (existe) {
+        await db.removerFavorito(ctx.user.id, input.repertorioId);
+        return { favoritado: false };
+      } else {
+        await db.adicionarFavorito(ctx.user.id, input.repertorioId);
+        return { favoritado: true };
+      }
+    }),
+  verificarFavorito: protectedProcedure
+    .input(z.object({ repertorioId: z.number() }))
+    .query(async ({ ctx, input }) => {
+      return { favoritado: await db.verificarFavorito(ctx.user.id, input.repertorioId) };
+    }),
+  // Repertórios próprios
+  listarMeusRepertorios: protectedProcedure.query(async ({ ctx }) => {
+    return db.listarRepertoriosUsuario(ctx.user.id);
+  }),
+  buscarMeuRepertorio: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const rep = await db.buscarRepertorioUsuarioPorId(input.id);
+      if (!rep || rep.userId !== ctx.user.id) return null;
+      const musicas = await db.listarMusicasUsuario(rep.id);
+      return { ...rep, musicas };
+    }),
+  criarMeuRepertorio: protectedProcedure
+    .input(z.object({
+      titulo: z.string().min(2),
+      descricao: z.string().optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      return db.criarRepertorioUsuario({ ...input, userId: ctx.user.id });
+    }),
+  atualizarMeuRepertorio: protectedProcedure
+    .input(z.object({
+      id: z.number(),
+      titulo: z.string().min(2).optional(),
+      descricao: z.string().optional(),
+      compartilhado: z.boolean().optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const rep = await db.buscarRepertorioUsuarioPorId(input.id);
+      if (!rep || rep.userId !== ctx.user.id) throw new Error("Não autorizado");
+      const { id, ...data } = input;
+      return db.atualizarRepertorioUsuario(id, data);
+    }),
+  excluirMeuRepertorio: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const rep = await db.buscarRepertorioUsuarioPorId(input.id);
+      if (!rep || rep.userId !== ctx.user.id) throw new Error("Não autorizado");
+      await db.excluirRepertorioUsuario(input.id);
+      return { success: true };
+    }),
+  adicionarMusica: protectedProcedure
+    .input(z.object({
+      repertorioId: z.number(),
+      titulo: z.string().min(1),
+      artista: z.string().optional(),
+      tom: z.string().optional(),
+      momento: z.enum(["ENTRADA","ATO_PENITENCIAL","GLORIA","SALMO","ACLAMACAO","OFERTORIO","SANTO","COMUNHAO","FINAL","OUTROS"]).default("OUTROS"),
+      youtube: z.string().optional(),
+      cifra: z.string().optional(),
+      letra: z.string().optional(),
+      ordem: z.number().default(0),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const rep = await db.buscarRepertorioUsuarioPorId(input.repertorioId);
+      if (!rep || rep.userId !== ctx.user.id) throw new Error("Não autorizado");
+      return db.criarMusicaUsuario(input);
+    }),
+  removerMusica: protectedProcedure
+    .input(z.object({ id: z.number(), repertorioId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const rep = await db.buscarRepertorioUsuarioPorId(input.repertorioId);
+      if (!rep || rep.userId !== ctx.user.id) throw new Error("Não autorizado");
+      await db.excluirMusicaUsuario(input.id);
+      return { success: true };
+    }),
+});
+
 // ─── App Router ───────────────────────────────────────────────────────────────
 export const appRouter = router({
   auth: authRouter,
@@ -392,6 +487,7 @@ export const appRouter = router({
   repertorios: repertoriosRouter,
   blog: blogRouter,
   system: systemRouter,
+  usuario: usuarioRouter,
 });
 
 export type AppRouter = typeof appRouter;

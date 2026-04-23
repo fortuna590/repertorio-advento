@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { ArrowLeft, Plus, Trash2, Edit, Music, BookOpen, Save, X } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Edit, Music, BookOpen, Save, X, ExternalLink, Eye } from "lucide-react";
 import SEO from "@/components/SEO";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -95,6 +95,9 @@ function RepertoriosAdmin() {
               <p className="font-medium text-white truncate">{r.titulo}</p>
             </div>
             <div className="flex items-center gap-2 shrink-0">
+              <a href={`/repertorios/${r.slug}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-white/5 text-white/40 hover:bg-white/10 hover:text-white transition-colors" title="Ver no site">
+                <Eye className="w-4 h-4" />
+              </a>
               <button onClick={() => setEditando(r)} className="p-2 rounded-lg bg-white/5 text-white/60 hover:bg-white/10 hover:text-white transition-colors">
                 <Edit className="w-4 h-4" />
               </button>
@@ -125,7 +128,7 @@ function RepertorioForm({ inicial, onClose, onSaved }: { inicial?: any; onClose:
   });
 
   const [musicas, setMusicas] = useState<any[]>(inicial?.musicas || []);
-  const [novaMusica, setNovaMusica] = useState({ titulo: "", artista: "", momento: "ENTRADA", youtube: "", cifra: "" });
+  const [novaMusica, setNovaMusica] = useState({ titulo: "", artista: "", tom: "", momento: "ENTRADA", youtube: "", cifra: "", letra: "" });
 
   const salvar = () => {
     const payload = { ...form, musicas };
@@ -208,10 +211,14 @@ function RepertorioForm({ inicial, onClose, onSaved }: { inicial?: any; onClose:
             placeholder="Link YouTube" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none" />
           <input value={novaMusica.cifra} onChange={e => setNovaMusica({...novaMusica, cifra: e.target.value})}
             placeholder="Link Cifra" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none" />
+          <input value={novaMusica.letra} onChange={e => setNovaMusica({...novaMusica, letra: e.target.value})}
+            placeholder="Link Letra" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none" />
+          <input value={novaMusica.tom} onChange={e => setNovaMusica({...novaMusica, tom: e.target.value})}
+            placeholder="Tom (ex: Dó)" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none" />
           <button onClick={() => {
             if (!novaMusica.titulo.trim()) return;
             setMusicas([...musicas, {...novaMusica}]);
-            setNovaMusica({ titulo: "", artista: "", momento: "ENTRADA", youtube: "", cifra: "" });
+            setNovaMusica({ titulo: "", artista: "", tom: "", momento: "ENTRADA", youtube: "", cifra: "", letra: "" });
           }} className="flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-purple-600/30 text-purple-300 hover:bg-purple-600/50 transition-colors text-sm font-medium">
             <Plus className="w-4 h-4" />Adicionar
           </button>
@@ -269,6 +276,9 @@ function BlogAdmin() {
               <p className="font-medium text-white truncate">{a.titulo}</p>
             </div>
             <div className="flex items-center gap-2 shrink-0">
+              <a href={`/blog/${a.slug}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-white/5 text-white/40 hover:bg-white/10 hover:text-white transition-colors" title="Ver no site">
+                <Eye className="w-4 h-4" />
+              </a>
               <button onClick={() => setEditando(a)} className="p-2 rounded-lg bg-white/5 text-white/60 hover:bg-white/10 hover:text-white transition-colors">
                 <Edit className="w-4 h-4" />
               </button>
