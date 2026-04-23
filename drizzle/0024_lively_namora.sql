@@ -1,1 +1,0 @@
-ALTER TABLE `repertoriosPersonalizados` ADD `tags` text;

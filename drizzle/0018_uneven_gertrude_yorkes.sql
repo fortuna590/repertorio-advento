@@ -1,2 +1,0 @@
-ALTER TABLE `participantesEscala` ADD `userId` int;--> statement-breakpoint
-ALTER TABLE `participantesEscala` ADD CONSTRAINT `participantesEscala_userId_users_id_fk` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;

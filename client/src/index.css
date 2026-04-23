@@ -322,4 +322,53 @@
   .gradient-text {
     @apply bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent;
   }
+
+  /* Gradientes por Tempo Litúrgico */
+  .gradient-advento {
+    background: linear-gradient(135deg, #4c1d95, #7c3aed, #5b21b6);
+  }
+  .gradient-natal {
+    background: linear-gradient(135deg, #14532d, #16a34a, #15803d);
+  }
+  .gradient-quaresma {
+    background: linear-gradient(135deg, #1c1917, #44403c, #292524);
+  }
+  .gradient-pascoa {
+    background: linear-gradient(135deg, #78350f, #d97706, #b45309);
+  }
+  .gradient-tempo-comum {
+    background: linear-gradient(135deg, #14532d, #4d7c0f, #365314);
+  }
+  .gradient-celebracoes {
+    background: linear-gradient(135deg, #1e1b4b, #3730a3, #312e81);
+  }
+
+  /* Glow por Tempo Litúrgico */
+  .glow-advento { box-shadow: 0 0 30px rgba(124, 58, 237, 0.4); }
+  .glow-natal { box-shadow: 0 0 30px rgba(22, 163, 74, 0.4); }
+  .glow-quaresma { box-shadow: 0 0 30px rgba(68, 64, 60, 0.4); }
+  .glow-pascoa { box-shadow: 0 0 30px rgba(217, 119, 6, 0.4); }
+  .glow-tempo-comum { box-shadow: 0 0 30px rgba(77, 124, 15, 0.4); }
+
+  /* Glass Card */
+  .card-glass {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+  }
+  .card-glass:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(168, 85, 247, 0.3);
+  }
+
+  /* Prose Blog */
+  .prose-louvamais h1, .prose-louvamais h2, .prose-louvamais h3 {
+    @apply text-foreground font-bold mt-8 mb-4;
+  }
+  .prose-louvamais p { @apply mb-4 leading-7; }
+  .prose-louvamais a { @apply text-primary underline underline-offset-4 hover:text-primary/80; }
+  .prose-louvamais blockquote { @apply border-l-4 border-primary pl-4 italic text-muted-foreground my-6; }
+  .prose-louvamais ul, .prose-louvamais ol { @apply pl-6 mb-4 space-y-1; }
+  .prose-louvamais li { @apply leading-7; }
 }

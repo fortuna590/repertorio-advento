@@ -1,1 +1,0 @@
-ALTER TABLE `repertoriosAdmin` ADD `compartilhamentos` int DEFAULT 0 NOT NULL;

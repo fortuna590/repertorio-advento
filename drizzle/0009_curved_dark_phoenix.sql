@@ -1,1 +1,0 @@
-ALTER TABLE `repertorios` ADD `visualizacoes` int DEFAULT 0 NOT NULL;

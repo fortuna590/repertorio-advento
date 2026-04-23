@@ -1,1 +1,0 @@
-ALTER TABLE `artigos` ADD `compartilhamentos` int DEFAULT 0 NOT NULL;

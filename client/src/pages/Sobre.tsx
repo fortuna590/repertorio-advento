@@ -1,212 +1,52 @@
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Heart, Target, Users, Zap } from "lucide-react";
-import ModernHeader from "@/components/ModernHeader";
-import SocialLinks from "@/components/SocialLinks";
-import { APP_LOGO } from "@/const";
-import { Link } from "wouter";
+import SEO from "@/components/SEO";
+import { Music, Heart, BookOpen } from "lucide-react";
 
 export default function Sobre() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-slate-800">
-      <ModernHeader />
-
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        {/* Hero Section com Logo */}
-        <div className="text-center mb-20">
-          <div className="flex justify-center mb-8 animate-fadeInDown">
-            <img 
-              src={APP_LOGO} 
-              alt="LouvaMais" 
-              className="w-48 h-48 md:w-64 md:h-64 object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
-            />
+    <>
+      <SEO
+        title="Sobre o LouvaMais"
+        description="Conheça o LouvaMais, plataforma de repertórios litúrgicos para a Santa Missa."
+        keywords="sobre louvamais, repertório litúrgico, música sacra, liturgia católica"
+      />
+      <div className="container py-12 md:py-16 max-w-3xl mx-auto">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-purple-600/20 mb-6">
+            <Music className="w-10 h-10 text-purple-400" />
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 animate-fadeInUp">LouvaMais</h1>
-          <p className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400 font-semibold mb-4">
-            Louve com Excelência
+          <h1 className="text-4xl md:text-5xl font-black text-white mb-4">
+            Sobre o <span className="gradient-text">LouvaMais</span>
+          </h1>
+          <p className="text-xl text-white/60 leading-relaxed">
+            Uma plataforma dedicada a enriquecer a celebração da Santa Missa com repertórios litúrgicos organizados e acessíveis.
           </p>
         </div>
 
-        {/* Seção Principal */}
-        <div className="mb-16">
-          <h2 className="text-4xl font-bold text-white mb-6">Sobre o LouvaMais</h2>
-          <p className="text-xl text-purple-200 mb-8 leading-relaxed">
-            O LouvaMais é uma plataforma dedicada a facilitar a vida dos ministérios de música litúrgica. 
-            Nosso objetivo é fornecer uma seleção cuidadosa de músicas organizadas por momentos da Santa Missa, 
-            ajudando paróquias, comunidades e grupos de oração a celebrar com qualidade e devoção.
-          </p>
-        </div>
-
-        {/* Missão, Visão, Valores */}
-        <div className="grid md:grid-cols-3 gap-6 mb-16">
-          <Card className="p-8 bg-slate-800 border-purple-500/20">
-            <Target className="w-12 h-12 text-purple-400 mb-4" />
-            <h3 className="text-2xl font-bold text-white mb-4">Nossa Missão</h3>
-            <p className="text-purple-200">
-              Facilitar e enriquecer a experiência musical nas celebrações litúrgicas católicas, 
-              conectando ministérios de música com repertório de qualidade.
-            </p>
-          </Card>
-
-          <Card className="p-8 bg-slate-800 border-purple-500/20">
-            <Zap className="w-12 h-12 text-pink-400 mb-4" />
-            <h3 className="text-2xl font-bold text-white mb-4">Nossa Visão</h3>
-            <p className="text-purple-200">
-              Ser a plataforma de referência para música litúrgica na Igreja Católica, 
-              promovendo excelência e devoção em cada celebração.
-            </p>
-          </Card>
-
-          <Card className="p-8 bg-slate-800 border-purple-500/20">
-            <Users className="w-12 h-12 text-blue-400 mb-4" />
-            <h3 className="text-2xl font-bold text-white mb-4">Nossos Valores</h3>
-            <p className="text-purple-200">
-              Qualidade, devoção, comunidade e acessibilidade. Acreditamos que toda celebração 
-              merece música de excelência.
-            </p>
-          </Card>
-        </div>
-
-        {/* Seção Apoie o Projeto */}
-        <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30 rounded-lg p-12 mb-16">
-          <div className="flex items-center gap-4 mb-6">
-            <Heart className="w-12 h-12 text-pink-400" />
-            <h2 className="text-4xl font-bold text-white">Apoie o Projeto</h2>
-          </div>
-
-          <p className="text-purple-200 mb-8 text-lg leading-relaxed">
-            O LouvaMais é um projeto dedicado a servir a comunidade católica. 
-            Se você acredita na importância da música litúrgica de qualidade, 
-            considere apoiar nosso trabalho através de doações ou adquirindo nossos produtos educacionais.
-          </p>
-
-          <div className="grid md:grid-cols-2 gap-8 mb-8">
-            <div className="bg-slate-800 border border-purple-500/20 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-white mb-4">💝 Doações</h3>
-              <p className="text-purple-200 mb-4">
-                Suas doações ajudam a manter a plataforma funcionando e a criar novo conteúdo educativo.
-              </p>
-              <Link href="/doacoes">
-                <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white w-full">
-                  Fazer Doação
-                </Button>
-              </Link>
+        <div className="space-y-8">
+          <div className="card-glass rounded-2xl p-8">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 rounded-lg bg-purple-600/20"><Heart className="w-5 h-5 text-purple-400" /></div>
+              <h2 className="text-xl font-bold text-white">Nossa Missão</h2>
             </div>
-
-            <div className="bg-slate-800 border border-purple-500/20 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-white mb-4">📚 Produtos</h3>
-              <p className="text-purple-200 mb-4">
-                Adquira nossos e-books, cursos e guias para aprimorar seu ministério de música.
-              </p>
-              <Link href="/loja">
-                <Button className="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white w-full">
-                  Ver Produtos
-                </Button>
-              </Link>
-            </div>
+            <p className="text-white/60 leading-relaxed">
+              O LouvaMais nasceu do desejo de facilitar o trabalho de músicos e cantores litúrgicos, oferecendo repertórios organizados por tempo litúrgico, com links para cifras e vídeos no YouTube.
+            </p>
           </div>
 
-          <div className="bg-slate-800 border border-purple-500/20 rounded-lg p-6">
-            <h3 className="text-lg font-bold text-white mb-4">🙏 Outras Formas de Apoiar</h3>
-            <ul className="space-y-3 text-purple-200">
-              <li className="flex items-start gap-3">
-                <span className="text-pink-400 mt-1">✓</span>
-                <span>Compartilhe o LouvaMais com seu ministério e comunidade</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-pink-400 mt-1">✓</span>
-                <span>Envie sugestões de músicas e melhorias para a plataforma</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-pink-400 mt-1">✓</span>
-                <span>Compartilhe seus depoimentos e experiências conosco</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-pink-400 mt-1">✓</span>
-                <span>Siga nossas redes sociais e participe da comunidade</span>
-              </li>
+          <div className="card-glass rounded-2xl p-8">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 rounded-lg bg-pink-600/20"><BookOpen className="w-5 h-5 text-pink-400" /></div>
+              <h2 className="text-xl font-bold text-white">O que oferecemos</h2>
+            </div>
+            <ul className="space-y-3 text-white/60">
+              <li className="flex items-start gap-2"><span className="text-purple-400 mt-1">•</span> Repertórios organizados por tempo litúrgico (Advento, Natal, Quaresma, Páscoa, Tempo Comum)</li>
+              <li className="flex items-start gap-2"><span className="text-purple-400 mt-1">•</span> Músicas separadas por momento da Missa (Entrada, Ofertório, Comunhão, etc.)</li>
+              <li className="flex items-start gap-2"><span className="text-purple-400 mt-1">•</span> Links para cifras e YouTube para cada música</li>
+              <li className="flex items-start gap-2"><span className="text-purple-400 mt-1">•</span> Blog com artigos sobre liturgia e música sacra</li>
             </ul>
           </div>
         </div>
-
-        {/* Equipe */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">Quem Somos</h2>
-          <Card className="p-8 bg-slate-800 border-purple-500/20 text-center">
-            <p className="text-purple-200 mb-6 leading-relaxed">
-              O LouvaMais é desenvolvido por apaixonados por música litúrgica e tecnologia. 
-              Nossa equipe trabalha para criar ferramentas que facilitem a vida dos ministérios de música 
-              e enriqueçam as celebrações litúrgicas em toda a Igreja Católica.
-            </p>
-            <p className="text-purple-300 italic">
-              "Que a música seja sempre um instrumento de louvor e comunhão."
-            </p>
-          </Card>
-        </div>
-
-        {/* Contato */}
-        <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30 rounded-lg p-8 text-center mb-12">
-          <h2 className="text-2xl font-bold text-white mb-4">Entre em Contato</h2>
-          <p className="text-purple-200 mb-6">
-            Tem dúvidas, sugestões ou gostaria de conversar conosco?
-          </p>
-          <div className="flex justify-center gap-4 flex-wrap">
-            <Link href="/contato">
-              <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
-                📧 Enviar Mensagem
-              </Button>
-            </Link>
-          </div>
-        </div>
-
-        {/* Redes Sociais */}
-        <div className="text-center">
-          <h3 className="text-xl font-bold text-white mb-6">Siga-nos nas Redes Sociais</h3>
-          <SocialLinks />
-        </div>
       </div>
-
-      {/* Footer */}
-      <footer className="border-t border-purple-500/20 bg-slate-900/50 backdrop-blur-sm mt-20">
-        <div className="max-w-6xl mx-auto px-4 py-12">
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10 object-contain" />
-                <span className="font-bold text-white">LouvaMais</span>
-              </div>
-              <p className="text-purple-200 text-sm">
-                Músicas litúrgicas para enriquecer suas celebrações
-              </p>
-            </div>
-
-            <div>
-              <h4 className="font-semibold text-white mb-4">Links Rápidos</h4>
-              <nav className="space-y-2">
-                <Link href="/repertorio" className="text-purple-200 hover:text-white transition text-sm block">
-                  Repertório
-                </Link>
-                <Link href="/blog" className="text-purple-200 hover:text-white transition text-sm block">
-                  Blog
-                </Link>
-                <Link href="/depoimentos" className="text-purple-200 hover:text-white transition text-sm block">
-                  Depoimentos
-                </Link>
-              </nav>
-            </div>
-
-            <div>
-              <h4 className="font-semibold text-white mb-4">Redes Sociais</h4>
-              <SocialLinks layout="horizontal" size="small" />
-            </div>
-          </div>
-
-          <div className="border-t border-purple-500/20 pt-8 text-center text-purple-200 text-sm">
-            <p>© 2025 LouvaMais. Todos os direitos reservados.</p>
-            <p className="mt-2">Para a maior glória de Deus ✨</p>
-          </div>
-        </div>
-      </footer>
-    </div>
+    </>
   );
 }

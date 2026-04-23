@@ -1,1 +1,0 @@
-ALTER TABLE `participantesEscala` ADD `arquivado` int DEFAULT 0 NOT NULL;

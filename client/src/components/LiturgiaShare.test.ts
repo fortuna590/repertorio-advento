@@ -23,7 +23,7 @@ describe("LiturgiaShare Component", () => {
     const whatsappUrl = `https://wa.me/?text=${encodedText}`;
 
     expect(whatsappUrl).toContain("https://wa.me/");
-    expect(whatsappUrl).toContain("Liturgia de 2025-12-08");
+    expect(whatsappUrl).toContain(encodeURIComponent("Liturgia de 2025-12-08"));
   });
 
   it("deve gerar URL correta para Email", () => {
@@ -58,6 +58,6 @@ describe("LiturgiaShare Component", () => {
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodedText}`;
 
     expect(twitterUrl).toContain("https://twitter.com/intent/tweet");
-    expect(twitterUrl).toContain("Liturgia de 2025-12-08");
+    expect(twitterUrl).toContain(encodeURIComponent("Liturgia de 2025-12-08"));
   });
 });

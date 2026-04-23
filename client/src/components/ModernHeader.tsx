@@ -1,301 +1,60 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Home, Music, BookOpen, ShoppingBag, BarChart3, Info, User, LogIn, UserPlus, Heart, ListMusic, Settings, LogOut, Shield, Calendar, Clock, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { APP_LOGO } from "@/const";
-import { trpc } from "@/lib/trpc";
+import { Menu, X, Music2 } from "lucide-react";
 
-interface NavItem {
-  label: string;
-  href: string;
-  icon: React.ReactNode;
-}
-
-const navItems: NavItem[] = [
-  { label: "Início", href: "/", icon: <Home className="w-4 h-4" /> },
-  { label: "Repertório", href: "/repertorios", icon: <Music className="w-4 h-4" /> },
-  { label: "Blog", href: "/blog", icon: <BookOpen className="w-4 h-4" /> },
-  { label: "Loja", href: "/loja", icon: <ShoppingBag className="w-4 h-4" /> },
-  { label: "Estatísticas", href: "/estatisticas", icon: <BarChart3 className="w-4 h-4" /> },
-  { label: "Sobre", href: "/sobre", icon: <Info className="w-4 h-4" /> },
+const NAV = [
+  { href: "/", label: "Início" },
+  { href: "/repertorios", label: "Repertórios" },
+  { href: "/blog", label: "Blog" },
+  { href: "/sobre", label: "Sobre" },
 ];
 
 export default function ModernHeader() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [location, navigate] = useLocation();
-  
-  const { data: user } = trpc.auth.me.useQuery();
-  const { data: adminCheck } = trpc.admin.checkSuperAdmin.useQuery();
-  const logoutMutation = trpc.auth.logout.useMutation({
-    onSuccess: () => {
-      window.location.reload();
-    },
-  });
-
-  const isActive = (href: string) => location === href;
-
-  const handleLogout = () => {
-    logoutMutation.mutate();
-  };
+  const [location] = useLocation();
+  const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-gradient-to-r from-purple-900/95 to-slate-900/95 backdrop-blur-sm border-b border-purple-500/20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link href="/">
-            <div className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
-              <img src={APP_LOGO} alt="LouvaMais" className="w-10 h-10 object-contain" />
-              <span className="text-white font-bold hidden sm:inline">LouvaMais</span>
-            </div>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => (
-              <Link key={item.href} href={item.href}>
-                <div
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 cursor-pointer ${
-                    isActive(item.href)
-                      ? "bg-purple-600 text-white shadow-lg shadow-purple-500/50"
-                      : "text-purple-200 hover:text-white hover:bg-purple-600/30"
-                  }`}
-                >
-                  {item.icon}
-                  {item.label}
-                </div>
-              </Link>
-            ))}
-          </nav>
-
-          {/* Auth Buttons / User Menu */}
-          <div className="hidden md:flex items-center gap-2">
-            {!user ? (
-              <>
-                <Link href="/login">
-                  <Button variant="ghost" size="sm" className="text-purple-200 hover:text-white hover:bg-purple-600/30">
-                    <LogIn className="w-4 h-4 mr-2" />
-                    Entrar
-                  </Button>
-                </Link>
-                <Link href="/cadastro">
-                  <Button size="sm" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
-                    <UserPlus className="w-4 h-4 mr-2" />
-                    Cadastrar
-                  </Button>
-                </Link>
-              </>
-            ) : (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="text-purple-200 hover:text-white hover:bg-purple-600/30">
-                    {user.foto ? (
-                      <img src={user.foto} alt={user.name || "Usuário"} className="w-6 h-6 rounded-full mr-2" />
-                    ) : (
-                      <User className="w-4 h-4 mr-2" />
-                    )}
-                    {user.name || "Meu Perfil"}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 bg-slate-800 border-purple-500/30">
-                  <DropdownMenuLabel className="text-purple-200">Minha Conta</DropdownMenuLabel>
-                  <DropdownMenuSeparator className="bg-purple-500/20" />
-                  <Link href="/perfil">
-                    <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
-                      <User className="w-4 h-4 mr-2" />
-                      Meu Perfil
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/minhas-favoritas">
-                    <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
-                      <Heart className="w-4 h-4 mr-2" />
-                      Minhas Favoritas
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/meus-repertorios">
-                    <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
-                      <ListMusic className="w-4 h-4 mr-2" />
-                      Meus Repertórios
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/escalas">
-                    <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
-                      <Calendar className="w-4 h-4 mr-2" />
-                      Escalas
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/equipes">
-                    <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
-                      <Users className="w-4 h-4 mr-2" />
-                      Equipes
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/minhas-escalas">
-                    <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
-                      <Calendar className="w-4 h-4 mr-2" />
-                      Minhas Escalas
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/estatisticas-escalas">
-                    <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
-                      <BarChart3 className="w-4 h-4 mr-2" />
-                      Estatísticas
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/historico-escalas">
-                    <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
-                      <Clock className="w-4 h-4 mr-2" />
-                      Histórico
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/configuracoes">
-                    <DropdownMenuItem className="text-purple-100 focus:bg-purple-600/30 focus:text-white cursor-pointer">
-                      <Settings className="w-4 h-4 mr-2" />
-                      Configurações
-                    </DropdownMenuItem>
-                  </Link>
-                  {adminCheck?.isSuperAdmin && (
-                    <>
-                      <DropdownMenuSeparator className="bg-purple-500/20" />
-                      <Link href="/admin">
-                        <DropdownMenuItem className="text-yellow-400 focus:bg-yellow-600/30 focus:text-yellow-300 cursor-pointer">
-                          <Shield className="w-4 h-4 mr-2" />
-                          Administração
-                        </DropdownMenuItem>
-                      </Link>
-                    </>
-                  )}
-                  <DropdownMenuSeparator className="bg-purple-500/20" />
-                  <DropdownMenuItem onClick={handleLogout} className="text-red-400 focus:bg-red-600/30 focus:text-red-300 cursor-pointer">
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Sair
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
+    <header className="sticky top-0 z-50 border-b border-white/5" style={{ background: "rgba(10,10,15,0.85)", backdropFilter: "blur(20px)" }}>
+      <div className="container flex items-center justify-between h-16">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center transition-all group-hover:scale-110" style={{ background: "linear-gradient(135deg, #9333ea, #ec4899)" }}>
+            <Music2 className="w-4 h-4 text-white" />
           </div>
+          <span className="text-lg font-black text-white">Louva<span className="gradient-text">Mais</span></span>
+        </Link>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg text-purple-200 hover:text-white hover:bg-purple-600/30 transition-colors"
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center gap-1">
+          {NAV.map(n => (
+            <Link key={n.href} href={n.href}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                location === n.href ? "bg-white/10 text-white" : "text-white/60 hover:text-white hover:bg-white/5"
+              }`}>
+              {n.label}
+            </Link>
+          ))}
+        </nav>
 
-        {/* Mobile Navigation */}
-        {isOpen && (
-          <nav className="md:hidden pb-4 space-y-2">
-            {navItems.map((item) => (
-              <Link key={item.href} href={item.href}>
-                <div
-                  onClick={() => setIsOpen(false)}
-                  className={`block px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 cursor-pointer ${
-                    isActive(item.href)
-                      ? "bg-purple-600 text-white"
-                      : "text-purple-200 hover:text-white hover:bg-purple-600/30"
-                  }`}
-                >
-                  {item.icon}
-                  {item.label}
-                </div>
-              </Link>
-            ))}
-            
-            <div className="border-t border-purple-500/20 pt-2 mt-2">
-              {!user ? (
-                <>
-                  <Link href="/login">
-                    <div
-                      onClick={() => setIsOpen(false)}
-                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2 cursor-pointer"
-                    >
-                      <LogIn className="w-4 h-4" />
-                      Entrar
-                    </div>
-                  </Link>
-                  <Link href="/cadastro">
-                    <div
-                      onClick={() => setIsOpen(false)}
-                      className="block px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-purple-600 to-pink-600 text-white transition-all duration-200 flex items-center gap-2 mt-2 cursor-pointer"
-                    >
-                      <UserPlus className="w-4 h-4" />
-                      Cadastrar
-                    </div>
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link href="/perfil">
-                    <div
-                      onClick={() => setIsOpen(false)}
-                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2 cursor-pointer"
-                    >
-                      <User className="w-4 h-4" />
-                      Meu Perfil
-                    </div>
-                  </Link>
-                  <Link href="/minhas-favoritas">
-                    <div
-                      onClick={() => setIsOpen(false)}
-                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2 cursor-pointer"
-                    >
-                      <Heart className="w-4 h-4" />
-                      Minhas Favoritas
-                    </div>
-                  </Link>
-                  <Link href="/meus-repertorios">
-                    <div
-                      onClick={() => setIsOpen(false)}
-                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2 cursor-pointer"
-                    >
-                      <ListMusic className="w-4 h-4" />
-                      Meus Repertórios
-                    </div>
-                  </Link>
-                  <Link href="/escalas">
-                    <div
-                      onClick={() => setIsOpen(false)}
-                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2 cursor-pointer"
-                    >
-                      <Calendar className="w-4 h-4" />
-                      Escalas
-                    </div>
-                  </Link>
-                  <Link href="/configuracoes">
-                    <div
-                      onClick={() => setIsOpen(false)}
-                      className="block px-4 py-2 rounded-lg text-sm font-medium text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all duration-200 flex items-center gap-2 cursor-pointer"
-                    >
-                      <Settings className="w-4 h-4" />
-                      Configurações
-                    </div>
-                  </Link>
-                  <button
-                    onClick={() => {
-                      setIsOpen(false);
-                      handleLogout();
-                    }}
-                    className="w-full text-left px-4 py-2 rounded-lg text-sm font-medium text-red-400 hover:bg-red-600/30 transition-all duration-200 flex items-center gap-2 mt-2"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    Sair
-                  </button>
-                </>
-              )}
-            </div>
-          </nav>
-        )}
+        {/* Mobile toggle */}
+        <button onClick={() => setOpen(!open)} className="md:hidden p-2 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-colors">
+          {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
       </div>
+
+      {/* Mobile menu */}
+      {open && (
+        <div className="md:hidden border-t border-white/5 py-3" style={{ background: "rgba(10,10,15,0.95)" }}>
+          {NAV.map(n => (
+            <Link key={n.href} href={n.href} onClick={() => setOpen(false)}
+              className={`block px-6 py-3 text-sm font-medium transition-colors ${
+                location === n.href ? "text-white bg-white/5" : "text-white/60 hover:text-white"
+              }`}>
+              {n.label}
+            </Link>
+          ))}
+        </div>
+      )}
     </header>
   );
 }
