@@ -23,7 +23,7 @@
 
 ## Melhorias Futuras
 
-- [ ] Painel admin: upload de imagem de capa para artigos
+- [x] Painel admin: upload de imagem de capa para artigos — concluído
 - [ ] Painel admin: adicionar/remover músicas individualmente por momento
 - [ ] Página de repertório: links para YouTube e cifra por música
 - [ ] SEO: sitemap.xml automático

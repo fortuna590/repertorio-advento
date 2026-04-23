@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "wouter";
-import { ArrowLeft, Plus, Trash2, Edit, Music, BookOpen, Save, X, ExternalLink, Eye } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Edit, Music, BookOpen, Save, X, ExternalLink, Eye, Upload, ImageIcon } from "lucide-react";
 import SEO from "@/components/SEO";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -310,6 +310,37 @@ function ArtigoForm({ inicial, onClose, onSaved }: { inicial?: any; onClose: () 
     palavrasChave: inicial?.palavrasChave || "",
   });
 
+  const [uploadando, setUploadando] = useState(false);
+  const [erroUpload, setErroUpload] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImagemUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setErroUpload("Apenas imagens são permitidas (JPG, PNG, WebP)");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setErroUpload("A imagem deve ter no máximo 5 MB");
+      return;
+    }
+    setErroUpload("");
+    setUploadando(true);
+    try {
+      const formData = new FormData();
+      formData.append("imagem", file);
+      const res = await fetch("/api/upload/imagem", { method: "POST", body: formData, credentials: "include" });
+      if (!res.ok) throw new Error("Falha no upload");
+      const { url } = await res.json();
+      setForm(f => ({ ...f, imagemCapa: url }));
+    } catch (err) {
+      setErroUpload("Erro ao fazer upload. Tente novamente.");
+    } finally {
+      setUploadando(false);
+    }
+  };
+
   const salvar = () => {
     const payload = {
       ...form,
@@ -343,9 +374,56 @@ function ArtigoForm({ inicial, onClose, onSaved }: { inicial?: any; onClose: () 
             className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50" placeholder="advento, música sacra" />
         </div>
         <div className="md:col-span-2">
-          <label className="block text-xs font-medium text-white/50 mb-1">URL da Imagem de Capa</label>
-          <input value={form.imagemCapa} onChange={e => setForm({...form, imagemCapa: e.target.value})}
-            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50" placeholder="https://..." />
+          <label className="block text-xs font-medium text-white/50 mb-1">Imagem de Capa</label>
+          <div className="space-y-3">
+            {/* Preview da imagem atual */}
+            {form.imagemCapa && (
+              <div className="relative rounded-xl overflow-hidden border border-white/10 bg-white/5">
+                <img src={form.imagemCapa} alt="Capa" className="w-full h-40 object-cover" />
+                <button
+                  type="button"
+                  onClick={() => setForm(f => ({ ...f, imagemCapa: "" }))}
+                  className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-white hover:bg-red-600/80 transition-colors"
+                  title="Remover imagem"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
+
+            {/* Área de upload */}
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              className="flex flex-col items-center justify-center gap-2 px-4 py-6 rounded-xl border-2 border-dashed border-white/20 bg-white/5 hover:border-purple-500/50 hover:bg-white/10 transition-all cursor-pointer"
+            >
+              {uploadando ? (
+                <>
+                  <div className="w-6 h-6 border-2 border-purple-400 border-t-transparent rounded-full animate-spin" />
+                  <span className="text-sm text-white/50">Enviando imagem...</span>
+                </>
+              ) : (
+                <>
+                  {form.imagemCapa ? (
+                    <><ImageIcon className="w-5 h-5 text-purple-400" /><span className="text-sm text-purple-300">Clique para trocar a imagem</span></>
+                  ) : (
+                    <><Upload className="w-5 h-5 text-white/40" /><span className="text-sm text-white/50">Clique para enviar uma imagem</span><span className="text-xs text-white/30">JPG, PNG ou WebP · máx. 5 MB</span></>
+                  )}
+                </>
+              )}
+            </div>
+
+            {/* Input oculto */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImagemUpload}
+            />
+
+            {/* Erro de upload */}
+            {erroUpload && <p className="text-xs text-red-400">{erroUpload}</p>}
+          </div>
         </div>
         <div className="md:col-span-2">
           <label className="block text-xs font-medium text-white/50 mb-1">Resumo</label>
