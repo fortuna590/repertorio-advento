@@ -3,6 +3,7 @@ import { ArrowLeft, Calendar, Tag, Music, ArrowRight, Share2, Copy, Check } from
 import SEO from "@/components/SEO";
 import { trpc } from "@/lib/trpc";
 import { useState, useCallback } from "react";
+import { RecomendacoesSection } from "@/components/RecomendacoesSection";
 
 const TEMPO_COLORS: Record<string, string> = {
   ADVENTO: "bg-purple-600/20 text-purple-300 border-purple-500/30",
@@ -39,6 +40,10 @@ export default function BlogArtigo() {
   const { slug } = useParams<{ slug: string }>();
   const { data: artigo, isLoading } = trpc.blog.buscarPorSlug.useQuery({ slug: slug || "" }, { enabled: !!slug });
   const { data: todosRepertorios } = trpc.repertorios.listar.useQuery(undefined);
+  const { data: recomendacoes, isLoading: loadingRec } = trpc.recomendacoes.paraArtigo.useQuery(
+    { artigoId: artigo?.id ?? 0 },
+    { enabled: !!artigo?.id }
+  );
   const [copiado, setCopiado] = useState(false);
 
   const compartilhar = useCallback(async () => {
@@ -220,8 +225,18 @@ export default function BlogArtigo() {
           </section>
         )}
 
+        {/* Recomendações inteligentes */}
+        <div className="max-w-3xl mx-auto">
+          <RecomendacoesSection
+            repertorios={recomendacoes?.repertorios}
+            artigos={recomendacoes?.artigos}
+            isLoading={loadingRec}
+            titulo="Veja também"
+          />
+        </div>
+
         {/* CTA para blog */}
-        <div className="max-w-3xl mx-auto mt-12 pt-8 border-t border-white/10 text-center">
+        <div className="max-w-3xl mx-auto mt-8 pt-8 border-t border-white/10 text-center">
           <Link href="/blog" className="inline-flex items-center gap-2 text-sm text-white/50 hover:text-white transition-colors">
             <ArrowLeft className="w-4 h-4" /> Voltar ao blog
           </Link>

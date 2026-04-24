@@ -480,7 +480,168 @@ const usuarioRouter = router({
     }),
 });
 
-// ─── App Router ───────────────────────────────────────────────────────────────
+// ─── Recomendações Router ───────────────────────────────────────────────────
+// Mapa de contexto inteligente: ao estar num tempo, sugere o próximo
+const PROXIMO_TEMPO: Record<string, string[]> = {
+  ADVENTO:      ["NATAL", "TEMPO_COMUM"],
+  NATAL:        ["TEMPO_COMUM", "QUARESMA"],
+  QUARESMA:     ["PASCOA", "TEMPO_COMUM"],
+  PASCOA:       ["TEMPO_COMUM", "NATAL"],
+  TEMPO_COMUM:  ["ADVENTO", "QUARESMA"],
+  CELEBRACOES:  ["TEMPO_COMUM", "ADVENTO"],
+  GERAL:        ["TEMPO_COMUM", "ADVENTO"],
+};
+
+function parseTags(raw: string | null | undefined): string[] {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) return parsed.map(String);
+  } catch {}
+  return raw.split(",").map(t => t.trim()).filter(Boolean);
+}
+
+function scoreRepertorio(
+  candidato: any,
+  tempoAtual: string,
+  categoriaAtual: string | null,
+  tagsAtuais: string[]
+): number {
+  let score = 0;
+  // mesmo tempo litúrgico = maior peso
+  if (candidato.tempoLiturgico === tempoAtual) score += 10;
+  // tempo sugerido pelo contexto
+  const proximoTempos = PROXIMO_TEMPO[tempoAtual] ?? [];
+  if (proximoTempos.includes(candidato.tempoLiturgico)) score += 5;
+  // mesma categoria
+  if (categoriaAtual && candidato.categoria === categoriaAtual) score += 4;
+  // tags em comum
+  const tagsCandidate = parseTags(candidato.tags);
+  const intersecao = tagsAtuais.filter(t => tagsCandidate.includes(t));
+  score += intersecao.length * 2;
+  return score;
+}
+
+function scoreArtigo(
+  candidato: any,
+  categoriaAtual: string | null,
+  tagsAtuais: string[]
+): number {
+  let score = 0;
+  if (categoriaAtual && candidato.categoria === categoriaAtual) score += 6;
+  const tagsCandidate = parseTags(candidato.tags);
+  const intersecao = tagsAtuais.filter(t => tagsCandidate.includes(t));
+  score += intersecao.length * 3;
+  return score;
+}
+
+const recomendacoesRouter = router({
+  // Recomendações a partir de um repertório
+  paraRepertorio: publicProcedure
+    .input(z.object({
+      repertorioId: z.number(),
+      limit: z.number().default(3),
+    }))
+    .query(async ({ input }) => {
+      const [todosRep, todosArt] = await Promise.all([
+        db.listarRepertorios(true),
+        db.listarArtigos(true),
+      ]);
+      const atual = todosRep.find(r => r.id === input.repertorioId);
+      if (!atual) return { repertorios: [], artigos: [] };
+
+      const tagsAtuais = parseTags(atual.tags);
+
+      // Repertórios relacionados (excluindo o atual)
+      const repertoriosScored = todosRep
+        .filter(r => r.id !== input.repertorioId)
+        .map(r => ({ ...r, _score: scoreRepertorio(r, atual.tempoLiturgico, atual.categoria, tagsAtuais) }))
+        .sort((a, b) => b._score - a._score)
+        .slice(0, input.limit);
+
+      // Artigos relacionados por categoria/tags do repertório
+      const artigosScored = todosArt
+        .map(a => ({ ...a, _score: scoreArtigo(a, atual.categoria, tagsAtuais) }))
+        .sort((a, b) => b._score - a._score)
+        .slice(0, input.limit);
+
+      return {
+        repertorios: repertoriosScored,
+        artigos: artigosScored,
+        contexto: atual.tempoLiturgico,
+      };
+    }),
+
+  // Recomendações a partir de um artigo
+  paraArtigo: publicProcedure
+    .input(z.object({
+      artigoId: z.number(),
+      limit: z.number().default(3),
+    }))
+    .query(async ({ input }) => {
+      const [todosRep, todosArt] = await Promise.all([
+        db.listarRepertorios(true),
+        db.listarArtigos(true),
+      ]);
+      const atual = todosArt.find(a => a.id === input.artigoId);
+      if (!atual) return { repertorios: [], artigos: [] };
+
+      const tagsAtuais = parseTags(atual.tags);
+
+      // Artigos relacionados (excluindo o atual)
+      const artigosScored = todosArt
+        .filter(a => a.id !== input.artigoId)
+        .map(a => ({ ...a, _score: scoreArtigo(a, atual.categoria, tagsAtuais) }))
+        .sort((a, b) => b._score - a._score)
+        .slice(0, input.limit);
+
+      // Repertórios relacionados por categoria/tags do artigo
+      // Usa tempoLiturgico mais próximo da categoria do artigo como heurística
+      const tempoHint = tagsAtuais.find(t =>
+        ["ADVENTO","NATAL","QUARESMA","PASCOA","TEMPO_COMUM","CELEBRACOES"].includes(t.toUpperCase())
+      )?.toUpperCase() ?? "TEMPO_COMUM";
+
+      const repertoriosScored = todosRep
+        .map(r => ({ ...r, _score: scoreRepertorio(r, tempoHint, atual.categoria, tagsAtuais) }))
+        .sort((a, b) => b._score - a._score)
+        .slice(0, input.limit);
+
+      return {
+        repertorios: repertoriosScored,
+        artigos: artigosScored,
+        contexto: atual.categoria,
+      };
+    }),
+
+  // Recomendações gerais para a Home (destaques por tempo litúrgico atual)
+  destaques: publicProcedure
+    .input(z.object({
+      tempoLiturgico: z.string().optional(),
+      limit: z.number().default(3),
+    }).optional())
+    .query(async ({ input }) => {
+      const [todosRep, todosArt] = await Promise.all([
+        db.listarRepertorios(true),
+        db.listarArtigos(true),
+      ]);
+      const tempo = input?.tempoLiturgico ?? "TEMPO_COMUM";
+      const proximoTempos = PROXIMO_TEMPO[tempo] ?? [];
+      const limit = input?.limit ?? 3;
+
+      // Prioriza mesmo tempo, depois os próximos
+      const repertorios = [
+        ...todosRep.filter(r => r.tempoLiturgico === tempo),
+        ...todosRep.filter(r => proximoTempos.includes(r.tempoLiturgico)),
+        ...todosRep.filter(r => r.tempoLiturgico !== tempo && !proximoTempos.includes(r.tempoLiturgico)),
+      ].slice(0, limit);
+
+      const artigos = todosArt.slice(0, limit);
+
+      return { repertorios, artigos, contexto: tempo };
+    }),
+});
+
+// ─── App Router ─────────────────────────────────────────────────────────────
 export const appRouter = router({
   auth: authRouter,
   admin: adminRouter,
@@ -488,6 +649,7 @@ export const appRouter = router({
   blog: blogRouter,
   system: systemRouter,
   usuario: usuarioRouter,
+  recomendacoes: recomendacoesRouter,
 });
 
 export type AppRouter = typeof appRouter;

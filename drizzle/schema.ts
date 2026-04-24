@@ -30,6 +30,7 @@ export const repertorios = mysqlTable("lm_repertorios", {
   ]).notNull().default("TEMPO_COMUM"),
   categoria: varchar("categoria", { length: 100 }).notNull().default("Missa Dominical"),
   descricao: text("descricao"),
+  tags: text("tags"),
   visivel: boolean("visivel").notNull().default(true),
   metaTitle: varchar("metaTitle", { length: 255 }),
   metaDescription: varchar("metaDescription", { length: 320 }),

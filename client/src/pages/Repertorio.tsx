@@ -4,6 +4,7 @@ import SEO from "@/components/SEO";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useState, useCallback } from "react";
+import { RecomendacoesSection } from "@/components/RecomendacoesSection";
 
 const MOMENTOS_LABELS: Record<string, string> = {
   ENTRADA: "Entrada",
@@ -39,6 +40,10 @@ const TEMPO_LABELS: Record<string, string> = {
 export default function Repertorio() {
   const { slug } = useParams<{ slug: string }>();
   const { data: r, isLoading } = trpc.repertorios.buscarPorSlug.useQuery({ slug: slug || "" }, { enabled: !!slug });
+  const { data: recomendacoes, isLoading: loadingRec } = trpc.recomendacoes.paraRepertorio.useQuery(
+    { repertorioId: r?.id ?? 0 },
+    { enabled: !!r?.id }
+  );
   const [copiado, setCopiado] = useState(false);
   const [exportando, setExportando] = useState(false);
   const { isAuthenticated } = useAuth();
@@ -328,6 +333,13 @@ export default function Repertorio() {
             </button>
           </div>
         </div>
+
+        {/* Recomendações */}
+        <RecomendacoesSection
+          repertorios={recomendacoes?.repertorios}
+          artigos={recomendacoes?.artigos}
+          isLoading={loadingRec}
+        />
       </div>
     </>
   );

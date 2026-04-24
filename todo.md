@@ -41,3 +41,14 @@
 ## Bug Fixes
 
 - [x] Corrigir bug de tela preta na edição de artigos no mobile (Android Chrome) — parsing de tags normalizado + card-glass substituído por bg-slate-900 nos modais
+
+## Sistema de Recomendação Inteligente
+
+- [x] Adicionar campo `tags` à tabela lm_repertorios e migrar banco
+- [x] Criar endpoint `recomendacoes.paraRepertorio` — retorna 3 repertórios + 3 artigos por tempo litúrgico e categoria
+- [x] Criar endpoint `recomendacoes.paraArtigo` — retorna 3 repertórios + 3 artigos por categoria e tags
+- [x] Criar endpoint `recomendacoes.destaques` — retorna sugestões contextuais baseadas na data atual (Advento→Natal, Quaresma→Páscoa)
+- [x] Criar componente `RecomendacoesSection` reutilizável com design system (cards, hover effects, responsivo)
+- [x] Integrar recomendações na página Repertório Individual
+- [x] Integrar recomendações na página Artigo Individual
+- [x] Integrar destaques contextuais na Home ("Sugerido para você agora")

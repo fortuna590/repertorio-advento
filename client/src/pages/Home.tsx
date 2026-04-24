@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { ArrowRight, BookOpen, Music2, Star } from "lucide-react";
 import SEO from "@/components/SEO";
 import { trpc } from "@/lib/trpc";
+import { RecomendacoesSection } from "@/components/RecomendacoesSection";
 
 const TEMPOS = [
   { id: "ADVENTO", label: "Advento", descricao: "Tempo de espera e preparação para o Natal", emoji: "🕯️", gradient: "gradient-advento", href: "/repertorios?tempo=ADVENTO" },
@@ -17,6 +18,7 @@ export default function Home() {
   const repertoriosRecentes = repertoriosData?.slice(0, 3);
   const { data: artigosData } = trpc.blog.listar.useQuery(undefined);
   const artigosRecentes = artigosData?.slice(0, 3);
+  const { data: destaques, isLoading: loadingDestaques } = trpc.recomendacoes.destaques.useQuery({});
 
   return (
     <>
@@ -128,6 +130,18 @@ export default function Home() {
           </div>
         </section>
       )}
+
+      {/* RECOMENDAÇÕES CONTEXTUAIS */}
+      <section className="py-16 md:py-20 border-t border-white/5">
+        <div className="container">
+          <RecomendacoesSection
+            repertorios={destaques?.repertorios}
+            artigos={destaques?.artigos}
+            isLoading={loadingDestaques}
+            titulo="Sugerido para você agora"
+          />
+        </div>
+      </section>
 
       {/* CTA FINAL */}
       <section className="py-20 md:py-28 border-t border-white/5">
