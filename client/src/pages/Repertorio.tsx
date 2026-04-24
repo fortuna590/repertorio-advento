@@ -3,7 +3,7 @@ import { ArrowLeft, Music, BookOpen, Copy, Share2, FileDown, Youtube, Guitar, Fi
 import SEO from "@/components/SEO";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { RecomendacoesSection } from "@/components/RecomendacoesSection";
 
 const MOMENTOS_LABELS: Record<string, string> = {
@@ -57,6 +57,23 @@ export default function Repertorio() {
   });
   const isFavorito = favData?.favoritado ?? false;
 
+  // ─── Analytics ──────────────────────────────────────────────────────────────
+  const registrarView = trpc.analytics.registrarView.useMutation();
+  const registrarClick = trpc.analytics.registrarMusicClick.useMutation();
+  const registrarAcao = trpc.analytics.registrarAcao.useMutation();
+
+  // Registrar visualização quando o repertório carrega (fire-and-forget)
+  useEffect(() => {
+    if (!r?.id) return;
+    registrarView.mutate({
+      tipo: "repertorio",
+      referenciaId: r.id,
+      titulo: r.titulo,
+      slug: r.slug,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [r?.id]);
+
   const gerarTextoRepertorio = useCallback(() => {
     if (!r) return "";
     let texto = `${r.titulo}\n`;
@@ -81,6 +98,8 @@ export default function Repertorio() {
 
   const copiarRepertorio = useCallback(async () => {
     const texto = gerarTextoRepertorio();
+    // Tracking
+    registrarAcao.mutate({ acao: "copiar_repertorio", referenciaId: r?.id, referenciaTitle: r?.titulo });
     try {
       await navigator.clipboard.writeText(texto);
       setCopiado(true);
@@ -113,6 +132,8 @@ export default function Repertorio() {
 
   const exportarPDF = useCallback(async () => {
     if (!r) return;
+    // Tracking
+    registrarAcao.mutate({ acao: "exportar_pdf", referenciaId: r.id, referenciaTitle: r.titulo });
     setExportando(true);
     try {
       // Gera HTML para impressão/PDF
@@ -288,6 +309,7 @@ export default function Repertorio() {
                           {m.youtube && (
                             <a href={m.youtube} target="_blank" rel="noopener noreferrer"
                               title="Ouvir no YouTube"
+                              onClick={() => registrarClick.mutate({ musicaTitulo: m.titulo, musicaArtista: m.artista, repertorioId: r.id, repertorioTitulo: r.titulo, tipoLink: "youtube" })}
                               className="p-2 rounded-lg bg-red-600/15 text-red-400 hover:bg-red-600/30 transition-colors">
                               <Youtube className="w-3.5 h-3.5" />
                             </a>
@@ -295,6 +317,7 @@ export default function Repertorio() {
                           {m.cifra && (
                             <a href={m.cifra} target="_blank" rel="noopener noreferrer"
                               title="Ver cifra"
+                              onClick={() => registrarClick.mutate({ musicaTitulo: m.titulo, musicaArtista: m.artista, repertorioId: r.id, repertorioTitulo: r.titulo, tipoLink: "cifra" })}
                               className="p-2 rounded-lg bg-purple-600/15 text-purple-400 hover:bg-purple-600/30 transition-colors">
                               <Guitar className="w-3.5 h-3.5" />
                             </a>
@@ -302,6 +325,7 @@ export default function Repertorio() {
                           {m.letra && (
                             <a href={m.letra} target="_blank" rel="noopener noreferrer"
                               title="Ver letra"
+                              onClick={() => registrarClick.mutate({ musicaTitulo: m.titulo, musicaArtista: m.artista, repertorioId: r.id, repertorioTitulo: r.titulo, tipoLink: "letra" })}
                               className="p-2 rounded-lg bg-blue-600/15 text-blue-400 hover:bg-blue-600/30 transition-colors">
                               <FileText className="w-3.5 h-3.5" />
                             </a>

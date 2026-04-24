@@ -641,7 +641,8 @@ const recomendacoesRouter = router({
     }),
 });
 
-// ─── App Router ─────────────────────────────────────────────────────────────
+import { analyticsRouter } from "./routers/analytics";
+// ─── App Router ──────────────────────────────────────────────────
 export const appRouter = router({
   auth: authRouter,
   admin: adminRouter,
@@ -650,6 +651,7 @@ export const appRouter = router({
   system: systemRouter,
   usuario: usuarioRouter,
   recomendacoes: recomendacoesRouter,
+  analytics: analyticsRouter,
 });
 
 export type AppRouter = typeof appRouter;

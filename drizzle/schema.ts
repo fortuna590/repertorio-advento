@@ -132,3 +132,41 @@ export const musicasUsuario = mysqlTable("lm_musicas_usuario", {
 });
 export type MusicaUsuario = typeof musicasUsuario.$inferSelect;
 export type InsertMusicaUsuario = typeof musicasUsuario.$inferInsert;
+
+// ─── Analytics: Visualizações ────────────────────────────────────────────────
+export const views = mysqlTable("lm_views", {
+  id: int("id").autoincrement().primaryKey(),
+  tipo: mysqlEnum("tipo", ["repertorio", "artigo"]).notNull(),
+  referenciaId: int("referenciaId").notNull(),
+  titulo: varchar("titulo", { length: 255 }),
+  slug: varchar("slug", { length: 255 }),
+  sessionId: varchar("sessionId", { length: 64 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type View = typeof views.$inferSelect;
+export type InsertView = typeof views.$inferInsert;
+
+// ─── Analytics: Cliques em Músicas ───────────────────────────────────────────
+export const musicClicks = mysqlTable("lm_music_clicks", {
+  id: int("id").autoincrement().primaryKey(),
+  musicaTitulo: varchar("musicaTitulo", { length: 255 }).notNull(),
+  musicaArtista: varchar("musicaArtista", { length: 255 }),
+  repertorioId: int("repertorioId"),
+  repertorioTitulo: varchar("repertorioTitulo", { length: 255 }),
+  tipoLink: mysqlEnum("tipoLink", ["youtube", "cifra", "letra"]).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type MusicClick = typeof musicClicks.$inferSelect;
+export type InsertMusicClick = typeof musicClicks.$inferInsert;
+
+// ─── Analytics: Ações do Usuário ─────────────────────────────────────────────
+export const userActions = mysqlTable("lm_user_actions", {
+  id: int("id").autoincrement().primaryKey(),
+  acao: mysqlEnum("acao", ["salvar_repertorio", "exportar_pdf", "favoritar", "copiar_repertorio", "compartilhar"]).notNull(),
+  referenciaId: int("referenciaId"),
+  referenciaTitle: varchar("referenciaTitle", { length: 255 }),
+  userId: int("userId"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type UserAction = typeof userActions.$inferSelect;
+export type InsertUserAction = typeof userActions.$inferInsert;

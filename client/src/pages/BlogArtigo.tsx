@@ -2,7 +2,7 @@ import { Link, useParams } from "wouter";
 import { ArrowLeft, Calendar, Tag, Music, ArrowRight, Share2, Copy, Check } from "lucide-react";
 import SEO from "@/components/SEO";
 import { trpc } from "@/lib/trpc";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { RecomendacoesSection } from "@/components/RecomendacoesSection";
 
 const TEMPO_COLORS: Record<string, string> = {
@@ -45,6 +45,21 @@ export default function BlogArtigo() {
     { enabled: !!artigo?.id }
   );
   const [copiado, setCopiado] = useState(false);
+
+  // ─── Analytics ──────────────────────────────────────────────────────────────
+  const registrarView = trpc.analytics.registrarView.useMutation();
+
+  // Registrar visualização quando o artigo carrega (fire-and-forget)
+  useEffect(() => {
+    if (!artigo?.id) return;
+    registrarView.mutate({
+      tipo: "artigo",
+      referenciaId: artigo.id,
+      titulo: artigo.titulo,
+      slug: artigo.slug,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [artigo?.id]);
 
   const compartilhar = useCallback(async () => {
     const url = window.location.href;

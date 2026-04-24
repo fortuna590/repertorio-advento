@@ -15,6 +15,7 @@ const Admin = lazy(() => import("@/pages/Admin"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const MinhaArea = lazy(() => import("@/pages/MinhaArea"));
 const ComoFunciona = lazy(() => import("@/pages/ComoFunciona"));
+const AdminAnalytics = lazy(() => import("@/pages/AdminAnalytics"));
 
 function PageLoader() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="/sobre" component={Sobre} />
             <Route path="/minha-area" component={MinhaArea} />
             <Route path="/admin" component={Admin} />
+            <Route path="/admin/analytics" component={AdminAnalytics} />
             <Route path="/como-funciona" component={ComoFunciona} />
             <Route component={NotFound} />
           </Switch>

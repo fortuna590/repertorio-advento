@@ -60,3 +60,13 @@
 - [x] Adicionar dica contextual na página de Repertório Individual ("Você pode copiar ou exportar")
 - [x] Criar página /como-funciona com SEO, passo a passo, benefícios e FAQ
 - [x] Adicionar link "Como Funciona" no menu de navegação (desktop e mobile)
+
+## Sistema de Analytics Interno
+
+- [x] Criar tabelas lm_views, lm_music_clicks e lm_user_actions no banco
+- [x] Criar endpoints tRPC de registro (fire-and-forget) para views, cliques e ações
+- [x] Criar endpoint de dashboard (admin only) com top repertórios, artigos, músicas
+- [x] Instrumentar Repertorio.tsx — tracking de view + cliques em YouTube/cifra/letra + ações de copiar/exportar
+- [x] Instrumentar BlogArtigo.tsx — tracking de view ao carregar artigo
+- [x] Criar página AdminAnalytics com gráfico de tendência, rankings e distribuições
+- [x] Adicionar botão "Analytics" no painel Admin e registrar rota /admin/analytics

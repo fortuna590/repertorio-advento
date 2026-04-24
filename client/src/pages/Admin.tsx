@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Link } from "wouter";
-import { ArrowLeft, Plus, Trash2, Edit, Music, BookOpen, Save, X, ExternalLink, Eye, Upload, ImageIcon } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Edit, Music, BookOpen, Save, X, ExternalLink, Eye, Upload, ImageIcon, BarChart2 } from "lucide-react";
 import SEO from "@/components/SEO";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -47,6 +47,10 @@ export default function Admin() {
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm transition-all ${tab==="blog" ? "bg-purple-600 text-white" : "bg-white/5 text-white/60 hover:bg-white/10 border border-white/10"}`}>
             <BookOpen className="w-4 h-4" />Blog
           </button>
+          <Link href="/admin/analytics"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm bg-white/5 text-white/60 hover:bg-white/10 border border-white/10 transition-all">
+            <BarChart2 className="w-4 h-4" />Analytics
+          </Link>
         </div>
 
         {tab === "repertorios" && <RepertoriosAdmin />}
