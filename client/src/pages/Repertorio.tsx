@@ -256,6 +256,12 @@ export default function Repertorio() {
           )}
         </div>
 
+        {/* Dica contextual de onboarding */}
+        <div className="flex items-center gap-2 mb-8 px-4 py-2.5 rounded-xl bg-purple-600/10 border border-purple-500/20 text-purple-300/80 text-xs">
+          <span className="shrink-0 w-4 h-4 rounded-full bg-purple-500/30 flex items-center justify-center text-purple-300 font-bold text-[10px]">i</span>
+          <span>Você pode <strong className="text-purple-300">copiar ou exportar este repertório</strong> usando os botões acima para usar na sua próxima celebração.</span>
+        </div>
+
         {/* Músicas por Momento */}
         {momentosComMusicas.length > 0 ? (
           <div className="space-y-6">

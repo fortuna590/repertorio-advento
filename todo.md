@@ -52,3 +52,11 @@
 - [x] Integrar recomendações na página Repertório Individual
 - [x] Integrar recomendações na página Artigo Individual
 - [x] Integrar destaques contextuais na Home ("Sugerido para você agora")
+
+## Onboarding e UX
+
+- [x] Criar componente OnboardingModal (3 passos, localStorage, fechável com animação)
+- [x] Integrar OnboardingModal no App.tsx — aparece apenas na primeira visita
+- [x] Adicionar dica contextual na página de Repertório Individual ("Você pode copiar ou exportar")
+- [x] Criar página /como-funciona com SEO, passo a passo, benefícios e FAQ
+- [x] Adicionar link "Como Funciona" no menu de navegação (desktop e mobile)

@@ -3,6 +3,7 @@ import { Suspense, lazy } from "react";
 import ModernHeader from "@/components/ModernHeader";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import OnboardingModal from "@/components/OnboardingModal";
 
 const Home = lazy(() => import("@/pages/Home"));
 const Repertorios = lazy(() => import("@/pages/Repertorios"));
@@ -13,6 +14,7 @@ const Sobre = lazy(() => import("@/pages/Sobre"));
 const Admin = lazy(() => import("@/pages/Admin"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const MinhaArea = lazy(() => import("@/pages/MinhaArea"));
+const ComoFunciona = lazy(() => import("@/pages/ComoFunciona"));
 
 function PageLoader() {
   return (
@@ -37,12 +39,15 @@ export default function App() {
             <Route path="/sobre" component={Sobre} />
             <Route path="/minha-area" component={MinhaArea} />
             <Route path="/admin" component={Admin} />
+            <Route path="/como-funciona" component={ComoFunciona} />
             <Route component={NotFound} />
           </Switch>
         </Suspense>
       </main>
       <Footer />
       <WhatsAppButton />
+      {/* Modal de onboarding — aparece apenas na primeira visita */}
+      <OnboardingModal />
     </div>
   );
 }
