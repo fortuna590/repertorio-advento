@@ -2,6 +2,7 @@ import { z } from "zod";
 import { router, publicProcedure, protectedProcedure, adminProcedure } from "./_core/trpc";
 import { systemRouter } from "./_core/systemRouter";
 import * as db from "./db";
+import { analyticsRouter } from "./routers/analytics";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function gerarSlug(texto: string): string {
@@ -478,6 +479,39 @@ const usuarioRouter = router({
       await db.excluirMusicaUsuario(input.id);
       return { success: true };
     }),
+  editarMusica: protectedProcedure
+    .input(z.object({
+      id: z.number(),
+      repertorioId: z.number(),
+      titulo: z.string().min(1).optional(),
+      artista: z.string().optional(),
+      tom: z.string().optional(),
+      momento: z.enum(["ENTRADA","ATO_PENITENCIAL","GLORIA","SALMO","ACLAMACAO","OFERTORIO","SANTO","COMUNHAO","FINAL","OUTROS"]).optional(),
+      youtube: z.string().optional(),
+      cifra: z.string().optional(),
+      letra: z.string().optional(),
+      ordem: z.number().optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const rep = await db.buscarRepertorioUsuarioPorId(input.repertorioId);
+      if (!rep || rep.userId !== ctx.user.id) throw new Error("Não autorizado");
+      const { id, repertorioId, ...data } = input;
+      return db.atualizarMusicaUsuario(id, data);
+    }),
+  // Músicas Favoritas (de repertórios públicos)
+  toggleMusicaFavorita: protectedProcedure
+    .input(z.object({ musicaId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      return db.toggleMusicaFavorita(ctx.user.id, input.musicaId);
+    }),
+  listarMusicasFavoritas: protectedProcedure
+    .query(async ({ ctx }) => {
+      return db.listarMusicasFavoritas(ctx.user.id);
+    }),
+  listarIdsMusicasFavoritas: protectedProcedure
+    .query(async ({ ctx }) => {
+      return db.listarIdsMusicasFavoritas(ctx.user.id);
+    }),
 });
 
 // ─── Recomendações Router ───────────────────────────────────────────────────
@@ -641,7 +675,6 @@ const recomendacoesRouter = router({
     }),
 });
 
-import { analyticsRouter } from "./routers/analytics";
 // ─── App Router ──────────────────────────────────────────────────
 export const appRouter = router({
   auth: authRouter,

@@ -170,3 +170,12 @@ export const userActions = mysqlTable("lm_user_actions", {
 });
 export type UserAction = typeof userActions.$inferSelect;
 export type InsertUserAction = typeof userActions.$inferInsert;
+// ─── Músicas Favoritas do Usuário ─────────────────────────────────────────────
+export const musicasFavoritas = mysqlTable("lm_musicas_favoritas", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  musicaId: int("musicaId").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type MusicaFavorita = typeof musicasFavoritas.$inferSelect;
+export type InsertMusicaFavorita = typeof musicasFavoritas.$inferInsert;

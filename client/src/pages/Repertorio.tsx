@@ -52,6 +52,13 @@ export default function Repertorio() {
     { repertorioId: r?.id || 0 },
     { enabled: isAuthenticated && !!r?.id }
   );
+  const { data: idsMusicasFav, refetch: refetchMusicasFav } = trpc.usuario.listarIdsMusicasFavoritas.useQuery(
+    undefined,
+    { enabled: isAuthenticated }
+  );
+  const toggleMusicaFav = trpc.usuario.toggleMusicaFavorita.useMutation({
+    onSuccess: () => refetchMusicasFav(),
+  });
   const toggleFav = trpc.usuario.toggleFavorito.useMutation({
     onSuccess: () => utils.usuario.verificarFavorito.invalidate(),
   });
@@ -329,6 +336,15 @@ export default function Repertorio() {
                               className="p-2 rounded-lg bg-blue-600/15 text-blue-400 hover:bg-blue-600/30 transition-colors">
                               <FileText className="w-3.5 h-3.5" />
                             </a>
+                          )}
+                          {isAuthenticated && (
+                            <button
+                              onClick={() => toggleMusicaFav.mutate({ musicaId: m.id })}
+                              title={idsMusicasFav?.includes(m.id) ? "Remover dos favoritos" : "Favoritar música"}
+                              className={`p-2 rounded-lg transition-colors ${idsMusicasFav?.includes(m.id) ? "bg-pink-600/30 text-pink-400 hover:bg-pink-600/40" : "bg-white/5 text-white/30 hover:bg-pink-600/15 hover:text-pink-400"}`}
+                            >
+                              <Heart className={`w-3.5 h-3.5 ${idsMusicasFav?.includes(m.id) ? "fill-current" : ""}`} />
+                            </button>
                           )}
                         </div>
                       </div>

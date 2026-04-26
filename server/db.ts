@@ -282,3 +282,55 @@ export async function excluirMusicaUsuario(id: number) {
   if (!db) return;
   await db.delete(musicasUsuario).where(eq(musicasUsuario.id, id));
 }
+
+// ─── Músicas Favoritas ────────────────────────────────────────────────────────
+import { musicasFavoritas } from "../drizzle/schema";
+
+export async function toggleMusicaFavorita(userId: number, musicaId: number): Promise<{ favoritado: boolean }> {
+  const db = await getDb();
+  if (!db) return { favoritado: false };
+  const existing = await db.select().from(musicasFavoritas)
+    .where(and(eq(musicasFavoritas.userId, userId), eq(musicasFavoritas.musicaId, musicaId)))
+    .limit(1);
+  if (existing.length > 0) {
+    await db.delete(musicasFavoritas).where(and(eq(musicasFavoritas.userId, userId), eq(musicasFavoritas.musicaId, musicaId)));
+    return { favoritado: false };
+  } else {
+    await db.insert(musicasFavoritas).values({ userId, musicaId });
+    return { favoritado: true };
+  }
+}
+
+export async function listarMusicasFavoritas(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  const favs = await db.select().from(musicasFavoritas).where(eq(musicasFavoritas.userId, userId));
+  if (favs.length === 0) return [];
+  const ids = favs.map(f => f.musicaId);
+  const todasMusicas = await db.select().from(musicas);
+  return todasMusicas.filter(m => ids.includes(m.id));
+}
+
+export async function verificarMusicaFavorita(userId: number, musicaId: number): Promise<boolean> {
+  const db = await getDb();
+  if (!db) return false;
+  const rows = await db.select().from(musicasFavoritas)
+    .where(and(eq(musicasFavoritas.userId, userId), eq(musicasFavoritas.musicaId, musicaId)))
+    .limit(1);
+  return rows.length > 0;
+}
+
+export async function listarIdsMusicasFavoritas(userId: number): Promise<number[]> {
+  const db = await getDb();
+  if (!db) return [];
+  const rows = await db.select({ musicaId: musicasFavoritas.musicaId }).from(musicasFavoritas).where(eq(musicasFavoritas.userId, userId));
+  return rows.map(r => r.musicaId);
+}
+
+export async function atualizarMusicaUsuario(id: number, data: Partial<typeof musicasUsuario.$inferInsert>) {
+  const db = await getDb();
+  if (!db) return null;
+  await db.update(musicasUsuario).set(data).where(eq(musicasUsuario.id, id));
+  const rows = await db.select().from(musicasUsuario).where(eq(musicasUsuario.id, id)).limit(1);
+  return rows[0] ?? null;
+}

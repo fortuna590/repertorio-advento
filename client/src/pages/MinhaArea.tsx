@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Heart, Music, Plus, Trash2, Edit3, Share2, LogOut, User, ArrowLeft, ExternalLink, Youtube, Guitar, BookOpen, Check, X } from "lucide-react";
+import { Heart, Music, Plus, Trash2, Edit3, Share2, LogOut, User, ArrowLeft, ExternalLink, Youtube, Guitar, BookOpen, Check, X, FileText, Pencil, Save } from "lucide-react";
 import SEO from "@/components/SEO";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -31,7 +31,7 @@ const TEMPO_LABELS: Record<string, string> = {
   PASCOA: "Páscoa", TEMPO_COMUM: "Tempo Comum", CELEBRACOES: "Celebrações",
 };
 
-type Tab = "favoritos" | "meus-repertorios";
+type Tab = "favoritos" | "musicas-favoritas" | "meus-repertorios";
 
 export default function MinhaArea() {
   const { user, isAuthenticated, loading, logout } = useAuth();
@@ -43,6 +43,8 @@ export default function MinhaArea() {
   const [repertorioAberto, setRepertorioAberto] = useState<number | null>(null);
   const [adicionandoMusica, setAdicionandoMusica] = useState(false);
   const [novaMusica, setNovaMusica] = useState({ titulo: "", artista: "", tom: "", momento: "OUTROS", youtube: "", cifra: "", letra: "" });
+  const [editandoMusicaId, setEditandoMusicaId] = useState<number | null>(null);
+  const [musicaEditForm, setMusicaEditForm] = useState<any>(null);
   const { toast } = useToast();
   const utils = trpc.useUtils();
 
@@ -56,6 +58,10 @@ export default function MinhaArea() {
   const excluirRep = trpc.usuario.excluirMeuRepertorio.useMutation({
     onSuccess: () => { utils.usuario.listarMeusRepertorios.invalidate(); if (repertorioAberto) setRepertorioAberto(null); toast({ title: "Repertório excluído" }); },
   });
+  const { data: musicasFavoritas, isLoading: loadingMusicasFav, refetch: refetchMusicasFav } = trpc.usuario.listarMusicasFavoritas.useQuery(undefined, { enabled: isAuthenticated });
+  const toggleMusicaFav = trpc.usuario.toggleMusicaFavorita.useMutation({
+    onSuccess: () => refetchMusicasFav(),
+  });
   const removeFav = trpc.usuario.toggleFavorito.useMutation({
     onSuccess: () => utils.usuario.listarFavoritos.invalidate(),
   });
@@ -64,6 +70,9 @@ export default function MinhaArea() {
   });
   const removeMusica = trpc.usuario.removerMusica.useMutation({
     onSuccess: () => utils.usuario.buscarMeuRepertorio.invalidate(),
+  });
+  const editarMusicaUser = trpc.usuario.editarMusica.useMutation({
+    onSuccess: () => { utils.usuario.buscarMeuRepertorio.invalidate(); setEditandoMusicaId(null); setMusicaEditForm(null); toast({ title: "Música atualizada!" }); },
   });
 
   if (loading) {
@@ -114,23 +123,53 @@ export default function MinhaArea() {
             <div className="text-center py-10 text-white/30 text-sm">Nenhuma música ainda. Adicione a primeira!</div>
           )}
           {(repertorioDetalhes.musicas || []).map((m) => (
-            <div key={m.id} className="card-glass p-4 rounded-xl flex items-start justify-between gap-3">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap mb-1">
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-purple-600/20 text-purple-300 border border-purple-500/30">{MOMENTO_LABELS[m.momento] || m.momento}</span>
-                  {m.tom && <span className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-white/40 border border-white/10">{m.tom}</span>}
+            <div key={m.id} className="card-glass rounded-xl overflow-hidden">
+              {editandoMusicaId === m.id && musicaEditForm ? (
+                <div className="p-4 space-y-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <Input placeholder="Título *" value={musicaEditForm.titulo} onChange={e => setMusicaEditForm((p: any) => ({...p, titulo: e.target.value}))} className="bg-white/5 border-white/10 text-white placeholder:text-white/30 col-span-2" />
+                    <Input placeholder="Artista" value={musicaEditForm.artista || ""} onChange={e => setMusicaEditForm((p: any) => ({...p, artista: e.target.value}))} className="bg-white/5 border-white/10 text-white placeholder:text-white/30" />
+                    <Input placeholder="Tom (ex: Dó)" value={musicaEditForm.tom || ""} onChange={e => setMusicaEditForm((p: any) => ({...p, tom: e.target.value}))} className="bg-white/5 border-white/10 text-white placeholder:text-white/30" />
+                  </div>
+                  <Select value={musicaEditForm.momento} onValueChange={v => setMusicaEditForm((p: any) => ({...p, momento: v}))}>
+                    <SelectTrigger className="bg-white/5 border-white/10 text-white"><SelectValue /></SelectTrigger>
+                    <SelectContent>{Object.entries(MOMENTO_LABELS).map(([k,v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}</SelectContent>
+                  </Select>
+                  <Input placeholder="Link YouTube" value={musicaEditForm.youtube || ""} onChange={e => setMusicaEditForm((p: any) => ({...p, youtube: e.target.value}))} className="bg-white/5 border-white/10 text-white placeholder:text-white/30" />
+                  <Input placeholder="Link Cifra" value={musicaEditForm.cifra || ""} onChange={e => setMusicaEditForm((p: any) => ({...p, cifra: e.target.value}))} className="bg-white/5 border-white/10 text-white placeholder:text-white/30" />
+                  <Input placeholder="Link Letra" value={musicaEditForm.letra || ""} onChange={e => setMusicaEditForm((p: any) => ({...p, letra: e.target.value}))} className="bg-white/5 border-white/10 text-white placeholder:text-white/30" />
+                  <div className="flex gap-2 pt-1">
+                    <Button onClick={() => editarMusicaUser.mutate({ id: m.id, repertorioId: repertorioAberto!, ...musicaEditForm })} disabled={!musicaEditForm.titulo || editarMusicaUser.isPending} className="bg-purple-600 hover:bg-purple-500 text-white flex-1 text-xs">
+                      <Save className="w-3 h-3 mr-1" />{editarMusicaUser.isPending ? "Salvando..." : "Salvar"}
+                    </Button>
+                    <Button variant="outline" onClick={() => { setEditandoMusicaId(null); setMusicaEditForm(null); }} className="border-white/10 text-white/60 text-xs">Cancelar</Button>
+                  </div>
                 </div>
-                <p className="font-semibold text-white text-sm">{m.titulo}</p>
-                {m.artista && <p className="text-xs text-white/40">{m.artista}</p>}
-                <div className="flex gap-2 mt-2">
-                  {m.youtube && <a href={m.youtube} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-red-400 hover:text-red-300"><Youtube className="w-3 h-3" /> YouTube</a>}
-                  {m.cifra && <a href={m.cifra} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300"><Guitar className="w-3 h-3" /> Cifra</a>}
-                  {m.letra && <a href={m.letra} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-green-400 hover:text-green-300"><BookOpen className="w-3 h-3" /> Letra</a>}
+              ) : (
+                <div className="p-4 flex items-start justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-purple-600/20 text-purple-300 border border-purple-500/30">{MOMENTO_LABELS[m.momento] || m.momento}</span>
+                      {m.tom && <span className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-white/40 border border-white/10">{m.tom}</span>}
+                    </div>
+                    <p className="font-semibold text-white text-sm">{m.titulo}</p>
+                    {m.artista && <p className="text-xs text-white/40">{m.artista}</p>}
+                    <div className="flex gap-2 mt-2">
+                      {m.youtube && <a href={m.youtube} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-red-400 hover:text-red-300"><Youtube className="w-3 h-3" /> YouTube</a>}
+                      {m.cifra && <a href={m.cifra} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300"><Guitar className="w-3 h-3" /> Cifra</a>}
+                      {m.letra && <a href={m.letra} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-green-400 hover:text-green-300"><BookOpen className="w-3 h-3" /> Letra</a>}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button onClick={() => { setEditandoMusicaId(m.id); setMusicaEditForm({ titulo: m.titulo, artista: m.artista || "", tom: m.tom || "", momento: m.momento, youtube: m.youtube || "", cifra: m.cifra || "", letra: m.letra || "" }); }} className="p-1.5 rounded-lg text-purple-400/60 hover:text-purple-400 hover:bg-purple-400/10 transition-all" title="Editar música">
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                    <button onClick={() => removeMusica.mutate({ id: m.id, repertorioId: repertorioAberto })} className="p-1.5 rounded-lg text-white/20 hover:text-red-400 hover:bg-red-400/10 transition-all" title="Remover música">
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <button onClick={() => removeMusica.mutate({ id: m.id, repertorioId: repertorioAberto })} className="p-1.5 rounded-lg text-white/20 hover:text-red-400 hover:bg-red-400/10 transition-all shrink-0">
-                <X className="w-4 h-4" />
-              </button>
+              )}
             </div>
           ))}
         </div>
@@ -193,7 +232,7 @@ export default function MinhaArea() {
 
         {/* Tabs */}
         <div className="flex gap-2 mb-8 border-b border-white/10 pb-0">
-          {([["favoritos", Heart, "Favoritos"], ["meus-repertorios", Music, "Meus Repertórios"]] as const).map(([id, Icon, label]) => (
+          {([["favoritos", Heart, "Favoritos"], ["musicas-favoritas", FileText, "Minhas Músicas"], ["meus-repertorios", Music, "Meus Repertórios"]] as const).map(([id, Icon, label]) => (
             <button key={id} onClick={() => setTab(id as Tab)}
               className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all -mb-px ${tab === id ? "border-purple-500 text-white" : "border-transparent text-white/40 hover:text-white/70"}`}>
               <Icon className="w-4 h-4" /> {label}
@@ -241,6 +280,58 @@ export default function MinhaArea() {
           </div>
         )}
 
+        {/* Minhas Músicas */}
+        {tab === "musicas-favoritas" && (
+          <div>
+            {loadingMusicasFav ? (
+              <div className="space-y-3">
+                {[1,2,3,4].map(i => <div key={i} className="h-16 bg-white/5 rounded-xl animate-pulse" />)}
+              </div>
+            ) : !musicasFavoritas?.length ? (
+              <div className="text-center py-16">
+                <Heart className="w-12 h-12 text-white/10 mx-auto mb-4" />
+                <p className="text-white/40 mb-2">Nenhuma música favoritada</p>
+                <p className="text-sm text-white/20">Acesse um repertório e clique no coração ao lado de uma música para salvá-la aqui.</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {musicasFavoritas.map((m: any) => (
+                  <div key={m.id} className="flex items-center gap-3 p-3 rounded-xl bg-white/3 border border-white/5 hover:border-white/10 transition-colors">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-white truncate">{m.titulo}</p>
+                      {m.artista && <p className="text-xs text-white/40 truncate">{m.artista}</p>}
+                      {m.tom && <span className="text-xs px-1.5 py-0.5 rounded bg-white/5 text-white/30 mt-0.5 inline-block">{m.tom}</span>}
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {m.youtube && (
+                        <a href={m.youtube} target="_blank" rel="noopener noreferrer" title="Ouvir no YouTube"
+                          className="p-2 rounded-lg bg-red-600/15 text-red-400 hover:bg-red-600/30 transition-colors">
+                          <Youtube className="w-3.5 h-3.5" />
+                        </a>
+                      )}
+                      {m.cifra && (
+                        <a href={m.cifra} target="_blank" rel="noopener noreferrer" title="Ver cifra"
+                          className="p-2 rounded-lg bg-purple-600/15 text-purple-400 hover:bg-purple-600/30 transition-colors">
+                          <Guitar className="w-3.5 h-3.5" />
+                        </a>
+                      )}
+                      {m.letra && (
+                        <a href={m.letra} target="_blank" rel="noopener noreferrer" title="Ver letra"
+                          className="p-2 rounded-lg bg-blue-600/15 text-blue-400 hover:bg-blue-600/30 transition-colors">
+                          <BookOpen className="w-3.5 h-3.5" />
+                        </a>
+                      )}
+                      <button onClick={() => toggleMusicaFav.mutate({ musicaId: m.id })}
+                        className="p-2 rounded-lg bg-pink-600/20 text-pink-400 hover:bg-pink-600/30 transition-colors" title="Remover dos favoritos">
+                        <Heart className="w-3.5 h-3.5 fill-current" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
         {/* Meus Repertórios */}
         {tab === "meus-repertorios" && (
           <div>

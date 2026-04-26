@@ -70,3 +70,14 @@
 - [x] Instrumentar BlogArtigo.tsx — tracking de view ao carregar artigo
 - [x] Criar página AdminAnalytics com gráfico de tendência, rankings e distribuições
 - [x] Adicionar botão "Analytics" no painel Admin e registrar rota /admin/analytics
+
+## Edição de Músicas + Favoritos + Área do Usuário
+
+- [x] Corrigir Admin.tsx — botões editar/excluir por música individual com formulário preenchido
+- [x] Criar tabela lm_musicas_favoritas no banco
+- [x] Criar tabela lm_musicas_usuario e lm_repertorios_usuario no banco (já existiam)
+- [x] Criar endpoints tRPC: editarMusica, toggleMusicaFavorita, listarMusicasFavoritas, listarIdsMusicasFavoritas
+- [x] Criar endpoints tRPC: criarMeuRepertorio, editarMeuRepertorio, excluirMeuRepertorio, adicionarMusica, removerMusica
+- [x] Adicionar botão Favoritar em cada música na página pública de repertório (apenas para usuários logados)
+- [x] Criar página MinhaArea com abas "Favoritos", "Minhas Músicas" e "Meus Repertórios"
+- [x] Criar fluxo de criação/edição de repertório personalizado do usuário com edição inline de músicas
