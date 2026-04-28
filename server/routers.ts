@@ -3,6 +3,7 @@ import { router, publicProcedure, protectedProcedure, adminProcedure } from "./_
 import { systemRouter } from "./_core/systemRouter";
 import * as db from "./db";
 import { analyticsRouter } from "./routers/analytics";
+import { gerarPDFRepertorio } from "./pdfRepertorio";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function gerarSlug(texto: string): string {
@@ -511,6 +512,22 @@ const usuarioRouter = router({
   listarIdsMusicasFavoritas: protectedProcedure
     .query(async ({ ctx }) => {
       return db.listarIdsMusicasFavoritas(ctx.user.id);
+    }),
+
+  exportarPDF: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const rep = await db.buscarRepertorioUsuarioPorId(input.id);
+      if (!rep || rep.userId !== ctx.user.id) throw new Error("Não autorizado");
+      const musicas = await db.listarMusicasUsuario(rep.id);
+      const pdfBuffer = await gerarPDFRepertorio({
+        titulo: rep.titulo,
+        descricao: rep.descricao,
+        musicas,
+        nomeUsuario: ctx.user.name ?? undefined,
+      });
+      const filename = `${rep.titulo.replace(/[^a-zA-Z0-9\s]/g, "").trim().replace(/\s+/g, "-")}.pdf`;
+      return { pdf: pdfBuffer.toString("base64"), filename };
     }),
 });
 

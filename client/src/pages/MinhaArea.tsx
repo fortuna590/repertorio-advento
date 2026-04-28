@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Heart, Music, Plus, Trash2, Edit3, Share2, LogOut, User, ArrowLeft, ExternalLink, Youtube, Guitar, BookOpen, Check, X, FileText, Pencil, Save } from "lucide-react";
+import { Heart, Music, Plus, Trash2, Edit3, Share2, LogOut, User, ArrowLeft, ExternalLink, Youtube, Guitar, BookOpen, Check, X, FileText, Pencil, Save, FileDown } from "lucide-react";
 import SEO from "@/components/SEO";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -74,6 +74,21 @@ export default function MinhaArea() {
   const editarMusicaUser = trpc.usuario.editarMusica.useMutation({
     onSuccess: () => { utils.usuario.buscarMeuRepertorio.invalidate(); setEditandoMusicaId(null); setMusicaEditForm(null); toast({ title: "Música atualizada!" }); },
   });
+  const exportarPDF = trpc.usuario.exportarPDF.useMutation({
+    onSuccess: (data) => {
+      // Converter base64 para Blob e disparar download
+      const bytes = Uint8Array.from(atob(data.pdf), c => c.charCodeAt(0));
+      const blob = new Blob([bytes], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = data.filename;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast({ title: "PDF gerado!", description: "O download iniciou automaticamente." });
+    },
+    onError: () => toast({ title: "Erro ao gerar PDF", description: "Tente novamente." }),
+  });
 
   if (loading) {
     return (
@@ -112,9 +127,20 @@ export default function MinhaArea() {
             <h1 className="text-2xl font-black text-white">{repertorioDetalhes.titulo}</h1>
             {repertorioDetalhes.descricao && <p className="text-white/50 mt-1 text-sm">{repertorioDetalhes.descricao}</p>}
           </div>
-          <button onClick={() => excluirRep.mutate({ id: repertorioAberto })} className="p-2 rounded-lg text-red-400/60 hover:text-red-400 hover:bg-red-400/10 transition-all">
-            <Trash2 className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => exportarPDF.mutate({ id: repertorioAberto })}
+              disabled={exportarPDF.isPending}
+              size="sm"
+              className="bg-purple-600/20 border border-purple-500/30 text-purple-300 hover:bg-purple-600/40 hover:text-white transition-all text-xs gap-1.5"
+            >
+              <FileDown className="w-3.5 h-3.5" />
+              {exportarPDF.isPending ? "Gerando..." : "Exportar PDF"}
+            </Button>
+            <button onClick={() => excluirRep.mutate({ id: repertorioAberto })} className="p-2 rounded-lg text-red-400/60 hover:text-red-400 hover:bg-red-400/10 transition-all">
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Músicas */}
@@ -375,6 +401,14 @@ export default function MinhaArea() {
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       {r.compartilhado && <Share2 className="w-4 h-4 text-purple-400" />}
+                      <button
+                        onClick={e => { e.stopPropagation(); exportarPDF.mutate({ id: r.id }); }}
+                        disabled={exportarPDF.isPending}
+                        className="p-2 rounded-lg text-purple-400/50 hover:text-purple-400 hover:bg-purple-400/10 transition-all"
+                        title="Exportar PDF"
+                      >
+                        <FileDown className="w-4 h-4" />
+                      </button>
                       <button onClick={e => { e.stopPropagation(); excluirRep.mutate({ id: r.id }); }} className="p-2 rounded-lg text-white/20 hover:text-red-400 hover:bg-red-400/10 transition-all">
                         <Trash2 className="w-4 h-4" />
                       </button>

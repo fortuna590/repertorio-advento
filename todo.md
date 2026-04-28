@@ -81,3 +81,12 @@
 - [x] Adicionar botão Favoritar em cada música na página pública de repertório (apenas para usuários logados)
 - [x] Criar página MinhaArea com abas "Favoritos", "Minhas Músicas" e "Meus Repertórios"
 - [x] Criar fluxo de criação/edição de repertório personalizado do usuário com edição inline de músicas
+
+## Exportação de PDF — Repertórios do Usuário
+
+- [x] Instalar pdfkit no projeto
+- [x] Criar helper server/pdfRepertorio.ts com layout visual (cabeçalho roxo, músicas agrupadas por momento, rodapé)
+- [x] Criar endpoint tRPC usuario.exportarPDF (protectedProcedure, retorna base64)
+- [x] Adicionar botão "Exportar PDF" na visão detalhada do repertório (MinhaArea)
+- [x] Adicionar ícone de download na lista de repertórios (MinhaArea)
+- [x] Download automático via Blob URL no frontend
