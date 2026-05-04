@@ -61,6 +61,48 @@ export async function getUserById(id: number) {
   const rows = await db.select().from(users).where(eq(users.id, id)).limit(1);
   return rows[0] ?? null;
 }
+export async function getUserByEmail(email: string) {
+  const db = await getDb();
+  if (!db) return null;
+  const rows = await db.select().from(users).where(eq(users.email, email)).limit(1);
+  return rows[0] ?? null;
+}
+
+export async function createLocalUser(data: {
+  openId: string;
+  name: string;
+  email: string;
+  passwordHash: string;
+  loginMethod: string;
+  role: "user" | "admin" | "moderator" | "gestor";
+  lastSignedIn: Date;
+}) {
+  const db = await getDb();
+  if (!db) return;
+  await db.insert(users).values({
+    openId: data.openId,
+    name: data.name,
+    email: data.email,
+    passwordHash: data.passwordHash,
+    loginMethod: data.loginMethod,
+    role: data.role,
+    status: "active",
+    lastSignedIn: data.lastSignedIn,
+  });
+}
+
+export async function updateUserRole(userId: number, role: "user" | "admin" | "moderator" | "gestor") {
+  const db = await getDb();
+  if (!db) return;
+  await db.update(users).set({ role, updatedAt: new Date() }).where(eq(users.id, userId));
+}
+
+export async function updateUserStatus(userId: number, status: "active" | "suspended" | "pending", suspensionReason?: string) {
+  const db = await getDb();
+  if (!db) return;
+  await db.update(users).set({ status, suspensionReason: suspensionReason ?? null, updatedAt: new Date() }).where(eq(users.id, userId));
+}
+
 
 export async function listarUsuarios() {
   const db = await getDb();

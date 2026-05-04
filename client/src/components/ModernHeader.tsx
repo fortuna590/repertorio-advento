@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X, Music2, User, LogIn, Shield } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { getLoginUrl } from "@/const";
+import { AuthModal } from "@/components/AuthModal";
 
 const NAV = [
   { href: "/", label: "Início" },
@@ -16,10 +16,12 @@ export default function ModernHeader() {
   const [location] = useLocation();
   const [open, setOpen] = useState(false);
   const { user, isAuthenticated, loading } = useAuth();
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   const isAdmin = user?.role === "admin";
 
   return (
+    <>
     <header className="sticky top-0 z-50 border-b border-white/5" style={{ background: "rgba(10,10,15,0.85)", backdropFilter: "blur(20px)" }}>
       <div className="container flex items-center justify-between h-16">
         {/* Logo */}
@@ -66,11 +68,11 @@ export default function ModernHeader() {
                 <span>Minha Área</span>
               </Link>
             ) : (
-              <a href={getLoginUrl()}
+              <button onClick={() => setAuthModalOpen(true)}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-purple-600/20 border border-purple-500/30 text-purple-300 hover:bg-purple-600/30 transition-all">
                 <LogIn className="w-4 h-4" />
                 Entrar
-              </a>
+              </button>
             )
           )}
         </div>
@@ -113,15 +115,21 @@ export default function ModernHeader() {
                 Minha Área
               </Link>
             ) : (
-              <a href={getLoginUrl()} onClick={() => setOpen(false)}
-                className="flex items-center gap-3 px-6 py-3 text-sm font-medium text-purple-300 hover:text-white transition-colors border-t border-white/5 mt-2 pt-4">
+              <button onClick={() => { setOpen(false); setAuthModalOpen(true); }}
+                className="flex items-center gap-3 px-6 py-3 text-sm font-medium text-purple-300 hover:text-white transition-colors border-t border-white/5 mt-2 pt-4 w-full text-left">
                 <LogIn className="w-4 h-4" />
                 Entrar
-              </a>
+              </button>
             )
           )}
         </div>
       )}
     </header>
+    <AuthModal
+      isOpen={authModalOpen}
+      onClose={() => setAuthModalOpen(false)}
+      onSuccess={() => window.location.reload()}
+    />
+    </>
   );
 }
