@@ -16,6 +16,7 @@ const NotFound = lazy(() => import("@/pages/NotFound"));
 const MinhaArea = lazy(() => import("@/pages/MinhaArea"));
 const ComoFunciona = lazy(() => import("@/pages/ComoFunciona"));
 const AdminAnalytics = lazy(() => import("@/pages/AdminAnalytics"));
+const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
 
 function PageLoader() {
   return (
@@ -42,6 +43,7 @@ export default function App() {
             <Route path="/admin" component={Admin} />
             <Route path="/admin/analytics" component={AdminAnalytics} />
             <Route path="/como-funciona" component={ComoFunciona} />
+            <Route path="/politica-privacidade" component={PrivacyPolicy} />
             <Route component={NotFound} />
           </Switch>
         </Suspense>

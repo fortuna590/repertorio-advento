@@ -1,5 +1,31 @@
 import { boolean, int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
 
+// ─── Tipos de Repertório ─────────────────────────────────────────────────────────
+export const tiposRepertorio = mysqlTable("lm_tipos_repertorio", {
+  id: int("id").autoincrement().primaryKey(),
+  nome: varchar("nome", { length: 100 }).notNull().unique(),
+  descricao: text("descricao"),
+  ordem: int("ordem").notNull().default(0),
+  ativo: boolean("ativo").notNull().default(true),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type TipoRepertorio = typeof tiposRepertorio.$inferSelect;
+export type InsertTipoRepertorio = typeof tiposRepertorio.$inferInsert;
+
+// ─── Momentos (dinâmicos) ─────────────────────────────────────────────────────
+export const momentos = mysqlTable("lm_momentos", {
+  id: int("id").autoincrement().primaryKey(),
+  tipoRepertorioId: int("tipoRepertorioId").notNull(),
+  nome: varchar("nome", { length: 100 }).notNull(),
+  descricao: text("descricao"),
+  ordem: int("ordem").notNull().default(0),
+  ativo: boolean("ativo").notNull().default(true),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type Momento = typeof momentos.$inferSelect;
+export type InsertMomento = typeof momentos.$inferInsert;
+
 // ─── Usuários ─────────────────────────────────────────────────────────────────
 export const users = mysqlTable("users", {
   id: int("id").autoincrement().primaryKey(),
@@ -21,6 +47,7 @@ export type InsertUser = typeof users.$inferInsert;
 // ─── Repertórios (admin) ──────────────────────────────────────────────────────
 export const repertorios = mysqlTable("lm_repertorios", {
   id: int("id").autoincrement().primaryKey(),
+  tipoRepertorioId: int("tipoRepertorioId").notNull().default(1),
   titulo: varchar("titulo", { length: 255 }).notNull(),
   slug: varchar("slug", { length: 255 }).notNull().unique(),
   tempoLiturgico: mysqlEnum("tempoLiturgico", [
@@ -49,6 +76,7 @@ export type InsertRepertorio = typeof repertorios.$inferInsert;
 export const musicas = mysqlTable("lm_musicas", {
   id: int("id").autoincrement().primaryKey(),
   repertorioId: int("repertorioId").notNull(),
+  momentoId: int("momentoId"),
   momento: mysqlEnum("momento", [
     "ENTRADA",
     "ATO_PENITENCIAL",
@@ -103,10 +131,11 @@ export const favoritos = mysqlTable("lm_favoritos", {
 });
 export type Favorito = typeof favoritos.$inferSelect;
 export type InsertFavorito = typeof favoritos.$inferInsert;
-// ─── Repertórios de Usuário (privados) ───────────────────────────────────────
+// ─── Repertórios de Usuário (privados) ────────────────────────────────────────────────
 export const repertoriosUsuario = mysqlTable("lm_repertorios_usuario", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
+  tipoRepertorioId: int("tipoRepertorioId").notNull().default(1),
   titulo: varchar("titulo", { length: 255 }).notNull(),
   descricao: text("descricao"),
   compartilhado: boolean("compartilhado").notNull().default(false),

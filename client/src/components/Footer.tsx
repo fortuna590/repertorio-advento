@@ -16,6 +16,7 @@ export default function Footer() {
             <Link href="/repertorios" className="hover:text-white transition-colors">Repertórios</Link>
             <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
             <Link href="/sobre" className="hover:text-white transition-colors">Sobre</Link>
+            <Link href="/politica-privacidade" className="hover:text-white transition-colors">Privacidade</Link>
           </nav>
           <p className="text-xs text-white/25 flex items-center gap-1.5">
             Feito com <Heart className="w-3 h-3 text-pink-500 fill-pink-500" /> para a glória de Deus
