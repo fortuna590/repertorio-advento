@@ -3,6 +3,7 @@ import { router, publicProcedure, protectedProcedure, adminProcedure } from "./_
 import { systemRouter } from "./_core/systemRouter";
 import * as db from "./db";
 import { analyticsRouter } from "./routers/analytics";
+import { momentosRouter } from "./routers/momentos";
 import { gerarPDFRepertorio } from "./pdfRepertorio";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -702,6 +703,7 @@ export const appRouter = router({
   usuario: usuarioRouter,
   recomendacoes: recomendacoesRouter,
   analytics: analyticsRouter,
+  momentos: momentosRouter,
 });
 
 export type AppRouter = typeof appRouter;

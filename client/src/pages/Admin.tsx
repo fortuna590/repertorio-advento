@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Link } from "wouter";
 import { ArrowLeft, Plus, Trash2, Edit, Music, BookOpen, Save, X, ExternalLink, Eye, Upload, ImageIcon, BarChart2, Pencil } from "lucide-react";
 import SEO from "@/components/SEO";
@@ -8,11 +8,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 type Tab = "repertorios" | "blog";
 
 const TEMPOS = ["ADVENTO","NATAL","QUARESMA","PASCOA","TEMPO_COMUM","CELEBRACOES","GERAL"];
-const MOMENTOS = ["ENTRADA","ATO_PENITENCIAL","GLORIA","SALMO","OFERTORIO","COMUNHAO","FINAL","OUTROS"];
-const MOMENTOS_LABELS: Record<string,string> = {
-  ENTRADA:"Entrada",ATO_PENITENCIAL:"Ato Penitencial",GLORIA:"Glória",SALMO:"Salmo",
-  OFERTORIO:"Ofertório",COMUNHAO:"Comunhão",FINAL:"Final",OUTROS:"Outros"
-};
+// Momentos agora vêm do banco de dados dinamicamente
 
 export default function Admin() {
   const { user, isAuthenticated, loading } = useAuth();
@@ -98,21 +94,13 @@ function RepertoriosAdmin() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-xs px-2 py-0.5 rounded-full bg-purple-600/20 text-purple-300">{r.tempoLiturgico}</span>
-                {r.categoria && <span className="text-xs text-white/30">{r.categoria}</span>}
+                <h3 className="text-sm font-semibold text-white truncate">{r.titulo}</h3>
               </div>
-              <p className="font-medium text-white truncate">{r.titulo}</p>
+              <p className="text-xs text-white/40">{r.categoria}</p>
             </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <a href={`/repertorios/${r.slug}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-white/5 text-white/40 hover:bg-white/10 hover:text-white transition-colors" title="Ver no site">
-                <Eye className="w-4 h-4" />
-              </a>
-              <button onClick={() => setEditando(r)} className="p-2 rounded-lg bg-white/5 text-white/60 hover:bg-white/10 hover:text-white transition-colors">
-                <Edit className="w-4 h-4" />
-              </button>
-              <button onClick={() => { if(confirm("Deletar este repertório?")) deletar.mutate({ id: r.id }); }}
-                className="p-2 rounded-lg bg-red-600/10 text-red-400 hover:bg-red-600/20 transition-colors">
-                <Trash2 className="w-4 h-4" />
-              </button>
+            <div className="flex gap-2 shrink-0">
+              <button onClick={() => setEditando(r)} className="p-2 rounded-lg text-purple-400 hover:bg-purple-600/10 transition-colors"><Edit className="w-4 h-4" /></button>
+              <button onClick={() => deletar.mutate({ id: r.id })} className="p-2 rounded-lg text-red-400 hover:bg-red-600/10 transition-colors"><Trash2 className="w-4 h-4" /></button>
             </div>
           </div>
         ))}
@@ -122,12 +110,14 @@ function RepertoriosAdmin() {
 }
 
 function RepertorioForm({ inicial, onClose, onSaved }: { inicial?: any; onClose: () => void; onSaved: () => void }) {
-  const criar = trpc.admin.criarRepertorio.useMutation({ onSuccess: onSaved });
-  const editar = trpc.admin.editarRepertorio.useMutation({ onSuccess: onSaved });
-
+  const criar = trpc.admin.criarRepertorio.useMutation({ onSuccess: () => onSaved() });
+  const editar = trpc.admin.editarRepertorio.useMutation({ onSuccess: () => onSaved() });
+  const { data: tiposRepertorio } = trpc.momentos.listarTipos.useQuery();
+  
   const [form, setForm] = useState({
     titulo: inicial?.titulo || "",
-    tempoLiturgico: inicial?.tempoLiturgico || "GERAL",
+    tempoLiturgico: inicial?.tempoLiturgico || "ADVENTO",
+    tipoRepertorioId: inicial?.tipoRepertorioId || 1,
     categoria: inicial?.categoria || "",
     descricao: inicial?.descricao || "",
     metaTitle: inicial?.metaTitle || "",
@@ -135,14 +125,21 @@ function RepertorioForm({ inicial, onClose, onSaved }: { inicial?: any; onClose:
     palavrasChave: inicial?.palavrasChave || "",
   });
 
+  const { data: momentosPorTipo } = trpc.momentos.listarPorTipo.useQuery(
+    { tipoRepertorioId: form.tipoRepertorioId || 1 },
+    { enabled: !!form.tipoRepertorioId }
+  );
+
   const [musicas, setMusicas] = useState<any[]>(inicial?.musicas || []);
-  const [novaMusica, setNovaMusica] = useState({ titulo: "", artista: "", tom: "", momento: "ENTRADA", youtube: "", cifra: "", letra: "" });
+  const [novaMusica, setNovaMusica] = useState({ titulo: "", artista: "", tom: "", momentoId: momentosPorTipo?.[0]?.id || 1, youtube: "", cifra: "", letra: "" });
   const [editandoMusica, setEditandoMusica] = useState<number | null>(null);
   const [musicaEditada, setMusicaEditada] = useState<any>(null);
+  
   const iniciarEdicaoMusica = (i: number) => {
     setEditandoMusica(i);
     setMusicaEditada({ ...musicas[i] });
   };
+  
   const salvarEdicaoMusica = () => {
     if (editandoMusica === null || !musicaEditada) return;
     const novas = [...musicas];
@@ -170,6 +167,13 @@ function RepertorioForm({ inicial, onClose, onSaved }: { inicial?: any; onClose:
           <label className="block text-xs font-medium text-white/50 mb-1">Título *</label>
           <input value={form.titulo} onChange={e => setForm({...form, titulo: e.target.value})}
             className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50" placeholder="Título do repertório" />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-white/50 mb-1">Tipo de Repertório *</label>
+          <select value={form.tipoRepertorioId} onChange={e => setForm({...form, tipoRepertorioId: parseInt(e.target.value)})}
+            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-purple-500/50">
+            {tiposRepertorio?.map(t => <option key={t.id} value={t.id} className="bg-slate-900">{t.nome}</option>)}
+          </select>
         </div>
         <div>
           <label className="block text-xs font-medium text-white/50 mb-1">Tempo Litúrgico *</label>
@@ -214,9 +218,9 @@ function RepertorioForm({ inicial, onClose, onSaved }: { inicial?: any; onClose:
               {editandoMusica === i && musicaEditada ? (
                 <div className="p-3 space-y-2">
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                    <select value={musicaEditada.momento} onChange={e => setMusicaEditada({...musicaEditada, momento: e.target.value})}
+                    <select value={musicaEditada.momentoId} onChange={e => setMusicaEditada({...musicaEditada, momentoId: parseInt(e.target.value)})}
                       className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none">
-                      {MOMENTOS.map(mo => <option key={mo} value={mo} className="bg-slate-900">{MOMENTOS_LABELS[mo]}</option>)}
+                      {momentosPorTipo?.map(mo => <option key={mo.id} value={mo.id} className="bg-slate-900">{mo.nome}</option>)}
                     </select>
                     <input value={musicaEditada.titulo} onChange={e => setMusicaEditada({...musicaEditada, titulo: e.target.value})}
                       placeholder="Título *" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none col-span-1 sm:col-span-2" />
@@ -238,7 +242,7 @@ function RepertorioForm({ inicial, onClose, onSaved }: { inicial?: any; onClose:
                 </div>
               ) : (
                 <div className="flex items-center gap-3 p-3">
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-purple-600/20 text-purple-300 shrink-0">{MOMENTOS_LABELS[m.momento]}</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-purple-600/20 text-purple-300 shrink-0">{m.momento?.nome || 'Sem momento'}</span>
                   <span className="text-sm text-white flex-1 truncate">{m.titulo}</span>
                   {m.artista && <span className="text-xs text-white/40 truncate hidden sm:block">{m.artista}</span>}
                   <button onClick={() => iniciarEdicaoMusica(i)} className="p-1 rounded text-purple-400 hover:bg-purple-600/10 transition-colors shrink-0" title="Editar música">
@@ -252,39 +256,43 @@ function RepertorioForm({ inicial, onClose, onSaved }: { inicial?: any; onClose:
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 p-4 rounded-xl bg-white/3 border border-white/5">
-          <select value={novaMusica.momento} onChange={e => setNovaMusica({...novaMusica, momento: e.target.value})}
-            className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none">
-            {MOMENTOS.map(m => <option key={m} value={m} className="bg-slate-900">{MOMENTOS_LABELS[m]}</option>)}
-          </select>
-          <input value={novaMusica.titulo} onChange={e => setNovaMusica({...novaMusica, titulo: e.target.value})}
-            placeholder="Título da música *" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none col-span-1 sm:col-span-2" />
-          <input value={novaMusica.artista} onChange={e => setNovaMusica({...novaMusica, artista: e.target.value})}
-            placeholder="Artista" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none" />
-          <input value={novaMusica.youtube} onChange={e => setNovaMusica({...novaMusica, youtube: e.target.value})}
-            placeholder="Link YouTube" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none" />
-          <input value={novaMusica.cifra} onChange={e => setNovaMusica({...novaMusica, cifra: e.target.value})}
-            placeholder="Link Cifra" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none" />
-          <input value={novaMusica.letra} onChange={e => setNovaMusica({...novaMusica, letra: e.target.value})}
-            placeholder="Link Letra" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none" />
-          <input value={novaMusica.tom} onChange={e => setNovaMusica({...novaMusica, tom: e.target.value})}
-            placeholder="Tom (ex: Dó)" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none" />
+
+        {/* Adicionar nova música */}
+        <div className="rounded-xl bg-white/3 border border-white/5 p-3 space-y-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <select value={novaMusica.momentoId} onChange={e => setNovaMusica({...novaMusica, momentoId: parseInt(e.target.value)})}
+              className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none">
+              <option value="">Selecione o momento</option>
+              {momentosPorTipo?.map(mo => <option key={mo.id} value={mo.id} className="bg-slate-900">{mo.nome}</option>)}
+            </select>
+            <input value={novaMusica.titulo} onChange={e => setNovaMusica({...novaMusica, titulo: e.target.value})}
+              placeholder="Título *" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none col-span-1 sm:col-span-2" />
+            <input value={novaMusica.artista} onChange={e => setNovaMusica({...novaMusica, artista: e.target.value})}
+              placeholder="Artista" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none" />
+            <input value={novaMusica.tom} onChange={e => setNovaMusica({...novaMusica, tom: e.target.value})}
+              placeholder="Tom (ex: Dó)" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none" />
+            <input value={novaMusica.youtube} onChange={e => setNovaMusica({...novaMusica, youtube: e.target.value})}
+              placeholder="Link YouTube" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none" />
+            <input value={novaMusica.cifra} onChange={e => setNovaMusica({...novaMusica, cifra: e.target.value})}
+              placeholder="Link Cifra" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none" />
+            <input value={novaMusica.letra} onChange={e => setNovaMusica({...novaMusica, letra: e.target.value})}
+              placeholder="Link Letra" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none" />
+          </div>
           <button onClick={() => {
-            if (!novaMusica.titulo.trim()) return;
-            setMusicas([...musicas, {...novaMusica}]);
-            setNovaMusica({ titulo: "", artista: "", tom: "", momento: "ENTRADA", youtube: "", cifra: "", letra: "" });
-          }} className="flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-purple-600/30 text-purple-300 hover:bg-purple-600/50 transition-colors text-sm font-medium">
+            if (novaMusica.titulo && novaMusica.momentoId) {
+              setMusicas([...musicas, novaMusica]);
+              setNovaMusica({ titulo: "", artista: "", tom: "", momentoId: momentosPorTipo?.[0]?.id || 1, youtube: "", cifra: "", letra: "" });
+            }
+          }} className="w-full px-3 py-2 rounded-lg text-sm text-white bg-purple-600/40 hover:bg-purple-600/60 transition-colors flex items-center justify-center gap-2">
             <Plus className="w-4 h-4" />Adicionar
           </button>
         </div>
       </div>
 
-      <div className="flex justify-end gap-3">
-        <button onClick={onClose} className="px-5 py-2.5 rounded-xl text-sm font-medium text-white/60 hover:text-white border border-white/10 hover:bg-white/5 transition-colors">Cancelar</button>
-        <button onClick={salvar} disabled={criar.isPending || editar.isPending}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-all hover:opacity-90 disabled:opacity-50"
-          style={{ background: "linear-gradient(to right, #9333ea, #ec4899)" }}>
-          <Save className="w-4 h-4" />{criar.isPending || editar.isPending ? "Salvando..." : "Salvar"}
+      <div className="flex gap-2 justify-end">
+        <button onClick={onClose} className="px-4 py-2 rounded-xl text-sm text-white/60 hover:text-white border border-white/10 hover:bg-white/5 transition-colors">Cancelar</button>
+        <button onClick={salvar} disabled={criar.isPending || editar.isPending} className="px-4 py-2 rounded-xl text-sm text-white bg-purple-600/40 hover:bg-purple-600/60 transition-colors disabled:opacity-50 flex items-center gap-2">
+          <Save className="w-4 h-4" />{inicial ? "Salvar Alterações" : "Criar Repertório"}
         </button>
       </div>
     </div>
@@ -328,22 +336,14 @@ function BlogAdmin() {
           <div key={a.id} className="card-glass rounded-xl p-4 flex items-center justify-between gap-4">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                {a.categoria && <span className="text-xs px-2 py-0.5 rounded-full bg-pink-600/20 text-pink-300">{a.categoria}</span>}
-                <span className="text-xs text-white/30">{new Date(a.createdAt).toLocaleDateString("pt-BR")}</span>
+                <span className="text-xs px-2 py-0.5 rounded-full bg-purple-600/20 text-purple-300">{a.categoria}</span>
+                <h3 className="text-sm font-semibold text-white truncate">{a.titulo}</h3>
               </div>
-              <p className="font-medium text-white truncate">{a.titulo}</p>
+              <p className="text-xs text-white/40 truncate">{a.resumo || a.conteudo?.substring(0, 50)}</p>
             </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <a href={`/blog/${a.slug}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-white/5 text-white/40 hover:bg-white/10 hover:text-white transition-colors" title="Ver no site">
-                <Eye className="w-4 h-4" />
-              </a>
-              <button onClick={() => setEditando(a)} className="p-2 rounded-lg bg-white/5 text-white/60 hover:bg-white/10 hover:text-white transition-colors">
-                <Edit className="w-4 h-4" />
-              </button>
-              <button onClick={() => { if(confirm("Deletar este artigo?")) deletar.mutate({ id: a.id }); }}
-                className="p-2 rounded-lg bg-red-600/10 text-red-400 hover:bg-red-600/20 transition-colors">
-                <Trash2 className="w-4 h-4" />
-              </button>
+            <div className="flex gap-2 shrink-0">
+              <button onClick={() => setEditando(a)} className="p-2 rounded-lg text-purple-400 hover:bg-purple-600/10 transition-colors"><Edit className="w-4 h-4" /></button>
+              <button onClick={() => deletar.mutate({ id: a.id })} className="p-2 rounded-lg text-red-400 hover:bg-red-600/10 transition-colors"><Trash2 className="w-4 h-4" /></button>
             </div>
           </div>
         ))}
@@ -353,183 +353,70 @@ function BlogAdmin() {
 }
 
 function ArtigoForm({ inicial, onClose, onSaved }: { inicial?: any; onClose: () => void; onSaved: () => void }) {
-  const criar = trpc.admin.criarArtigo.useMutation({ onSuccess: onSaved });
-  const editar = trpc.admin.editarArtigo.useMutation({ onSuccess: onSaved });
-
-  // Normaliza tags independente de vir como array, string JSON ou string CSV do banco
-  const parseTags = (raw: any): string => {
-    if (!raw) return "";
-    if (Array.isArray(raw)) return raw.join(", ");
-    if (typeof raw === "string") {
-      try {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) return parsed.join(", ");
-      } catch {}
-      return raw; // já é string CSV ou texto simples
-    }
-    return String(raw);
-  };
-
+  const criar = trpc.admin.criarArtigo.useMutation({ onSuccess: () => onSaved() });
+  const editar = trpc.admin.editarArtigo.useMutation({ onSuccess: () => onSaved() });
   const [form, setForm] = useState({
-    titulo: inicial?.titulo ?? "",
-    resumo: inicial?.resumo ?? "",
-    conteudo: inicial?.conteudo ?? "",
-    categoria: inicial?.categoria ?? "",
-    imagemCapa: inicial?.imagemCapa ?? "",
-    tags: parseTags(inicial?.tags),
-    metaTitle: inicial?.metaTitle ?? "",
-    metaDescription: inicial?.metaDescription ?? "",
-    palavrasChave: inicial?.palavrasChave ?? "",
+    titulo: inicial?.titulo || "",
+    descricao: inicial?.descricao || "",
+    conteudo: inicial?.conteudo || "",
+    categoria: inicial?.categoria || "",
+    tags: inicial?.tags?.join(", ") || "",
   });
 
-  const [uploadando, setUploadando] = useState(false);
-  const [erroUpload, setErroUpload] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleImagemUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      setErroUpload("Apenas imagens são permitidas (JPG, PNG, WebP)");
-      return;
+  const salvar = async () => {
+    if (!form.titulo) return alert("Título é obrigatório");
+    if (!form.conteudo) return alert("Conteúdo é obrigatório");
+    
+    const tags = form.tags.split(",").map((t: string) => t.trim()).filter(Boolean);
+    
+    if (inicial) {
+      await editar.mutateAsync({ id: inicial.id, ...form, tags });
+    } else {
+      await criar.mutateAsync({ ...form, tags });
     }
-    if (file.size > 5 * 1024 * 1024) {
-      setErroUpload("A imagem deve ter no máximo 5 MB");
-      return;
-    }
-    setErroUpload("");
-    setUploadando(true);
-    try {
-      const formData = new FormData();
-      formData.append("imagem", file);
-      const res = await fetch("/api/upload/imagem", { method: "POST", body: formData, credentials: "include" });
-      if (!res.ok) throw new Error("Falha no upload");
-      const { url } = await res.json();
-      setForm(f => ({ ...f, imagemCapa: url }));
-    } catch (err) {
-      setErroUpload("Erro ao fazer upload. Tente novamente.");
-    } finally {
-      setUploadando(false);
-    }
-  };
-
-  const salvar = () => {
-    const payload = {
-      ...form,
-      tags: form.tags ? form.tags.split(",").map((t: string) => t.trim()).filter(Boolean) : [],
-    };
-    if (inicial) editar.mutate({ id: inicial.id, ...payload });
-    else criar.mutate(payload);
   };
 
   return (
-    <div className="bg-slate-900 rounded-2xl p-6 mb-6 border border-purple-500/30 shadow-2xl">
-      <div className="flex items-center justify-between mb-6">
+    <div className="card-glass rounded-xl p-6 space-y-4">
+      <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-bold text-white">{inicial ? "Editar Artigo" : "Novo Artigo"}</h3>
-        <button onClick={onClose} className="p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition-colors"><X className="w-4 h-4" /></button>
+        <button onClick={onClose} className="text-white/50 hover:text-white"><X className="w-5 h-5" /></button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <div className="md:col-span-2">
-          <label className="block text-xs font-medium text-white/50 mb-1">Título *</label>
-          <input value={form.titulo} onChange={e => setForm({...form, titulo: e.target.value})}
-            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50" placeholder="Título do artigo" />
-        </div>
-        <div>
-          <label className="block text-xs font-medium text-white/50 mb-1">Categoria</label>
-          <input value={form.categoria} onChange={e => setForm({...form, categoria: e.target.value})}
-            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50" placeholder="Ex: Liturgia" />
-        </div>
-        <div>
-          <label className="block text-xs font-medium text-white/50 mb-1">Tags (separadas por vírgula)</label>
-          <input value={form.tags} onChange={e => setForm({...form, tags: e.target.value})}
-            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50" placeholder="advento, música sacra" />
-        </div>
-        <div className="md:col-span-2">
-          <label className="block text-xs font-medium text-white/50 mb-1">Imagem de Capa</label>
-          <div className="space-y-3">
-            {/* Preview da imagem atual */}
-            {form.imagemCapa && (
-              <div className="relative rounded-xl overflow-hidden border border-white/10 bg-white/5">
-                <img src={form.imagemCapa} alt="Capa" className="w-full h-40 object-cover" />
-                <button
-                  type="button"
-                  onClick={() => setForm(f => ({ ...f, imagemCapa: "" }))}
-                  className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-white hover:bg-red-600/80 transition-colors"
-                  title="Remover imagem"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            )}
-
-            {/* Área de upload */}
-            <div
-              onClick={() => fileInputRef.current?.click()}
-              className="flex flex-col items-center justify-center gap-2 px-4 py-6 rounded-xl border-2 border-dashed border-white/20 bg-white/5 hover:border-purple-500/50 hover:bg-white/10 transition-all cursor-pointer"
-            >
-              {uploadando ? (
-                <>
-                  <div className="w-6 h-6 border-2 border-purple-400 border-t-transparent rounded-full animate-spin" />
-                  <span className="text-sm text-white/50">Enviando imagem...</span>
-                </>
-              ) : (
-                <>
-                  {form.imagemCapa ? (
-                    <><ImageIcon className="w-5 h-5 text-purple-400" /><span className="text-sm text-purple-300">Clique para trocar a imagem</span></>
-                  ) : (
-                    <><Upload className="w-5 h-5 text-white/40" /><span className="text-sm text-white/50">Clique para enviar uma imagem</span><span className="text-xs text-white/30">JPG, PNG ou WebP · máx. 5 MB</span></>
-                  )}
-                </>
-              )}
-            </div>
-
-            {/* Input oculto */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleImagemUpload}
-            />
-
-            {/* Erro de upload */}
-            {erroUpload && <p className="text-xs text-red-400">{erroUpload}</p>}
-          </div>
-        </div>
-        <div className="md:col-span-2">
-          <label className="block text-xs font-medium text-white/50 mb-1">Resumo</label>
-          <textarea value={form.resumo} onChange={e => setForm({...form, resumo: e.target.value})} rows={2}
-            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50 resize-none" placeholder="Breve resumo do artigo" />
-        </div>
-        <div className="md:col-span-2">
-          <label className="block text-xs font-medium text-white/50 mb-1">Conteúdo (HTML) *</label>
-          <textarea value={form.conteudo} onChange={e => setForm({...form, conteudo: e.target.value})} rows={10}
-            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50 resize-y font-mono text-sm" placeholder="<p>Conteúdo do artigo em HTML...</p>" />
-        </div>
-        <div>
-          <label className="block text-xs font-medium text-white/50 mb-1">Meta Title (SEO)</label>
-          <input value={form.metaTitle} onChange={e => setForm({...form, metaTitle: e.target.value})}
-            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50" placeholder="Título para SEO" />
-        </div>
-        <div>
-          <label className="block text-xs font-medium text-white/50 mb-1">Palavras-chave</label>
-          <input value={form.palavrasChave} onChange={e => setForm({...form, palavrasChave: e.target.value})}
-            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50" placeholder="palavra1, palavra2" />
-        </div>
-        <div className="md:col-span-2">
-          <label className="block text-xs font-medium text-white/50 mb-1">Meta Description (SEO)</label>
-          <textarea value={form.metaDescription} onChange={e => setForm({...form, metaDescription: e.target.value})} rows={2}
-            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50 resize-none" placeholder="Descrição para mecanismos de busca" />
-        </div>
+      <div>
+        <label className="text-xs font-semibold text-white/60 mb-1 block">Título *</label>
+        <input value={form.titulo} onChange={e => setForm({...form, titulo: e.target.value})}
+          placeholder="Título do artigo" className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none" />
       </div>
 
-      <div className="flex justify-end gap-3">
-        <button onClick={onClose} className="px-5 py-2.5 rounded-xl text-sm font-medium text-white/60 hover:text-white border border-white/10 hover:bg-white/5 transition-colors">Cancelar</button>
-        <button onClick={salvar} disabled={criar.isPending || editar.isPending}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-all hover:opacity-90 disabled:opacity-50"
-          style={{ background: "linear-gradient(to right, #9333ea, #ec4899)" }}>
-          <Save className="w-4 h-4" />{criar.isPending || editar.isPending ? "Salvando..." : "Salvar"}
+      <div>
+        <label className="text-xs font-semibold text-white/60 mb-1 block">Descrição</label>
+        <input value={form.descricao} onChange={e => setForm({...form, descricao: e.target.value})}
+          placeholder="Breve descrição" className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none" />
+      </div>
+
+      <div>
+        <label className="text-xs font-semibold text-white/60 mb-1 block">Categoria</label>
+        <input value={form.categoria} onChange={e => setForm({...form, categoria: e.target.value})}
+          placeholder="Ex: Música, Liturgia" className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none" />
+      </div>
+
+      <div>
+        <label className="text-xs font-semibold text-white/60 mb-1 block">Tags</label>
+        <input value={form.tags} onChange={e => setForm({...form, tags: e.target.value})}
+          placeholder="tag1, tag2, tag3" className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none" />
+      </div>
+
+      <div>
+        <label className="text-xs font-semibold text-white/60 mb-1 block">Conteúdo *</label>
+        <textarea value={form.conteudo} onChange={e => setForm({...form, conteudo: e.target.value})}
+          placeholder="Conteúdo do artigo (Markdown suportado)" rows={8} className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none resize-none" />
+      </div>
+
+      <div className="flex gap-2 justify-end">
+        <button onClick={onClose} className="px-4 py-2 rounded-xl text-sm text-white/60 hover:text-white border border-white/10 hover:bg-white/5 transition-colors">Cancelar</button>
+        <button onClick={salvar} disabled={criar.isPending || editar.isPending} className="px-4 py-2 rounded-xl text-sm text-white bg-purple-600/40 hover:bg-purple-600/60 transition-colors disabled:opacity-50 flex items-center gap-2">
+          <Save className="w-4 h-4" />{inicial ? "Salvar Alterações" : "Criar Artigo"}
         </button>
       </div>
     </div>
