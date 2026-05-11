@@ -171,15 +171,16 @@ function RepertorioForm({ inicial, onClose, onSaved }: { inicial?: any; onClose:
         <div>
           <label className="block text-xs font-medium text-white/50 mb-1">Tipo de Repertório *</label>
           <select value={form.tipoRepertorioId} onChange={e => setForm({...form, tipoRepertorioId: parseInt(e.target.value)})}
-            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-purple-500/50">
-            {tiposRepertorio?.map(t => <option key={t.id} value={t.id} className="bg-slate-900">{t.nome}</option>)}
+            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-purple-500/50 appearance-none cursor-pointer">
+            <option value="">Selecione um tipo</option>
+            {tiposRepertorio?.map(t => <option key={t.id} value={t.id} style={{backgroundColor: '#1e293b', color: '#fff'}}>{t.nome}</option>)}
           </select>
         </div>
         <div>
           <label className="block text-xs font-medium text-white/50 mb-1">Tempo Litúrgico *</label>
           <select value={form.tempoLiturgico} onChange={e => setForm({...form, tempoLiturgico: e.target.value})}
-            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-purple-500/50">
-            {TEMPOS.map(t => <option key={t} value={t} className="bg-slate-900">{t}</option>)}
+            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-purple-500/50 appearance-none cursor-pointer">
+            {TEMPOS.map(t => <option key={t} value={t} style={{backgroundColor: '#1e293b', color: '#fff'}}>{t}</option>)}
           </select>
         </div>
         <div>
@@ -218,10 +219,11 @@ function RepertorioForm({ inicial, onClose, onSaved }: { inicial?: any; onClose:
               {editandoMusica === i && musicaEditada ? (
                 <div className="p-3 space-y-2">
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                    <select value={musicaEditada.momentoId} onChange={e => setMusicaEditada({...musicaEditada, momentoId: parseInt(e.target.value)})}
-                      className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none">
-                      {momentosPorTipo?.map(mo => <option key={mo.id} value={mo.id} className="bg-slate-900">{mo.nome}</option>)}
-                    </select>
+            <select value={musicaEditada.momentoId} onChange={e => setMusicaEditada({...musicaEditada, momentoId: parseInt(e.target.value)})}
+              className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none appearance-none cursor-pointer">
+              <option value="">Selecione</option>
+              {momentosPorTipo?.map(mo => <option key={mo.id} value={mo.id} style={{backgroundColor: '#1e293b', color: '#fff'}}>{mo.nome}</option>)}
+            </select>
                     <input value={musicaEditada.titulo} onChange={e => setMusicaEditada({...musicaEditada, titulo: e.target.value})}
                       placeholder="Título *" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none col-span-1 sm:col-span-2" />
                     <input value={musicaEditada.artista || ""} onChange={e => setMusicaEditada({...musicaEditada, artista: e.target.value})}
@@ -261,9 +263,9 @@ function RepertorioForm({ inicial, onClose, onSaved }: { inicial?: any; onClose:
         <div className="rounded-xl bg-white/3 border border-white/5 p-3 space-y-2">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             <select value={novaMusica.momentoId} onChange={e => setNovaMusica({...novaMusica, momentoId: parseInt(e.target.value)})}
-              className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none">
+              className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none appearance-none cursor-pointer">
               <option value="">Selecione o momento</option>
-              {momentosPorTipo?.map(mo => <option key={mo.id} value={mo.id} className="bg-slate-900">{mo.nome}</option>)}
+              {momentosPorTipo?.map(mo => <option key={mo.id} value={mo.id} style={{backgroundColor: '#1e293b', color: '#fff'}}>{mo.nome}</option>)}
             </select>
             <input value={novaMusica.titulo} onChange={e => setNovaMusica({...novaMusica, titulo: e.target.value})}
               placeholder="Título *" className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none col-span-1 sm:col-span-2" />
