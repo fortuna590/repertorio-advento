@@ -1,0 +1,157 @@
+{
+  "query": "SHOW TABLES;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SHOW TABLES;",
+  "rows": [
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "__drizzle_migrations"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "artigos"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "auditLogs"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "badges"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "clicks"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "depoimentos"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "disponibilidades"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "equipes"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "escalas"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "escalas_eventos"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "escalas_participantes"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "funcoesEscala"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "historicoEscalas"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "historicoMusicasBase"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "indisponibilidades"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "liturgiaFavoritos"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "liturgias"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "lm_artigos"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "lm_favoritos"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "lm_momentos"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "lm_music_clicks"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "lm_musicas"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "lm_musicas_favoritas"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "lm_musicas_usuario"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "lm_repertorios"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "lm_repertorios_usuario"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "lm_tipos_repertorio"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "lm_user_actions"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "lm_views"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "membros"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "membros_badges"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "metas_equipe"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "momentosMissa"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "musicHistory"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "musicasAdminFavoritas"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "musicasFavoritas"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "musicasRepertorio"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "musicasRepertorioBase"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "musicasRepertorioPersonalizado"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "notifications"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "participantesEscala"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "pontuacoes"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "products"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "repertorios"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "repertoriosAdmin"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "repertoriosPersonalizados"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "templatesEscalas"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "userPreferences"
+    },
+    {
+      "Tables_in_WPGwe4YCMvYVkabQpYjZqQ": "users"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_WPGwe4YCMvYVkabQpYjZqQ\n__drizzle_migrations\nartigos\nauditLogs\nbadges\nclicks\ndepoimentos\ndisponibilidades\nequipes\nescalas\nescalas_eventos\nescalas_participantes\nfuncoesEscala\nhistoricoEscalas\nhistoricoMusicasBase\nindisponibilidades\nliturgiaFavoritos\nliturgias\nlm_artigos\nlm_favoritos\nlm_momentos\nlm_music_clicks\nlm_musicas\nlm_musicas_favoritas\nlm_musicas_usuario\nlm_repertorios\nlm_repertorios_usuario\nlm_tipos_repertorio\nlm_user_actions\nlm_views\nmembros\nmembros_badges\nmetas_equipe\nmomentosMissa\nmusicHistory\nmusicasAdminFavoritas\nmusicasFavoritas\nmusicasRepertorio\nmusicasRepertorioBase\nmusicasRepertorioPersonalizado\nnotifications\nparticipantesEscala\npontuacoes\nproducts\nrepertorios\nrepertoriosAdmin\nrepertoriosPersonalizados\ntemplatesEscalas\nuserPreferences\nusers\n",
+  "stderr": "",
+  "execution_time_ms": 268
+}

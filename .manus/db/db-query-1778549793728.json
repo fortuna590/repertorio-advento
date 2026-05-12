@@ -1,0 +1,40 @@
+{
+  "query": "SELECT id, titulo, slug FROM lm_repertorios LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute SELECT id, titulo, slug FROM lm_repertorios LIMIT 10;",
+  "rows": [
+    {
+      "id": "1",
+      "titulo": "Repertório para Missa – Advento",
+      "slug": "repertorio-missa-advento"
+    },
+    {
+      "id": "2",
+      "titulo": "Repertório para Missa – Quaresma",
+      "slug": "repertorio-missa-quaresma"
+    },
+    {
+      "id": "3",
+      "titulo": "Repertório para Missa – Natal",
+      "slug": "repertorio-missa-natal"
+    },
+    {
+      "id": "4",
+      "titulo": "Repertório para Missa – Páscoa",
+      "slug": "repertorio-para-missa-pascoa"
+    },
+    {
+      "id": "5",
+      "titulo": "Repertório para Missa – Tempo Comum",
+      "slug": "repertorio-missa-tempo-comum"
+    },
+    {
+      "id": "30001",
+      "titulo": "Repertório para Missa no Tempo Comum (Domingo)",
+      "slug": "repertorio-para-missa-no-tempo-comum-domingo"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\ttitulo\tslug\n1\tRepertório para Missa – Advento\trepertorio-missa-advento\n2\tRepertório para Missa – Quaresma\trepertorio-missa-quaresma\n3\tRepertório para Missa – Natal\trepertorio-missa-natal\n4\tRepertório para Missa – Páscoa\trepertorio-para-missa-pascoa\n5\tRepertório para Missa – Tempo Comum\trepertorio-missa-tempo-comum\n30001\tRepertório para Missa no Tempo Comum (Domingo)\trepertorio-para-missa-no-tempo-comum-domingo\n",
+  "stderr": "",
+  "execution_time_ms": 269
+}

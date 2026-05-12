@@ -1,0 +1,8 @@
+{
+  "query": "INSERT INTO lm_repertorios (tipoRepertorioId, titulo, slug, tempoLiturgico, categoria, descricao, visivel, createdAt, updatedAt)\nSELECT \n  1 as tipoRepertorioId,\n  nome as titulo,\n  LOWER(REPLACE(REPLACE(REPLACE(nome, ' ', '-'), 'á', 'a'), 'é', 'e')) as slug,\n  'TEMPO_COMUM' as tempoLiturgico,\n  'Repertório' as categoria,\n  descricao,\n  1 as visivel,\n  createdAt,\n  updatedAt\nFROM repertorios;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user C5evcjhu424D75V.root --database WPGwe4YCMvYVkabQpYjZqQ --execute INSERT INTO lm_repertorios (tipoRepertorioId, titulo, slug, tempoLiturgico, categoria, descricao, visivel, createdAt, updatedAt)\nSELECT \n  1 as tipoRepertorioId,\n  nome as titulo,\n  LOWER(REPLACE(REPLACE(REPLACE(nome, ' ', '-'), 'á', 'a'), 'é', 'e')) as slug,\n  'TEMPO_COMUM' as tempoLiturgico,\n  'Repertório' as categoria,\n  descricao,\n  1 as visivel,\n  createdAt,\n  updatedAt\nFROM repertorios;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1062 (23000) at line 1: Duplicate entry '?' for key 'lm_repertorios.lm_repertorios_slug_unique'"
+  ]
+}

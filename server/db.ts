@@ -1,7 +1,9 @@
 import { eq, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { users, repertorios, musicas, artigos } from "../drizzle/schema";
+import { users, repertorios as lm_repertorios, musicas, artigos } from "../drizzle/schema";
 import { ENV } from "./_core/env";
+
+const repertorios = lm_repertorios; // Alias para compatibilidade
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
