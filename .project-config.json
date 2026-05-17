@@ -1,0 +1,45 @@
+{
+  "build_command": "pnpm run build",
+  "capabilities": [
+    "db",
+    "server",
+    "user"
+  ],
+  "dev_command": "pnpm run dev",
+  "env_vars": {
+    "DATABASE_URL": "mysql://C5evcjhu424D75V.root:6iRE9ESvE2zhC586gnnp@gateway02.us-east-1.prod.aws.tidbcloud.com:4000/WPGwe4YCMvYVkabQpYjZqQ?ssl={\"rejectUnauthorized\":true}"
+  },
+  "experiments": null,
+  "git_remote": {
+    "repo_url": "s3://vida-prod-gitrepo/webdev-git/310419663031542019/WPGwe4YCMvYVkabQpYjZqQ",
+    "access_key_id": "ASIAZV3A2ECZPJ7KZLAG",
+    "secret_access_key": "SWwNlLHhWzUrvITa7nGkZw9QP5VFfeeUkBdTRjpv",
+    "session_token": "IQoJb3JpZ2luX2VjEOj//////////wEaCXVzLWVhc3QtMSJGMEQCIEYEIgPU+dMOsc8Q5c7nq1jDVatzRLCg9a/ChkaaMAJZAiA+cJzFAJs3Ol7o3E8sSB1xWbS4SlC0ncd0gpbDv6nxmyr/Awix//////////8BEAQaDDY2NTM4NjA5ODg2NiIMEWwqiJEbgR+XCDAPKtMDhep68ZT2ZQTXPREIAYHwaaQTv3Cvk3OrYymh8YUTlcCuIfWth5rfQLlvjN1T9fUQjj4sQ8OMhYIGqmx1JcQcPBlQye8JMRcQFKQd8iToL9tAm3P2Mmw0vqG+nt4D3oDKYrsxJNBfaglHZhmSqLQrTlpZFyQ6EXfyHTnpyIfXRTV3esYTD08AwLBFhby5WHaejv4btZf2ZO2qqLgRYZVSRTvA/7rXrTFfFpup0jEeZ6dPOqg+CF84fAvv7uT7QCdgodaqIp4J9KuYUlePmDg+azFCEh1g2b5EGobogR4b/bWuOUAHVn00FfVW56fpcnylM97LwrZD3orMrjGuOOSibS6vmxrDPBmS+FGXWGrEAIXYWlBnLrhjC3zvPYAOzVleBOzmcLTepECA7MlVTf0v6b2jexXOP4WOXW6CzavISajA4Jg6AsrCg2/3oEqIG3EuGS6bBFGA8zLoEk71k3dtkLrPcZN29jmmDR8okrWZ5sMUaw086XI2+O8fxKcFrPYxCwYxEJoXIiSHQQR90hqqC6H6ZA3CxVb0sQk1vYt6edwLDGPgRiFFO68X4O4GztU8bSS4Qth63FsDpkfop7cVgXc+CjbetbalWN4UfQ3MiTbVcIww5Z2p0AY6ngEu/bT+IxBEhXHfKsUVTiRO/hDiLzoNIW6yq/eJbwJk7jQp2UwmRdJ9aFsNQcqTJGugL++mdb+q61fH8VRQx1r5sw1/4vqoSAM8GFiH/jlOhVVhZTR+m3tOMs81qIX06N0pBzB+YDGhl6OL5kr1ozD/Uj7mjjH//NsVUffOJgszzRXzJn9peo7Yf3eC9+vuZ+oGspf/tCrIeKszXrY3BQ==",
+    "expiration": "2026-05-18T11:27:33.000Z"
+  },
+  "name": "repertorio-advento",
+  "path": "/home/ubuntu/repertorio-advento",
+  "port": 3000,
+  "secrets": {
+    "BUILT_IN_FORGE_API_KEY": "d6J97Yo2KFjWZ98CkytcPb",
+    "BUILT_IN_FORGE_API_URL": "https://forge.manus.ai",
+    "JWT_SECRET": "mAhkVz4kGKdMjU5YFccV2D",
+    "OAUTH_SERVER_URL": "https://api.manus.im",
+    "OWNER_NAME": "Tiago Fortuna Santos",
+    "OWNER_OPEN_ID": "7pPY4zk3CMNRPirVvQhxBK",
+    "RESEND_API_KEY": "re_GiNfTVoG_BAgHpMhKqMxGJa3FMXvtJJPq",
+    "STRIPE_SECRET_KEY": "sk_test_51SUbATLEUKweaSxfvTjfkNL2ItkhBpvubjsoGmfI8xJvKFTQx9wU1IrxteBNrmjGrFYBNPRKvz9lfGMaqmtoDfGD00M6qmX6tN",
+    "STRIPE_WEBHOOK_SECRET": "whsec_AqjHKKLQh0WymHiT12yszayrANv51PH7",
+    "VITE_ANALYTICS_ENDPOINT": "https://manus-analytics.com",
+    "VITE_ANALYTICS_WEBSITE_ID": "85b1dfc1-3274-4ef5-b584-99fc033b52d6",
+    "VITE_APP_ID": "WPGwe4YCMvYVkabQpYjZqQ",
+    "VITE_APP_LOGO": "https://files.manuscdn.com/user_upload_by_module/web_dev_logo/310419663031542019/WkuRtJTAbtEPwwNw.png",
+    "VITE_APP_TITLE": "LouvaMais",
+    "VITE_FRONTEND_FORGE_API_KEY": "AyVC5wUcLLBnvoftaGmft7",
+    "VITE_FRONTEND_FORGE_API_URL": "https://forge.manus.ai",
+    "VITE_OAUTH_PORTAL_URL": "https://manus.im",
+    "VITE_STRIPE_PUBLISHABLE_KEY": "pk_test_51SUbATLEUKweaSxfVUu0q7HqeEVYipw40WHmLZ2BRm4KFGFpQmTw0AXNgmnyDQTStWkU2NtqmYlpWGKwh4n9PfAE00YLFHaEu8"
+  },
+  "template_id": "web-db-user",
+  "test_command": "pnpm test"
+}

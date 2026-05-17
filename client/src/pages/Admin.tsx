@@ -363,7 +363,34 @@ function ArtigoForm({ inicial, onClose, onSaved }: { inicial?: any; onClose: () 
     conteudo: inicial?.conteudo || "",
     categoria: inicial?.categoria || "",
     tags: inicial?.tags?.join(", ") || "",
+    imagemCapa: inicial?.imagemCapa || "",
   });
+  const [uploadando, setUploadando] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadando(true);
+    try {
+      const formData = new FormData();
+      formData.append("imagem", file);
+      const response = await fetch("/api/upload/imagem", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      if (data.url) {
+        setForm({ ...form, imagemCapa: data.url });
+      } else {
+        alert("Erro ao fazer upload: " + (data.error || "Desconhecido"));
+      }
+    } catch (err: any) {
+      alert("Erro ao fazer upload: " + err.message);
+    } finally {
+      setUploadando(false);
+    }
+  };
 
   const salvar = async () => {
     if (!form.titulo) return alert("Título é obrigatório");
@@ -407,6 +434,23 @@ function ArtigoForm({ inicial, onClose, onSaved }: { inicial?: any; onClose: () 
         <label className="text-xs font-semibold text-white/60 mb-1 block">Tags</label>
         <input value={form.tags} onChange={e => setForm({...form, tags: e.target.value})}
           placeholder="tag1, tag2, tag3" className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none" />
+      </div>
+
+      <div>
+        <label className="text-xs font-semibold text-white/60 mb-1 block">Imagem de Capa</label>
+        <div className="flex gap-2 items-center">
+          <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploadando}
+            className="flex-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white/50 text-sm file:mr-2 file:px-2 file:py-1 file:rounded file:bg-purple-600/40 file:text-white file:cursor-pointer file:border-0 focus:outline-none" />
+          {uploadando && <span className="text-xs text-white/50">Enviando...</span>}
+        </div>
+        {form.imagemCapa && (
+          <div className="mt-2 relative">
+            <img src={form.imagemCapa} alt="Preview" className="w-full h-32 object-cover rounded-lg" />
+            <button type="button" onClick={() => setForm({...form, imagemCapa: ""})} className="absolute top-1 right-1 p-1 bg-red-600/80 rounded text-white text-xs hover:bg-red-700">
+              <X className="w-3 h-3" />
+            </button>
+          </div>
+        )}
       </div>
 
       <div>
