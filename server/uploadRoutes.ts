@@ -1,8 +1,15 @@
 import { Router } from "express";
 import multer from "multer";
-import { storagePut } from "./storage";
+import path from "path";
+import fs from "fs";
 
 const router = Router();
+
+// Criar diretório de uploads se não existir
+const uploadsDir = path.join(process.cwd(), "public", "uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
 
 // Multer em memória — sem salvar em disco
 const upload = multer({
@@ -27,10 +34,14 @@ router.post("/imagem", upload.single("imagem"), async (req, res) => {
 
     const ext = req.file.originalname.split(".").pop() ?? "jpg";
     const randomSuffix = Math.random().toString(36).slice(2, 10);
-    const key = `blog-capas/${Date.now()}-${randomSuffix}.${ext}`;
+    const filename = `${Date.now()}-${randomSuffix}.${ext}`;
+    const filepath = path.join(uploadsDir, filename);
 
-    const { url } = await storagePut(key, req.file.buffer, req.file.mimetype);
+    // Salvar arquivo localmente
+    fs.writeFileSync(filepath, req.file.buffer);
 
+    // Retornar URL pública
+    const url = `/uploads/${filename}`;
     return res.json({ url });
   } catch (err: any) {
     console.error("[Upload] Erro:", err);
