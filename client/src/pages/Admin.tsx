@@ -362,7 +362,7 @@ function ArtigoForm({ inicial, onClose, onSaved }: { inicial?: any; onClose: () 
     descricao: inicial?.descricao || "",
     conteudo: inicial?.conteudo || "",
     categoria: inicial?.categoria || "",
-    tags: inicial?.tags?.join(", ") || "",
+    tags: Array.isArray(inicial?.tags) ? inicial.tags.join(", ") : (typeof inicial?.tags === "string" ? inicial.tags : ""),
     imagemCapa: inicial?.imagemCapa || "",
   });
   const [uploadando, setUploadando] = useState(false);
